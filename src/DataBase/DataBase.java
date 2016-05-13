@@ -11,43 +11,43 @@ public class DataBase {
 	static Connection c = null;
 	static Statement stmt = null;
 
-	public static void main(String[] args) {
-		HashMap<String, String> vars = new HashMap<String, String>();
-		// vars.put("empid", "6");
-		// vars.put("empname", "\'arian\'");
-		// vars.put("sectionid", "1");
-		// vars.put("ismodir", "false");
+//	public static void main(String[] args) {
+//		HashMap<String, String> vars = new HashMap<String, String>();
+//		// vars.put("empid", "6");
+//		// vars.put("empname", "\'arian\'");
+//		// vars.put("sectionid", "1");
+//		// vars.put("ismodir", "false");
+//
+//		// insert(vars, "EMPLOYEE");
+//		HashMap<String, String> vars2 = new HashMap<String, String>();
+//		vars2.put("empid", "123");
+//		vars2.put("empname", "\'arian\'");
+//		ResultSet rs = select(vars2, "EMPLOYEE");
+//		try {
+//			while (rs.next()) {
+//				int id = rs.getInt("empid");
+//				String name = rs.getString("empname");
+//				System.out.println("ID = " + id);
+//				System.out.println("NAME = " + name);
+//				System.out.println();
+//			}
+//			rs.close();
+//			c.close();
+//			stmt.close();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		// String sql = "UPDATE COMPANY set SALARY = 25000.00 where ID=1;";
+//		HashMap<String, String> condVars = new HashMap<String, String>();
+//		condVars.put("empid", "123");
+//		condVars.put("empname", "\'arian\'");
+//		HashMap<String, String> setVars = new HashMap<String, String>();
+//		setVars.put("empname", "\'negar\'");
+//		update(condVars, setVars, "EMPLOYEE");
+//	}
 
-		// insert(vars, "EMPLOYEE");
-		HashMap<String, String> vars2 = new HashMap<String, String>();
-		vars2.put("empid", "123");
-		vars2.put("empname", "\'arian\'");
-		ResultSet rs = select(vars2, "EMPLOYEE");
-		try {
-			while (rs.next()) {
-				int id = rs.getInt("empid");
-				String name = rs.getString("empname");
-				System.out.println("ID = " + id);
-				System.out.println("NAME = " + name);
-				System.out.println();
-			}
-			rs.close();
-			c.close();
-			stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// String sql = "UPDATE COMPANY set SALARY = 25000.00 where ID=1;";
-		HashMap<String, String> condVars = new HashMap<String, String>();
-		condVars.put("empid", "123");
-		condVars.put("empname", "\'arian\'");
-		HashMap<String, String> setVars = new HashMap<String, String>();
-		setVars.put("empname", "\'negar\'");
-		update(condVars, setVars, "EMPLOYEE");
-	}
-
-	static public boolean insert(HashMap<String, String> vars, String tableName) {
+	public boolean insert(HashMap<String, String> vars, String tableName) {
 		try {
 			Class.forName("org.postgresql.Driver");
 			c = DriverManager.getConnection(
@@ -80,7 +80,8 @@ public class DataBase {
 		return true;
 
 	}
-	public static ResultSet select(HashMap<String, String> vars, String tableName) {
+	
+public ResultSet select(HashMap<String, String> vars, String tableName) {
 		try {
 			Class.forName("org.postgresql.Driver");
 			c = DriverManager.getConnection(
@@ -107,7 +108,7 @@ public class DataBase {
 		}
 	}
 
-	public static boolean update(HashMap<String, String> condVars,
+	public boolean update(HashMap<String, String> condVars,
 			HashMap<String, String> setVars, String tableName) {
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -146,5 +147,15 @@ public class DataBase {
 
 	public boolean delete(HashMap<String, String> vars, String tableName) {
 		return false;
+	}
+	public void connectionClose(){
+		try {
+			c.close();
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

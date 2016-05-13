@@ -1,92 +1,136 @@
 package UserManagement;
+
 import java.util.HashMap;
 import DataBase.DataBase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
-public class Employee{
+public class Employee {
 	private int id;
 	private String name;
 	private int sectionId;
 	private boolean isManager;
 	private String username;
 	private String password;
-	boolean loggedin;
+	public boolean loggedin;
+	private String post;
 	DataBase DB;
-	public void Employee(){
+
+	public Employee() {
 		DB = new DataBase();
 	}
-	boolean login(String username, String password){
+
+	public boolean login(String username, String password) {
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("username", username);
-		vars.put("password", password);
+		vars.put("username", "\'"+username+"\'");
+		vars.put("password", "\'"+password+"\'");
+		System.out.println(vars.toString());
 		ResultSet results = DB.select(vars, "Employee");
+
 		boolean ret = false;
 		try {
-			if( results.next() ){
+			if (results.next()) {
 				getFromDB(results.getInt("empId"));
 				this.loggedin = true;
-				submitToDB();
+				HashMap<String, String> setVars = new HashMap<String, String>();
+				setVars.put("is_loggedin", Boolean.toString(this.loggedin));
+				submitToDB(setVars);
 				ret = true;
 			}
-			 results.close();
-			
+			results.close();
+
 		} catch (SQLException e) {
 			System.out.println(e);
 			ret = false;
 		}
 		return ret;
 	}
-	boolean logout(){
+
+	public boolean logout() {
 		boolean ret = false;
 		this.loggedin = false;
-		submitToDB();
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("is_loggedin", Boolean.toString(this.loggedin));
+		submitToDB(setVars);
 		return true;
 	}
-	void setId(int inputId){
+
+	public void setId(int inputId) {
 		this.id = inputId;
 	}
-	int getId(){
+
+	public int getId() {
 		return this.id;
 	}
-	void setName(String inputName){
+
+	public void setName(String inputName) {
 		this.name = inputName;
 	}
-	String getName(){
+
+	public String getName() {
 		return this.name;
 	}
-	void setSectionId(int inputSectionId){
+
+	public void setSectionId(int inputSectionId) {
 		this.sectionId = inputSectionId;
 	}
-	int getSectionId(){
+
+	public int getSectionId() {
 		return this.sectionId;
 	}
-	
-	void setUsername(String inputUsername){
+
+	public void setUsername(String inputUsername) {
 		this.username = inputUsername;
 	}
-	String getUsername(){
+
+	public String getUsername() {
 		return this.username;
 	}
-	
-	void setPassword(String inputPassword){
+
+	void setPassword(String inputPassword) {
 		this.password = inputPassword;
 	}
-	String getPassword(){
+
+	String getPassword() {
 		return this.password;
 	}
-	void promoteManager(){
+
+	public void promoteManager() {
 		this.isManager = true;
 	}
-	void demoteManager(){
+
+	public void demoteManager() {
 		this.isManager = false;
 	}
-	public void submitToDB(){
-		/* link mizane be DB etelaAt ro too ye satre jadid insert mikone!*/
+
+	public void submitToDB(HashMap<String, String> setVars) {
+		HashMap<String, String> condVars = new HashMap<String, String>();
+		condVars.put("empid", Integer.toString(this.id));
+		DB.update(condVars, setVars, "EMPLOYEE");
+
 	}
-	public void getFromDB(int empId){
-		/* az DB migire hamaro set mikone! */
+
+	public boolean getFromDB(int empId){
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("empid", Integer.toString(empId));
+		ResultSet rs = DB.select(vars, "Employee");
+		try {
+			if (rs.next()) {
+				this.id = rs.getInt("empid");
+				this.name = rs.getString("empname");
+				this.isManager = rs.getBoolean("ismodir");
+				this.password = rs.getString("password");
+				this.username = rs.getString("username");
+				this.sectionId = rs.getInt("sectionid");
+				this.post = rs.getString("post");
+			}
+			rs.close();
+			DB.connectionClose();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+			return false;
+		}
 	}
-	
 }
