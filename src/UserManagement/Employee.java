@@ -1,4 +1,9 @@
 package UserManagement;
+import java.util.HashMap;
+import DataBase.DataBase;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 
 public class Employee{
 	private int id;
@@ -8,9 +13,36 @@ public class Employee{
 	private String username;
 	private String password;
 	boolean loggedin;
+	DataBase DB;
+	public void Employee(){
+		DB = new DataBase();
+	}
 	boolean login(String username, String password){
-		
-		return false;
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("username", username);
+		vars.put("password", password);
+		ResultSet results = DB.select(vars, "Employee");
+		boolean ret = false;
+		try {
+			if( results.next() ){
+				getFromDB(results.getInt("empId"));
+				this.loggedin = true;
+				submitToDB();
+				ret = true;
+			}
+			 results.close();
+			
+		} catch (SQLException e) {
+			System.out.println(e);
+			ret = false;
+		}
+		return ret;
+	}
+	boolean logout(){
+		boolean ret = false;
+		this.loggedin = false;
+		submitToDB();
+		return true;
 	}
 	void setId(int inputId){
 		this.id = inputId;

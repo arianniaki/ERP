@@ -1,6 +1,7 @@
 package DataBase;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -46,8 +47,8 @@ public class DataBase{
 		}
 		
 	}
-	public boolean select(HashMap<String, String> vars, String tableName){
-		return false;
+	public ResultSet select(HashMap<String, String> vars, String tableName){
+		return null;
 	}
 	public boolean update(HashMap<String, String> vars, String tableName){
 		return false;
