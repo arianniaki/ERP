@@ -15,9 +15,12 @@ import javax.swing.JTextField;
 public class LoginPage extends JPanel {
 
   private JTextField[] fields;
+  String[] labels = { "Username", "Password"};
+  int[] widths = { 15, 15 };
+  String[] descs = { "Username", "Password" };
 
   // Create a form with the specified labels, tooltips, and sizes.
-  public LoginPage(String[] labels, int[] widths, String[] tips) {
+  public LoginPage() {
     super(new BorderLayout());
     
     JPanel labelPanel = new JPanel(new GridLayout(labels.length, 1));
@@ -28,8 +31,6 @@ public class LoginPage extends JPanel {
 
     for (int i = 0; i < labels.length; i += 1) {
       fields[i] = new JTextField();
-      if (i < tips.length)
-        fields[i].setToolTipText(tips[i]);
       if (i < widths.length)
         fields[i].setColumns(widths[i]);
 

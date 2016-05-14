@@ -13,16 +13,11 @@ import UserManagement.Employee;
 public class main {
 	   // The entry main() method
 	  public static void main(String[] args) {
-		    String[] labels = { "Username", "Password"};
-//		    char[] mnemonics = { 'F', 'M', 'L', 'A' };
-		    int[] widths = { 15, 15 };
-		    String[] descs = { "Username", "Password" };
 
-		    final LoginPage form = new LoginPage(labels, widths, descs);
+		    final LoginPage form = new LoginPage();
 
 		    JButton submit = new JButton("Submit Form");
 		    final JFrame f = new JFrame("Login Page");
-
 		    submit.addActionListener(new ActionListener() {
 		      public void actionPerformed(ActionEvent e) {
 		        System.out.println(form.getText(0) + " " + form.getText(1));

@@ -41,11 +41,7 @@ public class UserPage extends JFrame {
 		    			System.out.println(emp.loggedin);
 		    		    final JFrame f = new JFrame("Login Page");
 		    		    
-		    		    String[] labels = { "Username", "Password"};
-//		    		    char[] mnemonics = { 'F', 'M', 'L', 'A' };
-		    		    int[] widths = { 15, 15 };
-		    		    String[] descs = { "Username", "Password" };
-		    		    final LoginPage form = new LoginPage(labels, widths, descs);
+		    		    final LoginPage form = new LoginPage();
 		    		    JButton submit = new JButton("Submit Form");
 
 		    		    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
