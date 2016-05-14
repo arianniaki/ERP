@@ -34,7 +34,7 @@ public class Resource{
 	public boolean getFromDB(int rid){
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(rid));
-		ResultSet rs = DB.select(vars, "Employee");
+		ResultSet rs = DB.select(vars, "resource");
 		try {
 			if (rs.next()) {
 				this.id = rs.getInt("rid");
@@ -49,6 +49,13 @@ public class Resource{
 			return false;
 		}
 	}
- 
+
+	public void submitToDB(HashMap<String, String> setVars) {
+		HashMap<String, String> condVars = new HashMap<String, String>();
+		condVars.put("id", Integer.toString(this.id));
+		DB.update(condVars, setVars, "resource");
+
+	}
+
 
 }
