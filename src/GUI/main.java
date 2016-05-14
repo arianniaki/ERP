@@ -21,6 +21,7 @@ public class main {
 		    final LoginPage form = new LoginPage(labels, widths, descs);
 
 		    JButton submit = new JButton("Submit Form");
+		    final JFrame f = new JFrame("Login Page");
 
 		    submit.addActionListener(new ActionListener() {
 		      public void actionPerformed(ActionEvent e) {
@@ -34,12 +35,13 @@ public class main {
 				if(emp.login(form.getText(0),form.getText(1))){
 					System.out.println(emp.getName());
 					System.out.println(emp.loggedin);
-
+				    UserPage userpage = new UserPage(emp);
+				    userpage.setVisible(true);
+					f.dispose();
 				}
 		      }
 		    });
 
-		    JFrame f = new JFrame("Text Form Example");
 		    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		    f.getContentPane().add(form, BorderLayout.NORTH);
 		    JPanel p = new JPanel();

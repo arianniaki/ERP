@@ -19,6 +19,7 @@ public class LoginPage extends JPanel {
   // Create a form with the specified labels, tooltips, and sizes.
   public LoginPage(String[] labels, int[] widths, String[] tips) {
     super(new BorderLayout());
+    
     JPanel labelPanel = new JPanel(new GridLayout(labels.length, 1));
     JPanel fieldPanel = new JPanel(new GridLayout(labels.length, 1));
     add(labelPanel, BorderLayout.WEST);
