@@ -10,49 +10,14 @@ import java.util.HashMap;
 public class DataBase {
 	static Connection c = null;
 	static Statement stmt = null;
-
-//	public static void main(String[] args) {
-//		HashMap<String, String> vars = new HashMap<String, String>();
-//		// vars.put("empid", "6");
-//		// vars.put("empname", "\'arian\'");
-//		// vars.put("sectionid", "1");
-//		// vars.put("ismodir", "false");
-//
-//		// insert(vars, "EMPLOYEE");
-//		HashMap<String, String> vars2 = new HashMap<String, String>();
-//		vars2.put("empid", "123");
-//		vars2.put("empname", "\'arian\'");
-//		ResultSet rs = select(vars2, "EMPLOYEE");
-//		try {
-//			while (rs.next()) {
-//				int id = rs.getInt("empid");
-//				String name = rs.getString("empname");
-//				System.out.println("ID = " + id);
-//				System.out.println("NAME = " + name);
-//				System.out.println();
-//			}
-//			rs.close();
-//			c.close();
-//			stmt.close();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		// String sql = "UPDATE COMPANY set SALARY = 25000.00 where ID=1;";
-//		HashMap<String, String> condVars = new HashMap<String, String>();
-//		condVars.put("empid", "123");
-//		condVars.put("empname", "\'arian\'");
-//		HashMap<String, String> setVars = new HashMap<String, String>();
-//		setVars.put("empname", "\'negar\'");
-//		update(condVars, setVars, "EMPLOYEE");
-//	}
+	static String dbName = "jdbc:postgresql://localhost:5432/ERP";
+	static String user = "postgres";
+	static String pass = "123456m.";
 
 	public boolean insert(HashMap<String, String> vars, String tableName) {
 		try {
 			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection(
-					"jdbc:postgresql://localhost:5432/ERP", "postgres",
-					"123456m.");
+			c = DriverManager.getConnection(dbName, user, pass);
 			c.setAutoCommit(false);
 			System.out.println("Opened database successfully");
 
@@ -80,8 +45,8 @@ public class DataBase {
 		return true;
 
 	}
-	
-public ResultSet select(HashMap<String, String> vars, String tableName) {
+
+	public ResultSet select(HashMap<String, String> vars, String tableName) {
 		try {
 			Class.forName("org.postgresql.Driver");
 			c = DriverManager.getConnection(
@@ -112,9 +77,8 @@ public ResultSet select(HashMap<String, String> vars, String tableName) {
 			HashMap<String, String> setVars, String tableName) {
 		try {
 			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection(
-					"jdbc:postgresql://localhost:5432/ERP", "postgres",
-					"123456m.");
+			c = DriverManager.getConnection(dbName, user, pass);
+
 			c.setAutoCommit(false);
 			System.out.println("Opened database successfully");
 
@@ -132,10 +96,10 @@ public ResultSet select(HashMap<String, String> vars, String tableName) {
 			System.out.println(sql);
 			int out = stmt.executeUpdate(sql);
 			c.commit();
-			if(out > 0){
+			if (out > 0) {
 				System.out.println("Operation done successfully");
 				return true;
-			}else{
+			} else {
 				return false;
 			}
 		} catch (Exception e) {
@@ -145,10 +109,56 @@ public ResultSet select(HashMap<String, String> vars, String tableName) {
 		}
 	}
 
+	public ResultSet selectAll(String tableName) {
+		try {
+			Class.forName("org.postgresql.Driver");
+			c = DriverManager.getConnection(dbName, user, pass);
+
+			c.setAutoCommit(false);
+			System.out.println("Opened database successfully");
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM " + tableName + ";");
+			return rs;
+
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+			return null;
+		}
+
+	}
+
 	public boolean delete(HashMap<String, String> vars, String tableName) {
+		try {
+			Class.forName("org.postgresql.Driver");
+			c = DriverManager.getConnection(dbName, user, pass);
+
+			c.setAutoCommit(false);
+			System.out.println("Opened database successfully");
+
+			stmt = c.createStatement();
+			String sql = "DELETE from " + tableName + " where ";
+			for (String key : vars.keySet()) {
+				sql += key + "=" + vars.get(key) + " AND ";
+			}
+			sql = sql.substring(0, sql.length() - 5) + ";";
+			System.out.println("sql : "+ sql);
+
+			stmt.executeUpdate(sql);
+			c.commit();
+			stmt.close();
+			c.close();
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		System.out.println("Operation done successfully");
 		return false;
 	}
-	public void connectionClose(){
+
+	public void connectionClose() {
 		try {
 			c.close();
 			stmt.close();
