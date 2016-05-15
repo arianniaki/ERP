@@ -39,25 +39,26 @@ public class Main {
 //		rscat.deleteResource(4);
 //		System.out.println();
 //		rscat.readAllResources();
-
-//		ResourceCatalogue rscat = new ResourceCatalogue();
-//		rscat = new ResourceCatalogue();
-////		rscat.addResource(8, "sanad8");
+//
+//		InformationResourceCatalogue rscat = new InformationResourceCatalogue();
+//		rscat = new InformationResourceCatalogue();
+//		rscat.addResource(18, 2,"sanad8");
 //		rscat.readAllResources();
-//		rscat.deleteResource(3);
+//		System.out.println();
+//		rscat.deleteResource(18);
 //		System.out.println();
 //		rscat.readAllResources();
-		
-		// test EmployeeCatalogue
-		EmployeeCatalogue empcat = new EmployeeCatalogue();
-		empcat.readAllEmployees();
-		empcat.addEmployee(10, false, "gholamReza", "hammal", 5);
-		System.out.println(":::::: after insert ::::::::");
-		empcat.readAllEmployees();
-		empcat.deleteEmployee(10);
-		System.out.println(":::::: after delete ::::::::");
-
-		empcat.readAllEmployees();
-
+//		
+//		// test EmployeeCatalogue
+//		EmployeeCatalogue empcat = new EmployeeCatalogue();
+//		empcat.readAllEmployees();
+//		empcat.addEmployee(10, false, "gholamReza", "hammal", 5);
+//		System.out.println(":::::: after insert ::::::::");
+//		empcat.readAllEmployees();
+//		empcat.deleteEmployee(10);
+//		System.out.println(":::::: after delete ::::::::");
+//
+//		empcat.readAllEmployees();
+//
 	}
 }
