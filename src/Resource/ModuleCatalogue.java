@@ -7,13 +7,13 @@ public class ModuleCatalogue extends ResourceCatalogue{
 	public ModuleCatalogue(){
 		super();
 		tableName = "module";
-		nameInDb = "modname";
 	}
 	
 	public void addResource(int rid, int modid, String name) {
+		super.addResource(rid);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(rid));
-		vars.put(nameInDb, "\'" + name + "\'");
+		vars.put("modname", "\'" + name + "\'");
 		vars.put("modid", Integer.toString(modid));
 		DB.insert(vars, tableName);
 	}
