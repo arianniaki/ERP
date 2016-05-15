@@ -1,3 +1,4 @@
+import Resource.InformationResourceCatalogue;
 import Resource.Resource;
 import Resource.ResourceCatalogue;
 import UserManagement.Employee;
@@ -21,10 +22,10 @@ public class Main {
 //		}
 		
 		// test resource
-//		ResourceCatalogue rscat = new ResourceCatalogue();
-//		rscat = new ResourceCatalogue();
-////		rscat.addResource(8, "sanad8");
-//		rscat.readAllResources();
+		InformationResourceCatalogue rscat = new InformationResourceCatalogue();
+		rscat = new InformationResourceCatalogue();
+//		rscat.addResource(8, "sanad8");
+		rscat.readAllResources();
 //		rscat.deleteResource(4);
 //		System.out.println();
 //		rscat.readAllResources();

@@ -10,6 +10,7 @@ public class Resource{
 	private int id;
 	private String name;
 	DataBase DB;
+	String tableName;
 	
 	public Resource(){
 		DB = new DataBase();
@@ -34,7 +35,7 @@ public class Resource{
 	public boolean getFromDB(int rid){
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(rid));
-		ResultSet rs = DB.select(vars, "resource");
+		ResultSet rs = DB.select(vars, tableName);
 		try {
 			if (rs.next()) {
 				this.id = rs.getInt("rid");
@@ -53,7 +54,7 @@ public class Resource{
 	public void submitToDB(HashMap<String, String> setVars) {
 		HashMap<String, String> condVars = new HashMap<String, String>();
 		condVars.put("id", Integer.toString(this.id));
-		DB.update(condVars, setVars, "resource");
+		DB.update(condVars, setVars, tableName);
 
 	}
 

@@ -19,7 +19,7 @@ public class DataBase {
 			Class.forName("org.postgresql.Driver");
 			c = DriverManager.getConnection(dbName, user, pass);
 			c.setAutoCommit(false);
-			System.out.println("Opened database successfully");
+			System.out.println("insert : Opened database successfully");
 
 			stmt = c.createStatement();
 			String sql = "INSERT INTO " + tableName + " (";
@@ -53,7 +53,7 @@ public class DataBase {
 					"jdbc:postgresql://localhost:5432/ERP", "postgres",
 					"123456m.");
 			c.setAutoCommit(false);
-			System.out.println("Opened database successfully");
+			System.out.println("select : Opened database successfully");
 
 			stmt = c.createStatement();
 			String sql = "SELECT * FROM " + tableName + " where ";
@@ -80,7 +80,7 @@ public class DataBase {
 			c = DriverManager.getConnection(dbName, user, pass);
 
 			c.setAutoCommit(false);
-			System.out.println("Opened database successfully");
+			System.out.println("update : Opened database successfully");
 
 			stmt = c.createStatement();
 			String sql = "UPDATE " + tableName + " set ";// SALARY = 25000.00
@@ -109,17 +109,40 @@ public class DataBase {
 		}
 	}
 
+	public ResultSet getColumns (String tableName){
+		try {
+			Class.forName("org.postgresql.Driver");
+			c = DriverManager.getConnection(dbName, user, pass);
+
+			c.setAutoCommit(false);
+			System.out.println("getColumns : Opened database successfully");
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT column_name, data_type FROM information_schema.columns where table_schema = 'public' and table_name = \'" + tableName + "\'"+ ";");
+
+			return rs;
+
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+			return null;
+		}
+
+
+	}
 	public ResultSet selectAll(String tableName) {
 		try {
 			Class.forName("org.postgresql.Driver");
 			c = DriverManager.getConnection(dbName, user, pass);
 
 			c.setAutoCommit(false);
-			System.out.println("Opened database successfully");
+			System.out.println("SelectAll : Opened database successfully");
 
 			stmt = c.createStatement();
 			ResultSet rs = stmt
 					.executeQuery("SELECT * FROM " + tableName + ";");
+			
 			return rs;
 
 		} catch (Exception e) {
@@ -136,7 +159,7 @@ public class DataBase {
 			c = DriverManager.getConnection(dbName, user, pass);
 
 			c.setAutoCommit(false);
-			System.out.println("Opened database successfully");
+			System.out.println("delete : Opened database successfully");
 
 			stmt = c.createStatement();
 			String sql = "DELETE from " + tableName + " where ";
