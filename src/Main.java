@@ -1,5 +1,6 @@
 import Resource.FinancialResourceCatalogue;
 import Resource.InformationResourceCatalogue;
+import Resource.ModuleCatalogue;
 import Resource.Resource;
 import Resource.ResourceCatalogue;
 import UserManagement.Employee;
@@ -23,13 +24,16 @@ public class Main {
 //		}
 		
 		// test resource
-//		FinancialResourceCatalogue fr = new FinancialResourceCatalogue();
-//		fr = new FinancialResourceCatalogue();
-//		fr.readAllResources();
-//		fr.addResource(2,2, "finan pul");
-//		System.out.println();
-//		fr.readAllResources();
-//		rscat.addResource(8, "sanad8");
+//		ModuleCatalogue mcat = new ModuleCatalogue();
+//		System.out.println("all : ");
+//		mcat.readAllResources();
+//		mcat.addResource(6,2,"module 1");
+//		mcat.addResource(5,2,"module 3");
+//		System.out.println(":::::::after insert ::::::: ");
+//		mcat.readAllResources();
+//		mcat.deleteResource(5);
+//		System.out.println(":::::::after delete ::::::: ");
+//		mcat.readAllResources();
 
 //		rscat.deleteResource(4);
 //		System.out.println();

@@ -37,7 +37,7 @@ public class ResourceCatalogue {
 	public void deleteResource(int id) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(id));
-		DB.delete(vars, tableName);
+		DB.delete(vars, "resource");
 	}
 
 }

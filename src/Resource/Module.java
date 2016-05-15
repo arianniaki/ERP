@@ -1,5 +1,9 @@
 package Resource;
 
-public class Module {
+public class Module extends Resource{
+	public Module() {
+		super();
+		tableName = "module";
 
+	}
 }
