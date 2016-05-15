@@ -207,22 +207,121 @@ displayemployees.addActionListener(new ActionListener() {
 		      }});
         addresourcebtn.addActionListener(new ActionListener() {
 		      public void actionPerformed(ActionEvent e) {
+			        final JFrame fresource = new JFrame("Add Resource pop up");
+
+		    	   final JPanel guires = new JPanel(new BorderLayout(5,5));
+		    	   guires.setBorder( new TitledBorder("BorderLayout(5,5)") );
+		           fresource.setContentPane(guires);
+
+		           
+		           JPanel resourceLables = new JPanel(new BorderLayout(4,5));
+		           resourceLables.setBorder(
+		               new TitledBorder("BorderLayout(4,4)") );
+		           guires.add(resourceLables, BorderLayout.WEST);
+
+
+		           final JPanel resourcePanel = new JPanel(new GridLayout(0,1,0,0));
+		           resourcePanel.setBorder(
+		               new TitledBorder("Res") );
+		           resourceLables.add(resourcePanel, BorderLayout.NORTH);
+		           
+		           final JPanel InforesourcePanel = new JPanel(new GridLayout(0,1,0,0));
+		           InforesourcePanel.setBorder(
+		               new TitledBorder("Info") );
+		           resourceLables.add(InforesourcePanel, BorderLayout.SOUTH);
+		           
+		           
+		           JPanel PhysresourceLables = new JPanel(new BorderLayout(4,5));
+		           PhysresourceLables.setBorder(
+		               new TitledBorder("BorderLayout(4,4)") );
+		           guires.add(PhysresourceLables, BorderLayout.EAST);
+
+		           final JPanel PhysresourcePanel = new JPanel(new GridLayout(0,1,0,0));
+		           PhysresourcePanel.setBorder(
+		               new TitledBorder("Phys") );
+		           PhysresourceLables.add(PhysresourcePanel, BorderLayout.NORTH);
+		           
+		           
+
+		           final JPanel FinanresourceLables = new JPanel(new GridLayout(0,1,0,0));
+		           FinanresourceLables.setBorder(
+		               new TitledBorder("Finan") );
+		           PhysresourceLables.add(FinanresourceLables, BorderLayout.SOUTH);
+		           fresource.pack();
+		           
+		           fresource.validate();
+		           
+		           
+		           
+		           fresource.pack();
+		           
+		           fresource.validate();
+
+		           
+		    	  
+		    	  
+		    	  
 		        System.out.println("clicked add resource");
-		        final JFrame fresource = new JFrame("Add Resource pop up");
-		      String[] labels = { "Resource Name","Resource ID" };
-		      int[] widths = { 15, 15};
+		        String[] labels = { "Resource Name","Resource ID" };
+		        String[] physlabels = { "PhysResource Name","Resource ID" };
+		        String[] infolabels = { "InfoResource Name","Resource ID" };
+		        String[] finanlabels = { "FinanResource Name","Resource ID" };
+
+
+		        int[] widths = { 15, 15};
 
     		    final TextForm resourceform = new TextForm(labels,widths);
-    		    JButton submitres = new JButton("Submit Resource");
+    		    final TextForm physresform = new TextForm(physlabels,widths);
+    		    final TextForm infoform = new TextForm(infolabels,widths);
+    		    final TextForm finanform = new TextForm(finanlabels,widths);
 
+
+    		    resourcePanel.add(resourceform,BorderLayout.NORTH);
+    		    InforesourcePanel.add(infoform,BorderLayout.NORTH);
+
+    		    PhysresourcePanel.add(physresform,BorderLayout.NORTH);
+    		    FinanresourceLables.add(finanform,BorderLayout.NORTH);
+
+    		    
+    		    JButton submitres = new JButton("Submit Resource");
 //    		    fresource.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    		    fresource.getContentPane().add(resourceform, BorderLayout.NORTH);
-    		    JPanel p = new JPanel();
-    		    p.add(submitres);
-    		    fresource.getContentPane().add(p, BorderLayout.SOUTH);
+
+    		    JPanel submitresbtnPanel = new JPanel();
+    		    submitresbtnPanel.add(submitres);
+    		    resourcePanel.add(submitresbtnPanel,BorderLayout.SOUTH);
+    		    
+    		    
+    		    JButton submitphysres = new JButton("Submit Physical Resource");
+//    		    fresource.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    		    JPanel submitPhysresbtnPanel = new JPanel();
+    		    submitPhysresbtnPanel.add(submitphysres);
+    		    PhysresourcePanel.add(submitPhysresbtnPanel,BorderLayout.SOUTH);
+
+    		    
+    		    JButton submitinfores = new JButton("Submit Info Resource");
+//    		    fresource.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    		    JPanel submitInforesbtnPanel = new JPanel();
+    		    submitInforesbtnPanel.add(submitinfores);
+    		    InforesourcePanel.add(submitInforesbtnPanel,BorderLayout.SOUTH);
+    		    
+    		    JButton submitfinanres = new JButton("Submit Finan Resource");
+//    		    fresource.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    		    JPanel submitFinanresbtnPanel = new JPanel();
+    		    submitFinanresbtnPanel.add(submitfinanres);
+    		    FinanresourceLables.add(submitFinanresbtnPanel,BorderLayout.SOUTH);
+    		    
+    		    
+//    		    fresource.getContentPane().add(resourceform, BorderLayout.NORTH);
+//    		    fresource.getContentPane().add(p, BorderLayout.SOUTH);
     		    fresource.pack();
     		    fresource.setVisible(true);
 //    			ine.dispose();
+    		    
+    		         
+
     		    
     			submitres.addActionListener(new ActionListener() {
   			      public void actionPerformed(ActionEvent e) {
@@ -233,6 +332,37 @@ displayemployees.addActionListener(new ActionListener() {
   					rscat.readAllResources();
   			      }
   			    });
+    			
+    			submitphysres.addActionListener(new ActionListener() {
+    			      public void actionPerformed(ActionEvent e) {
+    			        System.out.println(physresform.getText(0));
+//    					ResourceCatalogue rscat = new ResourceCatalogue();
+//    					rscat = new ResourceCatalogue();
+//    					rscat.addResource(resourceform.getText(0));
+//    					rscat.readAllResources();
+    			      }
+    			    });
+    			
+    			submitinfores.addActionListener(new ActionListener() {
+  			      public void actionPerformed(ActionEvent e) {
+  			        System.out.println(infoform.getText(0));
+//  					ResourceCatalogue rscat = new ResourceCatalogue();
+//  					rscat = new ResourceCatalogue();
+//  					rscat.addResource(resourceform.getText(0));
+//  					rscat.readAllResources();
+  			      }
+  			    });
+    			
+    			submitfinanres.addActionListener(new ActionListener() {
+    			      public void actionPerformed(ActionEvent e) {
+    			        System.out.println(finanform.getText(0));
+//    					ResourceCatalogue rscat = new ResourceCatalogue();
+//    					rscat = new ResourceCatalogue();
+//    					rscat.addResource(resourceform.getText(0));
+//    					rscat.readAllResources();
+    			      }
+    			    });
+    			
     			
 		      }});
         
