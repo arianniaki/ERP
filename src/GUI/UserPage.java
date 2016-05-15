@@ -3,16 +3,20 @@ package GUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.table.DefaultTableModel;
 
+import Resource.ModuleCatalogue;
 import Resource.ResourceCatalogue;
 import UserManagement.Employee;
+import UserManagement.EmployeeCatalogue;
 public class UserPage extends JFrame {
-    protected JButton addmodulebtn, addresourcebtn,logout,displayresourcebtn;
+    protected JButton addmodulebtn, addresourcebtn,logout,displaymodulebtn,displayemployees;
     // Constructor sets features of the frame, creates buttons, adds them to the frame, and
     // assigns an object to listen to them
     
@@ -45,17 +49,23 @@ public class UserPage extends JFrame {
         setSize(500,500); // sets the size of the window
         addmodulebtn = new JButton("Add Module"); // create two new buttons w/labels start and stop
         addresourcebtn = new JButton("Add Resource");
-        displayresourcebtn = new JButton("Display Resource");
+        displaymodulebtn = new JButton("Display Modules");
+        displayemployees = new JButton("Display Employees");
 
+        
         logout = new JButton("Logout");
         buttons.add( addmodulebtn);
         buttons.add( addresourcebtn);
         buttons.add( logout);
-        buttons.add( displayresourcebtn);
+        buttons.add( displaymodulebtn);
+        buttons.add( displayemployees);
+
 
         super.validate();
       
         final JFrame ine = this;
+        
+    
 //        Container contentPane = getContentPane();
 //        contentPane.setLayout(new FlowLayout()); // layout objects from left to right
                                                  // until fill up row and then go to next row
@@ -66,15 +76,16 @@ public class UserPage extends JFrame {
         
 
         String[] header = {"Name", "Value"};
-        String[] a = new String[0];
-        String[] names = System.getProperties().
-            stringPropertyNames().toArray(a);
-        String[][] data = new String[names.length][2];
-        for (int ii=0; ii<names.length; ii++) {
-            data[ii][0] = names[ii];
-            data[ii][1] = System.getProperty(names[ii]);
-        }
-        DefaultTableModel model = new DefaultTableModel(data, header);
+//        String[] a = new String[0];
+//        String[] names = System.getProperties().
+//            stringPropertyNames().toArray(a);
+        String[][] data = new String[2][2];
+        
+//        for (int ii=0; ii<names.length; ii++) {
+//            data[ii][0] = names[ii];
+//            data[ii][1] = System.getProperty(names[ii]);
+//        }
+        final DefaultTableModel model = new DefaultTableModel(data, header);
         JTable table = new JTable(model);
         try {
             // 1.6+
@@ -86,25 +97,25 @@ public class UserPage extends JFrame {
         tableScroll.setPreferredSize(
             new Dimension(tablePreferred.width, tablePreferred.height/3) );
 
-        JPanel imagePanel = new JPanel(new GridBagLayout());
-        imagePanel.setBorder(
-            new TitledBorder("GridBagLayout()") );
+//        JPanel imagePanel = new JPanel(new GridBagLayout());
+//        imagePanel.setBorder(
+//            new TitledBorder("GridBagLayout()") );
 
-        BufferedImage bi = new BufferedImage(
-            200,200,BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = bi.createGraphics();
-        GradientPaint gp = new GradientPaint(
-            20f,20f,Color.red, 180f,180f,Color.yellow);
-        g.setPaint(gp);
-        g.fillRect(0,0,200,200);
-        ImageIcon ii = new ImageIcon(bi);
-        JLabel imageLabel = new JLabel(ii);
-        imagePanel.add( imageLabel, null );
+//        BufferedImage bi = new BufferedImage(
+//            200,200,BufferedImage.TYPE_INT_ARGB);
+//        Graphics2D g = bi.createGraphics();
+//        GradientPaint gp = new GradientPaint(
+//            20f,20f,Color.red, 180f,180f,Color.yellow);
+//        g.setPaint(gp);
+//        g.fillRect(0,0,200,200);
+//        ImageIcon ii = new ImageIcon(bi);
+//        JLabel imageLabel = new JLabel(ii);
+//        imagePanel.add( imageLabel, null );
 
         JSplitPane splitPane = new JSplitPane(
             JSplitPane.VERTICAL_SPLIT,
             tableScroll,
-            new JScrollPane(imagePanel));
+            new JScrollPane());
         gui.add( splitPane, BorderLayout.CENTER );
 
         ine.setContentPane(gui);
@@ -119,35 +130,77 @@ public class UserPage extends JFrame {
         } catch(Throwable ignoreAndContinue) {
         }
 
-        
+displaymodulebtn.addActionListener(new ActionListener() {
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		ModuleCatalogue mcat = new ModuleCatalogue();
+		System.out.println("all : ");
+		ArrayList<HashMap<String, String>> allmodules = mcat.readAllResources();
+		if (model.getRowCount() > 0) {
+		    for (int i = model.getRowCount() - 1; i > -1; i--) {
+		    	model.removeRow(i);
+		    }
+		}
+		for (int i = 0; i < allmodules.size(); i++) {
+			System.out.println(allmodules.get(i));
+			model.addRow(new Object[] { allmodules.get(i).toString().substring(0, 7), allmodules.get(i).toString().subSequence(7, allmodules.get(i).toString().length())});
+		}
+		model.setColumnIdentifiers(new Object[]{"rid","resource"});
+	}
+});
+
+displayemployees.addActionListener(new ActionListener() {
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		EmployeeCatalogue empcat = new EmployeeCatalogue();
+		System.out.println("all : ");
+		ArrayList<HashMap<String, String>> allemps = empcat.readAllEmployees();
+		if (model.getRowCount() > 0) {
+		    for (int i = model.getRowCount() - 1; i > -1; i--) {
+		    	model.removeRow(i);
+		    }
+		}
+		for (int i = 0; i < allemps.size(); i++) {
+			System.out.println(allemps.get(i));
+			model.addRow(new Object[] { allemps.get(i).toString().substring(0, 9), allemps.get(i).toString().subSequence(7, allemps.get(i).toString().length())});
+		}
+		model.setColumnIdentifiers(new Object[]{"empid","employee"});
+	}
+});
         
         // create an object to listen to both buttons:
         addmodulebtn.addActionListener(new ActionListener() {
 		      public void actionPerformed(ActionEvent e) {
 		        System.out.println("clicked add module");
 		        final JFrame fmodule = new JFrame("Add Module pop up");
-			      String[] labels = { "Module Name" };
-			      int[] widths = { 15, 15};
+			      String[] labels = { "Module Name","Module id","Resource id" };
+			      int[] widths = { 15, 15,15};
 
 	    		    final TextForm moduleform = new TextForm(labels,widths);
-	    		    JButton submitres = new JButton("Submit Module");
+	    		    JButton submitmodule = new JButton("Submit Module");
 
 //	    		    fresource.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    		    fmodule.getContentPane().add(moduleform, BorderLayout.NORTH);
 	    		    JPanel p = new JPanel();
-	    		    p.add(submitres);
+	    		    p.add(submitmodule);
 	    		    fmodule.getContentPane().add(p, BorderLayout.SOUTH);
 	    		    fmodule.pack();
 	    		    fmodule.setVisible(true);
 //	    			ine.dispose();
 	    		    
-	    			submitres.addActionListener(new ActionListener() {
+	    			submitmodule.addActionListener(new ActionListener() {
 	  			      public void actionPerformed(ActionEvent e) {
 	  			        System.out.println(moduleform.getText(0));
-	  					ResourceCatalogue rscat = new ResourceCatalogue();
-	  					rscat = new ResourceCatalogue();
-	  					rscat.addResource(moduleform.getText(0));
-	  					rscat.readAllResources();
+	  					ModuleCatalogue mcat = new ModuleCatalogue();
+	  					System.out.println("all : ");
+	  					mcat.readAllResources();
+	  			        
+	  					mcat.addResource(Integer.parseInt(moduleform.getText(2)),Integer.parseInt(moduleform.getText(1)),moduleform.getText(0));
+	  					mcat.readAllResources();
 	  			      }
 	  			    });
 		        
@@ -156,7 +209,7 @@ public class UserPage extends JFrame {
 		      public void actionPerformed(ActionEvent e) {
 		        System.out.println("clicked add resource");
 		        final JFrame fresource = new JFrame("Add Resource pop up");
-		      String[] labels = { "Resource Name" };
+		      String[] labels = { "Resource Name","Resource ID" };
 		      int[] widths = { 15, 15};
 
     		    final TextForm resourceform = new TextForm(labels,widths);
@@ -176,7 +229,7 @@ public class UserPage extends JFrame {
   			        System.out.println(resourceform.getText(0));
   					ResourceCatalogue rscat = new ResourceCatalogue();
   					rscat = new ResourceCatalogue();
-  					rscat.addResource(resourceform.getText(0));
+//  					rscat.addResource(resourceform.getText(0));
   					rscat.readAllResources();
   			      }
   			    });
