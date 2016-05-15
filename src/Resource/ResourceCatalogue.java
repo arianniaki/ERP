@@ -30,9 +30,9 @@ public class ResourceCatalogue{
 		}
 	}
 	
-	public void addResource(int id, String name){
+	public void addResource(String name){
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("rid", Integer.toString(id));
+//		vars.put("rid", Integer.toString(id));
 		vars.put("rname", "\'"+name+"\'");
 		DB.insert(vars, "resource");
 	}
