@@ -30,6 +30,32 @@ public class UserPage extends JFrame {
         addmodulebtn.addActionListener(new ActionListener() {
 		      public void actionPerformed(ActionEvent e) {
 		        System.out.println("clicked add module");
+		        final JFrame fmodule = new JFrame("Add Module pop up");
+			      String[] labels = { "Module Name" };
+			      int[] widths = { 15, 15};
+
+	    		    final TextForm moduleform = new TextForm(labels,widths);
+	    		    JButton submitres = new JButton("Submit Module");
+
+//	    		    fresource.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    		    fmodule.getContentPane().add(moduleform, BorderLayout.NORTH);
+	    		    JPanel p = new JPanel();
+	    		    p.add(submitres);
+	    		    fmodule.getContentPane().add(p, BorderLayout.SOUTH);
+	    		    fmodule.pack();
+	    		    fmodule.setVisible(true);
+//	    			ine.dispose();
+	    		    
+	    			submitres.addActionListener(new ActionListener() {
+	  			      public void actionPerformed(ActionEvent e) {
+	  			        System.out.println(moduleform.getText(0));
+	  					ResourceCatalogue rscat = new ResourceCatalogue();
+	  					rscat = new ResourceCatalogue();
+	  					rscat.addResource(moduleform.getText(0));
+	  					rscat.readAllResources();
+	  			      }
+	  			    });
+		        
 		      }});
         addresourcebtn.addActionListener(new ActionListener() {
 		      public void actionPerformed(ActionEvent e) {
