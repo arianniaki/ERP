@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -24,6 +25,9 @@ public class main {
 		        Employee emp = new Employee();
 				if(!(emp.login(form.getText(0),form.getText(1)))){
 					System.out.println("huraaa");
+					form.failed_label.setVisible(true);
+
+
 				}else{
 					System.out.println("shit");
 				}

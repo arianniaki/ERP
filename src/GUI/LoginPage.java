@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,8 @@ public class LoginPage extends JPanel {
   String[] labels = { "Username", "Password"};
   int[] widths = { 15, 15 };
   String[] descs = { "Username", "Password" };
+  JLabel failed_label = new JLabel("User Password Incorrect");
+
 
   // Create a form with the specified labels, tooltips, and sizes.
   public LoginPage() {
@@ -39,7 +42,11 @@ public class LoginPage extends JPanel {
 
       labelPanel.add(lab);
       JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+      p.setPreferredSize(new Dimension(300,55));
       p.add(fields[i]);
+      p.add(failed_label);
+	  failed_label.setVisible(false);
+
       fieldPanel.add(p);
     }
   }

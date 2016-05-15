@@ -29,5 +29,13 @@ public class Main {
 //		rscat.deleteResource(4);
 //		System.out.println();
 //		rscat.readAllResources();
+
+//		ResourceCatalogue rscat = new ResourceCatalogue();
+//		rscat = new ResourceCatalogue();
+////		rscat.addResource(8, "sanad8");
+//		rscat.readAllResources();
+//		rscat.deleteResource(3);
+//		System.out.println();
+//		rscat.readAllResources();
 	}
 }
