@@ -1,3 +1,4 @@
+import Resource.FinancialResourceCatalogue;
 import Resource.InformationResourceCatalogue;
 import Resource.Resource;
 import Resource.ResourceCatalogue;
@@ -22,10 +23,14 @@ public class Main {
 //		}
 		
 		// test resource
-		InformationResourceCatalogue rscat = new InformationResourceCatalogue();
-		rscat = new InformationResourceCatalogue();
+//		FinancialResourceCatalogue fr = new FinancialResourceCatalogue();
+//		fr = new FinancialResourceCatalogue();
+//		fr.readAllResources();
+//		fr.addResource(2,2, "finan pul");
+//		System.out.println();
+//		fr.readAllResources();
 //		rscat.addResource(8, "sanad8");
-		rscat.readAllResources();
+
 //		rscat.deleteResource(4);
 //		System.out.println();
 //		rscat.readAllResources();

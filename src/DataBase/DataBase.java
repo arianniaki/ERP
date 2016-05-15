@@ -20,7 +20,7 @@ public class DataBase {
 			c = DriverManager.getConnection(dbName, user, pass);
 			c.setAutoCommit(false);
 			System.out.println("insert : Opened database successfully");
-
+			System.out.println();
 			stmt = c.createStatement();
 			String sql = "INSERT INTO " + tableName + " (";
 			for (String key : vars.keySet()) {
