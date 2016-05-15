@@ -4,6 +4,7 @@ import Resource.ModuleCatalogue;
 import Resource.Resource;
 import Resource.ResourceCatalogue;
 import UserManagement.Employee;
+import UserManagement.EmployeeCatalogue;
 
 public class Main {
 	public static void main(String[] args) {
@@ -46,5 +47,17 @@ public class Main {
 //		rscat.deleteResource(3);
 //		System.out.println();
 //		rscat.readAllResources();
+		
+		// test EmployeeCatalogue
+		EmployeeCatalogue empcat = new EmployeeCatalogue();
+		empcat.readAllEmployees();
+		empcat.addEmployee(10, false, "gholamReza", "hammal", 5);
+		System.out.println(":::::: after insert ::::::::");
+		empcat.readAllEmployees();
+		empcat.deleteEmployee(10);
+		System.out.println(":::::: after delete ::::::::");
+
+		empcat.readAllEmployees();
+
 	}
 }
