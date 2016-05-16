@@ -19,7 +19,7 @@ import Resource.ResourceCatalogue;
 import UserManagement.Employee;
 import UserManagement.EmployeeCatalogue;
 public class UserPage extends JFrame {
-    protected JButton addmodulebtn, addresourcebtn,logout,displaymodulebtn,displayemployees;
+    protected JButton addmodulebtn, addresourcebtn,logout,displaymodulebtn,displayemployees,displayresources;
     // Constructor sets features of the frame, creates buttons, adds them to the frame, and
     // assigns an object to listen to them
     
@@ -54,7 +54,7 @@ public class UserPage extends JFrame {
         addresourcebtn = new JButton("Add Resource");
         displaymodulebtn = new JButton("Display Modules");
         displayemployees = new JButton("Display Employees");
-
+        displayresources = new JButton("Display Resources");
         
         logout = new JButton("Logout");
         buttons.add( addmodulebtn);
@@ -62,6 +62,7 @@ public class UserPage extends JFrame {
         buttons.add( logout);
         buttons.add( displaymodulebtn);
         buttons.add( displayemployees);
+        buttons.add( displayresources);
 
 
         super.validate();
@@ -152,6 +153,28 @@ displaymodulebtn.addActionListener(new ActionListener() {
 		}
 		model.setColumnIdentifiers(new Object[]{"rid","resource"});
 	}
+});
+
+displayresources.addActionListener(new ActionListener() {
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		ResourceCatalogue rcat = new ResourceCatalogue();
+		System.out.println("all : ");
+		ArrayList<HashMap<String, String>> allres = rcat.readAllResources();
+		if (model.getRowCount() > 0) {
+		    for (int i = model.getRowCount() - 1; i > -1; i--) {
+		    	model.removeRow(i);
+		    }
+		}
+		for (int i = 0; i < allres.size(); i++) {
+			System.out.println(allres.get(i));
+			model.addRow(new Object[] { allres.get(i).toString().substring(0, 7), allres.get(i).toString().subSequence(7, allres.get(i).toString().length())});
+		}
+		model.setColumnIdentifiers(new Object[]{"rid","resource"});
+	}
+	
 });
 
 displayemployees.addActionListener(new ActionListener() {

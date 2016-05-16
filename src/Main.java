@@ -1,6 +1,7 @@
 import Resource.FinancialResourceCatalogue;
 import Resource.InformationResourceCatalogue;
 import Resource.ModuleCatalogue;
+import Resource.PhysicalResourceCatalogue;
 import Resource.Resource;
 import Resource.ResourceCatalogue;
 import UserManagement.Employee;
