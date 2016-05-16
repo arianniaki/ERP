@@ -10,7 +10,7 @@ public class ModuleCatalogue extends ResourceCatalogue{
 	}
 	
 	public void addResource(int rid, int modid, String name) {
-		super.addResource(rid);
+		super.addResource(rid,name);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(rid));
 		vars.put("modname", "\'" + name + "\'");

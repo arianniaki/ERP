@@ -41,13 +41,21 @@ public class Main {
 //		rscat.readAllResources();
 //
 //		InformationResourceCatalogue rscat = new InformationResourceCatalogue();
-//		rscat = new InformationResourceCatalogue();
-//		rscat.addResource(18, 2,"sanad8");
+//		ResourceCatalogue rs = new ResourceCatalogue();
+//		rs.readAllResources();
+//		System.out.println();
+//		rscat.addResource(90, 0, "temp");
+//		System.out.println();
 //		rscat.readAllResources();
 //		System.out.println();
-//		rscat.deleteResource(18);
+//		rs.readAllResources();
+//
+//		rscat.deleteResource(90);
 //		System.out.println();
 //		rscat.readAllResources();
+//		System.out.println();
+//		rs.readAllResources();
+
 //		
 //		// test EmployeeCatalogue
 //		EmployeeCatalogue empcat = new EmployeeCatalogue();
