@@ -29,16 +29,19 @@ public class EmployeeCatalogue{
 		DB.delete(vars, "employee");
 	}
 
-	public void addEmployee(int empid, boolean ismodir, String empname, String post, int sectionId) {
+	public void addEmployee(int empid, boolean ismodir, String empname, String post, int sectionId,String username,String password, boolean is_loggedin) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", Integer.toString(empid));
 		vars.put("empname", "\'" + empname + "\'");
 		vars.put("sectionid", Integer.toString(sectionId));
 		vars.put("post", "\'" + post +"\'");
 		vars.put("ismodir", Boolean.toString(ismodir));
-		
+		vars.put("username", "\'" + username +"\'");
+		vars.put("password", "\'" + password +"\'");
+		vars.put("is_loggedin", Boolean.toString(is_loggedin));
+
+
 		DB.insert(vars, "employee");
 	}
-
 
 }
