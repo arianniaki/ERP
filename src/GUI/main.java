@@ -50,6 +50,7 @@ public class main {
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 				    final JFrame signup = new JFrame("Signup Page");
+				    
 				    String[] labels = { "Employee Name","Employee id","Section ID","Username","Password"};
 				    int[] widths = { 15, 15,15,15,15};
 	    		    JButton submitsignup = new JButton("Submit");
@@ -73,6 +74,7 @@ public class main {
 							
 							empcat.addEmployee(Integer.parseInt(signupform.getText(1)), false, signupform.getText(0), "newuser",Integer.parseInt(signupform.getText(2)),signupform.getText(3), signupform.getText(4),false);
 							empcat.readAllEmployees();
+							signup.dispose();
 						}
 					});
 
