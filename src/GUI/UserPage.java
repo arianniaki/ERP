@@ -67,7 +67,7 @@ public class UserPage extends JFrame {
         super.validate();
       
         final JFrame ine = this;
-        
+        ine.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
     
 //        Container contentPane = getContentPane();
 //        contentPane.setLayout(new FlowLayout()); // layout objects from left to right
@@ -223,15 +223,15 @@ displayemployees.addActionListener(new ActionListener() {
 		           guires.add(resourceLables, BorderLayout.WEST);
 
 
-		           final JPanel resourcePanel = new JPanel(new GridLayout(0,1,0,0));
-		           resourcePanel.setBorder(
-		               new TitledBorder("Res") );
-		           resourceLables.add(resourcePanel, BorderLayout.NORTH);
+//		           final JPanel resourcePanel = new JPanel(new GridLayout(0,1,0,0));
+//		           resourcePanel.setBorder(
+//		               new TitledBorder("Res") );
+//		           resourceLables.add(resourcePanel, BorderLayout.NORTH);
 		           
 		           final JPanel InforesourcePanel = new JPanel(new GridLayout(0,1,0,0));
 		           InforesourcePanel.setBorder(
 		               new TitledBorder("Info") );
-		           resourceLables.add(InforesourcePanel, BorderLayout.SOUTH);
+		           resourceLables.add(InforesourcePanel, BorderLayout.NORTH);
 		           
 		           
 		           JPanel PhysresourceLables = new JPanel(new BorderLayout(4,5));
@@ -254,14 +254,9 @@ displayemployees.addActionListener(new ActionListener() {
 		           
 		           fresource.validate();
 		           
-		           
-		           
 		           fresource.pack();
 		           
 		           fresource.validate();
-
-		           
-		    	  
 		    	  
 		    	  
 		        System.out.println("clicked add resource");
@@ -279,7 +274,7 @@ displayemployees.addActionListener(new ActionListener() {
     		    final TextForm finanform = new TextForm(finanlabels,widths);
 
 
-    		    resourcePanel.add(resourceform,BorderLayout.NORTH);
+//    		    resourcePanel.add(resourceform,BorderLayout.NORTH);
     		    InforesourcePanel.add(infoform,BorderLayout.NORTH);
 
     		    PhysresourcePanel.add(physresform,BorderLayout.NORTH);
@@ -291,7 +286,7 @@ displayemployees.addActionListener(new ActionListener() {
 
     		    JPanel submitresbtnPanel = new JPanel();
     		    submitresbtnPanel.add(submitres);
-    		    resourcePanel.add(submitresbtnPanel,BorderLayout.SOUTH);
+//    		    resourcePanel.add(submitresbtnPanel,BorderLayout.SOUTH);
     		    
     		    
     		    JButton submitphysres = new JButton("Submit Physical Resource");
