@@ -42,7 +42,7 @@ public class Main {
 //		rscat.readAllResources();
 //
 //		InformationResourceCatalogue rscat = new InformationResourceCatalogue();
-//		ResourceCatalogue rs = new ResourceCatalogue();
+		ResourceCatalogue rs = new ResourceCatalogue();
 //		rs.readAllResources();
 //		System.out.println();
 //		rscat.addResource(90, 0, "temp");
