@@ -15,6 +15,7 @@ public class ResourceCatalogue {
 
 	public ResourceCatalogue() {
 		DB = new DataBase();
+		tableName = "resource";
 	}
 
 	public ArrayList<HashMap<String, String>> readAllResources() {
@@ -26,9 +27,10 @@ public class ResourceCatalogue {
 		return result;
 	}
 
-	public void addResource(int rid) {
+	public void addResource(int rid, String name) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(rid));
+		vars.put("rname", "\'"+name+"\'");
 		DB.insert(vars, "resource");
 	}
 
