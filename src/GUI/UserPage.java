@@ -11,7 +11,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.table.DefaultTableModel;
 
+import Resource.FinancialResourceCatalogue;
+import Resource.InformationResourceCatalogue;
 import Resource.ModuleCatalogue;
+import Resource.PhysicalResourceCatalogue;
 import Resource.ResourceCatalogue;
 import UserManagement.Employee;
 import UserManagement.EmployeeCatalogue;
@@ -336,9 +339,9 @@ displayemployees.addActionListener(new ActionListener() {
     			submitphysres.addActionListener(new ActionListener() {
     			      public void actionPerformed(ActionEvent e) {
     			        System.out.println(physresform.getText(0));
-//    					ResourceCatalogue rscat = new ResourceCatalogue();
-//    					rscat = new ResourceCatalogue();
-//    					rscat.addResource(resourceform.getText(0));
+    					PhysicalResourceCatalogue physrscat = new PhysicalResourceCatalogue();
+    					
+    					physrscat.addResource(Integer.parseInt(physresform.getText(1)),2,physresform.getText(0));
 //    					rscat.readAllResources();
     			      }
     			    });
@@ -346,6 +349,10 @@ displayemployees.addActionListener(new ActionListener() {
     			submitinfores.addActionListener(new ActionListener() {
   			      public void actionPerformed(ActionEvent e) {
   			        System.out.println(infoform.getText(0));
+					InformationResourceCatalogue inforscat = new InformationResourceCatalogue();
+					
+					inforscat.addResource(Integer.parseInt(infoform.getText(1)),2,infoform.getText(0));
+
 //  					ResourceCatalogue rscat = new ResourceCatalogue();
 //  					rscat = new ResourceCatalogue();
 //  					rscat.addResource(resourceform.getText(0));
@@ -356,10 +363,10 @@ displayemployees.addActionListener(new ActionListener() {
     			submitfinanres.addActionListener(new ActionListener() {
     			      public void actionPerformed(ActionEvent e) {
     			        System.out.println(finanform.getText(0));
-//    					ResourceCatalogue rscat = new ResourceCatalogue();
-//    					rscat = new ResourceCatalogue();
-//    					rscat.addResource(resourceform.getText(0));
-//    					rscat.readAllResources();
+    			        
+    			        FinancialResourceCatalogue finanrscat = new FinancialResourceCatalogue();
+    					
+    			        finanrscat.addResource(Integer.parseInt(finanform.getText(1)),2,finanform.getText(0));
     			      }
     			    });
     			
