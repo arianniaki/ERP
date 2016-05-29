@@ -13,11 +13,23 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.awt.event.ActionEvent;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
+import Resource.ModuleCatalogue;
+import Resource.ResourceCatalogue;
+
 import com.jgoodies.forms.layout.FormSpecs;
+import javax.swing.JScrollPane;
+import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 public class NUserPage {
 
@@ -63,7 +75,9 @@ public class NUserPage {
 		
 		JPanel editPanel = new JPanel();
 		tabbedPane.addTab("Edit Info", null, editPanel, null);
-		editPanel.setLayout(new SpringLayout());
+		SpringLayout sl_editPanel = new SpringLayout();
+		editPanel.setLayout(sl_editPanel);
+		
 		
 		JPanel accessrightPanel = new JPanel();
 		tabbedPane.addTab("AccessRight Management", null, accessrightPanel, null);
@@ -137,6 +151,33 @@ public class NUserPage {
 		
 		JPanel modulePanel = new JPanel();
 		resourcesTab.addTab("Module", null, modulePanel, null);
+		SpringLayout sl_modulePanel = new SpringLayout();
+		modulePanel.setLayout(sl_modulePanel);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		sl_modulePanel.putConstraint(SpringLayout.NORTH, scrollPane, 87, SpringLayout.NORTH, modulePanel);
+		sl_modulePanel.putConstraint(SpringLayout.WEST, scrollPane, -716, SpringLayout.EAST, modulePanel);
+		sl_modulePanel.putConstraint(SpringLayout.SOUTH, scrollPane, 293, SpringLayout.NORTH, modulePanel);
+		sl_modulePanel.putConstraint(SpringLayout.EAST, scrollPane, -32, SpringLayout.EAST, modulePanel);
+		modulePanel.add(scrollPane);
+		
+		//get module list
+		DefaultListModel<String> modulelistModel = new DefaultListModel<String>();
+
+		JList moduleList = new JList(modulelistModel);
+		scrollPane.setViewportView(moduleList);
+		
+		ModuleCatalogue mcat = new ModuleCatalogue();
+		System.out.println("all : ");
+		ArrayList<HashMap<String, String>> allmodules = mcat.readAllResources();
+		moduleList.removeAll();
+
+		for (int i = 0; i < allmodules.size(); i++) {
+			System.out.println(allmodules.get(i));
+			modulelistModel.addElement(""+allmodules.get(i).toString().substring(0, 7)+" " +allmodules.get(i).toString().subSequence(7, allmodules.get(i).toString().length()));
+		}
+
+		//end get module list
 		
 		JPanel informationPanel = new JPanel();
 		resourcesTab.addTab("Information", null, informationPanel, null);
@@ -147,11 +188,90 @@ public class NUserPage {
 		JPanel physicalPanel = new JPanel();
 		resourcesTab.addTab("Physical", null, physicalPanel, null);
 		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		
+		JPanel panel_3 = new JPanel();
+		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
+		gl_physicalPanel.setHorizontalGroup(
+			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_physicalPanel.createSequentialGroup()
+							.addGap(135)
+							.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 519, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_physicalPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 776, Short.MAX_VALUE)))
+					.addContainerGap())
+		);
+		gl_physicalPanel.setVerticalGroup(
+			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+					.addGap(94)
+					.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(131, Short.MAX_VALUE))
+		);
+		SpringLayout sl_panel_3 = new SpringLayout();
+		panel_3.setLayout(sl_panel_3);
+		
+		JButton btnAddPhysicalResource = new JButton("Add Physical Resource");
+		btnAddPhysicalResource.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				NAddPhysical addphysWindow = new NAddPhysical();
+				addphysWindow.getAddPhysResFrame().setVisible(true);
+			}
+		});
+		sl_panel_3.putConstraint(SpringLayout.NORTH, btnAddPhysicalResource, 0, SpringLayout.NORTH, panel_3);
+		sl_panel_3.putConstraint(SpringLayout.EAST, btnAddPhysicalResource, 0, SpringLayout.EAST, panel_3);
+		panel_3.add(btnAddPhysicalResource);
+		
+		//get phys res list
+		DefaultListModel<String> physicalreslistModel = new DefaultListModel<String>();
+
+		
+		JList physicalresList = new JList(physicalreslistModel);
+		scrollPane_2.setViewportView(physicalresList);
+		physicalPanel.setLayout(gl_physicalPanel);
+		
+		
+		
+		//end get phys res list
+		
 		JPanel allPanel = new JPanel();
 		resourcesTab.addTab("All", null, allPanel, null);
+		SpringLayout sl_allPanel = new SpringLayout();
+		allPanel.setLayout(sl_allPanel);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		sl_allPanel.putConstraint(SpringLayout.NORTH, scrollPane_1, 85, SpringLayout.NORTH, allPanel);
+		sl_allPanel.putConstraint(SpringLayout.WEST, scrollPane_1, 50, SpringLayout.WEST, allPanel);
+		sl_allPanel.putConstraint(SpringLayout.SOUTH, scrollPane_1, 320, SpringLayout.NORTH, allPanel);
+		sl_allPanel.putConstraint(SpringLayout.EAST, scrollPane_1, -40, SpringLayout.EAST, allPanel);
+		allPanel.add(scrollPane_1);
+		
+		DefaultListModel<String> allreslistModel = new DefaultListModel<String>();
+
+		JList allresList = new JList(allreslistModel);
+		scrollPane_1.setViewportView(allresList);
+		
+		//get all res list
+		ResourceCatalogue rcat = new ResourceCatalogue();
+		System.out.println("all : ");
+		ArrayList<HashMap<String, String>> allres = rcat.readAllResources();
+		allresList.removeAll();
+		
+		for (int i = 0; i < allres.size(); i++) {
+			System.out.println(allres.get(i));
+			allreslistModel.addElement(""+allres.get(i).toString().substring(0, 7)+" "+allres.get(i).toString().subSequence(7, allres.get(i).toString().length()));
+		}
+		
+		//end get res list
 		
 		JPanel projectPanel = new JPanel();
 		tabbedPane.addTab("Project Management", null, projectPanel, null);
+		tabbedPane.setEnabledAt(4, true);
 		SpringLayout sl_projectPanel = new SpringLayout();
 		projectPanel.setLayout(sl_projectPanel);
 		

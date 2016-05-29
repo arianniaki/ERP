@@ -360,7 +360,6 @@ displayemployees.addActionListener(new ActionListener() {
     					PhysicalResourceCatalogue physrscat = new PhysicalResourceCatalogue();
     					
     					physrscat.addResource(Integer.parseInt(physresform.getText(1)),2,physresform.getText(0));
-//    					rscat.readAllResources();
     			      }
     			    });
     			
