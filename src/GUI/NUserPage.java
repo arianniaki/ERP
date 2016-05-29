@@ -33,7 +33,7 @@ import javax.swing.GroupLayout.Alignment;
 
 public class NUserPage {
 
-	private JFrame frame;
+	private JFrame userpageFrame;
 	private JTextField txtSearch;
 	private JTextField reqSearchbar;
 
@@ -45,7 +45,7 @@ public class NUserPage {
 			public void run() {
 				try {
 					NUserPage window = new NUserPage();
-					window.frame.setVisible(true);
+					window.userpageFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -64,14 +64,14 @@ public class NUserPage {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 850, 600);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		userpageFrame = new JFrame();
+		userpageFrame.setBounds(100, 100, 850, 600);
+		userpageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		userpageFrame.getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(6, 6, 850, 600);
-		frame.getContentPane().add(tabbedPane);
+		userpageFrame.getContentPane().add(tabbedPane);
 		
 		JPanel editPanel = new JPanel();
 		tabbedPane.addTab("Edit Info", null, editPanel, null);
@@ -320,4 +320,8 @@ public class NUserPage {
 		sl_panel_2.putConstraint(SpringLayout.EAST, projsearchBtn, -1, SpringLayout.WEST, txtSearch);
 		panel_2.add(projsearchBtn);
 	}
+	public JFrame getUserpageFrame() {
+		return userpageFrame;
+	}
+
 }

@@ -87,8 +87,10 @@ public class NLoginPage {
 						lblLoginFailed.setVisible(true);
 
 					}else{
-						UserPage userpage = new UserPage(emp);
-					    userpage.setVisible(true);
+						NUserPage userpageWindow = new NUserPage();
+						
+//						UserPage userpage = new UserPage(emp);
+						userpageWindow.getUserpageFrame().setVisible(true);
 						loginFrame.dispose();
 					}
 					}
