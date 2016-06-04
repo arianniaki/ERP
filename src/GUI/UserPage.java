@@ -11,6 +11,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.table.DefaultTableModel;
 
+import GUI.Form.Field;
+import GUI.Form.PanelBuilder;
+import GUI.Form.TextForm;
+import GUI.Form.Form;
 import Resource.FinancialResourceCatalogue;
 import Resource.InformationResourceCatalogue;
 import Resource.ModuleCatalogue;
@@ -205,12 +209,36 @@ displayemployees.addActionListener(new ActionListener() {
 		        final JFrame fmodule = new JFrame("Add Module pop up");
 			      String[] labels = { "Module Name","Module id","Resource id" };
 			      int[] widths = { 15, 15,15};
-
+			      	ArrayList<String> options = new ArrayList<String>();
+			      	options.add("iphone");
+			      	options.add("macbook");
+			      	options.add("imac");
+			      	ArrayList<Field> myfields = new ArrayList<Field>();
+			      	Field field1 = new Field("text", "name       ", "Arian", 10);
+			      	Field field2 = new Field("text", "family     ", "Niaki", 10);
+			      	Field field3 = new Field("text", "affiliation", "sharif", 10);
+			      	Field field4 = new Field("comboBox", "items", options , 10);
+			      	Field field5 = new Field("text", "work", "sharif", 10);
+			      	Field field6 = new Field("text", "phone", "sharif", 10);
+			      	Field field7 = new Field("text", "address", "sharif", 10);
+			      	
+			      	
+			      	myfields.add(field1);
+			      	myfields.add(field2);
+			      	myfields.add(field3);
+			      	myfields.add(field4);
+			      	myfields.add(field5);
+			      	myfields.add(field6);
+			      	myfields.add(field7);
+			      	Form myForm = new Form(myfields, "Arian Info");
+			      	PanelBuilder myPanel = new PanelBuilder(myForm);
+			      	myPanel.makeForm();
+			      	
 	    		    final TextForm moduleform = new TextForm(labels,widths);
 	    		    JButton submitmodule = new JButton("Submit Module");
 
 //	    		    fresource.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    		    fmodule.getContentPane().add(moduleform, BorderLayout.NORTH);
+	    		    fmodule.getContentPane().add(myPanel.getJPanel(), BorderLayout.NORTH);
 	    		    JPanel p = new JPanel();
 	    		    p.add(submitmodule);
 	    		    fmodule.getContentPane().add(p, BorderLayout.SOUTH);
