@@ -21,6 +21,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
 import GUI.Form.Field;
+import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
 import Resource.ModuleCatalogue;
@@ -184,16 +185,10 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
-				moduleFields.add(new Field("text","email","",10));
-				moduleFields.add( new Field("text","username","",10));
-				moduleFields.add( new Field("text","name","",10));
-				
-				moduleFields.add(new Field("text","lastname","",10));
-				moduleFields.add(new Field("text","password","",10));
-				moduleFields.add(new Field("text","repeat password","",10));
+				moduleFields.add(new Field("text","name","",10,"name"));
 
-				Form moduleForm = new Form(moduleFields,"Sign up Form");
-				PanelBuilder modulePanel = new PanelBuilder(moduleForm);
+				Form moduleForm = new Form(moduleFields,"Module Form");
+				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
 				modulePanel.makeForm();
 				JFrame AddModulePage= new JFrame("Add Module Form");
 				AddModulePage.getContentPane().add(modulePanel.getJPanel(),BorderLayout.NORTH);
@@ -213,7 +208,15 @@ public class NUserPage {
 						ModuleCatalogue mcat = new ModuleCatalogue();
 						System.out.println("all : ");
 						mcat.readAllResources();
-				        
+
+	  			    	for(int i=0; i<modulePanel.getJPanel().getComponentCount(); i++){
+	  			    		FieldPanel fpanel = (FieldPanel)modulePanel.getJPanel().getComponent(i);
+							mcat.addResource(1333,13,fpanel.getValues().get(0));
+
+	  			    	}
+
+	  			    	
+	  			    	
 //						mcat.addResource(Integer.parseInt(moduleform.getText(2)),Integer.parseInt(moduleform.getText(1)),moduleform.getText(0));
 						// tu resource ham bayad insert she
 						mcat.readAllResources();

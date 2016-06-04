@@ -111,13 +111,13 @@ public class NLoginPage {
 			public void actionPerformed(ActionEvent e) {
 				
 				ArrayList<Field> signupFields = new ArrayList<Field>();
-				signupFields.add(new Field("text","email","",10));
-				signupFields.add( new Field("text","username","",10));
-				signupFields.add( new Field("text","name","",10));
+				signupFields.add(new Field("text","email","",10,"email"));
+				signupFields.add( new Field("text","username","",10,"username"));
+				signupFields.add( new Field("text","name","",10,"name"));
 				
-				signupFields.add(new Field("text","lastname","",10));
-				signupFields.add(new Field("text","password","",10));
-				signupFields.add(new Field("text","repeat password","",10));
+				signupFields.add(new Field("text","lastname","",10,"lastname"));
+				signupFields.add(new Field("text","password","",10,"password"));
+				signupFields.add(new Field("text","repeat password","",10,"repassword"));
 
 				Form signupForm = new Form(signupFields,"Sign up Form");
 				PanelBuilder signupPanel = new PanelBuilder(signupForm);
