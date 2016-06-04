@@ -1,0 +1,34 @@
+package GUI.Form;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class ComboBoxJPanel extends JPanel {
+	private JComboBox comboField = new JComboBox();
+	private JButton b = new JButton("Add items");
+	
+	public ComboBoxJPanel(Field field) {
+		// TODO Auto-generated constructor stub
+		super(new BorderLayout());
+		for (int i = 0; i < field.options.size(); i++)
+		      comboField.addItem(field.options.get(i));
+		JPanel labelPanel = new JPanel();
+		JPanel fieldPanel = new JPanel();
+		add(labelPanel, BorderLayout.WEST);
+		add(fieldPanel, BorderLayout.CENTER);
+		JLabel lab = new JLabel(field.getLabel(), JLabel.RIGHT);
+		lab.setLabelFor(comboField);
+		labelPanel.add(lab);
+		JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		p.add(comboField);
+		fieldPanel.add(p);
+	}
+
+}
