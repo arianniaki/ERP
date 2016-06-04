@@ -20,6 +20,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
+import GUI.Form.Field;
+import GUI.Form.Form;
+import GUI.Form.PanelBuilder;
 import Resource.ModuleCatalogue;
 import Resource.ResourceCatalogue;
 
@@ -166,6 +169,54 @@ public class NUserPage {
 
 		JList moduleList = new JList(modulelistModel);
 		scrollPane.setViewportView(moduleList);
+		
+		JButton btnAddModule = new JButton("Add Module");
+		btnAddModule.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				ArrayList<Field> moduleFields = new ArrayList<Field>();
+				moduleFields.add(new Field("text","email","",10));
+				moduleFields.add( new Field("text","username","",10));
+				moduleFields.add( new Field("text","name","",10));
+				
+				moduleFields.add(new Field("text","lastname","",10));
+				moduleFields.add(new Field("text","password","",10));
+				moduleFields.add(new Field("text","repeat password","",10));
+
+				Form moduleForm = new Form(moduleFields,"Sign up Form");
+				PanelBuilder modulePanel = new PanelBuilder(moduleForm);
+				modulePanel.makeForm();
+				JFrame AddModulePage= new JFrame("Add Module Form");
+				AddModulePage.getContentPane().add(modulePanel.getJPanel(),BorderLayout.NORTH);
+				
+				JButton submitaddmoduleBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+    		    buttonPanel.add(submitaddmoduleBtn);
+    		    AddModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    		    AddModulePage.pack();
+				AddModulePage.setVisible(true);
+				
+				submitaddmoduleBtn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						ModuleCatalogue mcat = new ModuleCatalogue();
+						System.out.println("all : ");
+						mcat.readAllResources();
+				        
+//						mcat.addResource(Integer.parseInt(moduleform.getText(2)),Integer.parseInt(moduleform.getText(1)),moduleform.getText(0));
+						// tu resource ham bayad insert she
+						mcat.readAllResources();
+					}
+				});
+				
+					
+			}
+		});
+		sl_modulePanel.putConstraint(SpringLayout.NORTH, btnAddModule, 28, SpringLayout.NORTH, modulePanel);
+		sl_modulePanel.putConstraint(SpringLayout.EAST, btnAddModule, -50, SpringLayout.EAST, modulePanel);
+		modulePanel.add(btnAddModule);
 		
 		ModuleCatalogue mcat = new ModuleCatalogue();
 		System.out.println("all : ");
@@ -323,5 +374,4 @@ public class NUserPage {
 	public JFrame getUserpageFrame() {
 		return userpageFrame;
 	}
-
 }

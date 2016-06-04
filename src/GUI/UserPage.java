@@ -238,7 +238,7 @@ displayemployees.addActionListener(new ActionListener() {
 	    		    JButton submitmodule = new JButton("Submit Module");
 
 //	    		    fresource.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    		    fmodule.getContentPane().add(myPanel.getJPanel(), BorderLayout.NORTH);
+	    		    fmodule.getContentPane().add(moduleform, BorderLayout.NORTH);
 	    		    JPanel p = new JPanel();
 	    		    p.add(submitmodule);
 	    		    fmodule.getContentPane().add(p, BorderLayout.SOUTH);

@@ -9,12 +9,19 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.TextField;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
+import GUI.Form.Field;
+import GUI.Form.Form;
+import GUI.Form.PanelBuilder;
 import UserManagement.Employee;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class NLoginPage {
@@ -102,8 +109,31 @@ public class NLoginPage {
 		JButton btnSignUp = new JButton("Sign up");
 		btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NSignupPage signupWindow = new NSignupPage();
-				signupWindow.getSignupFrame().setVisible(true);
+				
+				ArrayList<Field> signupFields = new ArrayList<Field>();
+				signupFields.add(new Field("text","email","",10));
+				signupFields.add( new Field("text","username","",10));
+				signupFields.add( new Field("text","name","",10));
+				
+				signupFields.add(new Field("text","lastname","",10));
+				signupFields.add(new Field("text","password","",10));
+				signupFields.add(new Field("text","repeat password","",10));
+
+				Form signupForm = new Form(signupFields,"Sign up Form");
+				PanelBuilder signupPanel = new PanelBuilder(signupForm);
+				signupPanel.makeForm();
+				JFrame SignupPage= new JFrame("Sign up Form");
+				SignupPage.getContentPane().add(signupPanel.getJPanel(),BorderLayout.NORTH);
+				
+				JButton submit = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+    		    buttonPanel.add(submit);
+    		    SignupPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+
+				SignupPage.pack();
+				SignupPage.setVisible(true);
+//				NSignupPage signupWindow = new NSignupPage();
+//				signupWindow.getSignupFrame().setVisible(true);
 			}
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, btnSignUp, 6, SpringLayout.SOUTH, passwordField);
