@@ -81,6 +81,15 @@ public class NUserPage {
 		SpringLayout sl_editPanel = new SpringLayout();
 		editPanel.setLayout(sl_editPanel);
 		
+		JButton btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		sl_editPanel.putConstraint(SpringLayout.NORTH, btnLogout, 10, SpringLayout.NORTH, editPanel);
+		sl_editPanel.putConstraint(SpringLayout.EAST, btnLogout, -10, SpringLayout.EAST, editPanel);
+		editPanel.add(btnLogout);
+		
 		
 		JPanel accessrightPanel = new JPanel();
 		tabbedPane.addTab("AccessRight Management", null, accessrightPanel, null);
@@ -233,8 +242,14 @@ public class NUserPage {
 		JPanel informationPanel = new JPanel();
 		resourcesTab.addTab("Information", null, informationPanel, null);
 		
+		JButton btnAddInformation = new JButton("Add Information Resource");
+		informationPanel.add(btnAddInformation);
+		
 		JPanel financialPanel = new JPanel();
 		resourcesTab.addTab("Financial", null, financialPanel, null);
+		
+		JButton btnAddFinancial = new JButton("Add Financial Resource");
+		financialPanel.add(btnAddFinancial);
 		
 		JPanel physicalPanel = new JPanel();
 		resourcesTab.addTab("Physical", null, physicalPanel, null);
@@ -270,8 +285,6 @@ public class NUserPage {
 		JButton btnAddPhysicalResource = new JButton("Add Physical Resource");
 		btnAddPhysicalResource.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				NAddPhysical addphysWindow = new NAddPhysical();
-				addphysWindow.getAddPhysResFrame().setVisible(true);
 			}
 		});
 		sl_panel_3.putConstraint(SpringLayout.NORTH, btnAddPhysicalResource, 0, SpringLayout.NORTH, panel_3);
