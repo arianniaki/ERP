@@ -185,7 +185,10 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
+				moduleFields.add(new Field("text","rid","",10,"rid"));
+				moduleFields.add(new Field("text","mid","",10,"mid"));
 				moduleFields.add(new Field("text","name","",10,"name"));
+
 
 				Form moduleForm = new Form(moduleFields,"Module Form");
 				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
@@ -208,14 +211,16 @@ public class NUserPage {
 						ModuleCatalogue mcat = new ModuleCatalogue();
 						System.out.println("all : ");
 						mcat.readAllResources();
-
+						ArrayList<String> inputs = new ArrayList<String>();
 	  			    	for(int i=0; i<modulePanel.getJPanel().getComponentCount(); i++){
 	  			    		FieldPanel fpanel = (FieldPanel)modulePanel.getJPanel().getComponent(i);
-							mcat.addResource(1333,13,fpanel.getValues().get(0));
-
+	  			    		inputs.add(fpanel.getValues().get(0));
 	  			    	}
+	  			    	for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i)+"adasa");
+						}
+						mcat.addResource(Integer.parseInt(inputs.get(0)),Integer.parseInt(inputs.get(1)),inputs.get(2));
 
-	  			    	
 	  			    	
 //						mcat.addResource(Integer.parseInt(moduleform.getText(2)),Integer.parseInt(moduleform.getText(1)),moduleform.getText(0));
 						// tu resource ham bayad insert she
