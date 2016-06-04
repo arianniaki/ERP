@@ -9,10 +9,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class TextJPanel extends JPanel {
+public class TextJPanel extends FieldPanel {
 	private JTextField textField;
 	public TextJPanel(Field field) {
-		super(new BorderLayout());
+		super(field.getName());
+
 		JPanel labelPanel = new JPanel();
 		JPanel fieldPanel = new JPanel();
 		add(labelPanel, BorderLayout.WEST);
@@ -25,5 +26,12 @@ public class TextJPanel extends JPanel {
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		p.add(textField);
 		fieldPanel.add(p);
+		textField.setText("");
+	}
+	@Override
+	public ArrayList<String> getValues() {
+		ArrayList<String> ret = new ArrayList<String>();
+		ret.add(this.textField.getText().toString());
+		return ret;
 	}
 }

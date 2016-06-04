@@ -8,17 +8,20 @@ public class Field {
 	private String value;
 	ArrayList<String> options;
 	private int width;
-	public Field(String inputType, String inputLabel, ArrayList<String> inputOptions, int inputWidth){
+	private String name;
+	public Field(String inputType, String inputLabel, ArrayList<String> inputOptions, int inputWidth, String inputName){
 		type = inputType;
 		label = inputLabel;
 		options = new ArrayList<String>(inputOptions);
 		width = inputWidth;
+		name = inputName;
 	}
-	public Field(String inputType, String inputLabel, String inputValue, int inputWidth){
+	public Field(String inputType, String inputLabel, String inputValue, int inputWidth, String inputName){
 		type = inputType;
 		label = inputLabel;
 		value = inputValue;
 		width = inputWidth;
+		name = inputName;
 	}
 	public String getValue(){
 		return this.value;
@@ -36,5 +39,9 @@ public class Field {
 	public int getWidth() {
 		// TODO Auto-generated method stub
 		return this.width;
+	}
+	public String getName() {
+		// TODO Auto-generated method stub
+		return this.name;
 	}
 }

@@ -12,6 +12,7 @@ import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.table.DefaultTableModel;
 
 import GUI.Form.Field;
+import GUI.Form.FieldPanel;
 import GUI.Form.PanelBuilder;
 import GUI.Form.TextForm;
 import GUI.Form.Form;
@@ -214,13 +215,13 @@ displayemployees.addActionListener(new ActionListener() {
 			      	options.add("macbook");
 			      	options.add("imac");
 			      	ArrayList<Field> myfields = new ArrayList<Field>();
-			      	Field field1 = new Field("text", "name       ", "Arian", 10);
-			      	Field field2 = new Field("text", "family     ", "Niaki", 10);
-			      	Field field3 = new Field("text", "affiliation", "sharif", 10);
-			      	Field field4 = new Field("comboBox", "items", options , 10);
-			      	Field field5 = new Field("text", "work", "sharif", 10);
-			      	Field field6 = new Field("text", "phone", "sharif", 10);
-			      	Field field7 = new Field("text", "address", "sharif", 10);
+			      	Field field1 = new Field("text", "name       ", "Arian", 10, "name");
+			      	Field field2 = new Field("text", "family     ", "Niaki", 10, "family");
+			      	Field field3 = new Field("text", "affiliation", "sharif", 10, "affiliation");
+			      	Field field4 = new Field("comboBox", "items", options , 10, "items");
+			      	Field field5 = new Field("text", "work", "sharif", 10, "work");
+			      	Field field6 = new Field("text", "phone", "sharif", 10, "phone");
+			      	Field field7 = new Field("text", "address", "sharif", 10, "address");
 			      	
 			      	
 			      	myfields.add(field1);
@@ -231,14 +232,14 @@ displayemployees.addActionListener(new ActionListener() {
 			      	myfields.add(field6);
 			      	myfields.add(field7);
 			      	Form myForm = new Form(myfields, "Arian Info");
-			      	PanelBuilder myPanel = new PanelBuilder(myForm);
+			      	final PanelBuilder myPanel = new PanelBuilder(myForm);
 			      	myPanel.makeForm();
 			      	
 	    		    final TextForm moduleform = new TextForm(labels,widths);
 	    		    JButton submitmodule = new JButton("Submit Module");
 
 //	    		    fresource.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    		    fmodule.getContentPane().add(moduleform, BorderLayout.NORTH);
+	    		    fmodule.getContentPane().add(myPanel.getJPanel(), BorderLayout.NORTH);
 	    		    JPanel p = new JPanel();
 	    		    p.add(submitmodule);
 	    		    fmodule.getContentPane().add(p, BorderLayout.SOUTH);
@@ -248,13 +249,16 @@ displayemployees.addActionListener(new ActionListener() {
 	    		    
 	    			submitmodule.addActionListener(new ActionListener() {
 	  			      public void actionPerformed(ActionEvent e) {
-	  			        System.out.println(moduleform.getText(0));
-	  					ModuleCatalogue mcat = new ModuleCatalogue();
+	  			    	for(int i=0; i<myPanel.getJPanel().getComponentCount(); i++){
+	  			    		FieldPanel fpanel = (FieldPanel)myPanel.getJPanel().getComponent(i);
+	  			    	}
+	  			        
+	  					/*ModuleCatalogue mcat = new ModuleCatalogue();
 	  					System.out.println("all : ");
 	  					mcat.readAllResources();
 	  			        
 	  					mcat.addResource(Integer.parseInt(moduleform.getText(2)),Integer.parseInt(moduleform.getText(1)),moduleform.getText(0));
-	  					mcat.readAllResources();
+	  					mcat.readAllResources();*/
 	  			      }
 	  			    });
 		        

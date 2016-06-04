@@ -10,13 +10,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class ComboBoxJPanel extends JPanel {
+public class ComboBoxJPanel extends FieldPanel {
 	private JComboBox comboField = new JComboBox();
 	private JButton b = new JButton("Add items");
 	
 	public ComboBoxJPanel(Field field) {
 		// TODO Auto-generated constructor stub
-		super(new BorderLayout());
+		super(field.getName());
 		for (int i = 0; i < field.options.size(); i++)
 		      comboField.addItem(field.options.get(i));
 		JPanel labelPanel = new JPanel();
@@ -31,4 +31,11 @@ public class ComboBoxJPanel extends JPanel {
 		fieldPanel.add(p);
 	}
 
+	@Override
+	public ArrayList<String> getValues() {
+		ArrayList<String> ret = new ArrayList<String>();
+		ret.add(comboField.getSelectedItem().toString());
+		System.out.println(comboField.getSelectedItem().toString());
+		return ret;
+	}
 }
