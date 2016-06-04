@@ -233,8 +233,14 @@ public class NUserPage {
 		JPanel informationPanel = new JPanel();
 		resourcesTab.addTab("Information", null, informationPanel, null);
 		
+		JButton btnAddInformation = new JButton("Add Information Resource");
+		informationPanel.add(btnAddInformation);
+		
 		JPanel financialPanel = new JPanel();
 		resourcesTab.addTab("Financial", null, financialPanel, null);
+		
+		JButton btnAddFinancial = new JButton("Add Financial Resource");
+		financialPanel.add(btnAddFinancial);
 		
 		JPanel physicalPanel = new JPanel();
 		resourcesTab.addTab("Physical", null, physicalPanel, null);
