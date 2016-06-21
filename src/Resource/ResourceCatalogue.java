@@ -27,11 +27,13 @@ public class ResourceCatalogue {
 		return result;
 	}
 
-	public void addResource(int rid, String name) {
+	public long addResource(String name) {
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("rid", Integer.toString(rid));
+//		vars.put("rid", Integer.toString(rid));
 		vars.put("rname", "\'"+name+"\'");
-		DB.insert(vars, "resource");
+		long pk=DB.insert(vars, "resource");
+		System.out.println(pk+" return //////");
+		return pk;
 	}
 
 	public void deleteResource(int id) {

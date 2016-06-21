@@ -391,7 +391,7 @@ displayemployees.addActionListener(new ActionListener() {
     			        System.out.println(physresform.getText(0));
     					PhysicalResourceCatalogue physrscat = new PhysicalResourceCatalogue();
     					
-    					physrscat.addResource(Integer.parseInt(physresform.getText(1)),2,physresform.getText(0));
+//    					physrscat.addResource(Integer.parseInt(physresform.getText(1)),2,physresform.getText(0));
     			      }
     			    });
     			
@@ -400,7 +400,7 @@ displayemployees.addActionListener(new ActionListener() {
   			        System.out.println(infoform.getText(0));
 					InformationResourceCatalogue inforscat = new InformationResourceCatalogue();
 					
-					inforscat.addResource(Integer.parseInt(infoform.getText(1)),2,infoform.getText(0));
+//					inforscat.addResource(Integer.parseInt(infoform.getText(1)),2,infoform.getText(0));
 
 //  					ResourceCatalogue rscat = new ResourceCatalogue();
 //  					rscat = new ResourceCatalogue();
@@ -415,7 +415,7 @@ displayemployees.addActionListener(new ActionListener() {
     			        
     			        FinancialResourceCatalogue finanrscat = new FinancialResourceCatalogue();
     					
-    			        finanrscat.addResource(Integer.parseInt(finanform.getText(1)),2,finanform.getText(0));
+//    			        finanrscat.addResource(Integer.parseInt(finanform.getText(1)),2,finanform.getText(0));
     			      }
     			    });
     			

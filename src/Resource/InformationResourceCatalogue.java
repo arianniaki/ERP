@@ -9,14 +9,12 @@ public class InformationResourceCatalogue extends ResourceCatalogue {
 		tableName = "infores";
 	}
 
-	public void addResource(int rid, int irid, String name) {
-		super.addResource(rid,name);
-
+	public long addResource(String name) {
+		long resid = super.addResource(name);
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("rid", Integer.toString(rid));
+		vars.put("rid", resid+"");
 		vars.put("irname", "\'" + name + "\'");
-		vars.put("irid", Integer.toString(irid));
-		DB.insert(vars, tableName);
+		return DB.insert(vars, tableName);
 	}
 
 }

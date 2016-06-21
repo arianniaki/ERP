@@ -24,7 +24,10 @@ import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
+import Resource.FinancialResourceCatalogue;
+import Resource.InformationResourceCatalogue;
 import Resource.ModuleCatalogue;
+import Resource.PhysicalResourceCatalogue;
 import Resource.ResourceCatalogue;
 
 import com.jgoodies.forms.layout.FormSpecs;
@@ -129,6 +132,9 @@ public class NUserPage {
 		sl_panel.putConstraint(SpringLayout.NORTH, addreqBtn, 2, SpringLayout.NORTH, panel);
 		addreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				
+				
 			}
 		});
 		sl_panel.putConstraint(SpringLayout.EAST, addreqBtn, -10, SpringLayout.EAST, panel);
@@ -185,8 +191,8 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
-				moduleFields.add(new Field("text","rid","",10,"rid"));
-				moduleFields.add(new Field("text","mid","",10,"mid"));
+//				moduleFields.add(new Field("text","rid","",10,"rid"));
+//				moduleFields.add(new Field("text","mid","",10,"mid"));
 				moduleFields.add(new Field("text","name","",10,"name"));
 
 
@@ -219,10 +225,7 @@ public class NUserPage {
 	  			    	for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i)+"adasa");
 						}
-						mcat.addResource(Integer.parseInt(inputs.get(0)),Integer.parseInt(inputs.get(1)),inputs.get(2));
-
-	  			    	
-//						mcat.addResource(Integer.parseInt(moduleform.getText(2)),Integer.parseInt(moduleform.getText(1)),moduleform.getText(0));
+	  			    	mcat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
 						mcat.readAllResources();
 					}
@@ -252,12 +255,100 @@ public class NUserPage {
 		
 		JButton btnAddInformation = new JButton("Add Information Resource");
 		informationPanel.add(btnAddInformation);
+		btnAddInformation.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
+//				moduleFields.add(new Field("text","rid","",10,"rid"));
+//				moduleFields.add(new Field("text","mid","",10,"mid"));
+				information_moduleFields.add(new Field("text","infosname","",20,"name"));
+
+
+				Form information_moduleForm = new Form(information_moduleFields,"Information Module Form");
+				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
+				information_modulePanel.makeForm();
+				JFrame Add_InformationModulePage= new JFrame("Add Information Module Form");
+				Add_InformationModulePage.getContentPane().add(information_modulePanel.getJPanel(),BorderLayout.NORTH);
+				
+				JButton submitaddinformationmoduleBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+    		    buttonPanel.add(submitaddinformationmoduleBtn);
+    		    Add_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    		    Add_InformationModulePage.pack();
+    		    Add_InformationModulePage.setVisible(true);
+				
+    		    submitaddinformationmoduleBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+						System.out.println("all : ");
+						infocat.readAllResources();
+						ArrayList<String> inputs = new ArrayList<String>();
+	  			    	for(int i=0; i<information_modulePanel.getJPanel().getComponentCount(); i++){
+	  			    		FieldPanel fpanel = (FieldPanel)information_modulePanel.getJPanel().getComponent(i);
+	  			    		inputs.add(fpanel.getValues().get(0));
+	  			    	}
+	  			    	for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i)+" information");
+						}
+	  			    	infocat.addResource((inputs.get(0)));
+						// tu resource ham bayad insert she
+	  			    	infocat.readAllResources();
+					}
+				});
+			}
+		});
 		
 		JPanel financialPanel = new JPanel();
 		resourcesTab.addTab("Financial", null, financialPanel, null);
 		
 		JButton btnAddFinancial = new JButton("Add Financial Resource");
 		financialPanel.add(btnAddFinancial);
+		btnAddFinancial.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
+//				moduleFields.add(new Field("text","rid","",10,"rid"));
+//				moduleFields.add(new Field("text","mid","",10,"mid"));
+				financial_moduleFields.add(new Field("text","financename","",20,"name"));
+
+
+				Form financial_moduleForm = new Form(financial_moduleFields,"Information Module Form");
+				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
+				financial_modulePanel.makeForm();
+				JFrame Add_FinancialModulePage= new JFrame("Add Financial Module Form");
+				Add_FinancialModulePage.getContentPane().add(financial_modulePanel.getJPanel(),BorderLayout.NORTH);
+				
+				JButton submitaddfinancialmoduleBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+    		    buttonPanel.add(submitaddfinancialmoduleBtn);
+    		    Add_FinancialModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    		    Add_FinancialModulePage.pack();
+    		    Add_FinancialModulePage.setVisible(true);
+    		    submitaddfinancialmoduleBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+						System.out.println("all : ");
+						financat.readAllResources();
+						ArrayList<String> inputs = new ArrayList<String>();
+	  			    	for(int i=0; i<financial_modulePanel.getJPanel().getComponentCount(); i++){
+	  			    		FieldPanel fpanel = (FieldPanel)financial_modulePanel.getJPanel().getComponent(i);
+	  			    		inputs.add(fpanel.getValues().get(0));
+	  			    	}
+	  			    	for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i)+" financial");
+						}
+	  			    	financat.addResource((inputs.get(0)));
+						// tu resource ham bayad insert she
+	  			    	financat.readAllResources();
+					}
+				});
+			}
+		});
 		
 		JPanel physicalPanel = new JPanel();
 		resourcesTab.addTab("Physical", null, physicalPanel, null);
@@ -293,6 +384,46 @@ public class NUserPage {
 		JButton btnAddPhysicalResource = new JButton("Add Physical Resource");
 		btnAddPhysicalResource.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
+//				moduleFields.add(new Field("text","rid","",10,"rid"));
+//				moduleFields.add(new Field("text","mid","",10,"mid"));
+				physical_moduleFields.add(new Field("text","physname","",20,"name"));
+
+
+				Form physical_moduleForm = new Form(physical_moduleFields,"Physical Module Form");
+				final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
+				physical_modulePanel.makeForm();
+				JFrame Add_PhysicalModulePage= new JFrame("Add Physical Module Form");
+				Add_PhysicalModulePage.getContentPane().add(physical_modulePanel.getJPanel(),BorderLayout.NORTH);
+				
+				JButton submitaddphysicalmoduleBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+    		    buttonPanel.add(submitaddphysicalmoduleBtn);
+    		    Add_PhysicalModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    		    Add_PhysicalModulePage.pack();
+    		    Add_PhysicalModulePage.setVisible(true);
+				submitaddphysicalmoduleBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+						System.out.println("all : ");
+						physcat.readAllResources();
+						ArrayList<String> inputs = new ArrayList<String>();
+	  			    	for(int i=0; i<physical_modulePanel.getJPanel().getComponentCount(); i++){
+	  			    		FieldPanel fpanel = (FieldPanel)physical_modulePanel.getJPanel().getComponent(i);
+	  			    		inputs.add(fpanel.getValues().get(0));
+	  			    	}
+	  			    	for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i)+" physical");
+						}
+	  			    	physcat.addResource((inputs.get(0)));
+						// tu resource ham bayad insert she
+	  			    	physcat.readAllResources();
+	  			    	
+
+					}
+				});
 			}
 		});
 		sl_panel_3.putConstraint(SpringLayout.NORTH, btnAddPhysicalResource, 0, SpringLayout.NORTH, panel_3);
@@ -307,8 +438,16 @@ public class NUserPage {
 		scrollPane_2.setViewportView(physicalresList);
 		physicalPanel.setLayout(gl_physicalPanel);
 		
-		
-		
+		PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+		System.out.println("all : ");
+		ArrayList<HashMap<String, String>> allphysicals = physcat.readAllResources();
+		physicalresList.removeAll();
+
+		for (int i = 0; i < allphysicals.size(); i++) {
+			System.out.println(allphysicals.get(i));
+			physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
+		}
+
 		//end get phys res list
 		
 		JPanel allPanel = new JPanel();

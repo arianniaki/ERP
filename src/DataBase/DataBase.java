@@ -10,11 +10,13 @@ import java.util.HashMap;
 public class DataBase {
 	static Connection c = null;
 	static Statement stmt = null;
-	static String dbName = "jdbc:postgresql://localhost:5432/ERP";
+	static String dbName = "jdbc:postgresql://localhost:5432/erp";
 	static String user = "postgres";
 	static String pass = "123456m.";
+	
 
-	public boolean insert(HashMap<String, String> vars, String tableName) {
+	public long insert(HashMap<String, String> vars, String tableName) {
+		long pk=0;
 		try {
 			Class.forName("org.postgresql.Driver");
 			c = DriverManager.getConnection(dbName, user, pass);
@@ -32,7 +34,11 @@ public class DataBase {
 			}
 			sql = sql.substring(0, sql.length() - 1) + ");";
 			System.out.println(sql);
-			stmt.executeUpdate(sql);
+			stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			pk = rs.getLong(1);
+			System.out.println("SA:"+pk);
 
 			stmt.close();
 			c.commit();
@@ -42,7 +48,7 @@ public class DataBase {
 			System.exit(0);
 		}
 		System.out.println("Records created successfully");
-		return true;
+		return pk;
 
 	}
 
@@ -50,7 +56,7 @@ public class DataBase {
 		try {
 			Class.forName("org.postgresql.Driver");
 			c = DriverManager.getConnection(
-					"jdbc:postgresql://localhost:5432/ERP", "postgres",
+					dbName, "postgres",
 					"123456m.");
 			c.setAutoCommit(false);
 			System.out.println("select : Opened database successfully");

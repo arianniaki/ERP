@@ -9,13 +9,13 @@ public class ModuleCatalogue extends ResourceCatalogue{
 		tableName = "module";
 	}
 	
-	public void addResource(int rid, int modid, String name) {
-		super.addResource(rid,name);
+	public long addResource(String name) {
+		long resid = super.addResource(name);
+		System.out.println("resid in module cata: "+resid);
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("rid", Integer.toString(rid));
+		vars.put("rid", resid+"");
 		vars.put("modname", "\'" + name + "\'");
-		vars.put("modid", Integer.toString(modid));
-		DB.insert(vars, tableName);
+		return DB.insert(vars, tableName);
 	}
 
 
