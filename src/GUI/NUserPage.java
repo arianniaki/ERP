@@ -44,6 +44,9 @@ import javax.swing.ListModel;
 public class NUserPage {
 
 	private JFrame userpageFrame;
+	private JTextField editname_textField;
+	private JTextField editfamilyname_textField;
+	private String loggedin_user;
 
 	/**
 	 * Launch the application.
@@ -52,7 +55,7 @@ public class NUserPage {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NUserPage window = new NUserPage();
+					NUserPage window = new NUserPage(null);
 					window.userpageFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -63,8 +66,10 @@ public class NUserPage {
 
 	/**
 	 * Create the application.
+	 * @param loggedin_user 
 	 */
-	public NUserPage() {
+	public NUserPage(String user) {
+		loggedin_user=user;
 		initialize();
 	}
 
@@ -89,19 +94,44 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
+		JLabel lblName = new JLabel("Name");
+		
+		editname_textField = new JTextField();
+		editname_textField.setColumns(10);
+		editname_textField.setText(loggedin_user);
+		editfamilyname_textField = new JTextField();
+		editfamilyname_textField.setColumns(10);
+		
+		JLabel lblFamilyName = new JLabel("Family Name");
 		GroupLayout gl_editPanel = new GroupLayout(editPanel);
 		gl_editPanel.setHorizontalGroup(
-			gl_editPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_editPanel.createSequentialGroup()
-					.addContainerGap(749, Short.MAX_VALUE)
-					.addComponent(btnLogout))
+			gl_editPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_editPanel.createSequentialGroup()
+					.addContainerGap(575, Short.MAX_VALUE)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(editfamilyname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(40)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblFamilyName)
+						.addComponent(lblName)
+						.addComponent(btnLogout)))
 		);
 		gl_editPanel.setVerticalGroup(
 			gl_editPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_editPanel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(btnLogout)
-					.addContainerGap(470, Short.MAX_VALUE))
+					.addGap(59)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblName))
+					.addGap(26)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(editfamilyname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblFamilyName))
+					.addContainerGap(329, Short.MAX_VALUE))
 		);
 		editPanel.setLayout(gl_editPanel);
 		
