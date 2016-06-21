@@ -10,6 +10,7 @@ import javax.swing.JList;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.event.ActionListener;
@@ -37,11 +38,11 @@ import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class NUserPage {
 
 	private JFrame userpageFrame;
-	private JTextField txtSearch;
 	private JTextField reqSearchbar;
 
 	/**
@@ -72,64 +73,62 @@ public class NUserPage {
 	 */
 	private void initialize() {
 		userpageFrame = new JFrame();
-		userpageFrame.setBounds(100, 100, 850, 600);
+		userpageFrame.setBounds(100, 100, 870, 585);
 		userpageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		userpageFrame.getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(6, 6, 850, 600);
+		tabbedPane.setBounds(6, 6, 858, 551);
 		userpageFrame.getContentPane().add(tabbedPane);
 		
 		JPanel editPanel = new JPanel();
 		tabbedPane.addTab("Edit Info", null, editPanel, null);
-		SpringLayout sl_editPanel = new SpringLayout();
-		editPanel.setLayout(sl_editPanel);
 		
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		sl_editPanel.putConstraint(SpringLayout.NORTH, btnLogout, 10, SpringLayout.NORTH, editPanel);
-		sl_editPanel.putConstraint(SpringLayout.EAST, btnLogout, -10, SpringLayout.EAST, editPanel);
-		editPanel.add(btnLogout);
+		GroupLayout gl_editPanel = new GroupLayout(editPanel);
+		gl_editPanel.setHorizontalGroup(
+			gl_editPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_editPanel.createSequentialGroup()
+					.addContainerGap(749, Short.MAX_VALUE)
+					.addComponent(btnLogout))
+		);
+		gl_editPanel.setVerticalGroup(
+			gl_editPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_editPanel.createSequentialGroup()
+					.addComponent(btnLogout)
+					.addContainerGap(476, Short.MAX_VALUE))
+		);
+		editPanel.setLayout(gl_editPanel);
 		
 		
 		JPanel accessrightPanel = new JPanel();
 		tabbedPane.addTab("AccessRight Management", null, accessrightPanel, null);
-		SpringLayout sl_accessrightPanel = new SpringLayout();
-		accessrightPanel.setLayout(sl_accessrightPanel);
-		
-		JPanel panel_1 = new JPanel();
-		sl_accessrightPanel.putConstraint(SpringLayout.NORTH, panel_1, 10, SpringLayout.NORTH, accessrightPanel);
-		sl_accessrightPanel.putConstraint(SpringLayout.WEST, panel_1, 10, SpringLayout.WEST, accessrightPanel);
-		sl_accessrightPanel.putConstraint(SpringLayout.SOUTH, panel_1, 40, SpringLayout.NORTH, accessrightPanel);
-		sl_accessrightPanel.putConstraint(SpringLayout.EAST, panel_1, 819, SpringLayout.WEST, accessrightPanel);
-		accessrightPanel.add(panel_1);
-		SpringLayout sl_panel_1 = new SpringLayout();
-		panel_1.setLayout(sl_panel_1);
 		
 		JButton btnAssignAccessright = new JButton("Assign AccessRight");
-		sl_panel_1.putConstraint(SpringLayout.NORTH, btnAssignAccessright, 0, SpringLayout.NORTH, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.EAST, btnAssignAccessright, 0, SpringLayout.EAST, panel_1);
-		panel_1.add(btnAssignAccessright);
+		GroupLayout gl_accessrightPanel = new GroupLayout(accessrightPanel);
+		gl_accessrightPanel.setHorizontalGroup(
+			gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_accessrightPanel.createSequentialGroup()
+					.addContainerGap(669, Short.MAX_VALUE)
+					.addComponent(btnAssignAccessright))
+		);
+		gl_accessrightPanel.setVerticalGroup(
+			gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnAssignAccessright)
+					.addContainerGap(470, Short.MAX_VALUE))
+		);
+		accessrightPanel.setLayout(gl_accessrightPanel);
 		
 		JPanel requirementPanel = new JPanel();
 		tabbedPane.addTab("Requirment Management", null, requirementPanel, null);
-		SpringLayout sl_requirementPanel = new SpringLayout();
-		requirementPanel.setLayout(sl_requirementPanel);
-		
-		JPanel panel = new JPanel();
-		sl_requirementPanel.putConstraint(SpringLayout.NORTH, panel, 10, SpringLayout.NORTH, requirementPanel);
-		sl_requirementPanel.putConstraint(SpringLayout.WEST, panel, 10, SpringLayout.WEST, requirementPanel);
-		sl_requirementPanel.putConstraint(SpringLayout.SOUTH, panel, 40, SpringLayout.NORTH, requirementPanel);
-		sl_requirementPanel.putConstraint(SpringLayout.EAST, panel, 819, SpringLayout.WEST, requirementPanel);
-		requirementPanel.add(panel);
-		SpringLayout sl_panel = new SpringLayout();
-		panel.setLayout(sl_panel);
 		
 		JButton addreqBtn = new JButton("Add Requirement");
-		sl_panel.putConstraint(SpringLayout.NORTH, addreqBtn, 2, SpringLayout.NORTH, panel);
 		addreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -137,24 +136,37 @@ public class NUserPage {
 				
 			}
 		});
-		sl_panel.putConstraint(SpringLayout.EAST, addreqBtn, -10, SpringLayout.EAST, panel);
-		panel.add(addreqBtn);
 		
 		reqSearchbar = new JTextField();
-		sl_panel.putConstraint(SpringLayout.NORTH, reqSearchbar, 1, SpringLayout.NORTH, panel);
-		sl_panel.putConstraint(SpringLayout.WEST, reqSearchbar, 254, SpringLayout.WEST, panel);
-		sl_panel.putConstraint(SpringLayout.EAST, reqSearchbar, -162, SpringLayout.WEST, addreqBtn);
-		panel.add(reqSearchbar);
 		reqSearchbar.setColumns(10);
 		
 		JButton searchreqBtn = new JButton("Search");
-		sl_panel.putConstraint(SpringLayout.NORTH, searchreqBtn, 0, SpringLayout.NORTH, addreqBtn);
-		sl_panel.putConstraint(SpringLayout.EAST, searchreqBtn, -6, SpringLayout.WEST, reqSearchbar);
+		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
+		gl_requirementPanel.setHorizontalGroup(
+			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_requirementPanel.createSequentialGroup()
+					.addContainerGap(358, Short.MAX_VALUE)
+					.addComponent(searchreqBtn)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(reqSearchbar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(102)
+					.addComponent(addreqBtn))
+		);
+		gl_requirementPanel.setVerticalGroup(
+			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addreqBtn)
+						.addComponent(reqSearchbar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(searchreqBtn))
+					.addContainerGap(470, Short.MAX_VALUE))
+		);
+		requirementPanel.setLayout(gl_requirementPanel);
 		searchreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		panel.add(searchreqBtn);
 		
 		JPanel resourcePanel = new JPanel();
 		tabbedPane.addTab("Resource Management", null, resourcePanel, null);
@@ -165,83 +177,15 @@ public class NUserPage {
 		sl_resourcePanel.putConstraint(SpringLayout.NORTH, resourcesTab, 10, SpringLayout.NORTH, resourcePanel);
 		sl_resourcePanel.putConstraint(SpringLayout.WEST, resourcesTab, 10, SpringLayout.WEST, resourcePanel);
 		sl_resourcePanel.putConstraint(SpringLayout.SOUTH, resourcesTab, 525, SpringLayout.NORTH, resourcePanel);
-		sl_resourcePanel.putConstraint(SpringLayout.EAST, resourcesTab, 819, SpringLayout.WEST, resourcePanel);
+		sl_resourcePanel.putConstraint(SpringLayout.EAST, resourcesTab, 827, SpringLayout.WEST, resourcePanel);
 		resourcePanel.add(resourcesTab);
-		
-		JPanel modulePanel = new JPanel();
-		resourcesTab.addTab("Module", null, modulePanel, null);
-		SpringLayout sl_modulePanel = new SpringLayout();
-		modulePanel.setLayout(sl_modulePanel);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		sl_modulePanel.putConstraint(SpringLayout.NORTH, scrollPane, 87, SpringLayout.NORTH, modulePanel);
-		sl_modulePanel.putConstraint(SpringLayout.WEST, scrollPane, -716, SpringLayout.EAST, modulePanel);
-		sl_modulePanel.putConstraint(SpringLayout.SOUTH, scrollPane, 293, SpringLayout.NORTH, modulePanel);
-		sl_modulePanel.putConstraint(SpringLayout.EAST, scrollPane, -32, SpringLayout.EAST, modulePanel);
-		modulePanel.add(scrollPane);
 		
 		//get module list
 		DefaultListModel<String> modulelistModel = new DefaultListModel<String>();
-
-		JList moduleList = new JList(modulelistModel);
-		scrollPane.setViewportView(moduleList);
-		
-		JButton btnAddModule = new JButton("Add Module");
-		btnAddModule.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				ArrayList<Field> moduleFields = new ArrayList<Field>();
-//				moduleFields.add(new Field("text","rid","",10,"rid"));
-//				moduleFields.add(new Field("text","mid","",10,"mid"));
-				moduleFields.add(new Field("text","name","",10,"name"));
-
-
-				Form moduleForm = new Form(moduleFields,"Module Form");
-				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
-				modulePanel.makeForm();
-				JFrame AddModulePage= new JFrame("Add Module Form");
-				AddModulePage.getContentPane().add(modulePanel.getJPanel(),BorderLayout.NORTH);
-				
-				JButton submitaddmoduleBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-    		    buttonPanel.add(submitaddmoduleBtn);
-    		    AddModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-    		    AddModulePage.pack();
-				AddModulePage.setVisible(true);
-				
-				submitaddmoduleBtn.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						ModuleCatalogue mcat = new ModuleCatalogue();
-						System.out.println("all : ");
-						mcat.readAllResources();
-						ArrayList<String> inputs = new ArrayList<String>();
-	  			    	for(int i=0; i<modulePanel.getJPanel().getComponentCount(); i++){
-	  			    		FieldPanel fpanel = (FieldPanel)modulePanel.getJPanel().getComponent(i);
-	  			    		inputs.add(fpanel.getValues().get(0));
-	  			    	}
-	  			    	for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i)+"adasa");
-						}
-	  			    	mcat.addResource((inputs.get(0)));
-						// tu resource ham bayad insert she
-						mcat.readAllResources();
-					}
-				});
-				
-					
-			}
-		});
-		sl_modulePanel.putConstraint(SpringLayout.NORTH, btnAddModule, 28, SpringLayout.NORTH, modulePanel);
-		sl_modulePanel.putConstraint(SpringLayout.EAST, btnAddModule, -50, SpringLayout.EAST, modulePanel);
-		modulePanel.add(btnAddModule);
 		
 		ModuleCatalogue mcat = new ModuleCatalogue();
 		System.out.println("all : ");
 		ArrayList<HashMap<String, String>> allmodules = mcat.readAllResources();
-		moduleList.removeAll();
 
 		for (int i = 0; i < allmodules.size(); i++) {
 			System.out.println(allmodules.get(i));
@@ -254,7 +198,21 @@ public class NUserPage {
 		resourcesTab.addTab("Information", null, informationPanel, null);
 		
 		JButton btnAddInformation = new JButton("Add Information Resource");
-		informationPanel.add(btnAddInformation);
+		GroupLayout gl_informationPanel = new GroupLayout(informationPanel);
+		gl_informationPanel.setHorizontalGroup(
+			gl_informationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_informationPanel.createSequentialGroup()
+					.addContainerGap(588, Short.MAX_VALUE)
+					.addComponent(btnAddInformation))
+		);
+		gl_informationPanel.setVerticalGroup(
+			gl_informationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_informationPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnAddInformation)
+					.addContainerGap(434, Short.MAX_VALUE))
+		);
+		informationPanel.setLayout(gl_informationPanel);
 		btnAddInformation.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -304,7 +262,21 @@ public class NUserPage {
 		resourcesTab.addTab("Financial", null, financialPanel, null);
 		
 		JButton btnAddFinancial = new JButton("Add Financial Resource");
-		financialPanel.add(btnAddFinancial);
+		GroupLayout gl_financialPanel = new GroupLayout(financialPanel);
+		gl_financialPanel.setHorizontalGroup(
+			gl_financialPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_financialPanel.createSequentialGroup()
+					.addContainerGap(606, Short.MAX_VALUE)
+					.addComponent(btnAddFinancial))
+		);
+		gl_financialPanel.setVerticalGroup(
+			gl_financialPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_financialPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnAddFinancial)
+					.addContainerGap(434, Short.MAX_VALUE))
+		);
+		financialPanel.setLayout(gl_financialPanel);
 		btnAddFinancial.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -350,36 +322,96 @@ public class NUserPage {
 			}
 		});
 		
+		JPanel modulePanel_1 = new JPanel();
+		resourcesTab.addTab("Module", null, modulePanel_1, null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		
+				JList moduleList = new JList(modulelistModel);
+				scrollPane.setViewportView(moduleList);
+				moduleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				
+						
+						JButton btnAddModule = new JButton("Add Module");
+						btnAddModule.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								
+								ArrayList<Field> moduleFields = new ArrayList<Field>();
+//				moduleFields.add(new Field("text","rid","",10,"rid"));
+//				moduleFields.add(new Field("text","mid","",10,"mid"));
+								moduleFields.add(new Field("text","name","",10,"name"));
+
+
+								Form moduleForm = new Form(moduleFields,"Module Form");
+								final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
+								modulePanel.makeForm();
+								JFrame AddModulePage= new JFrame("Add Module Form");
+								AddModulePage.getContentPane().add(modulePanel.getJPanel(),BorderLayout.NORTH);
+								
+								JButton submitaddmoduleBtn = new JButton("Submit");
+								JPanel buttonPanel = new JPanel();
+    		    buttonPanel.add(submitaddmoduleBtn);
+    		    AddModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    		    AddModulePage.pack();
+								AddModulePage.setVisible(true);
+								
+								submitaddmoduleBtn.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										// TODO Auto-generated method stub
+										ModuleCatalogue mcat = new ModuleCatalogue();
+										System.out.println("all : ");
+										mcat.readAllResources();
+										ArrayList<String> inputs = new ArrayList<String>();
+	  			    	for(int i=0; i<modulePanel.getJPanel().getComponentCount(); i++){
+	  			    		FieldPanel fpanel = (FieldPanel)modulePanel.getJPanel().getComponent(i);
+	  			    		inputs.add(fpanel.getValues().get(0));
+	  			    	}
+	  			    	for (int i = 0; i < inputs.size(); i++) {
+											System.out.println(inputs.get(i)+"adasa");
+										}
+	  			    	mcat.addResource((inputs.get(0)));
+										// tu resource ham bayad insert she
+										mcat.readAllResources();
+									}
+								});
+								
+									
+							}
+						});
+						
+						JPanel panel_4 = new JPanel();
+						panel_4.setLayout(new SpringLayout());
+						GroupLayout gl_modulePanel_1 = new GroupLayout(modulePanel_1);
+						gl_modulePanel_1.setHorizontalGroup(
+							gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_modulePanel_1.createSequentialGroup()
+									.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(786))
+								.addGroup(gl_modulePanel_1.createSequentialGroup()
+									.addGap(80)
+									.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 684, GroupLayout.PREFERRED_SIZE))
+								.addGroup(Alignment.TRAILING, gl_modulePanel_1.createSequentialGroup()
+									.addContainerGap(677, Short.MAX_VALUE)
+									.addComponent(btnAddModule))
+						);
+						gl_modulePanel_1.setVerticalGroup(
+							gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_modulePanel_1.createSequentialGroup()
+									.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnAddModule)
+									.addGap(52)
+									.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE))
+						);
+						modulePanel_1.setLayout(gl_modulePanel_1);
+						moduleList.removeAll();
+		
 		JPanel physicalPanel = new JPanel();
 		resourcesTab.addTab("Physical", null, physicalPanel, null);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		
-		JPanel panel_3 = new JPanel();
-		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
-		gl_physicalPanel.setHorizontalGroup(
-			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_physicalPanel.createSequentialGroup()
-							.addGap(135)
-							.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 519, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_physicalPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 776, Short.MAX_VALUE)))
-					.addContainerGap())
-		);
-		gl_physicalPanel.setVerticalGroup(
-			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-					.addGap(94)
-					.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(131, Short.MAX_VALUE))
-		);
-		SpringLayout sl_panel_3 = new SpringLayout();
-		panel_3.setLayout(sl_panel_3);
 		
 		JButton btnAddPhysicalResource = new JButton("Add Physical Resource");
 		btnAddPhysicalResource.addActionListener(new ActionListener() {
@@ -426,9 +458,26 @@ public class NUserPage {
 				});
 			}
 		});
-		sl_panel_3.putConstraint(SpringLayout.NORTH, btnAddPhysicalResource, 0, SpringLayout.NORTH, panel_3);
-		sl_panel_3.putConstraint(SpringLayout.EAST, btnAddPhysicalResource, 0, SpringLayout.EAST, panel_3);
-		panel_3.add(btnAddPhysicalResource);
+		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
+		gl_physicalPanel.setHorizontalGroup(
+			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addGap(135)
+					.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 519, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+				.addGroup(Alignment.TRAILING, gl_physicalPanel.createSequentialGroup()
+					.addContainerGap(611, Short.MAX_VALUE)
+					.addComponent(btnAddPhysicalResource))
+		);
+		gl_physicalPanel.setVerticalGroup(
+			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnAddPhysicalResource)
+					.addGap(96)
+					.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(131, Short.MAX_VALUE))
+		);
 		
 		//get phys res list
 		DefaultListModel<String> physicalreslistModel = new DefaultListModel<String>();
@@ -437,6 +486,8 @@ public class NUserPage {
 		JList physicalresList = new JList(physicalreslistModel);
 		scrollPane_2.setViewportView(physicalresList);
 		physicalPanel.setLayout(gl_physicalPanel);
+		physicalresList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 		
 		PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 		System.out.println("all : ");
@@ -452,20 +503,29 @@ public class NUserPage {
 		
 		JPanel allPanel = new JPanel();
 		resourcesTab.addTab("All", null, allPanel, null);
-		SpringLayout sl_allPanel = new SpringLayout();
-		allPanel.setLayout(sl_allPanel);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		sl_allPanel.putConstraint(SpringLayout.NORTH, scrollPane_1, 85, SpringLayout.NORTH, allPanel);
-		sl_allPanel.putConstraint(SpringLayout.WEST, scrollPane_1, 50, SpringLayout.WEST, allPanel);
-		sl_allPanel.putConstraint(SpringLayout.SOUTH, scrollPane_1, 320, SpringLayout.NORTH, allPanel);
-		sl_allPanel.putConstraint(SpringLayout.EAST, scrollPane_1, -40, SpringLayout.EAST, allPanel);
-		allPanel.add(scrollPane_1);
 		
 		DefaultListModel<String> allreslistModel = new DefaultListModel<String>();
 
 		JList allresList = new JList(allreslistModel);
 		scrollPane_1.setViewportView(allresList);
+		allresList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		GroupLayout gl_allPanel = new GroupLayout(allPanel);
+		gl_allPanel.setHorizontalGroup(
+			gl_allPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_allPanel.createSequentialGroup()
+					.addGap(50)
+					.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 706, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_allPanel.setVerticalGroup(
+			gl_allPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_allPanel.createSequentialGroup()
+					.addGap(85)
+					.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE))
+		);
+		allPanel.setLayout(gl_allPanel);
+
 		
 		//get all res list
 		ResourceCatalogue rcat = new ResourceCatalogue();
@@ -483,53 +543,44 @@ public class NUserPage {
 		JPanel projectPanel = new JPanel();
 		tabbedPane.addTab("Project Management", null, projectPanel, null);
 		tabbedPane.setEnabledAt(4, true);
-		SpringLayout sl_projectPanel = new SpringLayout();
-		projectPanel.setLayout(sl_projectPanel);
 		
 		DefaultListModel<String> projectlistModel = new DefaultListModel<String>();
 
 		JList<String> projectList = new JList<String>(projectlistModel);
-		sl_projectPanel.putConstraint(SpringLayout.NORTH, projectList, 134, SpringLayout.NORTH, projectPanel);
-		sl_projectPanel.putConstraint(SpringLayout.WEST, projectList, 90, SpringLayout.WEST, projectPanel);
-		sl_projectPanel.putConstraint(SpringLayout.SOUTH, projectList, -127, SpringLayout.SOUTH, projectPanel);
-		sl_projectPanel.putConstraint(SpringLayout.EAST, projectList, 737, SpringLayout.WEST, projectPanel);
-		projectPanel.add(projectList);
 		projectlistModel.addElement("hello");
-		
-		JPanel panel_2 = new JPanel();
-		sl_projectPanel.putConstraint(SpringLayout.NORTH, panel_2, 10, SpringLayout.NORTH, projectPanel);
-		sl_projectPanel.putConstraint(SpringLayout.WEST, panel_2, 10, SpringLayout.WEST, projectPanel);
-		sl_projectPanel.putConstraint(SpringLayout.SOUTH, panel_2, 40, SpringLayout.NORTH, projectPanel);
-		sl_projectPanel.putConstraint(SpringLayout.EAST, panel_2, 819, SpringLayout.WEST, projectPanel);
-		projectPanel.add(panel_2);
-		SpringLayout sl_panel_2 = new SpringLayout();
-		panel_2.setLayout(sl_panel_2);
+		projectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JButton addprojectBtn = new JButton("Add Project");
-		sl_panel_2.putConstraint(SpringLayout.NORTH, addprojectBtn, 1, SpringLayout.NORTH, panel_2);
-		sl_panel_2.putConstraint(SpringLayout.EAST, addprojectBtn, 0, SpringLayout.EAST, panel_2);
-		sl_projectPanel.putConstraint(SpringLayout.EAST, addprojectBtn, 0, SpringLayout.EAST, panel_2);
-		panel_2.add(addprojectBtn);
 		addprojectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
-		txtSearch = new JTextField();
-		sl_panel_2.putConstraint(SpringLayout.NORTH, txtSearch, -1, SpringLayout.NORTH, addprojectBtn);
-		sl_panel_2.putConstraint(SpringLayout.WEST, txtSearch, -441, SpringLayout.WEST, addprojectBtn);
-		sl_panel_2.putConstraint(SpringLayout.EAST, txtSearch, -204, SpringLayout.WEST, addprojectBtn);
-		sl_projectPanel.putConstraint(SpringLayout.EAST, txtSearch, -168, SpringLayout.WEST, addprojectBtn);
-		panel_2.add(txtSearch);
-		sl_projectPanel.putConstraint(SpringLayout.SOUTH, txtSearch, -21, SpringLayout.NORTH, projectList);
-		txtSearch.setText("Search");
-		txtSearch.setColumns(10);
-		sl_projectPanel.putConstraint(SpringLayout.NORTH, addprojectBtn, 1, SpringLayout.NORTH, txtSearch);
-		
 		JButton projsearchBtn = new JButton("Search");
-		sl_panel_2.putConstraint(SpringLayout.NORTH, projsearchBtn, 0, SpringLayout.NORTH, addprojectBtn);
-		sl_panel_2.putConstraint(SpringLayout.EAST, projsearchBtn, -1, SpringLayout.WEST, txtSearch);
-		panel_2.add(projsearchBtn);
+		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
+		gl_projectPanel.setHorizontalGroup(
+			gl_projectPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addGap(90)
+					.addComponent(projectList, GroupLayout.PREFERRED_SIZE, 647, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(100, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, gl_projectPanel.createSequentialGroup()
+					.addGap(300)
+					.addComponent(projsearchBtn)
+					.addPreferredGap(ComponentPlacement.RELATED, 336, Short.MAX_VALUE)
+					.addComponent(addprojectBtn))
+		);
+		gl_projectPanel.setVerticalGroup(
+			gl_projectPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addprojectBtn)
+						.addComponent(projsearchBtn))
+					.addGap(91)
+					.addComponent(projectList, GroupLayout.PREFERRED_SIZE, 244, GroupLayout.PREFERRED_SIZE))
+		);
+		projectPanel.setLayout(gl_projectPanel);
 	}
 	public JFrame getUserpageFrame() {
 		return userpageFrame;
