@@ -7,7 +7,7 @@ import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
-import UserManagement.EmployeeCatalogue;
+import ProjectEmployee.EmployeeCatalogue;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;

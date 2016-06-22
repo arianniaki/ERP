@@ -10,8 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import GUI.Form.TextForm;
-import UserManagement.Employee;
-import UserManagement.EmployeeCatalogue;
+import ProjectEmployee.Employee;
+import ProjectEmployee.EmployeeCatalogue;
 
 public class main {
 	   // The entry main() method

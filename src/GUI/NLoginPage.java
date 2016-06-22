@@ -16,7 +16,7 @@ import com.jgoodies.forms.factories.DefaultComponentFactory;
 import GUI.Form.Field;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
-import UserManagement.Employee;
+import ProjectEmployee.Employee;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

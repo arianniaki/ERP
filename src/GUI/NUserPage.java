@@ -25,11 +25,11 @@ import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
-import Resource.FinancialResourceCatalogue;
-import Resource.InformationResourceCatalogue;
-import Resource.ModuleCatalogue;
-import Resource.PhysicalResourceCatalogue;
-import Resource.ResourceCatalogue;
+import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
+import ResourceManagement.Section.Resource.InformationResourceCatalogue;
+import ResourceManagement.Section.Resource.ModuleCatalogue;
+import ResourceManagement.Section.Resource.PhysicalResourceCatalogue;
+import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JScrollPane;

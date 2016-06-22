@@ -16,13 +16,13 @@ import GUI.Form.FieldPanel;
 import GUI.Form.PanelBuilder;
 import GUI.Form.TextForm;
 import GUI.Form.Form;
-import Resource.FinancialResourceCatalogue;
-import Resource.InformationResourceCatalogue;
-import Resource.ModuleCatalogue;
-import Resource.PhysicalResourceCatalogue;
-import Resource.ResourceCatalogue;
-import UserManagement.Employee;
-import UserManagement.EmployeeCatalogue;
+import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
+import ResourceManagement.Section.Resource.InformationResourceCatalogue;
+import ResourceManagement.Section.Resource.ModuleCatalogue;
+import ResourceManagement.Section.Resource.PhysicalResourceCatalogue;
+import ResourceManagement.Section.Resource.ResourceCatalogue;
+import ProjectEmployee.Employee;
+import ProjectEmployee.EmployeeCatalogue;
 public class UserPage extends JFrame {
     protected JButton addmodulebtn, addresourcebtn,logout,displaymodulebtn,displayemployees,displayresources;
     // Constructor sets features of the frame, creates buttons, adds them to the frame, and
