@@ -38,4 +38,6 @@ public class ComboBoxJPanel extends FieldPanel {
 		System.out.println(comboField.getSelectedItem().toString());
 		return ret;
 	}
+	
+	
 }

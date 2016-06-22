@@ -21,6 +21,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
+import GUI.Form.ComboBoxJPanel;
 import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
@@ -49,6 +50,9 @@ public class NUserPage {
 	private String loggedin_user;
 	private ArrayList<HashMap<String, String>> allmodules;
 	private ArrayList<HashMap<String, String>> allphysicals;
+	private ArrayList<HashMap<String, String>> allfinance;
+	private ArrayList<HashMap<String, String>> allinformation;
+	private ArrayList<HashMap<String, String>> allres;
 	/**
 	 * Launch the application.
 	 */
@@ -175,7 +179,49 @@ public class NUserPage {
 		JButton addreqBtn = new JButton("Add Requirement");
 		addreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			   	ArrayList<String> resource_types = new ArrayList<String>();
+			   	ArrayList<String> resources = new ArrayList<String>();
+		      	resource_types.add("Information");
+		      	resource_types.add("Financial");
+		      	resource_types.add("Physical");
+		      	resource_types.add("Employee");
+				ArrayList<Field> requirement_moduleFields = new ArrayList<Field>();
+		      	Field reqname = new Field("text", "req name       ", "", 10, "name");
+		      	Field req_res_type = new Field("comboBox", "items", resource_types , 10, "items");
+		      	Field req_res = new Field("comboBox", "items", resources , 10, "items");
+
+		      	
+		      	requirement_moduleFields.add(reqname);
+		      	requirement_moduleFields.add(req_res_type);
 				
+		      	
+  			    	
+				Form requirement_Form = new Form(requirement_moduleFields,"Requirement Form");
+				final PanelBuilder requirement_Panel = new PanelBuilder(requirement_Form);
+				requirement_Panel.makeForm();
+				
+				
+				JFrame Add_RequirementPage= new JFrame("Add Requirement Module Form");
+				Add_RequirementPage.getContentPane().add(requirement_Panel.getJPanel(),BorderLayout.NORTH);
+				
+				JButton submitaddrequeirementBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+    		    buttonPanel.add(submitaddrequeirementBtn);
+    		    Add_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    		    Add_RequirementPage.pack();
+    		    Add_RequirementPage.setVisible(true);
+    		    submitaddrequeirementBtn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+	  			    	for(int i=0; i<requirement_Panel.getJPanel().getComponentCount(); i++){
+	  			    		FieldPanel fpanel = (FieldPanel)requirement_Panel.getJPanel().getComponent(i);
+	  			    		System.out.println(fpanel.getValues());
+	  			    	}
+						
+					}
+				});
+
 				
 				
 			}
@@ -234,11 +280,11 @@ public class NUserPage {
 		
 
 		//get information list
-		DefaultListModel<String> informationlistModel = new DefaultListModel<String>();
+		final DefaultListModel<String> informationlistModel = new DefaultListModel<String>();
 		
 		InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 		System.out.println("all : ");
-		ArrayList<HashMap<String, String>> allinformation = infocat.readAllResources();
+		allinformation = infocat.readAllResources();
 
 		for (int i = 0; i < allinformation.size(); i++) {
 			System.out.println(allinformation.get(i));
@@ -252,6 +298,9 @@ public class NUserPage {
 		
 		JButton btnAddInformation = new JButton("Add Information Resource");
 		
+		
+
+		 
 		JScrollPane information_scrollPane = new JScrollPane();
 		GroupLayout gl_informationPanel = new GroupLayout(informationPanel);
 		gl_informationPanel.setHorizontalGroup(
@@ -282,8 +331,6 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
-//				moduleFields.add(new Field("text","rid","",10,"rid"));
-//				moduleFields.add(new Field("text","mid","",10,"mid"));
 				information_moduleFields.add(new Field("text","infosname","",20,"name"));
 
 
@@ -318,19 +365,33 @@ public class NUserPage {
 	  			    	infocat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
 	  			    	infocat.readAllResources();
+	  			    	
+	  			    	
+	  			    	allinformation.clear();
+	  			    	informationlistModel.removeAllElements();
+	  			    	allinformation=infocat.readAllResources();
+						for (int i = 0; i < allinformation.size(); i++) {
+							System.out.println(allinformation.get(i));
+							informationlistModel.addElement(""+allinformation.get(i).toString().substring(0, 7)+" " +allinformation.get(i).toString().subSequence(7, allinformation.get(i).toString().length()));
+						}
+	  			    	
+						
+						
 					}
 				});
 			}
 		});
 		
 
+	
+		
 		
 		//get financial list
-		DefaultListModel<String> financiallistModel = new DefaultListModel<String>();
+		final DefaultListModel<String> financiallistModel = new DefaultListModel<String>();
 		
 		FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 		System.out.println("all : ");
-		ArrayList<HashMap<String, String>> allfinance = financat.readAllResources();
+		allfinance = financat.readAllResources();
 
 		for (int i = 0; i < allfinance.size(); i++) {
 			System.out.println(allfinance.get(i));
@@ -376,10 +437,7 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
-//				moduleFields.add(new Field("text","rid","",10,"rid"));
-//				moduleFields.add(new Field("text","mid","",10,"mid"));
 				financial_moduleFields.add(new Field("text","financename","",20,"name"));
-
 
 				Form financial_moduleForm = new Form(financial_moduleFields,"Information Module Form");
 				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
@@ -411,6 +469,17 @@ public class NUserPage {
 	  			    	financat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
 	  			    	financat.readAllResources();
+	  			    	
+	  			    	
+	  			    	allfinance.clear();
+	  			    	financiallistModel.removeAllElements();
+	  			    	allfinance=financat.readAllResources();
+						for (int i = 0; i < allfinance.size(); i++) {
+							System.out.println(allfinance.get(i));
+							financiallistModel.addElement(""+allfinance.get(i).toString().substring(0, 7)+" " +allfinance.get(i).toString().subSequence(7, allfinance.get(i).toString().length()));
+						}
+	  			    	
+						
 					}
 				});
 			}
@@ -513,7 +582,6 @@ public class NUserPage {
 						);
 						
 												//end get module list
-												
 						JList<String> module_list = new JList<String>(modulelistModel);
 						module_scrollPane.setViewportView(module_list);
 						module_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -582,7 +650,6 @@ public class NUserPage {
 							physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
 						}
 	  			    	
-
 					}
 				});
 			}
@@ -613,22 +680,21 @@ public class NUserPage {
 		
 				//end get phys res list
 		
-				
 				JList<String> physical_list = new JList<String>(physicalreslistModel);
 				physical_scrollPane.setViewportView(physical_list);
 				physical_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		physicalPanel.setLayout(gl_physicalPanel);
+				physicalPanel.setLayout(gl_physicalPanel);
 
 		
 		
 		JPanel allPanel = new JPanel();
 		resourcesTab.addTab("All", null, allPanel, null);
 		
-		DefaultListModel<String> allreslistModel = new DefaultListModel<String>();
+		final DefaultListModel<String> allreslistModel = new DefaultListModel<String>();
 		//get all res list
-				ResourceCatalogue rcat = new ResourceCatalogue();
+				final ResourceCatalogue rcat = new ResourceCatalogue();
 				System.out.println("all : ");
-				ArrayList<HashMap<String, String>> allres = rcat.readAllResources();
+				allres = rcat.readAllResources();
 				
 				for (int i = 0; i < allres.size(); i++) {
 					System.out.println(allres.get(i));
@@ -636,17 +702,36 @@ public class NUserPage {
 				}
 		
 		JScrollPane allres_scrollPane = new JScrollPane();
+		
+		JButton button = new JButton("Refresh");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				allres.clear();
+				allreslistModel.removeAllElements();
+			    	allres=rcat.readAllResources();
+				for (int i = 0; i < allres.size(); i++) {
+					System.out.println(allres.get(i));
+					allreslistModel.addElement(""+allres.get(i).toString().substring(0, 7)+" " +allres.get(i).toString().subSequence(7, allres.get(i).toString().length()));
+				}
+			    	
+			}
+		});
 		GroupLayout gl_allPanel = new GroupLayout(allPanel);
 		gl_allPanel.setHorizontalGroup(
 			gl_allPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_allPanel.createSequentialGroup()
 					.addGap(30)
-					.addComponent(allres_scrollPane, GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+					.addComponent(allres_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
 					.addGap(30))
+				.addGroup(Alignment.TRAILING, gl_allPanel.createSequentialGroup()
+					.addContainerGap(588, Short.MAX_VALUE)
+					.addComponent(button, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE))
 		);
 		gl_allPanel.setVerticalGroup(
-			gl_allPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_allPanel.createSequentialGroup()
+			gl_allPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_allPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(button)
 					.addGap(30)
 					.addComponent(allres_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
 					.addGap(30))
