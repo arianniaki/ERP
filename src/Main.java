@@ -4,6 +4,7 @@ import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
+import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import ResourceManagement.Section.Resource.*;
 
 public class Main {
@@ -73,11 +74,17 @@ public class Main {
 //
 //		Employee emp = empcat.getEmployee(12);
 //
-		ProjectCatalogue projCat = new ProjectCatalogue();
-		projCat.getProjects();
-		System.out.println(";;;;;;;;;;;;;");
-		projCat.searchProjects("10", "java");
+//		ProjectCatalogue projCat = new ProjectCatalogue();
+//		projCat.getProjects();
+//		System.out.println(";;;;;;;;;;;;;");
+//		projCat.searchProjects("10", "java");
 		
-
+		// test subSystem:
+		SubSystemCatalogue subCat = new SubSystemCatalogue();
+		subCat.addSubSystem("sub1", 6);
+		subCat.addSubSystem("sub2", 7);
+		subCat.getSubSystems();
+		subCat.deleteSubSystem(2);
+		subCat.getSubSystems();
 	}
 }

@@ -59,7 +59,6 @@ public class ProjectCatalogue {
 	}
 
 	
-
 	public ArrayList<Project> searchProjects(String resourceType){
 		ArrayList<Project> result = new ArrayList<Project>();
 		return result;
