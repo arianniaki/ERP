@@ -1,3 +1,6 @@
+import ProjectEmployee.Employee;
+import ProjectEmployee.EmployeeCatalogue;
+import ProjectEmployee.ProjectCatalogue;
 import ResourceManagement.Section.Resource.*;
 
 public class Main {
@@ -52,9 +55,8 @@ public class Main {
 
 //		
 //		// test EmployeeCatalogue
-//		EmployeeCatalogue empcat = new EmployeeCatalogue();
 //		empcat.readAllEmployees();
-//		empcat.addEmployee(10, false, "gholamReza", "hammal", 5);
+//		empcat.addEmployee(12, false, "gholi", "hammal", 5, "gholi", "123", false);
 //		System.out.println(":::::: after insert ::::::::");
 //		empcat.readAllEmployees();
 //		empcat.deleteEmployee(10);
@@ -62,5 +64,14 @@ public class Main {
 //
 //		empcat.readAllEmployees();
 //
+		
+		//test project
+//		EmployeeCatalogue empcat = new EmployeeCatalogue();
+//
+//		Employee emp = empcat.getEmployee(12);
+//
+//		ProjectCatalogue projCat = new ProjectCatalogue();
+//		projCat.addProject("testproj 2",emp);
+//		projCat.getProjects();
 	}
 }

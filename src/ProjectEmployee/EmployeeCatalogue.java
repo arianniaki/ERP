@@ -1,5 +1,7 @@
 package ProjectEmployee;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,6 +31,7 @@ public class EmployeeCatalogue{
 	}
 
 	public void addEmployee(int empid, boolean ismodir, String empname, String post, int sectionId,String username,String password, boolean is_loggedin) {
+		
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", Integer.toString(empid));
 		vars.put("empname", "\'" + empname + "\'");
@@ -39,8 +42,30 @@ public class EmployeeCatalogue{
 		vars.put("password", "\'" + password +"\'");
 		vars.put("is_loggedin", Boolean.toString(is_loggedin));
 
-
+		
 		DB.insert(vars, "employee");
+	}
+	
+	public Employee getEmployee(int empid){
+		Employee emp = new Employee();
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("empid", Integer.toString(empid));
+		ResultSet res = DB.select(vars, "employee");
+		try {
+			if(res.next()){
+				emp.setId(res.getInt("empid"));
+				emp.setName(res.getString("empname"));
+				emp.setUsername(res.getString("username"));
+				emp.setSectionId(res.getInt("sectionid"));
+				emp.setPassword(res.getString("password"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return emp;
+		
+		
 	}
 
 }
