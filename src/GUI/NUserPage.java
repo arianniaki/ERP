@@ -48,6 +48,7 @@ public class NUserPage {
 	private JTextField editfamilyname_textField;
 	private String loggedin_user;
 	private ArrayList<HashMap<String, String>> allmodules;
+	private ArrayList<HashMap<String, String>> allphysicals;
 	/**
 	 * Launch the application.
 	 */
@@ -513,13 +514,25 @@ public class NUserPage {
 						
 												//end get module list
 												
-												JList<String> module_list = new JList<String>(modulelistModel);
-												module_scrollPane.setViewportView(module_list);
-												module_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+						JList<String> module_list = new JList<String>(modulelistModel);
+						module_scrollPane.setViewportView(module_list);
+						module_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 						modulePanel.setLayout(gl_modulePanel_1);
+						
+						//get phys res list
+						final DefaultListModel<String> physicalreslistModel = new DefaultListModel<String>();
+						
+						PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+						System.out.println("all : ");
+						allphysicals = physcat.readAllResources();
+
+						for (int i = 0; i < allphysicals.size(); i++) {
+							System.out.println(allphysicals.get(i));
+							physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
+						}
+						
+						
 		
-						
-						
 		JPanel physicalPanel = new JPanel();
 		resourcesTab.addTab("Physical", null, physicalPanel, null);
 		
@@ -527,8 +540,6 @@ public class NUserPage {
 		btnAddPhysicalResource.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
-//				moduleFields.add(new Field("text","rid","",10,"rid"));
-//				moduleFields.add(new Field("text","mid","",10,"mid"));
 				physical_moduleFields.add(new Field("text","physname","",20,"name"));
 
 
@@ -563,24 +574,21 @@ public class NUserPage {
 						// tu resource ham bayad insert she
 	  			    	physcat.readAllResources();
 	  			    	
+	  			    	allphysicals.clear();
+	  			    	physicalreslistModel.removeAllElements();
+						allphysicals=physcat.readAllResources();
+						for (int i = 0; i < allphysicals.size(); i++) {
+							System.out.println(allphysicals.get(i));
+							physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
+						}
+	  			    	
 
 					}
 				});
 			}
 		});
 		
-		//get phys res list
-		DefaultListModel<String> physicalreslistModel = new DefaultListModel<String>();
-		
-		PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
-		System.out.println("all : ");
-		ArrayList<HashMap<String, String>> allphysicals = physcat.readAllResources();
 
-		for (int i = 0; i < allphysicals.size(); i++) {
-			System.out.println(allphysicals.get(i));
-			physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
-		}
-		
 		JScrollPane physical_scrollPane = new JScrollPane();
 		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
 		gl_physicalPanel.setHorizontalGroup(
