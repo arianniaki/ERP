@@ -21,6 +21,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
+import GUI.Form.ComboBoxJPanel;
 import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
@@ -178,7 +179,49 @@ public class NUserPage {
 		JButton addreqBtn = new JButton("Add Requirement");
 		addreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			   	ArrayList<String> resource_types = new ArrayList<String>();
+			   	ArrayList<String> resources = new ArrayList<String>();
+		      	resource_types.add("Information");
+		      	resource_types.add("Financial");
+		      	resource_types.add("Physical");
+		      	resource_types.add("Employee");
+				ArrayList<Field> requirement_moduleFields = new ArrayList<Field>();
+		      	Field reqname = new Field("text", "req name       ", "", 10, "name");
+		      	Field req_res_type = new Field("comboBox", "items", resource_types , 10, "items");
+		      	Field req_res = new Field("comboBox", "items", resources , 10, "items");
+
+		      	
+		      	requirement_moduleFields.add(reqname);
+		      	requirement_moduleFields.add(req_res_type);
 				
+		      	
+  			    	
+				Form requirement_Form = new Form(requirement_moduleFields,"Requirement Form");
+				final PanelBuilder requirement_Panel = new PanelBuilder(requirement_Form);
+				requirement_Panel.makeForm();
+				
+				
+				JFrame Add_RequirementPage= new JFrame("Add Requirement Module Form");
+				Add_RequirementPage.getContentPane().add(requirement_Panel.getJPanel(),BorderLayout.NORTH);
+				
+				JButton submitaddrequeirementBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+    		    buttonPanel.add(submitaddrequeirementBtn);
+    		    Add_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    		    Add_RequirementPage.pack();
+    		    Add_RequirementPage.setVisible(true);
+    		    submitaddrequeirementBtn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+	  			    	for(int i=0; i<requirement_Panel.getJPanel().getComponentCount(); i++){
+	  			    		FieldPanel fpanel = (FieldPanel)requirement_Panel.getJPanel().getComponent(i);
+	  			    		System.out.println(fpanel.getValues());
+	  			    	}
+						
+					}
+				});
+
 				
 				
 			}
