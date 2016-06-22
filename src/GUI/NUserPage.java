@@ -351,7 +351,7 @@ public class NUserPage {
 
 		for (int i = 0; i < allinformation.size(); i++) {
 			System.out.println(allinformation.get(i));
-			informationlistModel.addElement(""+allinformation.get(i).toString().substring(0, 7)+" " +allinformation.get(i).toString().subSequence(7, allinformation.get(i).toString().length()));
+			informationlistModel.addElement(""+allinformation.get(i).get("irname"));
 		}
 
 		//end get information list
@@ -435,7 +435,7 @@ public class NUserPage {
 	  			    	allinformation=infocat.readAllResources();
 						for (int i = 0; i < allinformation.size(); i++) {
 							System.out.println(allinformation.get(i));
-							informationlistModel.addElement(""+allinformation.get(i).toString().substring(0, 7)+" " +allinformation.get(i).toString().subSequence(7, allinformation.get(i).toString().length()));
+							informationlistModel.addElement(""+allinformation.get(i).get("irname"));
 						}
 	  			    	
 						
@@ -458,7 +458,7 @@ public class NUserPage {
 
 		for (int i = 0; i < allfinance.size(); i++) {
 			System.out.println(allfinance.get(i));
-			financiallistModel.addElement(""+allfinance.get(i).toString().substring(0, 7)+" " +allfinance.get(i).toString().subSequence(7, allfinance.get(i).toString().length()));
+			financiallistModel.addElement(""+allfinance.get(i).get("finanname"));
 		}
 
 		//end get financial list
@@ -539,7 +539,7 @@ public class NUserPage {
 	  			    	allfinance=financat.readAllResources();
 						for (int i = 0; i < allfinance.size(); i++) {
 							System.out.println(allfinance.get(i));
-							financiallistModel.addElement(""+allfinance.get(i).toString().substring(0, 7)+" " +allfinance.get(i).toString().subSequence(7, allfinance.get(i).toString().length()));
+							financiallistModel.addElement(""+allfinance.get(i).get("finanname"));
 						}
 	  			    	
 						
@@ -559,7 +559,7 @@ public class NUserPage {
 
 		for (int i = 0; i < allmodules.size(); i++) {
 			System.out.println(allmodules.get(i));
-			modulelistModel.addElement(""+allmodules.get(i).toString().substring(0, 7)+" " +allmodules.get(i).toString().subSequence(7, allmodules.get(i).toString().length()));
+			modulelistModel.addElement(""+allmodules.get(i).get("modname"));
 		}
 		// end module list
 		JPanel modulePanel = new JPanel();
@@ -611,7 +611,7 @@ public class NUserPage {
 										allmodules=mcat.readAllResources();
 										for (int i = 0; i < allmodules.size(); i++) {
 											System.out.println(allmodules.get(i));
-											modulelistModel.addElement(""+allmodules.get(i).toString().substring(0, 7)+" " +allmodules.get(i).toString().subSequence(7, allmodules.get(i).toString().length()));
+											modulelistModel.addElement(""+allmodules.get(i).get("modname"));
 										}
 									}
 								});
@@ -659,7 +659,7 @@ public class NUserPage {
 
 						for (int i = 0; i < allphysicals.size(); i++) {
 							System.out.println(allphysicals.get(i));
-							physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
+							physicalreslistModel.addElement(""+allphysicals.get(i).get("physname"));
 						}
 						
 						
@@ -710,7 +710,7 @@ public class NUserPage {
 						allphysicals=physcat.readAllResources();
 						for (int i = 0; i < allphysicals.size(); i++) {
 							System.out.println(allphysicals.get(i));
-							physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
+							physicalreslistModel.addElement(""+allphysicals.get(i).get("physname"));
 						}
 	  			    	
 					}
@@ -761,7 +761,7 @@ public class NUserPage {
 				
 				for (int i = 0; i < allres.size(); i++) {
 					System.out.println(allres.get(i));
-					allreslistModel.addElement(""+allres.get(i).toString().substring(0, 7)+" "+allres.get(i).toString().subSequence(7, allres.get(i).toString().length()));
+					allreslistModel.addElement(""+allres.get(i).get("rname"));
 				}
 		
 		JScrollPane allres_scrollPane = new JScrollPane();
@@ -774,7 +774,7 @@ public class NUserPage {
 			    	allres=rcat.readAllResources();
 				for (int i = 0; i < allres.size(); i++) {
 					System.out.println(allres.get(i));
-					allreslistModel.addElement(""+allres.get(i).toString().substring(0, 7)+" " +allres.get(i).toString().subSequence(7, allres.get(i).toString().length()));
+					allreslistModel.addElement(""+allres.get(i).get("rname"));
 				}
 			    	
 			}
