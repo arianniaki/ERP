@@ -51,6 +51,7 @@ public class NUserPage {
 	private ArrayList<HashMap<String, String>> allphysicals;
 	private ArrayList<HashMap<String, String>> allfinance;
 	private ArrayList<HashMap<String, String>> allinformation;
+	private ArrayList<HashMap<String, String>> allres;
 	/**
 	 * Launch the application.
 	 */
@@ -606,7 +607,6 @@ public class NUserPage {
 							physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
 						}
 	  			    	
-
 					}
 				});
 			}
@@ -637,7 +637,6 @@ public class NUserPage {
 		
 				//end get phys res list
 		
-				
 				JList<String> physical_list = new JList<String>(physicalreslistModel);
 				physical_scrollPane.setViewportView(physical_list);
 				physical_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -648,11 +647,11 @@ public class NUserPage {
 		JPanel allPanel = new JPanel();
 		resourcesTab.addTab("All", null, allPanel, null);
 		
-		DefaultListModel<String> allreslistModel = new DefaultListModel<String>();
+		final DefaultListModel<String> allreslistModel = new DefaultListModel<String>();
 		//get all res list
-				ResourceCatalogue rcat = new ResourceCatalogue();
+				final ResourceCatalogue rcat = new ResourceCatalogue();
 				System.out.println("all : ");
-				ArrayList<HashMap<String, String>> allres = rcat.readAllResources();
+				allres = rcat.readAllResources();
 				
 				for (int i = 0; i < allres.size(); i++) {
 					System.out.println(allres.get(i));
@@ -660,17 +659,36 @@ public class NUserPage {
 				}
 		
 		JScrollPane allres_scrollPane = new JScrollPane();
+		
+		JButton button = new JButton("Refresh");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				allres.clear();
+				allreslistModel.removeAllElements();
+			    	allres=rcat.readAllResources();
+				for (int i = 0; i < allres.size(); i++) {
+					System.out.println(allres.get(i));
+					allreslistModel.addElement(""+allres.get(i).toString().substring(0, 7)+" " +allres.get(i).toString().subSequence(7, allres.get(i).toString().length()));
+				}
+			    	
+			}
+		});
 		GroupLayout gl_allPanel = new GroupLayout(allPanel);
 		gl_allPanel.setHorizontalGroup(
 			gl_allPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_allPanel.createSequentialGroup()
 					.addGap(30)
-					.addComponent(allres_scrollPane, GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+					.addComponent(allres_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
 					.addGap(30))
+				.addGroup(Alignment.TRAILING, gl_allPanel.createSequentialGroup()
+					.addContainerGap(588, Short.MAX_VALUE)
+					.addComponent(button, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE))
 		);
 		gl_allPanel.setVerticalGroup(
-			gl_allPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_allPanel.createSequentialGroup()
+			gl_allPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_allPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(button)
 					.addGap(30)
 					.addComponent(allres_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
 					.addGap(30))

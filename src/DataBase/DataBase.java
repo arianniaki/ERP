@@ -43,6 +43,8 @@ public class DataBase {
 			stmt.close();
 			c.commit();
 			c.close();
+			System.out.println("insert : Closed database successfully");
+
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
@@ -179,6 +181,8 @@ public class DataBase {
 			c.commit();
 			stmt.close();
 			c.close();
+			System.out.println("delete : Closed database successfully");
+
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
