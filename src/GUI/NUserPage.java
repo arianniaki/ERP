@@ -47,7 +47,7 @@ public class NUserPage {
 	private JTextField editname_textField;
 	private JTextField editfamilyname_textField;
 	private String loggedin_user;
-
+	private ArrayList<HashMap<String, String>> allmodules;
 	/**
 	 * Launch the application.
 	 */
@@ -141,18 +141,17 @@ public class NUserPage {
 		
 		JButton btnAssignAccessright = new JButton("Assign AccessRight");
 		
-		JList<String> accessright_list = new JList<String>();
-		accessright_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane accessright_scrollPane = new JScrollPane();
 		GroupLayout gl_accessrightPanel = new GroupLayout(accessrightPanel);
 		gl_accessrightPanel.setHorizontalGroup(
 			gl_accessrightPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_accessrightPanel.createSequentialGroup()
 					.addGap(40)
-					.addGroup(gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_accessrightPanel.createSequentialGroup()
-							.addComponent(accessright_list, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-							.addGap(40))
-						.addComponent(btnAssignAccessright, Alignment.TRAILING)))
+					.addComponent(btnAssignAccessright))
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
+					.addGap(40))
 		);
 		gl_accessrightPanel.setVerticalGroup(
 			gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
@@ -160,9 +159,13 @@ public class NUserPage {
 					.addContainerGap()
 					.addComponent(btnAssignAccessright)
 					.addGap(40)
-					.addComponent(accessright_list, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+					.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
 					.addGap(40))
 		);
+		
+		JList<String> accessright_list = new JList<String>();
+		accessright_scrollPane.setViewportView(accessright_list);
+		accessright_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		accessrightPanel.setLayout(gl_accessrightPanel);
 		
 		JPanel requirementPanel = new JPanel();
@@ -179,19 +182,18 @@ public class NUserPage {
 		
 		JButton searchreqBtn = new JButton("Search");
 		
-		JList<String> requirement_list = new JList<String>();
-		requirement_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane requirement_scrollPane = new JScrollPane();
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
 		gl_requirementPanel.setHorizontalGroup(
-			gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
+			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_requirementPanel.createSequentialGroup()
 					.addContainerGap(358, Short.MAX_VALUE)
 					.addComponent(searchreqBtn)
 					.addGap(242)
 					.addComponent(addreqBtn))
-				.addGroup(Alignment.LEADING, gl_requirementPanel.createSequentialGroup()
+				.addGroup(gl_requirementPanel.createSequentialGroup()
 					.addGap(40)
-					.addComponent(requirement_list, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
 					.addGap(40))
 		);
 		gl_requirementPanel.setVerticalGroup(
@@ -202,9 +204,13 @@ public class NUserPage {
 						.addComponent(searchreqBtn)
 						.addComponent(addreqBtn))
 					.addGap(40)
-					.addComponent(requirement_list, GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
 					.addGap(40))
 		);
+		
+		JList<String> requirement_list = new JList<String>();
+		requirement_scrollPane.setViewportView(requirement_list);
+		requirement_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		requirementPanel.setLayout(gl_requirementPanel);
 		searchreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -245,8 +251,7 @@ public class NUserPage {
 		
 		JButton btnAddInformation = new JButton("Add Information Resource");
 		
-		JList<String> information_list = new JList<String>(informationlistModel);
-		information_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane information_scrollPane = new JScrollPane();
 		GroupLayout gl_informationPanel = new GroupLayout(informationPanel);
 		gl_informationPanel.setHorizontalGroup(
 			gl_informationPanel.createParallelGroup(Alignment.LEADING)
@@ -254,19 +259,23 @@ public class NUserPage {
 					.addContainerGap(588, Short.MAX_VALUE)
 					.addComponent(btnAddInformation))
 				.addGroup(gl_informationPanel.createSequentialGroup()
-					.addGap(20)
-					.addComponent(information_list, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(20))
+					.addGap(30)
+					.addComponent(information_scrollPane, GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+					.addGap(30))
 		);
 		gl_informationPanel.setVerticalGroup(
 			gl_informationPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_informationPanel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(btnAddInformation)
-					.addGap(20)
-					.addComponent(information_list, GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
-					.addGap(20))
+					.addGap(30)
+					.addComponent(information_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+					.addGap(30))
 		);
+		
+		JList<String> information_list = new JList<String>(informationlistModel);
+		information_scrollPane.setViewportView(information_list);
+		information_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		informationPanel.setLayout(gl_informationPanel);
 		btnAddInformation.addActionListener(new ActionListener() {
 			@Override
@@ -335,28 +344,31 @@ public class NUserPage {
 		
 		JButton btnAddFinancial = new JButton("Add Financial Resource");
 		
-		JList<String> financial_list = new JList<String>(financiallistModel);
-		financial_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane financial_scrollPane = new JScrollPane();
 		GroupLayout gl_financialPanel = new GroupLayout(financialPanel);
 		gl_financialPanel.setHorizontalGroup(
 			gl_financialPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_financialPanel.createSequentialGroup()
 					.addGap(20)
-					.addGroup(gl_financialPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_financialPanel.createSequentialGroup()
-							.addComponent(financial_list, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-							.addGap(20))
-						.addComponent(btnAddFinancial, Alignment.TRAILING)))
+					.addComponent(btnAddFinancial))
+				.addGroup(Alignment.LEADING, gl_financialPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(financial_scrollPane, GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+					.addGap(30))
 		);
 		gl_financialPanel.setVerticalGroup(
 			gl_financialPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_financialPanel.createSequentialGroup()
+				.addGroup(Alignment.LEADING, gl_financialPanel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(btnAddFinancial)
-					.addGap(20)
-					.addComponent(financial_list, GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
-					.addGap(20))
+					.addGap(30)
+					.addComponent(financial_scrollPane, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+					.addGap(30))
 		);
+		
+		JList<String> financial_list = new JList<String>(financiallistModel);
+		financial_scrollPane.setViewportView(financial_list);
+		financial_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		financialPanel.setLayout(gl_financialPanel);
 		btnAddFinancial.addActionListener(new ActionListener() {
 			@Override
@@ -405,9 +417,20 @@ public class NUserPage {
 		
 		
 
+		//get module list
+		final DefaultListModel<String> modulelistModel = new DefaultListModel<String>();
 		
-		JPanel modulePanel_1 = new JPanel();
-		resourcesTab.addTab("Module", null, modulePanel_1, null);
+		ModuleCatalogue mcat = new ModuleCatalogue();
+		System.out.println("all : ");
+		allmodules = mcat.readAllResources();
+
+		for (int i = 0; i < allmodules.size(); i++) {
+			System.out.println(allmodules.get(i));
+			modulelistModel.addElement(""+allmodules.get(i).toString().substring(0, 7)+" " +allmodules.get(i).toString().subSequence(7, allmodules.get(i).toString().length()));
+		}
+		// end module list
+		JPanel modulePanel = new JPanel();
+		resourcesTab.addTab("Module", null, modulePanel, null);
 				
 						
 						JButton btnAddModule = new JButton("Add Module");
@@ -415,8 +438,6 @@ public class NUserPage {
 							public void actionPerformed(ActionEvent e) {
 								
 								ArrayList<Field> moduleFields = new ArrayList<Field>();
-//				moduleFields.add(new Field("text","rid","",10,"rid"));
-//				moduleFields.add(new Field("text","mid","",10,"mid"));
 								moduleFields.add(new Field("text","name","",10,"name"));
 
 
@@ -452,6 +473,13 @@ public class NUserPage {
 	  			    	mcat.addResource((inputs.get(0)));
 										// tu resource ham bayad insert she
 										mcat.readAllResources();
+										allmodules.clear();
+										modulelistModel.removeAllElements();
+										allmodules=mcat.readAllResources();
+										for (int i = 0; i < allmodules.size(); i++) {
+											System.out.println(allmodules.get(i));
+											modulelistModel.addElement(""+allmodules.get(i).toString().substring(0, 7)+" " +allmodules.get(i).toString().subSequence(7, allmodules.get(i).toString().length()));
+										}
 									}
 								});
 								
@@ -459,50 +487,36 @@ public class NUserPage {
 							}
 						});
 						
-						JPanel panel_4 = new JPanel();
-						panel_4.setLayout(new SpringLayout());
 						
-						//get module list
-						DefaultListModel<String> modulelistModel = new DefaultListModel<String>();
 						
-						ModuleCatalogue mcat = new ModuleCatalogue();
-						System.out.println("all : ");
-						ArrayList<HashMap<String, String>> allmodules = mcat.readAllResources();
-
-						for (int i = 0; i < allmodules.size(); i++) {
-							System.out.println(allmodules.get(i));
-							modulelistModel.addElement(""+allmodules.get(i).toString().substring(0, 7)+" " +allmodules.get(i).toString().subSequence(7, allmodules.get(i).toString().length()));
-						}
-
-						//end get module list
-						
-						JList<String> module_list = new JList<String>(modulelistModel);
-						module_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-						GroupLayout gl_modulePanel_1 = new GroupLayout(modulePanel_1);
+						JScrollPane module_scrollPane = new JScrollPane();
+						GroupLayout gl_modulePanel_1 = new GroupLayout(modulePanel);
 						gl_modulePanel_1.setHorizontalGroup(
 							gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_modulePanel_1.createSequentialGroup()
-									.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
-										.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGroup(gl_modulePanel_1.createSequentialGroup()
-											.addGap(20)
-											.addComponent(module_list, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)))
-									.addGap(20))
-								.addGroup(Alignment.TRAILING, gl_modulePanel_1.createSequentialGroup()
 									.addContainerGap(677, Short.MAX_VALUE)
 									.addComponent(btnAddModule))
+								.addGroup(gl_modulePanel_1.createSequentialGroup()
+									.addGap(30)
+									.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+									.addGap(30))
 						);
 						gl_modulePanel_1.setVerticalGroup(
 							gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_modulePanel_1.createSequentialGroup()
-									.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGap(6)
 									.addComponent(btnAddModule)
-									.addGap(20)
-									.addComponent(module_list, GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
-									.addGap(20))
+									.addGap(30)
+									.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+									.addGap(30))
 						);
-						modulePanel_1.setLayout(gl_modulePanel_1);
+						
+												//end get module list
+												
+												JList<String> module_list = new JList<String>(modulelistModel);
+												module_scrollPane.setViewportView(module_list);
+												module_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+						modulePanel.setLayout(gl_modulePanel_1);
 		
 						
 						
@@ -566,32 +580,35 @@ public class NUserPage {
 			System.out.println(allphysicals.get(i));
 			physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
 		}
-
-		//end get phys res list
-
 		
-		JList<String> physical_list = new JList<String>(physicalreslistModel);
-		physical_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane physical_scrollPane = new JScrollPane();
 		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
 		gl_physicalPanel.setHorizontalGroup(
-			gl_physicalPanel.createParallelGroup(Alignment.TRAILING)
+			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addContainerGap(135, Short.MAX_VALUE)
+					.addContainerGap(611, Short.MAX_VALUE)
 					.addComponent(btnAddPhysicalResource))
-				.addGroup(Alignment.LEADING, gl_physicalPanel.createSequentialGroup()
-					.addGap(20)
-					.addComponent(physical_list, GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
-					.addGap(20))
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+					.addGap(30))
 		);
 		gl_physicalPanel.setVerticalGroup(
 			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_physicalPanel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(btnAddPhysicalResource)
-					.addGap(20)
-					.addComponent(physical_list, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
-					.addGap(20))
+					.addGap(30)
+					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+					.addGap(30))
 		);
+		
+				//end get phys res list
+		
+				
+				JList<String> physical_list = new JList<String>(physicalreslistModel);
+				physical_scrollPane.setViewportView(physical_list);
+				physical_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		physicalPanel.setLayout(gl_physicalPanel);
 
 		
@@ -609,26 +626,29 @@ public class NUserPage {
 					System.out.println(allres.get(i));
 					allreslistModel.addElement(""+allres.get(i).toString().substring(0, 7)+" "+allres.get(i).toString().subSequence(7, allres.get(i).toString().length()));
 				}
-				
-				//end get res list
 		
-		JList<String> allres_list = new JList<String>(allreslistModel);
-		allres_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane allres_scrollPane = new JScrollPane();
 		GroupLayout gl_allPanel = new GroupLayout(allPanel);
 		gl_allPanel.setHorizontalGroup(
 			gl_allPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_allPanel.createSequentialGroup()
-					.addGap(20)
-					.addComponent(allres_list, GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
-					.addGap(20))
+					.addGap(30)
+					.addComponent(allres_scrollPane, GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+					.addGap(30))
 		);
 		gl_allPanel.setVerticalGroup(
 			gl_allPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_allPanel.createSequentialGroup()
-					.addGap(20)
-					.addComponent(allres_list, GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-					.addGap(20))
+				.addGroup(Alignment.TRAILING, gl_allPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(allres_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+					.addGap(30))
 		);
+		
+		//end get res list
+		
+		JList<String> allres_list = new JList<String>(allreslistModel);
+		allres_scrollPane.setViewportView(allres_list);
+		allres_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		allPanel.setLayout(gl_allPanel);
 
 		
@@ -639,10 +659,7 @@ public class NUserPage {
 		tabbedPane.setEnabledAt(4, true);
 		
 		DefaultListModel<String> projectlistModel = new DefaultListModel<String>();
-
-		JList<String> projectList = new JList<String>(projectlistModel);
 		projectlistModel.addElement("hello");
-		projectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JButton addprojectBtn = new JButton("Add Project");
 		addprojectBtn.addActionListener(new ActionListener() {
@@ -651,6 +668,8 @@ public class NUserPage {
 		});
 		
 		JButton projsearchBtn = new JButton("Search");
+		
+		JScrollPane project_scrollPane = new JScrollPane();
 		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
 		gl_projectPanel.setHorizontalGroup(
 			gl_projectPanel.createParallelGroup(Alignment.TRAILING)
@@ -659,9 +678,9 @@ public class NUserPage {
 					.addComponent(projsearchBtn)
 					.addPreferredGap(ComponentPlacement.RELATED, 336, Short.MAX_VALUE)
 					.addComponent(addprojectBtn))
-				.addGroup(gl_projectPanel.createSequentialGroup()
+				.addGroup(Alignment.LEADING, gl_projectPanel.createSequentialGroup()
 					.addGap(40)
-					.addComponent(projectList, GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
 					.addGap(40))
 		);
 		gl_projectPanel.setVerticalGroup(
@@ -672,9 +691,13 @@ public class NUserPage {
 						.addComponent(addprojectBtn)
 						.addComponent(projsearchBtn))
 					.addGap(40)
-					.addComponent(projectList, GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
 					.addGap(40))
 		);
+		
+				JList<String> projectList = new JList<String>(projectlistModel);
+				project_scrollPane.setViewportView(projectList);
+				projectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		projectPanel.setLayout(gl_projectPanel);
 	}
 	public JFrame getUserpageFrame() {
