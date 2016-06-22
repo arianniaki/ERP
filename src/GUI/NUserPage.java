@@ -49,6 +49,8 @@ public class NUserPage {
 	private String loggedin_user;
 	private ArrayList<HashMap<String, String>> allmodules;
 	private ArrayList<HashMap<String, String>> allphysicals;
+	private ArrayList<HashMap<String, String>> allfinance;
+	private ArrayList<HashMap<String, String>> allinformation;
 	/**
 	 * Launch the application.
 	 */
@@ -234,11 +236,11 @@ public class NUserPage {
 		
 
 		//get information list
-		DefaultListModel<String> informationlistModel = new DefaultListModel<String>();
+		final DefaultListModel<String> informationlistModel = new DefaultListModel<String>();
 		
 		InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 		System.out.println("all : ");
-		ArrayList<HashMap<String, String>> allinformation = infocat.readAllResources();
+		allinformation = infocat.readAllResources();
 
 		for (int i = 0; i < allinformation.size(); i++) {
 			System.out.println(allinformation.get(i));
@@ -252,6 +254,9 @@ public class NUserPage {
 		
 		JButton btnAddInformation = new JButton("Add Information Resource");
 		
+		
+
+		 
 		JScrollPane information_scrollPane = new JScrollPane();
 		GroupLayout gl_informationPanel = new GroupLayout(informationPanel);
 		gl_informationPanel.setHorizontalGroup(
@@ -282,8 +287,6 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
-//				moduleFields.add(new Field("text","rid","",10,"rid"));
-//				moduleFields.add(new Field("text","mid","",10,"mid"));
 				information_moduleFields.add(new Field("text","infosname","",20,"name"));
 
 
@@ -318,19 +321,33 @@ public class NUserPage {
 	  			    	infocat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
 	  			    	infocat.readAllResources();
+	  			    	
+	  			    	
+	  			    	allinformation.clear();
+	  			    	informationlistModel.removeAllElements();
+	  			    	allinformation=infocat.readAllResources();
+						for (int i = 0; i < allinformation.size(); i++) {
+							System.out.println(allinformation.get(i));
+							informationlistModel.addElement(""+allinformation.get(i).toString().substring(0, 7)+" " +allinformation.get(i).toString().subSequence(7, allinformation.get(i).toString().length()));
+						}
+	  			    	
+						
+						
 					}
 				});
 			}
 		});
 		
 
+	
+		
 		
 		//get financial list
-		DefaultListModel<String> financiallistModel = new DefaultListModel<String>();
+		final DefaultListModel<String> financiallistModel = new DefaultListModel<String>();
 		
 		FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 		System.out.println("all : ");
-		ArrayList<HashMap<String, String>> allfinance = financat.readAllResources();
+		allfinance = financat.readAllResources();
 
 		for (int i = 0; i < allfinance.size(); i++) {
 			System.out.println(allfinance.get(i));
@@ -376,10 +393,7 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
-//				moduleFields.add(new Field("text","rid","",10,"rid"));
-//				moduleFields.add(new Field("text","mid","",10,"mid"));
 				financial_moduleFields.add(new Field("text","financename","",20,"name"));
-
 
 				Form financial_moduleForm = new Form(financial_moduleFields,"Information Module Form");
 				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
@@ -411,6 +425,17 @@ public class NUserPage {
 	  			    	financat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
 	  			    	financat.readAllResources();
+	  			    	
+	  			    	
+	  			    	allfinance.clear();
+	  			    	financiallistModel.removeAllElements();
+	  			    	allfinance=financat.readAllResources();
+						for (int i = 0; i < allfinance.size(); i++) {
+							System.out.println(allfinance.get(i));
+							financiallistModel.addElement(""+allfinance.get(i).toString().substring(0, 7)+" " +allfinance.get(i).toString().subSequence(7, allfinance.get(i).toString().length()));
+						}
+	  			    	
+						
 					}
 				});
 			}
@@ -513,7 +538,6 @@ public class NUserPage {
 						);
 						
 												//end get module list
-												
 						JList<String> module_list = new JList<String>(modulelistModel);
 						module_scrollPane.setViewportView(module_list);
 						module_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -617,7 +641,7 @@ public class NUserPage {
 				JList<String> physical_list = new JList<String>(physicalreslistModel);
 				physical_scrollPane.setViewportView(physical_list);
 				physical_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		physicalPanel.setLayout(gl_physicalPanel);
+				physicalPanel.setLayout(gl_physicalPanel);
 
 		
 		
