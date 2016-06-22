@@ -2,6 +2,8 @@ package GUI.Form;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -13,7 +15,10 @@ import javax.swing.JTextField;
 public class ComboBoxJPanel extends FieldPanel {
 	private JComboBox comboField = new JComboBox();
 	private JButton b = new JButton("Add items");
-	
+	private String selected_item = new String();
+	public JComboBox getComboBox(){
+		return comboField;
+	}
 	public ComboBoxJPanel(Field field) {
 		// TODO Auto-generated constructor stub
 		super(field.getName());
@@ -39,5 +44,8 @@ public class ComboBoxJPanel extends FieldPanel {
 		return ret;
 	}
 	
+	public String selected_Choice(){
+		return selected_item;
+	}
 	
 }

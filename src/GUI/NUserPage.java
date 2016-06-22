@@ -9,11 +9,14 @@ import javax.swing.SpringLayout;
 import javax.swing.JList;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.event.ActionEvent;
@@ -26,6 +29,7 @@ import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
+import ProjectEmployee.EmployeeCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
@@ -40,6 +44,8 @@ import java.awt.GridBagLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.ListModel;
 
 public class NUserPage {
@@ -180,26 +186,25 @@ public class NUserPage {
 		addreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			   	ArrayList<String> resource_types = new ArrayList<String>();
-			   	ArrayList<String> resources = new ArrayList<String>();
+			   	final ArrayList<String> resources = new ArrayList<String>();
 		      	resource_types.add("Information");
 		      	resource_types.add("Financial");
 		      	resource_types.add("Physical");
 		      	resource_types.add("Employee");
 				ArrayList<Field> requirement_moduleFields = new ArrayList<Field>();
 		      	Field reqname = new Field("text", "req name       ", "", 10, "name");
-		      	Field req_res_type = new Field("comboBox", "items", resource_types , 10, "items");
-		      	Field req_res = new Field("comboBox", "items", resources , 10, "items");
-
+		      	Field req_res_type = new Field("comboBox", "resource types", resource_types , 20, "items");
+		      	Field req_res = new Field("comboBox", "resources", resources , 20, "items");
+		      	
 		      	
 		      	requirement_moduleFields.add(reqname);
 		      	requirement_moduleFields.add(req_res_type);
+		      	requirement_moduleFields.add(req_res);
 				
-		      	
   			    	
 				Form requirement_Form = new Form(requirement_moduleFields,"Requirement Form");
 				final PanelBuilder requirement_Panel = new PanelBuilder(requirement_Form);
 				requirement_Panel.makeForm();
-				
 				
 				JFrame Add_RequirementPage= new JFrame("Add Requirement Module Form");
 				Add_RequirementPage.getContentPane().add(requirement_Panel.getJPanel(),BorderLayout.NORTH);
@@ -210,13 +215,71 @@ public class NUserPage {
     		    Add_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
     		    Add_RequirementPage.pack();
     		    Add_RequirementPage.setVisible(true);
+		    	ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel)requirement_Panel.getJPanel().getComponent(1);
+		    	ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel)requirement_Panel.getJPanel().getComponent(2);
+		    	final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
+		    	final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
+
+		    	resourceCombo.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(resourceCombo.getSelectedItem()+" ino select kardi balla");
+					}
+				});
+		    	
+		    	resource_type.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						if(resource_type.getSelectedItem().toString().equals("Financial"))
+						{
+							resourceCombo.removeAllItems();
+							FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+							ArrayList<HashMap<String, String>> financial_resource= financat.readAllResources();
+							for (int i = 0; i < financial_resource.size(); i++) {
+						    	resourceCombo.addItem(financial_resource.get(i).toString());
+							}
+						}
+						if(resource_type.getSelectedItem().toString().equals("Physical"))
+						{
+							resourceCombo.removeAllItems();
+							PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+							ArrayList<HashMap<String, String>> physical_resource= physcat.readAllResources();
+							for (int i = 0; i < physical_resource.size(); i++) {
+						    	resourceCombo.addItem(physical_resource.get(i).toString());
+							}
+					    	
+							
+						}
+						if(resource_type.getSelectedItem().toString().equals("Information"))
+						{
+							resourceCombo.removeAllItems();
+							InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+							ArrayList<HashMap<String, String>> information_resource= infocat.readAllResources();
+							for (int i = 0; i < information_resource.size(); i++) {
+						    	resourceCombo.addItem(information_resource.get(i).toString());
+							}
+					    	
+							
+						}
+						if(resource_type.getSelectedItem().toString().equals("Employee"))
+						{
+							resourceCombo.removeAllItems();
+							EmployeeCatalogue empcat = new EmployeeCatalogue();
+							ArrayList<HashMap<String, String>> employee_resource= empcat.readAllEmployees();
+							for (int i = 0; i < employee_resource.size(); i++) {
+						    	resourceCombo.addItem(employee_resource.get(i).toString());
+							}
+						}
+					}
+				});
     		    submitaddrequeirementBtn.addActionListener(new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
 	  			    	for(int i=0; i<requirement_Panel.getJPanel().getComponentCount(); i++){
-	  			    		FieldPanel fpanel = (FieldPanel)requirement_Panel.getJPanel().getComponent(i);
-	  			    		System.out.println(fpanel.getValues());
+//	  			    		System.out.println(fpanel.selected_Choice);
 	  			    	}
 						
 					}
@@ -288,7 +351,7 @@ public class NUserPage {
 
 		for (int i = 0; i < allinformation.size(); i++) {
 			System.out.println(allinformation.get(i));
-			informationlistModel.addElement(""+allinformation.get(i).toString().substring(0, 7)+" " +allinformation.get(i).toString().subSequence(7, allinformation.get(i).toString().length()));
+			informationlistModel.addElement(""+allinformation.get(i).get("irname"));
 		}
 
 		//end get information list
@@ -372,7 +435,7 @@ public class NUserPage {
 	  			    	allinformation=infocat.readAllResources();
 						for (int i = 0; i < allinformation.size(); i++) {
 							System.out.println(allinformation.get(i));
-							informationlistModel.addElement(""+allinformation.get(i).toString().substring(0, 7)+" " +allinformation.get(i).toString().subSequence(7, allinformation.get(i).toString().length()));
+							informationlistModel.addElement(""+allinformation.get(i).get("irname"));
 						}
 	  			    	
 						
@@ -395,7 +458,7 @@ public class NUserPage {
 
 		for (int i = 0; i < allfinance.size(); i++) {
 			System.out.println(allfinance.get(i));
-			financiallistModel.addElement(""+allfinance.get(i).toString().substring(0, 7)+" " +allfinance.get(i).toString().subSequence(7, allfinance.get(i).toString().length()));
+			financiallistModel.addElement(""+allfinance.get(i).get("finanname"));
 		}
 
 		//end get financial list
@@ -476,7 +539,7 @@ public class NUserPage {
 	  			    	allfinance=financat.readAllResources();
 						for (int i = 0; i < allfinance.size(); i++) {
 							System.out.println(allfinance.get(i));
-							financiallistModel.addElement(""+allfinance.get(i).toString().substring(0, 7)+" " +allfinance.get(i).toString().subSequence(7, allfinance.get(i).toString().length()));
+							financiallistModel.addElement(""+allfinance.get(i).get("finanname"));
 						}
 	  			    	
 						
@@ -496,7 +559,7 @@ public class NUserPage {
 
 		for (int i = 0; i < allmodules.size(); i++) {
 			System.out.println(allmodules.get(i));
-			modulelistModel.addElement(""+allmodules.get(i).toString().substring(0, 7)+" " +allmodules.get(i).toString().subSequence(7, allmodules.get(i).toString().length()));
+			modulelistModel.addElement(""+allmodules.get(i).get("modname"));
 		}
 		// end module list
 		JPanel modulePanel = new JPanel();
@@ -548,7 +611,7 @@ public class NUserPage {
 										allmodules=mcat.readAllResources();
 										for (int i = 0; i < allmodules.size(); i++) {
 											System.out.println(allmodules.get(i));
-											modulelistModel.addElement(""+allmodules.get(i).toString().substring(0, 7)+" " +allmodules.get(i).toString().subSequence(7, allmodules.get(i).toString().length()));
+											modulelistModel.addElement(""+allmodules.get(i).get("modname"));
 										}
 									}
 								});
@@ -596,7 +659,7 @@ public class NUserPage {
 
 						for (int i = 0; i < allphysicals.size(); i++) {
 							System.out.println(allphysicals.get(i));
-							physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
+							physicalreslistModel.addElement(""+allphysicals.get(i).get("physname"));
 						}
 						
 						
@@ -647,7 +710,7 @@ public class NUserPage {
 						allphysicals=physcat.readAllResources();
 						for (int i = 0; i < allphysicals.size(); i++) {
 							System.out.println(allphysicals.get(i));
-							physicalreslistModel.addElement(""+allphysicals.get(i).toString().substring(0, 7)+" " +allphysicals.get(i).toString().subSequence(7, allphysicals.get(i).toString().length()));
+							physicalreslistModel.addElement(""+allphysicals.get(i).get("physname"));
 						}
 	  			    	
 					}
@@ -698,7 +761,7 @@ public class NUserPage {
 				
 				for (int i = 0; i < allres.size(); i++) {
 					System.out.println(allres.get(i));
-					allreslistModel.addElement(""+allres.get(i).toString().substring(0, 7)+" "+allres.get(i).toString().subSequence(7, allres.get(i).toString().length()));
+					allreslistModel.addElement(""+allres.get(i).get("rname"));
 				}
 		
 		JScrollPane allres_scrollPane = new JScrollPane();
@@ -711,7 +774,7 @@ public class NUserPage {
 			    	allres=rcat.readAllResources();
 				for (int i = 0; i < allres.size(); i++) {
 					System.out.println(allres.get(i));
-					allreslistModel.addElement(""+allres.get(i).toString().substring(0, 7)+" " +allres.get(i).toString().subSequence(7, allres.get(i).toString().length()));
+					allreslistModel.addElement(""+allres.get(i).get("rname"));
 				}
 			    	
 			}
