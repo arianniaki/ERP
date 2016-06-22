@@ -58,4 +58,29 @@ public class Table {
 
 	}
 
+	public ArrayList<HashMap<String,String>> search(HashMap<String, String> vars){
+		ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String,String>>();
+		try {
+			ResultSet rs = DB.select(vars,tableName);
+			while (rs.next()) {
+				HashMap<String,String> val = new HashMap<String, String>();
+				for (Column col : columns) {
+					if (col.type.equals("integer")) {
+						val.put(col.name, Integer.toString(rs.getInt(col.name)));
+					}else if (col.type.equals("character")) {
+						val.put(col.name, rs.getString(col.name));
+					}else if (col.type.equals("date")) {
+						Date date = rs.getDate((col.name));
+						val.put(col.name, date.toString());
+					}
+				}
+				result.add(val);		
+			}
+			return result;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e);
+			return null;
+		}
+	}
 }

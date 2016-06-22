@@ -1,5 +1,8 @@
+import java.util.ArrayList;
+
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
+import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
 import ResourceManagement.Section.Resource.*;
 
@@ -70,8 +73,11 @@ public class Main {
 //
 //		Employee emp = empcat.getEmployee(12);
 //
-//		ProjectCatalogue projCat = new ProjectCatalogue();
-//		projCat.addProject("testproj 2",emp);
-//		projCat.getProjects();
+		ProjectCatalogue projCat = new ProjectCatalogue();
+		projCat.getProjects();
+		System.out.println(";;;;;;;;;;;;;");
+		projCat.searchProjects("10", "java");
+		
+
 	}
 }
