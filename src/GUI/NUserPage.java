@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -20,6 +21,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.awt.event.ActionEvent;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -53,6 +55,11 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.table.DefaultTableModel;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import javax.swing.ListModel;
 import javax.swing.JTable;
 
@@ -440,6 +447,32 @@ public class NUserPage {
 				JFrame Add_RequirementPage = new JFrame("Add Requirement Module Form");
 				Add_RequirementPage.getContentPane().add(requirement_Panel.getJPanel(), BorderLayout.NORTH);
 
+				
+				
+				//adding date
+				UtilDateModel modelfor = new UtilDateModel();
+				UtilDateModel modelto = new UtilDateModel();
+
+				Properties p = new Properties();
+				p.put("text.today", "Today");
+				p.put("text.month", "Month");
+				p.put("text.year", "Year");
+		        final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+		        JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
+		        JLabel from = new JLabel("From");
+		        JLabel to = new JLabel("To");
+				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+				final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
+
+				JPanel date_panel = new JPanel(new FlowLayout());
+				date_panel.add(from);
+
+				date_panel.add(from_datePanel);
+				date_panel.add(to);
+				date_panel.add(to_datePanel);
+				Add_RequirementPage.getContentPane().add(date_panel,BorderLayout.CENTER);
+				//end date
+				
 				JButton submitaddrequeirementBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submitaddrequeirementBtn);
@@ -456,6 +489,10 @@ public class NUserPage {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						System.out.println(resourceCombo.getSelectedItem() + " ino select kardi balla");
+						System.out.println(from_datePicker.getJFormattedTextField().getText()+" from date");
+			            System.out.println(to_datePicker.getJFormattedTextField().getText()+" to date");
+			            
+
 					}
 				});
 
