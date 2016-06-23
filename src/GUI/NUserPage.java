@@ -30,7 +30,9 @@ import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
+import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
+import ProjectEmployee.ProjectCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
@@ -62,11 +64,14 @@ public class NUserPage {
 	private ArrayList<HashMap<String, String>> allfinance;
 	private ArrayList<HashMap<String, String>> allinformation;
 	private ArrayList<HashMap<String, String>> allres;
+	private ArrayList<HashMap<String, String>> allprojects;
+
 	private JTable finan_table;
 	private JTable information_table;
 	private JTable module_table;
 	private JTable physical_table;
 	private JTable allresource_table;
+	private JTable project_table;
 
 	/**
 	 * Launch the application.
@@ -409,16 +414,18 @@ public class NUserPage {
 						}
 						infocat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
-						infocat.readAllResources();
-
 						allinformation.clear();
-						informationlistModel.removeAllElements();
 						allinformation = infocat.readAllResources();
-						for (int i = 0; i < allinformation.size(); i++) {
-							System.out.println(allinformation.get(i));
-							informationlistModel.addElement("" + allinformation.get(i).get("irname"));
+						System.out.println(information_tableModel.getRowCount()+" ---");
+						int rowcount= information_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							information_tableModel.removeRow(j);
 						}
-
+						System.out.println(information_tableModel.getRowCount()+" ---");
+						for (int i = 0; i < allinformation.size(); i++) {
+							Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
+							information_tableModel.addRow(objs);
+						}
 					}
 				});
 			}
@@ -447,7 +454,7 @@ public class NUserPage {
 		}
 		String[] finan_columns = new String[] { "Id", "Name" };
 
-		DefaultTableModel financial_tableModel = new DefaultTableModel(finan_columns, 0) {
+		final DefaultTableModel financial_tableModel = new DefaultTableModel(finan_columns, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
@@ -520,15 +527,20 @@ public class NUserPage {
 						}
 						financat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
-						financat.readAllResources();
-
 						allfinance.clear();
-						financiallistModel.removeAllElements();
 						allfinance = financat.readAllResources();
-						for (int i = 0; i < allfinance.size(); i++) {
-							System.out.println(allfinance.get(i));
-							financiallistModel.addElement("" + allfinance.get(i).get("finanname"));
+						System.out.println(financial_tableModel.getRowCount()+" ---");
+						int rowcount= financial_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							System.out.println(j);
+							financial_tableModel.removeRow(j);
 						}
+						System.out.println(financial_tableModel.getRowCount()+" ---");
+						for (int i = 0; i < allfinance.size(); i++) {
+							Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
+							financial_tableModel.addRow(objs);
+						}
+
 
 					}
 				});
@@ -549,6 +561,15 @@ public class NUserPage {
 		// end module list
 		JPanel modulePanel = new JPanel();
 		resourcesTab.addTab("Module", null, modulePanel, null);
+		String[] module_columns = new String[] { "Id", "Name" };
+
+		final DefaultTableModel module_tableModel = new DefaultTableModel(module_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
 
 		JButton btnAddModule = new JButton("Add Module");
 		btnAddModule.addActionListener(new ActionListener() {
@@ -569,7 +590,7 @@ public class NUserPage {
 				AddModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				AddModulePage.pack();
 				AddModulePage.setVisible(true);
-
+			
 				submitaddmoduleBtn.addActionListener(new ActionListener() {
 
 					@Override
@@ -588,13 +609,18 @@ public class NUserPage {
 						}
 						mcat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
-						mcat.readAllResources();
 						allmodules.clear();
-						modulelistModel.removeAllElements();
 						allmodules = mcat.readAllResources();
+						System.out.println(module_tableModel.getRowCount()+" ---");
+						int rowcount= module_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							System.out.println(j);
+							module_tableModel.removeRow(j);
+						}
+						System.out.println(module_tableModel.getRowCount()+" ---");
 						for (int i = 0; i < allmodules.size(); i++) {
-							System.out.println(allmodules.get(i));
-							modulelistModel.addElement("" + allmodules.get(i).get("modname"));
+							Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
+							module_tableModel.addRow(objs);
 						}
 					}
 				});
@@ -619,15 +645,6 @@ public class NUserPage {
 						.addGap(30).addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
 						.addGap(30)));
 		
-				String[] module_columns = new String[] { "Id", "Name" };
-
-				DefaultTableModel module_tableModel = new DefaultTableModel(module_columns, 0) {
-					@Override
-					public boolean isCellEditable(int row, int column) {
-						// all cells false
-						return false;
-					}
-				};
 
 
 		module_table = new JTable(module_tableModel);
@@ -654,6 +671,23 @@ public class NUserPage {
 		
 		JPanel physicalPanel = new JPanel();
 		resourcesTab.addTab("Physical", null, physicalPanel, null);
+		String[] physical_columns = new String[] { "Id", "Name" };
+
+		final DefaultTableModel phyiscal_tableModel = new DefaultTableModel(physical_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+
+		for (int i = 0; i < allphysicals.size(); i++) {
+			Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
+			phyiscal_tableModel.addRow(objs);
+		}
+
+		
+		
 
 		JButton btnAddPhysicalResource = new JButton("Add Physical Resource");
 		btnAddPhysicalResource.addActionListener(new ActionListener() {
@@ -690,14 +724,17 @@ public class NUserPage {
 						}
 						physcat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
-						physcat.readAllResources();
-
 						allphysicals.clear();
-						physicalreslistModel.removeAllElements();
 						allphysicals = physcat.readAllResources();
+						System.out.println(phyiscal_tableModel.getRowCount()+" ---");
+						int rowcount= phyiscal_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							phyiscal_tableModel.removeRow(j);
+						}
+						System.out.println(phyiscal_tableModel.getRowCount()+" ---");
 						for (int i = 0; i < allphysicals.size(); i++) {
-							System.out.println(allphysicals.get(i));
-							physicalreslistModel.addElement("" + allphysicals.get(i).get("physname"));
+							Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
+							phyiscal_tableModel.addRow(objs);
 						}
 
 					}
@@ -726,22 +763,6 @@ public class NUserPage {
 						.addGap(30).addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
 						.addGap(30)));
 		
-		String[] physical_columns = new String[] { "Id", "Name" };
-
-		DefaultTableModel phyiscal_tableModel = new DefaultTableModel(physical_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-
-		for (int i = 0; i < allphysicals.size(); i++) {
-			Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
-			phyiscal_tableModel.addRow(objs);
-		}
-
-		
 		
 		physical_table = new JTable(phyiscal_tableModel);
 		physical_scrollPane.setViewportView(physical_table);
@@ -762,17 +783,36 @@ public class NUserPage {
 		}
 
 		JScrollPane allres_scrollPane = new JScrollPane();
+		String[] allres_columns = new String[] { "Id", "Name" };
 
+		final DefaultTableModel allres_tableModel = new DefaultTableModel(allres_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		
+
+		
 		JButton button = new JButton("Refresh");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				//
 				allres.clear();
-				allreslistModel.removeAllElements();
 				allres = rcat.readAllResources();
-				for (int i = 0; i < allres.size(); i++) {
-					System.out.println(allres.get(i));
-					allreslistModel.addElement("" + allres.get(i).get("rname"));
+				System.out.println(allres_tableModel.getRowCount()+" ---");
+				int rowcount= allres_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					allres_tableModel.removeRow(j);
 				}
+				System.out.println(allres_tableModel.getRowCount()+" ---");
+				for (int i = 0; i < allres.size(); i++) {
+					Object[] objs = { allres.get(i).get("rid"), allres.get(i).get("rname") };
+					allres_tableModel.addRow(objs);
+				}
+				
 
 			}
 		});
@@ -789,16 +829,7 @@ public class NUserPage {
 								.addGap(30)));
 		
 		
-		String[] allres_columns = new String[] { "Id", "Name" };
-
-		DefaultTableModel allres_tableModel = new DefaultTableModel(allres_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-
+		
 		for (int i = 0; i <allres.size(); i++) {
 			Object[] objs = { allres.get(i).get("rid"), allres.get(i).get("rname") };
 			allres_tableModel.addRow(objs);
@@ -815,12 +846,97 @@ public class NUserPage {
 
 		DefaultListModel<String> projectlistModel = new DefaultListModel<String>();
 		projectlistModel.addElement("hello");
+		
+		String[] allproject_columns = new String[] { "Id", "Name" };
 
+		final DefaultTableModel allproject_tableModel = new DefaultTableModel(allproject_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		
 		JButton addprojectBtn = new JButton("Add Project");
 		addprojectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<Field> projectFields = new ArrayList<Field>();
+				EmployeeCatalogue empcat = new EmployeeCatalogue();
+				ArrayList<HashMap<String, String>> employees_fromcatalouge = empcat.readAllEmployees();
+				ArrayList<String> employees = new ArrayList<String>();
+
+				projectFields.add(new Field("text", "projname", "", 20, "name"));
+				
+				for (int i = 0; i < employees_fromcatalouge.size(); i++) {
+					employees.add("id:"+employees_fromcatalouge.get(i).get("empid").toString()+" "+employees_fromcatalouge.get(i).get("empname").toString());
+				}
+				System.out.println(employees+" 00");
+				projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
+
+				Form projectForm = new Form(projectFields, "Project Form");
+				final PanelBuilder projectPanel = new PanelBuilder(projectForm);
+				projectPanel.makeForm();
+				JFrame Add_ProjectPage = new JFrame("Add Project Form");
+				Add_ProjectPage.getContentPane().add(projectPanel.getJPanel(), BorderLayout.NORTH);
+
+				
+				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) projectPanel.getJPanel().getComponent(1);
+				final JComboBox employees_comboBox = comboBoxpane.getComboBox();
+
+				
+				JButton submitaddprojectBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddprojectBtn);
+				Add_ProjectPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Add_ProjectPage.pack();
+				Add_ProjectPage.setVisible(true);
+				
+				employees_comboBox.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(employees_comboBox.getSelectedItem() + " ino select kardi project");
+					}
+				});
+
+				
+				submitaddprojectBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						ProjectCatalogue projcat = new ProjectCatalogue();
+						System.out.println("all : ");
+						projcat.getProjects();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < projectPanel.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) projectPanel.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + " project");
+						}
+						int employeeID= Integer.parseInt((inputs.get(1).substring(0, 4).replace("id:", "")));
+						EmployeeCatalogue empcat = new EmployeeCatalogue();
+						Employee proj_manager= empcat.getEmployee(employeeID);
+						System.out.println(proj_manager.getName());
+						projcat.addProject(inputs.get(0).toString(), proj_manager);
+						// tu resource ham bayad insert she
+						allprojects = projcat.getProjects();
+						
+						int rowcount= allproject_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							allproject_tableModel.removeRow(j);
+						}
+						System.out.println(allproject_tableModel.getRowCount()+" ---");
+						for (int i = 0; i < allprojects.size(); i++) {
+							Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname") };
+							allproject_tableModel.addRow(objs);
+						}
+
+					
+				
 			}
 		});
+			}});
 
 		JButton projsearchBtn = new JButton("Search");
 
@@ -837,10 +953,29 @@ public class NUserPage {
 								.addComponent(projsearchBtn))
 						.addGap(40).addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
 						.addGap(40)));
+		
+		final DefaultListModel<String> allprojectlistModel = new DefaultListModel<String>();
+		// get all res list
+		final ProjectCatalogue pcat = new ProjectCatalogue();
+		System.out.println("all : ");
+		allprojects = pcat.getProjects();
 
-		JList<String> projectList = new JList<String>(projectlistModel);
-		project_scrollPane.setViewportView(projectList);
-		projectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		for (int i = 0; i < allprojects.size(); i++) {
+			System.out.println(allprojects.get(i));
+			allprojectlistModel.addElement("" + allprojects.get(i).get("projname"));
+		}
+		
+		
+
+		for (int i = 0; i <allprojects.size(); i++) {
+			Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname") };
+			allproject_tableModel.addRow(objs);
+		}
+
+		
+		project_table = new JTable(allproject_tableModel);
+		
+		project_scrollPane.setViewportView(project_table);
 		projectPanel.setLayout(gl_projectPanel);
 	}
 
