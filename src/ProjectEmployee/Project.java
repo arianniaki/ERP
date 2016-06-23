@@ -2,10 +2,11 @@ package ProjectEmployee;
 
 import java.util.ArrayList;
 
+import DataBase.DataBase;
 import ProjectEmployee.SubSystem.SubSystem;
 
 public class Project {
-
+	DataBase DB;
 	String name;
 	String description;
 	String projectSize;
@@ -16,6 +17,7 @@ public class Project {
 	ArrayList<Employee> employees;
 	
 	public Project(String name, String desc, String size, Employee manager, String tech){
+		DB = new DataBase();
 		this.name = name;
 		description = desc;
 		projectSize = size;

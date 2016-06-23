@@ -31,11 +31,14 @@ public class Employee {
 		try {
 			if (results.next()) {
 				getFromDB(results.getInt("empId"));
-				this.loggedin = true;
-				HashMap<String, String> setVars = new HashMap<String, String>();
-				setVars.put("is_loggedin", Boolean.toString(this.loggedin));
-				submitToDB(setVars);
-				ret = true;
+				AuthenticatedEmployee auth = AuthenticatedEmployee.getInstance();
+				if(auth.setEmployee(this)){
+					this.loggedin = true;
+					HashMap<String, String> setVars = new HashMap<String, String>();
+					setVars.put("is_loggedin", Boolean.toString(this.loggedin));
+					submitToDB(setVars);
+					ret = true;
+				}
 			}
 			results.close();
 
@@ -47,12 +50,17 @@ public class Employee {
 	}
 
 	public boolean logout() {
-		boolean ret = false;
-		this.loggedin = false;
-		HashMap<String, String> setVars = new HashMap<String, String>();
-		setVars.put("is_loggedin", Boolean.toString(this.loggedin));
-		submitToDB(setVars);
-		return true;
+		AuthenticatedEmployee auth = AuthenticatedEmployee.getInstance();
+		if(auth.getEmployee().getId() == this.id){
+			this.loggedin = false;
+			HashMap<String, String> setVars = new HashMap<String, String>();
+			setVars.put("is_loggedin", Boolean.toString(this.loggedin));
+			submitToDB(setVars);
+			auth.logoutEmployee();
+			return true;
+		}
+		return false;
+		
 	}
 
 	public void setId(int inputId) {
