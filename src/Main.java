@@ -8,8 +8,7 @@ import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
-import RequirementUtilization.ResourceRequirement;
-import RequirementUtilization.ResourceRequirementCatalogue;
+import RequirementUtilization.*;
 import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.*;
 
@@ -111,12 +110,22 @@ public class Main {
 //	    System.out.println(date.toString());
 		
 		//test resourcerequirement:
-		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
-		resreqCat.getResourceRequirements();
-		resreqCat.addResourceRequirement(2, 1, 7, "2016-01-02", "2016-01-03");
-		resreqCat.getResourceRequirements();
-		resreqCat.deleteSubSystem(2, 1, 7);
-		resreqCat.getResourceRequirements();
+//		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+//		resreqCat.getResourceRequirements();
+//		resreqCat.addResourceRequirement(2, 1, 7, "2016-01-02", "2016-01-03");
+//		resreqCat.getResourceRequirements();
+//		resreqCat.deleteResourceRequirement(2, 1, 7);
+//		resreqCat.getResourceRequirements();
+
+		// test projectresourceutilization
+		
+		
+//		ProjectResourceUtilizationCatalogue projres = new ProjectResourceUtilizationCatalogue();
+//		projres.getProjectResourceUtilizations();
+//		projres.addProjectResourceUtilization(2, 1, 7);
+//		projres.getProjectResourceUtilizations();
+//		projres.deleteProjectResourceUtilization(2, 1, 7);
+//		projres.getProjectResourceUtilizations();
 
 	}
 }

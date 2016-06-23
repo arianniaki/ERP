@@ -49,10 +49,12 @@ public class Table {
 				}
 				result.add(val);		
 			}
+			DB.connectionClose();
 			return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e);
+			DB.connectionClose();
 			return null;
 		}
 
@@ -76,10 +78,12 @@ public class Table {
 				}
 				result.add(val);		
 			}
+			DB.connectionClose();
 			return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e);
+			DB.connectionClose();
 			return null;
 		}
 	}

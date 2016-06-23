@@ -38,7 +38,7 @@ public class ResourceRequirementCatalogue{
 		return pk;
 	}
 	
-	public void deleteSubSystem(int rid, int sid, int pid) {
+	public void deleteResourceRequirement(int rid, int sid, int pid) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("sid", Integer.toString(sid));
 		vars.put("rid", Integer.toString(rid));
