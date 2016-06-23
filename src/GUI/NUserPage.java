@@ -65,6 +65,7 @@ public class NUserPage {
 	private ArrayList<HashMap<String, String>> allinformation;
 	private ArrayList<HashMap<String, String>> allres;
 	private ArrayList<HashMap<String, String>> allprojects;
+	private ArrayList<HashMap<String, String>> allemployees;
 
 	private JTable finan_table;
 	private JTable information_table;
@@ -73,6 +74,7 @@ public class NUserPage {
 	private JTable allresource_table;
 	private JTable project_table;
 	private JTable subsystem_table;
+	private JTable accessright_table;
 
 	/**
 	 * Launch the application.
@@ -159,23 +161,100 @@ public class NUserPage {
 		tabbedPane.addTab("AccessRight Management", null, accessrightPanel, null);
 
 		JButton btnAssignAccessright = new JButton("Assign AccessRight");
+		btnAssignAccessright.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> accessrights_types = new ArrayList<String>();
+				accessrights_types.add("Default");
+				accessrights_types.add("Intermediate");
+				accessrights_types.add("Super");
+				ArrayList<Field> acessright_assignFields = new ArrayList<Field>();
+				Field access_right = new Field("comboBox", "accessrights", accessrights_types, 20, "items");
+
+				acessright_assignFields.add(access_right);
+				
+				Form accessright_Form = new Form(acessright_assignFields, "AccessRight Form");
+				final PanelBuilder accessright_assignPanel = new PanelBuilder(accessright_Form);
+				accessright_assignPanel.makeForm();
+
+				JFrame Assign_AccessRightPage = new JFrame("Assign Access Right Form");
+				Assign_AccessRightPage.getContentPane().add(accessright_assignPanel.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitaddrequeirementBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddrequeirementBtn);
+				Assign_AccessRightPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Assign_AccessRightPage.pack();
+				Assign_AccessRightPage.setVisible(true);
+				ComboBoxJPanel comboBoxpanel_accessright = (ComboBoxJPanel) accessright_assignPanel.getJPanel().getComponent(0);
+				final JComboBox accessright_type = comboBoxpanel_accessright.getComboBox();
+
+				accessright_type.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(accessright_type.getSelectedItem() + " ino select kardi access right");
+					}
+				});
+			}
+		});
 
 		JScrollPane accessright_scrollPane = new JScrollPane();
 		GroupLayout gl_accessrightPanel = new GroupLayout(accessrightPanel);
-		gl_accessrightPanel.setHorizontalGroup(gl_accessrightPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_accessrightPanel.createSequentialGroup().addGap(40).addComponent(btnAssignAccessright))
-				.addGroup(gl_accessrightPanel.createSequentialGroup().addGap(40)
-						.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
-						.addGap(40)));
-		gl_accessrightPanel.setVerticalGroup(gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_accessrightPanel.createSequentialGroup().addContainerGap()
-						.addComponent(btnAssignAccessright).addGap(40)
-						.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
-						.addGap(40)));
+		gl_accessrightPanel.setHorizontalGroup(
+			gl_accessrightPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(btnAssignAccessright))
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addGap(41)
+					.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(39))
+		);
+		gl_accessrightPanel.setVerticalGroup(
+			gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnAssignAccessright)
+					.addGap(48)
+					.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+					.addGap(32))
+		);
+		
+		
+		// get employee list
+		final DefaultListModel<String> employeelistModel = new DefaultListModel<String>();
 
-		JList<String> accessright_list = new JList<String>();
-		accessright_scrollPane.setViewportView(accessright_list);
-		accessright_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		EmployeeCatalogue empcat = new EmployeeCatalogue();
+		System.out.println("all : ");
+		allemployees = empcat.readAllEmployees();
+
+		for (int i = 0; i < allemployees.size(); i++) {
+			System.out.println(allemployees.get(i));
+			employeelistModel.addElement("" + allemployees.get(i).get("username"));
+		}
+		// end employee list
+
+		
+		
+		String[] accessright_columns = new String[] { "Id", "Username","AccessRight" };
+
+		final DefaultTableModel accessright_tableModel = new DefaultTableModel(accessright_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		
+		
+		accessright_table = new JTable(accessright_tableModel);
+		for (int i = 0; i < allemployees.size(); i++) {
+			Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
+			accessright_tableModel.addRow(objs);
+		}
+
+		accessright_scrollPane.setViewportView(accessright_table);
 		accessrightPanel.setLayout(gl_accessrightPanel);
 
 		// project mgmt panel
