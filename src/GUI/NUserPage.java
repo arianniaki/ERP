@@ -83,7 +83,7 @@ public class NUserPage {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NUserPage window = new NUserPage(null);
+					NUserPage window = new NUserPage();
 					window.userpageFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -97,8 +97,7 @@ public class NUserPage {
 	 * 
 	 * @param loggedin_user
 	 */
-	public NUserPage(String user) {
-		loggedin_user = user;
+	public NUserPage() {
 		initialize();
 	}
 
