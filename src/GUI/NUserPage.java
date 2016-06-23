@@ -202,6 +202,34 @@ public class NUserPage {
 		});
 		
 		JButton addsubsystemBtn = new JButton("Add Subsystem");
+		addsubsystemBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
+
+				Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
+				Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
+
+				subsystem_addFields.add(subsystem_name);
+				subsystem_addFields.add(subsystem_desc);
+
+				Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
+				final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
+				subsystemAdd_Panel.makeForm();
+
+				JFrame Add_RequirementPage = new JFrame("Add Subsystem Form");
+				Add_RequirementPage.getContentPane().add(subsystemAdd_Panel.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitaddsubsystemBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddsubsystemBtn);
+				Add_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Add_RequirementPage.pack();
+				Add_RequirementPage.setVisible(true);
+				
+				
+			}
+		});
 		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
 		gl_subsystemPanel.setHorizontalGroup(
 			gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
@@ -211,8 +239,9 @@ public class NUserPage {
 					.addGap(40))
 				.addGroup(gl_subsystemPanel.createSequentialGroup()
 					.addComponent(btnNewButton)
-					.addPreferredGap(ComponentPlacement.RELATED, 603, Short.MAX_VALUE)
-					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 591, Short.MAX_VALUE)
+					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		gl_subsystemPanel.setVerticalGroup(
 			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
