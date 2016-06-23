@@ -76,6 +76,7 @@ public class NUserPage {
 	private JTable subsystem_table;
 	private JTable accessright_table;
 	private JTable registered_table;
+	private JTable human_table;
 
 	/**
 	 * Launch the application.
@@ -452,19 +453,39 @@ public class NUserPage {
 		JButton searchreqBtn = new JButton("Search");
 
 		JScrollPane requirement_scrollPane = new JScrollPane();
+		
+		JButton requirement_btnEdit = new JButton("Edit");
+		
+		JButton requirement_btnSatisfy = new JButton("Satisfy");
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
-		gl_requirementPanel.setHorizontalGroup(gl_requirementPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_requirementPanel.createSequentialGroup().addContainerGap(358, Short.MAX_VALUE)
-						.addComponent(searchreqBtn).addGap(242).addComponent(addreqBtn))
-				.addGroup(gl_requirementPanel.createSequentialGroup().addGap(40)
-						.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
-						.addGap(40)));
-		gl_requirementPanel.setVerticalGroup(gl_requirementPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_requirementPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE).addComponent(searchreqBtn)
-								.addComponent(addreqBtn))
-						.addGap(40).addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
-						.addGap(40)));
+		gl_requirementPanel.setHorizontalGroup(
+			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addComponent(requirement_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(requirement_btnSatisfy)
+					.addPreferredGap(ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
+					.addComponent(searchreqBtn)
+					.addGap(242)
+					.addComponent(addreqBtn))
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+		);
+		gl_requirementPanel.setVerticalGroup(
+			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(searchreqBtn)
+						.addComponent(addreqBtn)
+						.addComponent(requirement_btnEdit)
+						.addComponent(requirement_btnSatisfy))
+					.addGap(40)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+					.addGap(40))
+		);
 
 		JList<String> requirement_list = new JList<String>();
 		requirement_scrollPane.setViewportView(requirement_list);
@@ -487,6 +508,90 @@ public class NUserPage {
 		sl_resourcePanel.putConstraint(SpringLayout.EAST, resourcesTab, 827, SpringLayout.WEST, resourcePanel);
 		resourcePanel.add(resourcesTab);
 
+		
+		
+		//
+		// get information list
+		final DefaultListModel<String> humanlistModel = new DefaultListModel<String>();
+
+		EmployeeCatalogue employeecat = new EmployeeCatalogue();
+		System.out.println("all : ");
+		allemployees = employeecat.readAllEmployees();
+
+		for (int i = 0; i < allemployees.size(); i++) {
+			System.out.println(allemployees.get(i));
+			humanlistModel.addElement("" + allemployees.get(i).get("irname") + "\t" + allemployees.get(i).get("rid"));
+		}
+		
+		
+		
+		JPanel humanPanel = new JPanel();
+		resourcesTab.addTab("Human", null, humanPanel, null);
+		
+		JScrollPane human_scrollPane = new JScrollPane();
+		
+		JButton human_btnEdit = new JButton("Edit");
+		human_btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		JButton human_btnDelete = new JButton("Delete");
+		human_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		GroupLayout gl_humanPanel = new GroupLayout(humanPanel);
+		gl_humanPanel.setHorizontalGroup(
+			gl_humanPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_humanPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+				.addGroup(gl_humanPanel.createSequentialGroup()
+					.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(651, Short.MAX_VALUE))
+		);
+		gl_humanPanel.setVerticalGroup(
+			gl_humanPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_humanPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(human_btnEdit)
+						.addComponent(human_btnDelete))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+					.addGap(30))
+		);
+
+		String[] human_columns = new String[] { "Id", "Name" };
+
+		final DefaultTableModel human_tableModel = new DefaultTableModel(human_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		
+		
+		human_table = new JTable(human_tableModel);
+		human_scrollPane.setViewportView(human_table);
+		humanPanel.setLayout(gl_humanPanel);
+
+		for (int i = 0; i < allemployees.size(); i++) {
+			Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
+			human_tableModel.addRow(objs);
+		}
+		
+		
+		
+		
+		//
+		
+		
 		// get information list
 		final DefaultListModel<String> informationlistModel = new DefaultListModel<String>();
 
@@ -500,9 +605,8 @@ public class NUserPage {
 					.addElement("" + allinformation.get(i).get("irname") + "\t" + allinformation.get(i).get("rid"));
 		}
 		
-		JPanel humanPanel = new JPanel();
-		resourcesTab.addTab("Human", null, humanPanel, null);
-
+	
+		
 		// end get information list
 
 		JPanel informationPanel = new JPanel();
@@ -536,20 +640,34 @@ public class NUserPage {
 
 			}
 		});
+		
+		JButton information_btnDelete = new JButton("Delete");
 		GroupLayout gl_informationPanel = new GroupLayout(informationPanel);
-		gl_informationPanel.setHorizontalGroup(gl_informationPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_informationPanel.createSequentialGroup().addComponent(information_btnEdit)
-						.addPreferredGap(ComponentPlacement.RELATED, 513, Short.MAX_VALUE)
-						.addComponent(btnAddInformation))
-				.addGroup(gl_informationPanel.createSequentialGroup().addGap(30)
-						.addComponent(information_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-						.addGap(30)));
-		gl_informationPanel.setVerticalGroup(gl_informationPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_informationPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_informationPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnAddInformation).addComponent(information_btnEdit))
-						.addGap(30).addComponent(information_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-						.addGap(30)));
+		gl_informationPanel.setHorizontalGroup(
+			gl_informationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_informationPanel.createSequentialGroup()
+					.addComponent(information_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(information_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 441, Short.MAX_VALUE)
+					.addComponent(btnAddInformation))
+				.addGroup(gl_informationPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(information_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+		);
+		gl_informationPanel.setVerticalGroup(
+			gl_informationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_informationPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_informationPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnAddInformation)
+						.addComponent(information_btnEdit)
+						.addComponent(information_btnDelete))
+					.addGap(30)
+					.addComponent(information_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+					.addGap(30))
+		);
 
 		informationPanel.setLayout(gl_informationPanel);
 		btnAddInformation.addActionListener(new ActionListener() {
@@ -645,25 +763,35 @@ public class NUserPage {
 		}
 
 		financial_table_scrollPane.setViewportView(finan_table);
+		
+		JButton financial_btnDelete = new JButton("Delete");
 
 		GroupLayout gl_financialPanel = new GroupLayout(financialPanel);
-		gl_financialPanel
-				.setHorizontalGroup(gl_financialPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_financialPanel.createSequentialGroup()
-								.addComponent(financial_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(531).addComponent(btnAddFinancial))
-						.addGroup(gl_financialPanel.createSequentialGroup().addGap(30)
-								.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 251,
-										Short.MAX_VALUE)
-								.addGap(30)));
-		gl_financialPanel.setVerticalGroup(gl_financialPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_financialPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnAddFinancial).addComponent(financial_btnEdit))
-						.addGap(30)
-						.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-						.addGap(30)));
+		gl_financialPanel.setHorizontalGroup(
+			gl_financialPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_financialPanel.createSequentialGroup()
+					.addComponent(financial_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(financial_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addGap(461)
+					.addComponent(btnAddFinancial))
+				.addGroup(gl_financialPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+		);
+		gl_financialPanel.setVerticalGroup(
+			gl_financialPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_financialPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnAddFinancial)
+						.addComponent(financial_btnEdit)
+						.addComponent(financial_btnDelete))
+					.addGap(30)
+					.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+					.addGap(30))
+		);
 
 		financialPanel.setLayout(gl_financialPanel);
 		btnAddFinancial.addActionListener(new ActionListener() {
@@ -808,19 +936,39 @@ public class NUserPage {
 		JScrollPane module_scrollPane = new JScrollPane();
 
 		JButton module_btnEdit = new JButton("Edit");
+		
+		JButton module_btnDelete = new JButton("Delete");
+		
+		JButton btnViewMaintaning = new JButton("View Maintaning");
 		GroupLayout gl_modulePanel_1 = new GroupLayout(modulePanel);
-		gl_modulePanel_1.setHorizontalGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+		gl_modulePanel_1.setHorizontalGroup(
+			gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_modulePanel_1.createSequentialGroup()
-						.addComponent(module_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, 602, Short.MAX_VALUE).addComponent(btnAddModule))
-				.addGroup(gl_modulePanel_1.createSequentialGroup().addGap(30)
-						.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE).addGap(30)));
-		gl_modulePanel_1.setVerticalGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_modulePanel_1.createSequentialGroup().addGap(6)
-						.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE).addComponent(btnAddModule)
-								.addComponent(module_btnEdit))
-						.addGap(30).addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-						.addGap(30)));
+					.addComponent(module_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(module_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 411, Short.MAX_VALUE)
+					.addComponent(btnViewMaintaning)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnAddModule))
+				.addGroup(gl_modulePanel_1.createSequentialGroup()
+					.addGap(30)
+					.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+					.addGap(30))
+		);
+		gl_modulePanel_1.setVerticalGroup(
+			gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_modulePanel_1.createSequentialGroup()
+					.addGap(6)
+					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnAddModule)
+						.addComponent(module_btnEdit)
+						.addComponent(module_btnDelete)
+						.addComponent(btnViewMaintaning))
+					.addGap(30)
+					.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+					.addGap(30))
+		);
 		
 
 
@@ -923,26 +1071,37 @@ public class NUserPage {
 
 		JButton physical_btnEdit = new JButton("Edit");
 		
+		JButton physical_btnDelete = new JButton("Delete");
+		
 		
 		
 		
 		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
-		gl_physicalPanel
-				.setHorizontalGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_physicalPanel.createSequentialGroup()
-								.addComponent(physical_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 536, Short.MAX_VALUE)
-								.addComponent(btnAddPhysicalResource))
-						.addGroup(gl_physicalPanel.createSequentialGroup().addGap(30)
-								.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-								.addGap(30)));
-		gl_physicalPanel.setVerticalGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_physicalPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnAddPhysicalResource).addComponent(physical_btnEdit))
-						.addGap(30).addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
-						.addGap(30)));
+		gl_physicalPanel.setHorizontalGroup(
+			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addComponent(physical_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(physical_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 463, Short.MAX_VALUE)
+					.addComponent(btnAddPhysicalResource))
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+		);
+		gl_physicalPanel.setVerticalGroup(
+			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnAddPhysicalResource)
+						.addComponent(physical_btnEdit)
+						.addComponent(physical_btnDelete))
+					.addGap(30)
+					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+					.addGap(30))
+		);
 		
 		
 		physical_table = new JTable(phyiscal_tableModel);
