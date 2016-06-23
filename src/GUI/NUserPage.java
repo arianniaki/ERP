@@ -77,6 +77,7 @@ public class NUserPage {
 	private JTable accessright_table;
 	private JTable registered_table;
 	private JTable human_table;
+	private JTable maintaining_table;
 
 	/**
 	 * Launch the application.
@@ -278,8 +279,8 @@ public class NUserPage {
 		tabbedPane.remove(tabbedPane.getTabCount()-1); //remove subsystem tab
 		JScrollPane subsystem_scrollPane = new JScrollPane();
 		
-		JButton btnNewButton = new JButton("Back Button");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnBacktoProject = new JButton("Back");
+		btnBacktoProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("change tab to project mgmt");
 				System.out.println("Change JPanel");
@@ -327,7 +328,7 @@ public class NUserPage {
 					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
 					.addGap(40))
 				.addGroup(gl_subsystemPanel.createSequentialGroup()
-					.addComponent(btnNewButton)
+					.addComponent(btnBacktoProject)
 					.addPreferredGap(ComponentPlacement.RELATED, 591, Short.MAX_VALUE)
 					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
@@ -337,7 +338,7 @@ public class NUserPage {
 				.addGroup(gl_subsystemPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnNewButton)
+						.addComponent(btnBacktoProject)
 						.addComponent(addsubsystemBtn))
 					.addGap(5)
 					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
@@ -501,7 +502,7 @@ public class NUserPage {
 		SpringLayout sl_resourcePanel = new SpringLayout();
 		resourcePanel.setLayout(sl_resourcePanel);
 
-		JTabbedPane resourcesTab = new JTabbedPane(JTabbedPane.TOP);
+		final JTabbedPane resourcesTab = new JTabbedPane(JTabbedPane.TOP);
 		sl_resourcePanel.putConstraint(SpringLayout.NORTH, resourcesTab, 10, SpringLayout.NORTH, resourcePanel);
 		sl_resourcePanel.putConstraint(SpringLayout.WEST, resourcesTab, 10, SpringLayout.WEST, resourcePanel);
 		sl_resourcePanel.putConstraint(SpringLayout.SOUTH, resourcesTab, 525, SpringLayout.NORTH, resourcePanel);
@@ -552,7 +553,7 @@ public class NUserPage {
 					.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(651, Short.MAX_VALUE))
+					.addContainerGap(640, Short.MAX_VALUE))
 		);
 		gl_humanPanel.setVerticalGroup(
 			gl_humanPanel.createParallelGroup(Alignment.LEADING)
@@ -561,7 +562,7 @@ public class NUserPage {
 					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(human_btnEdit)
 						.addComponent(human_btnDelete))
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(30)
 					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
 					.addGap(30))
 		);
@@ -862,7 +863,7 @@ public class NUserPage {
 			modulelistModel.addElement("" + allmodules.get(i).get("modname"));
 		}
 		// end module list
-		JPanel modulePanel = new JPanel();
+		final JPanel modulePanel = new JPanel();
 		resourcesTab.addTab("Module", null, modulePanel, null);
 		String[] module_columns = new String[] { "Id", "Name" };
 
@@ -938,8 +939,25 @@ public class NUserPage {
 		JButton module_btnEdit = new JButton("Edit");
 		
 		JButton module_btnDelete = new JButton("Delete");
-		
+		final JPanel maintaining_panel = new JPanel();
+
 		JButton btnViewMaintaning = new JButton("View Maintaning");
+		btnViewMaintaning.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("-----");
+			      int rowIndex = module_table.getSelectedRow();
+			      int colIndex = module_table.getSelectedColumn();
+
+			    String Table_click = (module_table.getModel().getValueAt(rowIndex, 0).toString()); //return the thing in the 0st column
+			    System.out.println(Table_click);
+			    System.out.println("-----");
+				System.out.println("Change JPanel");
+				int selected_index= resourcesTab.getSelectedIndex();
+				resourcesTab.remove(selected_index);
+				resourcesTab.insertTab("Maintaining", null, maintaining_panel , null, selected_index);
+				resourcesTab.setSelectedComponent(maintaining_panel);				
+			}
+		});
 		GroupLayout gl_modulePanel_1 = new GroupLayout(modulePanel);
 		gl_modulePanel_1.setHorizontalGroup(
 			gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
@@ -991,6 +1009,71 @@ public class NUserPage {
 			System.out.println(allphysicals.get(i));
 			physicalreslistModel.addElement("" + allphysicals.get(i).get("physname"));
 		}
+		
+		resourcesTab.addTab("Maintaining Module", null, maintaining_panel, null);
+		resourcesTab.remove(resourcesTab.getTabCount()-1); //remove maintaining tab
+
+		JScrollPane maintaining_scrollPane = new JScrollPane();
+		
+		JButton maintaining_btnEdit = new JButton("Edit");
+		
+		JButton maintaining_btnDelete = new JButton("Delete");
+		maintaining_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		JButton btnAddMaintaining = new JButton("Add Maintaining");
+		btnAddMaintaining.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		JButton btnBacktoModule = new JButton("Back");
+		btnBacktoModule.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("change tab to module");
+				System.out.println("Change JPanel");
+				int selected_index= resourcesTab.getSelectedIndex();
+				resourcesTab.remove(selected_index);
+				resourcesTab.insertTab("Module", null, modulePanel, null, selected_index);
+				resourcesTab.setSelectedComponent(modulePanel);	
+				
+			}
+		});
+		GroupLayout gl_maintaining_panel = new GroupLayout(maintaining_panel);
+		gl_maintaining_panel.setHorizontalGroup(
+			gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addComponent(maintaining_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnBacktoModule)
+					.addPreferredGap(ComponentPlacement.RELATED, 399, Short.MAX_VALUE)
+					.addComponent(btnAddMaintaining, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_maintaining_panel.setVerticalGroup(
+			gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(maintaining_btnEdit)
+						.addComponent(maintaining_btnDelete)
+						.addComponent(btnAddMaintaining)
+						.addComponent(btnBacktoModule))
+					.addGap(30)
+					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+					.addGap(30))
+		);
+		
+		maintaining_table = new JTable();
+		maintaining_scrollPane.setViewportView(maintaining_table);
+		maintaining_panel.setLayout(gl_maintaining_panel);
 
 		//end phys res 
 		
@@ -1282,8 +1365,8 @@ public class NUserPage {
 
 		JScrollPane project_scrollPane = new JScrollPane();
 		
-		JButton button_1 = new JButton("View SubSystem");
-		button_1.addActionListener(new ActionListener() {
+		JButton viewsubsys_Btn = new JButton("View SubSystem");
+		viewsubsys_Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				System.out.println("-----");
@@ -1314,7 +1397,7 @@ public class NUserPage {
 					.addComponent(projsearchBtn)
 					.addPreferredGap(ComponentPlacement.RELATED, 330, Short.MAX_VALUE)
 					.addGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(button_1)
+						.addComponent(viewsubsys_Btn)
 						.addComponent(addprojectBtn))
 					.addContainerGap())
 		);
@@ -1326,7 +1409,7 @@ public class NUserPage {
 						.addComponent(addprojectBtn)
 						.addComponent(projsearchBtn))
 					.addGap(5)
-					.addComponent(button_1)
+					.addComponent(viewsubsys_Btn)
 					.addGap(40)
 					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
 					.addGap(40))
