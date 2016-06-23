@@ -34,6 +34,7 @@ import ProjectEmployee.AuthenticatedEmployee;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
+import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
@@ -66,7 +67,9 @@ public class NUserPage {
 	private ArrayList<HashMap<String, String>> allres;
 	private ArrayList<HashMap<String, String>> allprojects;
 	private ArrayList<HashMap<String, String>> allemployees;
+	private ArrayList<HashMap<String, String>> allsubsystems;
 
+	
 	private JTable finan_table;
 	private JTable information_table;
 	private JTable module_table;
@@ -78,6 +81,8 @@ public class NUserPage {
 	private JTable registered_table;
 	private JTable human_table;
 	private JTable maintaining_table;
+	
+	private int selected_project_forsubsystem;
 
 	/**
 	 * Launch the application.
@@ -291,6 +296,27 @@ public class NUserPage {
 			}
 		});
 		
+		
+		
+		String[] subsystem_columns = new String[] { "Name","ProjectId" };
+
+		final DefaultTableModel subsystem_tableModel = new DefaultTableModel(subsystem_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+
+		//THIS SHOULD BE CHANGED +++
+		SubSystemCatalogue subsyscat = new SubSystemCatalogue();
+		allsubsystems = subsyscat.getSubSystems();
+		for (int i = 0; i < allsubsystems.size(); i++) {
+			Object[] objs = { allsubsystems.get(i).get("sname"), allsubsystems.get(i).get("pid") };
+			subsystem_tableModel.addRow(objs);
+		}
+		
+		
 		JButton addsubsystemBtn = new JButton("Add Subsystem");
 		addsubsystemBtn.addActionListener(new ActionListener() {
 			@Override
@@ -307,15 +333,47 @@ public class NUserPage {
 				final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
 				subsystemAdd_Panel.makeForm();
 
-				JFrame Add_RequirementPage = new JFrame("Add Subsystem Form");
-				Add_RequirementPage.getContentPane().add(subsystemAdd_Panel.getJPanel(), BorderLayout.NORTH);
+				JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
+				Add_SubsystemPage.getContentPane().add(subsystemAdd_Panel.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitaddsubsystemBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submitaddsubsystemBtn);
-				Add_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_RequirementPage.pack();
-				Add_RequirementPage.setVisible(true);
+				Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Add_SubsystemPage.pack();
+				Add_SubsystemPage.setVisible(true);
+				submitaddsubsystemBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						SubSystemCatalogue subsyscat = new SubSystemCatalogue();
+						System.out.println("all : ");
+						subsyscat.getSubSystems();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < subsystemAdd_Panel.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) subsystemAdd_Panel.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + " subsystesm");
+						}
+						
+						subsyscat.addSubSystem(inputs.get(0).toString(), selected_project_forsubsystem);
+						
+						allsubsystems = subsyscat.getSubSystems();
+						int rowcount= subsystem_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							subsystem_tableModel.removeRow(j);
+						}
+						System.out.println(subsystem_tableModel.getRowCount()+" ---");
+						for (int i = 0; i < allsubsystems.size(); i++) {
+							Object[] objs = { allsubsystems.get(i).get("sname"), allsubsystems.get(i).get("pid") };
+							subsystem_tableModel.addRow(objs);
+						}
+						
+						
+					}
+				});
+				
 				
 				
 			}
@@ -345,7 +403,7 @@ public class NUserPage {
 					.addGap(40))
 		);
 		
-		subsystem_table = new JTable();
+		subsystem_table = new JTable(subsystem_tableModel);
 		subsystem_scrollPane.setViewportView(subsystem_table);
 		subsystemPanel.setLayout(gl_subsystemPanel);
 		//
@@ -1375,6 +1433,7 @@ public class NUserPage {
 
 			    String Table_click = (project_table.getModel().getValueAt(rowIndex, 0).toString()); //return the thing in the 0st column
 			    System.out.println(Table_click);
+			    selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
 			    System.out.println("-----");
 				System.out.println("Change JPanel");
 				int selected_index= tabbedPane.getSelectedIndex();
