@@ -75,6 +75,7 @@ public class NUserPage {
 	private JTable project_table;
 	private JTable subsystem_table;
 	private JTable accessright_table;
+	private JTable registered_table;
 
 	/**
 	 * Launch the application.
@@ -498,6 +499,9 @@ public class NUserPage {
 			informationlistModel
 					.addElement("" + allinformation.get(i).get("irname") + "\t" + allinformation.get(i).get("rid"));
 		}
+		
+		JPanel humanPanel = new JPanel();
+		resourcesTab.addTab("Human", null, humanPanel, null);
 
 		// end get information list
 
@@ -1193,6 +1197,48 @@ public class NUserPage {
 
 		project_scrollPane.setViewportView(project_table);
 		projectPanel.setLayout(gl_projectPanel);
+		
+		JPanel reportPanel = new JPanel();
+		if(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")  ){
+		tabbedPane.addTab("Report", null, reportPanel, null);
+		}		
+		JPanel RegisteredUserspanel = new JPanel();
+		if(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")  ){
+		tabbedPane.addTab("Registered Users", null, RegisteredUserspanel, null);
+		}		
+		JScrollPane registered_scrollPane = new JScrollPane();
+		
+		JButton btnConfirm = new JButton("Confirm");
+		
+		JButton btnDeny = new JButton("Deny");
+		GroupLayout gl_RegisteredUserspanel = new GroupLayout(RegisteredUserspanel);
+		gl_RegisteredUserspanel.setHorizontalGroup(
+			gl_RegisteredUserspanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_RegisteredUserspanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(Alignment.TRAILING, gl_RegisteredUserspanel.createSequentialGroup()
+					.addContainerGap(619, Short.MAX_VALUE)
+					.addComponent(btnDeny)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnConfirm))
+		);
+		gl_RegisteredUserspanel.setVerticalGroup(
+			gl_RegisteredUserspanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnConfirm)
+						.addComponent(btnDeny))
+					.addGap(40)
+					.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+					.addGap(40))
+		);
+		
+		registered_table = new JTable();
+		registered_scrollPane.setViewportView(registered_table);
+		RegisteredUserspanel.setLayout(gl_RegisteredUserspanel);
 		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight()
 				.getName().equals("default")) {
 			addreqBtn.setEnabled(false);
