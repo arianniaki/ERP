@@ -222,6 +222,7 @@ displayemployees.addActionListener(new ActionListener() {
 			      	Field field5 = new Field("text", "work", "sharif", 10, "work");
 			      	Field field6 = new Field("text", "phone", "sharif", 10, "phone");
 			      	Field field7 = new Field("text", "address", "sharif", 10, "address");
+			      	Field field8 = new Field("checkBox", "items", options , 10, "items");
 			      	
 			      	
 			      	myfields.add(field1);
@@ -231,6 +232,7 @@ displayemployees.addActionListener(new ActionListener() {
 			      	myfields.add(field5);
 			      	myfields.add(field6);
 			      	myfields.add(field7);
+			      	myfields.add(field8);
 			      	Form myForm = new Form(myfields, "Arian Info");
 			      	final PanelBuilder myPanel = new PanelBuilder(myForm);
 			      	myPanel.makeForm();
