@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import ProjectEmployee.AuthenticatedEmployee;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
@@ -15,19 +16,19 @@ import ResourceManagement.Section.Resource.*;
 public class Main {
 	public static void main(String[] args) throws ParseException {
 		// test employee
-//		Employee emp = new Employee();
-//		if(!(emp.login("ali","124"))){
-//			System.out.println("huraaa");
-//		}else{
-//			System.out.println("shit");
-//		}
-//		if(emp.login("ali", "123")){
-//			System.out.println(emp.getName());
-//			System.out.println(emp.loggedin);
-//
-//		}
+		Employee emp = new Employee();
+		if((emp.login("ali","123"))){
+			System.out.println("huraaa" + AuthenticatedEmployee.getInstance().getEmployee().getUsername());
+		}else{
+			System.out.println("shit");
+		}
+		
+		Employee gholam = new Employee();
+		gholam.getFromDB(1);
+		gholam.setAccessRight(2);
+		
 //		if(emp.logout()){
-//			System.out.println(emp.loggedin);
+//			System.out.println("logged out");
 //		}
 		
 		// test resource
@@ -127,5 +128,7 @@ public class Main {
 //		projres.deleteProjectResourceUtilization(2, 1, 7);
 //		projres.getProjectResourceUtilizations();
 
+		
+		
 	}
 }
