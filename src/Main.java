@@ -25,7 +25,7 @@ public class Main {
 		
 		Employee gholam = new Employee();
 		gholam.getFromDB(1);
-		gholam.setAccessRight(2);
+		gholam.setAccessRight(1);
 		
 //		if(emp.logout()){
 //			System.out.println("logged out");

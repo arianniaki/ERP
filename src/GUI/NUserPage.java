@@ -30,6 +30,7 @@ import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
+import ProjectEmployee.AuthenticatedEmployee;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
@@ -58,7 +59,6 @@ public class NUserPage {
 	private JFrame userpageFrame;
 	private JTextField editname_textField;
 	private JTextField editfamilyname_textField;
-	private String loggedin_user;
 	private ArrayList<HashMap<String, String>> allmodules;
 	private ArrayList<HashMap<String, String>> allphysicals;
 	private ArrayList<HashMap<String, String>> allfinance;
@@ -83,7 +83,7 @@ public class NUserPage {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NUserPage window = new NUserPage(null);
+					NUserPage window = new NUserPage();
 					window.userpageFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -97,8 +97,7 @@ public class NUserPage {
 	 * 
 	 * @param loggedin_user
 	 */
-	public NUserPage(String user) {
-		loggedin_user = user;
+	public NUserPage() {
 		initialize();
 	}
 
@@ -121,6 +120,13 @@ public class NUserPage {
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(AuthenticatedEmployee.getInstance().getEmployee().logout()){
+					System.out.println("logged out");
+					userpageFrame.dispose();
+					NLoginPage loginWindow = new NLoginPage();
+					loginWindow.getloginpageFrame().setVisible(true);
+
+				}
 			}
 		});
 
@@ -128,7 +134,7 @@ public class NUserPage {
 
 		editname_textField = new JTextField();
 		editname_textField.setColumns(10);
-		editname_textField.setText(loggedin_user);
+		editname_textField.setText("TO BE SET LATER");
 		editfamilyname_textField = new JTextField();
 		editfamilyname_textField.setColumns(10);
 
@@ -158,7 +164,9 @@ public class NUserPage {
 		editPanel.setLayout(gl_editPanel);
 
 		JPanel accessrightPanel = new JPanel();
-		tabbedPane.addTab("AccessRight Management", null, accessrightPanel, null);
+		if(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")  ){
+			tabbedPane.addTab("AccessRight Management", null, accessrightPanel, null);
+		}
 
 		JButton btnAssignAccessright = new JButton("Assign AccessRight");
 		btnAssignAccessright.addActionListener(new ActionListener() {
@@ -342,6 +350,7 @@ public class NUserPage {
 		tabbedPane.addTab("Requirment Management", null, requirementPanel, null);
 
 		JButton addreqBtn = new JButton("Add Requirement");
+		
 		addreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> resource_types = new ArrayList<String>();
@@ -496,7 +505,7 @@ public class NUserPage {
 		resourcesTab.addTab("Information", null, informationPanel, null);
 
 		JButton btnAddInformation = new JButton("Add Information Resource");
-
+		
 		JScrollPane information_scrollPane = new JScrollPane();
 		String[] info_columns = new String[] { "Id", "Name" };
 
@@ -610,6 +619,7 @@ public class NUserPage {
 		resourcesTab.addTab("Financial", null, financialPanel, null);
 		JButton btnAddFinancial = new JButton("Add Financial Resource");
 		JButton financial_btnEdit = new JButton("Edit");
+		
 		for (int i = 0; i < allfinance.size(); i++) {
 			financiallistModel.addElement("" + allfinance.get(i).get("finanname"));
 		}
@@ -908,6 +918,10 @@ public class NUserPage {
 		JScrollPane physical_scrollPane = new JScrollPane();
 
 		JButton physical_btnEdit = new JButton("Edit");
+		
+		
+		
+		
 		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
 		gl_physicalPanel
 				.setHorizontalGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING)
@@ -1004,7 +1018,6 @@ public class NUserPage {
 		allPanel.setLayout(gl_allPanel);
 
 		tabbedPane.addTab("Project Management", null, projectPanel, null);
-		tabbedPane.setEnabledAt(4, true);
 
 		DefaultListModel<String> projectlistModel = new DefaultListModel<String>();
 		projectlistModel.addElement("hello");
@@ -1020,6 +1033,8 @@ public class NUserPage {
 		};
 		
 		JButton addprojectBtn = new JButton("Add Project");
+		
+		
 		addprojectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Field> projectFields = new ArrayList<Field>();
@@ -1178,7 +1193,18 @@ public class NUserPage {
 
 		project_scrollPane.setViewportView(project_table);
 		projectPanel.setLayout(gl_projectPanel);
-		
+		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight()
+				.getName().equals("default")) {
+			addreqBtn.setEnabled(false);
+			btnAddInformation.setEnabled(false);
+			information_btnEdit.setEnabled(false);
+			btnAddFinancial.setEnabled(false);
+			financial_btnEdit.setEnabled(false);
+			btnAddPhysicalResource.setEnabled(false);
+			physical_btnEdit.setEnabled(false);
+			addprojectBtn.setEnabled(false);
+			addsubsystemBtn.setEnabled(false);
+		}
 		
 	}
 

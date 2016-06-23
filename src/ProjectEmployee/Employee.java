@@ -116,7 +116,7 @@ public class Employee {
 	}
 
 	public void setDefaultAccessRight(){
-		accessRight = new AccessRight(1);
+		setAccessRight(new AccessRight(1));
 		HashMap<String, String> setVars = new HashMap<String, String>();
 		setVars.put("accesrightid", 1+"");
 		submitToDB(setVars);
@@ -153,7 +153,7 @@ public class Employee {
 				this.username = rs.getString("username");
 				this.sectionId = rs.getInt("sectionid");
 				this.post = rs.getString("post");
-				this.accessRight= new AccessRight(rs.getInt("accessrightid"));
+				this.setAccessRight(new AccessRight(rs.getInt("accessrightid")));
 			}
 			rs.close();
 			DB.connectionClose();
@@ -163,5 +163,15 @@ public class Employee {
 			System.out.println(e);
 			return false;
 		}
+	}
+
+
+	public AccessRight getAccessRight() {
+		return accessRight;
+	}
+
+
+	public void setAccessRight(AccessRight accessRight) {
+		this.accessRight = accessRight;
 	}
 }
