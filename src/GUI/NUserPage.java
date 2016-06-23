@@ -691,6 +691,15 @@ public class NUserPage {
 		resourcesTab.addTab("Human", null, humanPanel, null);
 		
 		JScrollPane human_scrollPane = new JScrollPane();
+		String[] human_columns = new String[] { "Id", "Name" };
+
+		final DefaultTableModel human_tableModel = new DefaultTableModel(human_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
 		
 		JButton human_btnEdit = new JButton("Edit");
 		human_btnEdit.addActionListener(new ActionListener() {
@@ -699,8 +708,33 @@ public class NUserPage {
 		});
 		
 		JButton human_btnDelete = new JButton("Delete");
+		
 		human_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				System.out.println("-----");
+			    int rowIndex = human_table.getSelectedRow();
+			    int colIndex = human_table.getSelectedColumn();
+
+			    String Table_click = (human_table.getModel().getValueAt(rowIndex, 0).toString()); //return the thing in the 0st column
+			    System.out.println(Table_click);
+			    EmployeeCatalogue empcat_delete = new EmployeeCatalogue();
+			    empcat_delete.deleteEmployee(Integer.parseInt(Table_click));
+			    allemployees=empcat_delete.readAllEmployees();
+			    
+			    
+				int rowcount= human_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					human_tableModel.removeRow(j);
+				}
+				System.out.println(human_tableModel.getRowCount()+" ---");
+				for (int i = 0; i < allemployees.size(); i++) {
+					Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
+					human_tableModel.addRow(objs);
+				}
+				
+				
+				
 			}
 		});
 		GroupLayout gl_humanPanel = new GroupLayout(humanPanel);
@@ -728,16 +762,8 @@ public class NUserPage {
 					.addGap(30))
 		);
 
-		String[] human_columns = new String[] { "Id", "Name" };
 
-		final DefaultTableModel human_tableModel = new DefaultTableModel(human_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-		
+	
 		
 		human_table = new JTable(human_tableModel);
 		human_scrollPane.setViewportView(human_table);
