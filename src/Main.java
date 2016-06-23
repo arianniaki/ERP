@@ -1,3 +1,6 @@
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import ProjectEmployee.Employee;
@@ -5,11 +8,13 @@ import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
+import RequirementUtilization.ResourceRequirement;
+import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.*;
 
 public class Main {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		// test employee
 //		Employee emp = new Employee();
 //		if(!(emp.login("ali","124"))){
@@ -98,6 +103,20 @@ public class Main {
 //		secCat.deleteSection(8);
 //		secCat.getSections();
 
+//		String strDate = "2011-12-31";
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+//        java.util.Date date = sdf.parse(strDate);
+//		Date sqldate = new Date(date.getTime());
+//		System.out.println(sqldate);
+//	    System.out.println(date.toString());
+		
+		//test resourcerequirement:
+		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+		resreqCat.getResourceRequirements();
+		resreqCat.addResourceRequirement(2, 1, 7, "2016-01-02", "2016-01-03");
+		resreqCat.getResourceRequirements();
+		resreqCat.deleteSubSystem(2, 1, 7);
+		resreqCat.getResourceRequirements();
 
 	}
 }
