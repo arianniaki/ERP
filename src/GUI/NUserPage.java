@@ -72,6 +72,7 @@ public class NUserPage {
 	private JTable physical_table;
 	private JTable allresource_table;
 	private JTable project_table;
+	private JTable subsystem_table;
 
 	/**
 	 * Launch the application.
@@ -108,7 +109,7 @@ public class NUserPage {
 		userpageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		userpageFrame.getContentPane().setLayout(null);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(6, 6, 858, 551);
 		userpageFrame.getContentPane().add(tabbedPane);
 
@@ -177,6 +178,58 @@ public class NUserPage {
 		accessright_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		accessrightPanel.setLayout(gl_accessrightPanel);
 
+		// project mgmt panel
+		final JPanel projectPanel = new JPanel();
+
+		//
+		
+		// subsystem panel
+		final JPanel subsystemPanel = new JPanel();
+		tabbedPane.addTab("SubSystem", null, subsystemPanel, null);
+		tabbedPane.remove(tabbedPane.getTabCount()-1); //remove subsystem tab
+		JScrollPane subsystem_scrollPane = new JScrollPane();
+		
+		JButton btnNewButton = new JButton("Back Button");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("change tab to project mgmt");
+				System.out.println("Change JPanel");
+				int selected_index= tabbedPane.getSelectedIndex();
+				tabbedPane.remove(selected_index);
+				tabbedPane.insertTab("Project Management", null, projectPanel, null, selected_index);
+				tabbedPane.setSelectedComponent(projectPanel);				
+			}
+		});
+		
+		JButton addsubsystemBtn = new JButton("Add Subsystem");
+		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
+		gl_subsystemPanel.setHorizontalGroup(
+			gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addComponent(btnNewButton)
+					.addPreferredGap(ComponentPlacement.RELATED, 603, Short.MAX_VALUE)
+					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_subsystemPanel.setVerticalGroup(
+			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnNewButton)
+						.addComponent(addsubsystemBtn))
+					.addGap(5)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+					.addGap(40))
+		);
+		
+		subsystem_table = new JTable();
+		subsystem_scrollPane.setViewportView(subsystem_table);
+		subsystemPanel.setLayout(gl_subsystemPanel);
+		//
 		JPanel requirementPanel = new JPanel();
 		tabbedPane.addTab("Requirment Management", null, requirementPanel, null);
 
@@ -628,6 +681,8 @@ public class NUserPage {
 			}
 		});
 
+		
+		
 		JScrollPane module_scrollPane = new JScrollPane();
 
 		JButton module_btnEdit = new JButton("Edit");
@@ -840,7 +895,6 @@ public class NUserPage {
 		allres_scrollPane.setViewportView(allresource_table);
 		allPanel.setLayout(gl_allPanel);
 
-		JPanel projectPanel = new JPanel();
 		tabbedPane.addTab("Project Management", null, projectPanel, null);
 		tabbedPane.setEnabledAt(4, true);
 
@@ -874,13 +928,13 @@ public class NUserPage {
 				projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
 
 				Form projectForm = new Form(projectFields, "Project Form");
-				final PanelBuilder projectPanel = new PanelBuilder(projectForm);
-				projectPanel.makeForm();
+				final PanelBuilder project_addPanel = new PanelBuilder(projectForm);
+				project_addPanel.makeForm();
 				JFrame Add_ProjectPage = new JFrame("Add Project Form");
-				Add_ProjectPage.getContentPane().add(projectPanel.getJPanel(), BorderLayout.NORTH);
+				Add_ProjectPage.getContentPane().add(project_addPanel.getJPanel(), BorderLayout.NORTH);
 
 				
-				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) projectPanel.getJPanel().getComponent(1);
+				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) project_addPanel.getJPanel().getComponent(1);
 				final JComboBox employees_comboBox = comboBoxpane.getComboBox();
 
 				
@@ -907,8 +961,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						projcat.getProjects();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < projectPanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) projectPanel.getJPanel().getComponent(i);
+						for (int i = 0; i < project_addPanel.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) project_addPanel.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -941,18 +995,56 @@ public class NUserPage {
 		JButton projsearchBtn = new JButton("Search");
 
 		JScrollPane project_scrollPane = new JScrollPane();
+		
+		JButton button_1 = new JButton("View SubSystem");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				System.out.println("-----");
+			      int rowIndex = project_table.getSelectedRow();
+			      int colIndex = project_table.getSelectedColumn();
+
+			    String Table_click = (project_table.getModel().getValueAt(rowIndex, 0).toString()); //return the thing in the 0st column
+			    System.out.println(Table_click);
+			    System.out.println("-----");
+				System.out.println("Change JPanel");
+				int selected_index= tabbedPane.getSelectedIndex();
+				tabbedPane.remove(selected_index);
+				tabbedPane.insertTab("Subsystem", null, subsystemPanel, null, selected_index);
+				tabbedPane.setSelectedComponent(subsystemPanel);				
+
+				
+			}
+		});
 		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
-		gl_projectPanel.setHorizontalGroup(gl_projectPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_projectPanel.createSequentialGroup().addGap(300).addComponent(projsearchBtn)
-						.addPreferredGap(ComponentPlacement.RELATED, 336, Short.MAX_VALUE).addComponent(addprojectBtn))
-				.addGroup(Alignment.LEADING, gl_projectPanel.createSequentialGroup().addGap(40)
-						.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE).addGap(40)));
-		gl_projectPanel.setVerticalGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE).addComponent(addprojectBtn)
-								.addComponent(projsearchBtn))
-						.addGap(40).addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-						.addGap(40)));
+		gl_projectPanel.setHorizontalGroup(
+			gl_projectPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addGap(300)
+					.addComponent(projsearchBtn)
+					.addPreferredGap(ComponentPlacement.RELATED, 330, Short.MAX_VALUE)
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(button_1)
+						.addComponent(addprojectBtn))
+					.addContainerGap())
+		);
+		gl_projectPanel.setVerticalGroup(
+			gl_projectPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addprojectBtn)
+						.addComponent(projsearchBtn))
+					.addGap(5)
+					.addComponent(button_1)
+					.addGap(40)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+					.addGap(40))
+		);
 		
 		final DefaultListModel<String> allprojectlistModel = new DefaultListModel<String>();
 		// get all res list
@@ -974,9 +1066,12 @@ public class NUserPage {
 
 		
 		project_table = new JTable(allproject_tableModel);
-		
+	    project_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 		project_scrollPane.setViewportView(project_table);
 		projectPanel.setLayout(gl_projectPanel);
+		
+		
 	}
 
 	public JFrame getUserpageFrame() {
