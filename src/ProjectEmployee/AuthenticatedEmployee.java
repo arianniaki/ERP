@@ -4,7 +4,7 @@ package ProjectEmployee;
 public class AuthenticatedEmployee {
 	
 	private static AuthenticatedEmployee authenticatedEmployee = new AuthenticatedEmployee();
-	private Employee employee;
+	private Employee employee = null;
 	private AuthenticatedEmployee(){}
 	
 	public static AuthenticatedEmployee getInstance(){
@@ -18,11 +18,11 @@ public class AuthenticatedEmployee {
 		return true;
 	}
 	
-	public static Employee getEmployee(){
+	public Employee getEmployee(){
 		return authenticatedEmployee.employee;
 	}
 	
-	public static boolean logoutEmployee(){
+	public boolean logoutEmployee(){
 		if(authenticatedEmployee.employee == null)
 			return false;
 		authenticatedEmployee.employee = null;

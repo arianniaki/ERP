@@ -1,6 +1,8 @@
 package ProjectEmployee;
 
 import java.util.HashMap;
+
+import AccessRight.AccessRight;
 import DataBase.DataBase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,11 +16,13 @@ public class Employee {
 	private String password;
 	public boolean loggedin;
 	private String post;
+	private AccessRight accessRight;
 	DataBase DB;
 
 	public Employee() {
 		DB = new DataBase();
 	}
+	
 
 	public boolean login(String username, String password) {
 		HashMap<String, String> vars = new HashMap<String, String>();
@@ -111,6 +115,24 @@ public class Employee {
 		this.isManager = false;
 	}
 
+	public void setDefaultAccessRight(){
+		setAccessRight(new AccessRight(1));
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("accesrightid", 1+"");
+		submitToDB(setVars);
+	}
+
+	public boolean setAccessRight(int id){
+		if(AuthenticatedEmployee.getInstance().getEmployee().accessRight.getName().equals("super")){
+			accessRight = new AccessRight(id);
+			HashMap<String, String> setVars = new HashMap<String, String>();
+			setVars.put("accessrightid", id+"");
+			submitToDB(setVars);
+			return true;
+		}
+		return false;
+	}
+
 	public void submitToDB(HashMap<String, String> setVars) {
 		HashMap<String, String> condVars = new HashMap<String, String>();
 		condVars.put("empid", Integer.toString(this.id));
@@ -131,6 +153,7 @@ public class Employee {
 				this.username = rs.getString("username");
 				this.sectionId = rs.getInt("sectionid");
 				this.post = rs.getString("post");
+				this.setAccessRight(new AccessRight(rs.getInt("accessrightid")));
 			}
 			rs.close();
 			DB.connectionClose();
@@ -140,5 +163,15 @@ public class Employee {
 			System.out.println(e);
 			return false;
 		}
+	}
+
+
+	public AccessRight getAccessRight() {
+		return accessRight;
+	}
+
+
+	public void setAccessRight(AccessRight accessRight) {
+		this.accessRight = accessRight;
 	}
 }

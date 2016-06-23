@@ -157,8 +157,8 @@ public class NUserPage {
 				.addContainerGap(329, Short.MAX_VALUE)));
 		editPanel.setLayout(gl_editPanel);
 		
-		JPanel Resourcepanel = new JPanel();
-		tabbedPane.addTab("Report", null, Resourcepanel, null);
+		JPanel Reportpanel = new JPanel();
+		tabbedPane.addTab("Report", null, Reportpanel, null);
 
 		JPanel accessrightPanel = new JPanel();
 		tabbedPane.addTab("AccessRight Management", null, accessrightPanel, null);
