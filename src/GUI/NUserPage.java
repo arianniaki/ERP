@@ -156,6 +156,9 @@ public class NUserPage {
 						.addComponent(lblFamilyName))
 				.addContainerGap(329, Short.MAX_VALUE)));
 		editPanel.setLayout(gl_editPanel);
+		
+		JPanel Resourcepanel = new JPanel();
+		tabbedPane.addTab("Report", null, Resourcepanel, null);
 
 		JPanel accessrightPanel = new JPanel();
 		tabbedPane.addTab("AccessRight Management", null, accessrightPanel, null);
@@ -1004,7 +1007,7 @@ public class NUserPage {
 		allPanel.setLayout(gl_allPanel);
 
 		tabbedPane.addTab("Project Management", null, projectPanel, null);
-		tabbedPane.setEnabledAt(4, true);
+		tabbedPane.setEnabledAt(5, true);
 
 		DefaultListModel<String> projectlistModel = new DefaultListModel<String>();
 		projectlistModel.addElement("hello");
