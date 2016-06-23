@@ -409,16 +409,18 @@ public class NUserPage {
 						}
 						infocat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
-						infocat.readAllResources();
-
 						allinformation.clear();
-						informationlistModel.removeAllElements();
 						allinformation = infocat.readAllResources();
-						for (int i = 0; i < allinformation.size(); i++) {
-							System.out.println(allinformation.get(i));
-							informationlistModel.addElement("" + allinformation.get(i).get("irname"));
+						System.out.println(information_tableModel.getRowCount()+" ---");
+						int rowcount= information_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							information_tableModel.removeRow(j);
 						}
-
+						System.out.println(information_tableModel.getRowCount()+" ---");
+						for (int i = 0; i < allinformation.size(); i++) {
+							Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
+							information_tableModel.addRow(objs);
+						}
 					}
 				});
 			}
@@ -447,7 +449,7 @@ public class NUserPage {
 		}
 		String[] finan_columns = new String[] { "Id", "Name" };
 
-		DefaultTableModel financial_tableModel = new DefaultTableModel(finan_columns, 0) {
+		final DefaultTableModel financial_tableModel = new DefaultTableModel(finan_columns, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false
@@ -520,15 +522,20 @@ public class NUserPage {
 						}
 						financat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
-						financat.readAllResources();
-
 						allfinance.clear();
-						financiallistModel.removeAllElements();
 						allfinance = financat.readAllResources();
-						for (int i = 0; i < allfinance.size(); i++) {
-							System.out.println(allfinance.get(i));
-							financiallistModel.addElement("" + allfinance.get(i).get("finanname"));
+						System.out.println(financial_tableModel.getRowCount()+" ---");
+						int rowcount= financial_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							System.out.println(j);
+							financial_tableModel.removeRow(j);
 						}
+						System.out.println(financial_tableModel.getRowCount()+" ---");
+						for (int i = 0; i < allfinance.size(); i++) {
+							Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
+							financial_tableModel.addRow(objs);
+						}
+
 
 					}
 				});
@@ -549,6 +556,15 @@ public class NUserPage {
 		// end module list
 		JPanel modulePanel = new JPanel();
 		resourcesTab.addTab("Module", null, modulePanel, null);
+		String[] module_columns = new String[] { "Id", "Name" };
+
+		final DefaultTableModel module_tableModel = new DefaultTableModel(module_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
 
 		JButton btnAddModule = new JButton("Add Module");
 		btnAddModule.addActionListener(new ActionListener() {
@@ -569,7 +585,7 @@ public class NUserPage {
 				AddModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				AddModulePage.pack();
 				AddModulePage.setVisible(true);
-
+			
 				submitaddmoduleBtn.addActionListener(new ActionListener() {
 
 					@Override
@@ -588,13 +604,18 @@ public class NUserPage {
 						}
 						mcat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
-						mcat.readAllResources();
 						allmodules.clear();
-						modulelistModel.removeAllElements();
 						allmodules = mcat.readAllResources();
+						System.out.println(module_tableModel.getRowCount()+" ---");
+						int rowcount= module_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							System.out.println(j);
+							module_tableModel.removeRow(j);
+						}
+						System.out.println(module_tableModel.getRowCount()+" ---");
 						for (int i = 0; i < allmodules.size(); i++) {
-							System.out.println(allmodules.get(i));
-							modulelistModel.addElement("" + allmodules.get(i).get("modname"));
+							Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
+							module_tableModel.addRow(objs);
 						}
 					}
 				});
@@ -619,15 +640,6 @@ public class NUserPage {
 						.addGap(30).addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
 						.addGap(30)));
 		
-				String[] module_columns = new String[] { "Id", "Name" };
-
-				DefaultTableModel module_tableModel = new DefaultTableModel(module_columns, 0) {
-					@Override
-					public boolean isCellEditable(int row, int column) {
-						// all cells false
-						return false;
-					}
-				};
 
 
 		module_table = new JTable(module_tableModel);
@@ -654,6 +666,23 @@ public class NUserPage {
 		
 		JPanel physicalPanel = new JPanel();
 		resourcesTab.addTab("Physical", null, physicalPanel, null);
+		String[] physical_columns = new String[] { "Id", "Name" };
+
+		final DefaultTableModel phyiscal_tableModel = new DefaultTableModel(physical_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+
+		for (int i = 0; i < allphysicals.size(); i++) {
+			Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
+			phyiscal_tableModel.addRow(objs);
+		}
+
+		
+		
 
 		JButton btnAddPhysicalResource = new JButton("Add Physical Resource");
 		btnAddPhysicalResource.addActionListener(new ActionListener() {
@@ -690,14 +719,17 @@ public class NUserPage {
 						}
 						physcat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
-						physcat.readAllResources();
-
 						allphysicals.clear();
-						physicalreslistModel.removeAllElements();
 						allphysicals = physcat.readAllResources();
+						System.out.println(phyiscal_tableModel.getRowCount()+" ---");
+						int rowcount= phyiscal_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							phyiscal_tableModel.removeRow(j);
+						}
+						System.out.println(phyiscal_tableModel.getRowCount()+" ---");
 						for (int i = 0; i < allphysicals.size(); i++) {
-							System.out.println(allphysicals.get(i));
-							physicalreslistModel.addElement("" + allphysicals.get(i).get("physname"));
+							Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
+							phyiscal_tableModel.addRow(objs);
 						}
 
 					}
@@ -726,22 +758,6 @@ public class NUserPage {
 						.addGap(30).addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
 						.addGap(30)));
 		
-		String[] physical_columns = new String[] { "Id", "Name" };
-
-		DefaultTableModel phyiscal_tableModel = new DefaultTableModel(physical_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-
-		for (int i = 0; i < allphysicals.size(); i++) {
-			Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
-			phyiscal_tableModel.addRow(objs);
-		}
-
-		
 		
 		physical_table = new JTable(phyiscal_tableModel);
 		physical_scrollPane.setViewportView(physical_table);
@@ -762,17 +778,35 @@ public class NUserPage {
 		}
 
 		JScrollPane allres_scrollPane = new JScrollPane();
+		String[] allres_columns = new String[] { "Id", "Name" };
 
+		final DefaultTableModel allres_tableModel = new DefaultTableModel(allres_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+
+		
 		JButton button = new JButton("Refresh");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				//
 				allres.clear();
-				allreslistModel.removeAllElements();
 				allres = rcat.readAllResources();
-				for (int i = 0; i < allres.size(); i++) {
-					System.out.println(allres.get(i));
-					allreslistModel.addElement("" + allres.get(i).get("rname"));
+				System.out.println(allres_tableModel.getRowCount()+" ---");
+				int rowcount= allres_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					allres_tableModel.removeRow(j);
 				}
+				System.out.println(allres_tableModel.getRowCount()+" ---");
+				for (int i = 0; i < allres.size(); i++) {
+					Object[] objs = { allres.get(i).get("rid"), allres.get(i).get("rname") };
+					allres_tableModel.addRow(objs);
+				}
+				
 
 			}
 		});
@@ -789,16 +823,7 @@ public class NUserPage {
 								.addGap(30)));
 		
 		
-		String[] allres_columns = new String[] { "Id", "Name" };
-
-		DefaultTableModel allres_tableModel = new DefaultTableModel(allres_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-
+		
 		for (int i = 0; i <allres.size(); i++) {
 			Object[] objs = { allres.get(i).get("rid"), allres.get(i).get("rname") };
 			allres_tableModel.addRow(objs);
