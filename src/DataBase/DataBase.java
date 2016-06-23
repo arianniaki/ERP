@@ -139,6 +139,7 @@ public class DataBase {
 
 
 	}
+	
 	public ResultSet selectAll(String tableName) {
 		try {
 			Class.forName("org.postgresql.Driver");

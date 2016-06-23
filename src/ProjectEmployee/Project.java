@@ -51,4 +51,9 @@ public class Project {
 
 	}
 	
+	public String toString(){
+		String str="name: "+this.name;
+		return str;
+	}
+	
 }
