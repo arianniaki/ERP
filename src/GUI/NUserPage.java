@@ -30,6 +30,7 @@ import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
+import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
@@ -846,7 +847,16 @@ public class NUserPage {
 		DefaultListModel<String> projectlistModel = new DefaultListModel<String>();
 		projectlistModel.addElement("hello");
 		
+		String[] allproject_columns = new String[] { "Id", "Name" };
 
+		final DefaultTableModel allproject_tableModel = new DefaultTableModel(allproject_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		
 		JButton addprojectBtn = new JButton("Add Project");
 		addprojectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -858,7 +868,7 @@ public class NUserPage {
 				projectFields.add(new Field("text", "projname", "", 20, "name"));
 				
 				for (int i = 0; i < employees_fromcatalouge.size(); i++) {
-					employees.add(employees_fromcatalouge.get(i).get("empid").toString()+" "+employees_fromcatalouge.get(i).get("empname").toString());
+					employees.add("id:"+employees_fromcatalouge.get(i).get("empid").toString()+" "+employees_fromcatalouge.get(i).get("empname").toString());
 				}
 				System.out.println(employees+" 00");
 				projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
@@ -893,7 +903,36 @@ public class NUserPage {
 				submitaddprojectBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
+						ProjectCatalogue projcat = new ProjectCatalogue();
+						System.out.println("all : ");
+						projcat.getProjects();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < projectPanel.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) projectPanel.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + " project");
+						}
+						int employeeID= Integer.parseInt((inputs.get(1).substring(0, 4).replace("id:", "")));
+						EmployeeCatalogue empcat = new EmployeeCatalogue();
+						Employee proj_manager= empcat.getEmployee(employeeID);
+						System.out.println(proj_manager.getName());
+						projcat.addProject(inputs.get(0).toString(), proj_manager);
+						// tu resource ham bayad insert she
+						allprojects = projcat.getProjects();
+						
+						int rowcount= allproject_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							allproject_tableModel.removeRow(j);
+						}
+						System.out.println(allproject_tableModel.getRowCount()+" ---");
+						for (int i = 0; i < allprojects.size(); i++) {
+							Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname") };
+							allproject_tableModel.addRow(objs);
+						}
+
+					
 				
 			}
 		});
@@ -926,15 +965,7 @@ public class NUserPage {
 			allprojectlistModel.addElement("" + allprojects.get(i).get("projname"));
 		}
 		
-		String[] allproject_columns = new String[] { "Id", "Name" };
-
-		final DefaultTableModel allproject_tableModel = new DefaultTableModel(allproject_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
+		
 
 		for (int i = 0; i <allprojects.size(); i++) {
 			Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname") };
