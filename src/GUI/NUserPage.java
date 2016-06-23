@@ -31,6 +31,7 @@ import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
 import ProjectEmployee.EmployeeCatalogue;
+import ProjectEmployee.ProjectCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
@@ -62,11 +63,14 @@ public class NUserPage {
 	private ArrayList<HashMap<String, String>> allfinance;
 	private ArrayList<HashMap<String, String>> allinformation;
 	private ArrayList<HashMap<String, String>> allres;
+	private ArrayList<HashMap<String, String>> allprojects;
+
 	private JTable finan_table;
 	private JTable information_table;
 	private JTable module_table;
 	private JTable physical_table;
 	private JTable allresource_table;
+	private JTable project_table;
 
 	/**
 	 * Launch the application.
@@ -787,6 +791,7 @@ public class NUserPage {
 				return false;
 			}
 		};
+		
 
 		
 		JButton button = new JButton("Refresh");
@@ -840,12 +845,59 @@ public class NUserPage {
 
 		DefaultListModel<String> projectlistModel = new DefaultListModel<String>();
 		projectlistModel.addElement("hello");
+		
 
 		JButton addprojectBtn = new JButton("Add Project");
 		addprojectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<Field> projectFields = new ArrayList<Field>();
+				EmployeeCatalogue empcat = new EmployeeCatalogue();
+				ArrayList<HashMap<String, String>> employees_fromcatalouge = empcat.readAllEmployees();
+				ArrayList<String> employees = new ArrayList<String>();
+
+				projectFields.add(new Field("text", "projname", "", 20, "name"));
+				
+				for (int i = 0; i < employees_fromcatalouge.size(); i++) {
+					employees.add(employees_fromcatalouge.get(i).get("empid").toString()+" "+employees_fromcatalouge.get(i).get("empname").toString());
+				}
+				System.out.println(employees+" 00");
+				projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
+
+				Form projectForm = new Form(projectFields, "Project Form");
+				final PanelBuilder projectPanel = new PanelBuilder(projectForm);
+				projectPanel.makeForm();
+				JFrame Add_ProjectPage = new JFrame("Add Project Form");
+				Add_ProjectPage.getContentPane().add(projectPanel.getJPanel(), BorderLayout.NORTH);
+
+				
+				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) projectPanel.getJPanel().getComponent(1);
+				final JComboBox employees_comboBox = comboBoxpane.getComboBox();
+
+				
+				JButton submitaddprojectBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddprojectBtn);
+				Add_ProjectPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Add_ProjectPage.pack();
+				Add_ProjectPage.setVisible(true);
+				
+				employees_comboBox.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(employees_comboBox.getSelectedItem() + " ino select kardi project");
+					}
+				});
+
+				
+				submitaddprojectBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+				
 			}
 		});
+			}});
 
 		JButton projsearchBtn = new JButton("Search");
 
@@ -862,10 +914,37 @@ public class NUserPage {
 								.addComponent(projsearchBtn))
 						.addGap(40).addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
 						.addGap(40)));
+		
+		final DefaultListModel<String> allprojectlistModel = new DefaultListModel<String>();
+		// get all res list
+		final ProjectCatalogue pcat = new ProjectCatalogue();
+		System.out.println("all : ");
+		allprojects = pcat.getProjects();
 
-		JList<String> projectList = new JList<String>(projectlistModel);
-		project_scrollPane.setViewportView(projectList);
-		projectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		for (int i = 0; i < allprojects.size(); i++) {
+			System.out.println(allprojects.get(i));
+			allprojectlistModel.addElement("" + allprojects.get(i).get("projname"));
+		}
+		
+		String[] allproject_columns = new String[] { "Id", "Name" };
+
+		final DefaultTableModel allproject_tableModel = new DefaultTableModel(allproject_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+
+		for (int i = 0; i <allprojects.size(); i++) {
+			Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname") };
+			allproject_tableModel.addRow(objs);
+		}
+
+		
+		project_table = new JTable(allproject_tableModel);
+		
+		project_scrollPane.setViewportView(project_table);
 		projectPanel.setLayout(gl_projectPanel);
 	}
 
