@@ -13,7 +13,7 @@ public class ResourceRequirementCatalogue{
 	
 	public ResourceRequirementCatalogue() {
 		DB = new DataBase();
-		tableName = "resourcerequirement";
+		tableName = "resourcerequirment";
 	}
 	
 	public ArrayList<HashMap<String, String>> getResourceRequirements() {
@@ -33,8 +33,8 @@ public class ResourceRequirementCatalogue{
 		vars.put("fromdate", "\'"+from+"\'");
 		vars.put("todate", "\'"+to+"\'");
 		
-		long pk=DB.insert(vars, "resourcerequirement");
-		System.out.println("inserted into resourcerequirement table: " + pk);
+		long pk=DB.insert(vars, "resourcerequirment");
+		System.out.println("inserted into resourcerequirment table: " + pk);
 		return pk;
 	}
 	
@@ -44,7 +44,7 @@ public class ResourceRequirementCatalogue{
 		vars.put("rid", Integer.toString(rid));
 		vars.put("pid", Integer.toString(pid));
 
-		DB.delete(vars, "resourcerequirement");
+		DB.delete(vars, "resourcerequirment");
 	}
 
 }

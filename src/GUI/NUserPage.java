@@ -35,6 +35,7 @@ import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
+import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
@@ -68,6 +69,8 @@ public class NUserPage {
 	private ArrayList<HashMap<String, String>> allprojects;
 	private ArrayList<HashMap<String, String>> allemployees;
 	private ArrayList<HashMap<String, String>> allsubsystems;
+	private ArrayList<HashMap<String, String>> allresourcerequirements;
+
 
 	
 	private JTable finan_table;
@@ -83,6 +86,7 @@ public class NUserPage {
 	private JTable maintaining_table;
 	
 	private int selected_project_forsubsystem;
+	private JTable requirement_table;
 
 	/**
 	 * Launch the application.
@@ -500,8 +504,36 @@ public class NUserPage {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						for (int i = 0; i < requirement_Panel.getJPanel().getComponentCount(); i++) {
-							// System.out.println(fpanel.selected_Choice);
+//							 System.out.println(fpanel.selected_Choice);
 						}
+						ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+						System.out.println("all : ");
+						resreqCat.getResourceRequirements();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < requirement_Panel.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) requirement_Panel.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + "adasa");
+						}
+//						resreqCat.addResourceRequirement(rid, sid, pid, '2-z, to);
+//						// tu resource ham bayad insert she
+//						allmodules.clear();
+//						allmodules = mcat.readAllResources();
+//						System.out.println(module_tableModel.getRowCount()+" ---");
+//						int rowcount= module_tableModel.getRowCount();
+//						for (int j = rowcount - 1; j >= 0; j--) {
+//							System.out.println(j);
+//							module_tableModel.removeRow(j);
+//						}
+//						System.out.println(module_tableModel.getRowCount()+" ---");
+//						for (int i = 0; i < allmodules.size(); i++) {
+//							Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
+//							module_tableModel.addRow(objs);
+//						}
+//						
+						
 
 					}
 				});
@@ -545,10 +577,44 @@ public class NUserPage {
 					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
 					.addGap(40))
 		);
+		
+		
+		// get req list
+		final DefaultListModel<String> requirementlistModel = new DefaultListModel<String>();
 
-		JList<String> requirement_list = new JList<String>();
-		requirement_scrollPane.setViewportView(requirement_list);
-		requirement_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ResourceRequirementCatalogue resreqcat = new ResourceRequirementCatalogue();
+		System.out.println("all : ");
+		allresourcerequirements = resreqcat.getResourceRequirements();
+
+		for (int i = 0; i < allresourcerequirements.size(); i++) {
+			System.out.println(allresourcerequirements.get(i));
+			requirementlistModel.addElement("" + allresourcerequirements.get(i).get("rid") + "\t" + allresourcerequirements.get(i).get("sid"));
+		}
+		
+		
+
+		String[] resreq_columns = new String[] { "rid", "sid" };
+
+		final DefaultTableModel resreq_tableModel = new DefaultTableModel(resreq_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		
+		
+		requirement_table = new JTable(resreq_tableModel);
+
+		for (int i = 0; i < allresourcerequirements.size(); i++) {
+			Object[] objs = { allresourcerequirements.get(i).get("rid"), allresourcerequirements.get(i).get("sid")};
+			resreq_tableModel.addRow(objs);
+		}
+		
+		
+		
+		
+		requirement_scrollPane.setViewportView(requirement_table);
 		requirementPanel.setLayout(gl_requirementPanel);
 		searchreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -570,7 +636,7 @@ public class NUserPage {
 		
 		
 		//
-		// get information list
+		// get human list
 		final DefaultListModel<String> humanlistModel = new DefaultListModel<String>();
 
 		EmployeeCatalogue employeecat = new EmployeeCatalogue();
