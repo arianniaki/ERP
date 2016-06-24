@@ -2,6 +2,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ProjectEmployee.AuthenticatedEmployee;
 import ProjectEmployee.Employee;
@@ -33,8 +34,13 @@ public class Main {
 //			System.out.println("logged out");
 //		}
 		
-		// test resource
+		// test search resource
 //		ModuleCatalogue mcat = new ModuleCatalogue();
+//		HashMap <String,String> searchVars = new HashMap<String,String>();
+//		searchVars.put("modname", "\'"+"module4"+"\'");
+//		mcat.SearchResource(searchVars);
+		
+		
 //		System.out.println("all : ");
 //		mcat.readAllResources();
 //		mcat.addResource(6,2,"module 1");
@@ -50,7 +56,7 @@ public class Main {
 //		rscat.readAllResources();
 //
 //		InformationResourceCatalogue rscat = new InformationResourceCatalogue();
-		ResourceCatalogue rs = new ResourceCatalogue();
+//		ResourceCatalogue rs = new ResourceCatalogue();
 //		rs.readAllResources();
 //		System.out.println();
 //		rscat.addResource(90, 0, "temp");
@@ -78,7 +84,7 @@ public class Main {
 //
 		
 		//test project
-//		EmployeeCatalogue empcat = new EmployeeCatalogue();
+		EmployeeCatalogue empcat = new EmployeeCatalogue();
 //
 //		Employee emp = empcat.getEmployee(12);
 //
@@ -113,8 +119,11 @@ public class Main {
 //	    System.out.println(date.toString());
 		
 		//test resourcerequirement:
-//		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
-//		resreqCat.getResourceRequirements();
+		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+		ArrayList<ResourceRequirement> resreqs = resreqCat.getResourceRequirements();
+		for (int i = 0; i < resreqs.size(); i++) {
+			System.out.println(resreqs.get(i).toString());
+		}
 //		resreqCat.addResourceRequirement(2, 1, 7, "2016-01-02", "2016-01-03");
 //		resreqCat.getResourceRequirements();
 //		resreqCat.deleteResourceRequirement(2, 1, 7);
@@ -129,8 +138,14 @@ public class Main {
 //		projres.getProjectResourceUtilizations();
 //		projres.deleteProjectResourceUtilization(2, 1, 7);
 //		projres.getProjectResourceUtilizations();
-
 		
+		
+		//test sign up
+//		ArrayList<HashMap<String, String>> registered_users;
+
+//		registered_users=empcat.getRegistrations();
+
+//		empcat.makeDecision(5, false);
 		
 	}
 }

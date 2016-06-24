@@ -27,6 +27,26 @@ public class ProjectCatalogue {
 		return result;
 	}
 	
+	public Project getProject(int pid){
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("projid", Integer.toString(pid));
+		ResultSet res = DB.select(vars, "project");
+		EmployeeCatalogue empcat = new EmployeeCatalogue();
+		Project proj = null;
+		try {
+			if (res.next()) {
+				Employee manager = empcat.getEmployee(res.getInt("projectmanager"));
+				proj = new Project(res.getString("projname"), null, res.getString("size"), manager, res.getString("tech"));
+				proj.setId(pid);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return proj;
+
+	}
+	
 	public long addProject(String name, Employee manager) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("projname", "\'"+name+"\'");

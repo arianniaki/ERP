@@ -91,6 +91,8 @@ public class Table {
 				}else if (col.type.equals("date")) {
 					Date date = rs.getDate((col.name));
 					val.put(col.name, date.toString());
+				}else if (col.type.equals("character varying")){
+					val.put(col.name, rs.getString(col.name));
 				}
 			}
 			result.add(val);		

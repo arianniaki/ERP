@@ -17,19 +17,43 @@ public class Employee {
 	public boolean loggedin;
 	private String post;
 	private AccessRight accessRight;
+	private boolean is_confirmed;
 	DataBase DB;
 
 	public Employee() {
 		DB = new DataBase();
 	}
 	
+	public void editHuman(String name, int sectionId, String password, String post){
+		this.name = name;
+		this.sectionId = sectionId;
+		this.password = password;
+		this.post = post;
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("empname", "\'"+name+"\'");
+		setVars.put("sectionid", Integer.toString(sectionId));
+		setVars.put("password", "\'"+password+"\'");
+		setVars.put("post", "\'"+post+"\'");
+		submitToDB(setVars);
 
+	}
+
+	public void editEmployeeInformation(String name, String password){
+		this.name = name;
+		this.password = password;
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("empname", "\'"+name+"\'");
+		setVars.put("password", "\'"+password+"\'");
+		submitToDB(setVars);
+	}
+
+	
 	public boolean login(String username, String password) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("username", "\'"+username+"\'");
 		vars.put("password", "\'"+password+"\'");
 		System.out.println(vars.toString());
-		ResultSet results = DB.select(vars, "Employee");
+		ResultSet results = DB.select("Employee", vars, null);
 
 		boolean ret = false;
 		try {
@@ -143,7 +167,7 @@ public class Employee {
 	public boolean getFromDB(int empId){
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", Integer.toString(empId));
-		ResultSet rs = DB.select(vars, "Employee");
+		ResultSet rs = DB.select("Employee", vars, null);
 		try {
 			if (rs.next()) {
 				this.id = rs.getInt("empid");

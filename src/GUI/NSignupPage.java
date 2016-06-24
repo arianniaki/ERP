@@ -112,7 +112,7 @@ public class NSignupPage {
 			public void actionPerformed(ActionEvent e) {
 				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				String pass = new String(passwordField.getPassword());
-				empcat.addEmployee(14, false, nameField.getText(), "newuser",1 ,usernameField.getText(), pass ,false);
+				empcat.addEmployee(14, false, nameField.getText(), "newuser",1 ,usernameField.getText(), pass ,false,false);
 				empcat.readAllEmployees();
 				getSignupFrame().dispose();
 				NLoginPage loginpage = new NLoginPage();

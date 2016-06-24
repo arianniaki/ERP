@@ -6,6 +6,7 @@ import DataBase.DataBase;
 import ProjectEmployee.SubSystem.SubSystem;
 
 public class Project {
+	int pid;
 	DataBase DB;
 	String name;
 	String description;
@@ -15,6 +16,7 @@ public class Project {
 	Employee projectManager;
 	ArrayList<SubSystem> subSystems;
 	ArrayList<Employee> employees;
+	
 	
 	public Project(String name, String desc, String size, Employee manager, String tech){
 		DB = new DataBase();
@@ -27,6 +29,15 @@ public class Project {
 		subSystems = new ArrayList<>();
 		employees = new ArrayList<>();
 	}
+	
+	public void setId(int inputId) {
+		this.pid = inputId;
+	}
+
+	public int getId() {
+		return this.pid;
+	}
+
 	
 	public void editProject(String name, String desc, String size, Employee manager, String tech, boolean isComp, ArrayList<SubSystem> subs, ArrayList<Employee> emps){
 		this.name = name;

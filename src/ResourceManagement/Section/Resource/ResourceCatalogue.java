@@ -9,6 +9,9 @@ import DataBase.Column;
 import DataBase.DataBase;
 import DataBase.Table;
 import Report.Report;
+import ProjectEmployee.Employee;
+import ProjectEmployee.EmployeeCatalogue;
+import ProjectEmployee.Project;
 
 public class ResourceCatalogue {
 	DataBase DB;
@@ -28,6 +31,11 @@ public class ResourceCatalogue {
 		return result;
 	}
 
+	public Resource getResource (int rid){
+		Resource res = new Resource();		
+		res.getFromDB(rid);
+		return res;
+	}
 	public long addResource(String name) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 //		vars.put("rid", Integer.toString(rid));
@@ -59,4 +67,13 @@ public class ResourceCatalogue {
 		return rep;
 	}
 
+	public ArrayList<HashMap<String, String>> SearchResource(HashMap<String, String> searchvars){
+		
+		Table table = new Table(tableName);
+		ArrayList<HashMap<String, String>> result = table.search(searchvars);
+		for (int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i).toString());
+		}
+		return result;		
+	}
 }

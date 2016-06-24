@@ -37,6 +37,7 @@ import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
+import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
@@ -76,7 +77,8 @@ public class NUserPage {
 	private ArrayList<HashMap<String, String>> allprojects;
 	private ArrayList<HashMap<String, String>> allemployees;
 	private ArrayList<HashMap<String, String>> allsubsystems;
-	private ArrayList<HashMap<String, String>> allresourcerequirements;
+	private ArrayList<ResourceRequirement> allresourcerequirements;
+	private ArrayList<HashMap<String, String>> allregisteredusers;
 
 
 	
@@ -625,7 +627,7 @@ public class NUserPage {
 
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
 			System.out.println(allresourcerequirements.get(i));
-			requirementlistModel.addElement("" + allresourcerequirements.get(i).get("rid") + "\t" + allresourcerequirements.get(i).get("sid"));
+			requirementlistModel.addElement("" + allresourcerequirements.get(i).toString());
 		}
 		
 		
@@ -644,7 +646,7 @@ public class NUserPage {
 		requirement_table = new JTable(resreq_tableModel);
 
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
-			Object[] objs = { allresourcerequirements.get(i).get("rid"), allresourcerequirements.get(i).get("sid")};
+			Object[] objs = { allresourcerequirements.get(i).toString(), allresourcerequirements.get(i).toString()};
 			resreq_tableModel.addRow(objs);
 		}
 		
@@ -1632,10 +1634,39 @@ public class NUserPage {
 		if(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")  ){
 		tabbedPane.addTab("Report", null, reportPanel, null);
 		}		
+		
+		String[] allregisteredusers_columns = new String[] { "Id", "Name" };
+
+		final DefaultTableModel allregisteredusers_tableModel = new DefaultTableModel(allregisteredusers_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
+		final DefaultListModel<String> allregisteredlistModel = new DefaultListModel<String>();
+		final EmployeeCatalogue regempcat = new EmployeeCatalogue();
+		System.out.println("all registered: ");
+		allregisteredusers = regempcat.getRegistrations();
+
+		for (int i = 0; i < allregisteredusers.size(); i++) {
+			System.out.println(allregisteredusers.get(i));
+			allregisteredlistModel.addElement("" + allregisteredusers.get(i).get("empid"));
+		}
+		
+		
+
+		for (int i = 0; i <allregisteredusers.size(); i++) {
+			Object[] objs = { allregisteredusers.get(i).get("empid"), allregisteredusers.get(i).get("empname") };
+			allregisteredusers_tableModel.addRow(objs);
+		}
+		
+		
+		
 		JPanel RegisteredUserspanel = new JPanel();
-		if(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")  ){
+//		if(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")  ){
 		tabbedPane.addTab("Registered Users", null, RegisteredUserspanel, null);
-		}		
+//		}		
 		JScrollPane registered_scrollPane = new JScrollPane();
 		
 		JButton btnConfirm = new JButton("Confirm");
@@ -1666,7 +1697,8 @@ public class NUserPage {
 					.addGap(40))
 		);
 		
-		registered_table = new JTable();
+		registered_table = new JTable(allregisteredusers_tableModel);
+		
 		registered_scrollPane.setViewportView(registered_table);
 		RegisteredUserspanel.setLayout(gl_RegisteredUserspanel);
 		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight()
