@@ -755,6 +755,30 @@ public class NUserPage {
 		JButton human_btnEdit = new JButton("Edit");
 		human_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				int rowIndex = human_table.getSelectedRow();
+				int colIndex = human_table.getSelectedColumn();
+
+				String Table_click = (human_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
+				System.out.println(Table_click+" this was clicked");
+				EmployeeCatalogue empcat = new EmployeeCatalogue();
+				empcat.deleteEmployee(Integer.parseInt(Table_click));
+				
+				empcat.readAllEmployees();
+				allemployees.clear();
+				allemployees = empcat.readAllEmployees();
+				System.out.println(human_tableModel.getRowCount() + " ---");
+				int rowcount = human_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					human_tableModel.removeRow(j);
+				}
+				System.out.println(human_tableModel.getRowCount() + " ---");
+				for (int i = 0; i < allemployees.size(); i++) {
+					Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
+					human_tableModel.addRow(objs);
+				}
+				
+				
 			}
 		});
 
@@ -954,6 +978,31 @@ public class NUserPage {
 		});
 
 		JButton information_btnDelete = new JButton("Delete");
+		information_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int rowIndex = information_table.getSelectedRow();
+				int colIndex = information_table.getSelectedColumn();
+
+				String Table_click = (information_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
+				System.out.println(Table_click+" this was clicked");
+				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+				infocat.deleteResource(Integer.parseInt(Table_click));
+				
+				infocat.readAllResources();
+				allinformation.clear();
+				allinformation = infocat.readAllResources();
+				System.out.println(information_tableModel.getRowCount() + " ---");
+				int rowcount = information_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					information_tableModel.removeRow(j);
+				}
+				System.out.println(information_tableModel.getRowCount() + " ---");
+				for (int i = 0; i < allinformation.size(); i++) {
+					Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
+					information_tableModel.addRow(objs);
+				}
+			}
+		});
 		
 		search_informationname = new JTextField();
 		search_informationname.setColumns(10);
@@ -1196,6 +1245,34 @@ public class NUserPage {
 		financial_table_scrollPane.setViewportView(finan_table);
 
 		JButton financial_btnDelete = new JButton("Delete");
+		financial_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int rowIndex = finan_table.getSelectedRow();
+				int colIndex = finan_table.getSelectedColumn();
+
+				String Table_click = (finan_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
+				System.out.println(Table_click+" this was clicked");
+				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+				financat.deleteResource(Integer.parseInt(Table_click));
+				
+				financat.readAllResources();
+				allfinance.clear();
+				allfinance = financat.readAllResources();
+				System.out.println(financial_tableModel.getRowCount() + " ---");
+				int rowcount = financial_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					financial_tableModel.removeRow(j);
+				}
+				System.out.println(financial_tableModel.getRowCount() + " ---");
+				for (int i = 0; i < allfinance.size(); i++) {
+					Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
+					financial_tableModel.addRow(objs);
+				}
+				
+				
+			}
+		});
 		
 		search_financialname = new JTextField();
 		search_financialname.setColumns(10);
@@ -1487,6 +1564,34 @@ public class NUserPage {
 		});
 
 		JButton module_btnDelete = new JButton("Delete");
+		module_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int rowIndex = module_table.getSelectedRow();
+				int colIndex = module_table.getSelectedColumn();
+
+				String Table_click = (module_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
+				System.out.println(Table_click+" this was clicked");
+				ModuleCatalogue modcat = new ModuleCatalogue();
+				modcat.deleteResource(Integer.parseInt(Table_click));
+				
+				modcat.readAllResources();
+				allmodules.clear();
+				allmodules = modcat.readAllResources();
+				System.out.println(module_tableModel.getRowCount() + " ---");
+				int rowcount = module_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					module_tableModel.removeRow(j);
+				}
+				System.out.println(module_tableModel.getRowCount() + " ---");
+				for (int i = 0; i < allmodules.size(); i++) {
+					Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
+					module_tableModel.addRow(objs);
+				}
+				
+				
+			}
+		});
 		final JPanel maintaining_panel = new JPanel();
 
 		JButton btnViewMaintaning = new JButton("View Maintaning");
@@ -1834,6 +1939,31 @@ public class NUserPage {
 		});
 
 		JButton physical_btnDelete = new JButton("Delete");
+		physical_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int rowIndex = physical_table.getSelectedRow();
+				int colIndex = physical_table.getSelectedColumn();
+
+				String Table_click = (physical_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
+				System.out.println(Table_click+" this was clicked");
+				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+				physcat.deleteResource(Integer.parseInt(Table_click));
+				
+				physcat.readAllResources();
+				allphysicals.clear();
+				allphysicals = physcat.readAllResources();
+				System.out.println(phyiscal_tableModel.getRowCount() + " ---");
+				int rowcount = phyiscal_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					phyiscal_tableModel.removeRow(j);
+				}
+				System.out.println(phyiscal_tableModel.getRowCount() + " ---");
+				for (int i = 0; i < allphysicals.size(); i++) {
+					Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
+					phyiscal_tableModel.addRow(objs);
+				}
+			}
+		});
 		
 		search_physicalname = new JTextField();
 		search_physicalname.setColumns(10);
