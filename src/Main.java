@@ -2,6 +2,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ProjectEmployee.AuthenticatedEmployee;
 import ProjectEmployee.Employee;
@@ -76,7 +77,7 @@ public class Main {
 //
 		
 		//test project
-//		EmployeeCatalogue empcat = new EmployeeCatalogue();
+		EmployeeCatalogue empcat = new EmployeeCatalogue();
 //
 //		Employee emp = empcat.getEmployee(12);
 //
@@ -127,8 +128,14 @@ public class Main {
 //		projres.getProjectResourceUtilizations();
 //		projres.deleteProjectResourceUtilization(2, 1, 7);
 //		projres.getProjectResourceUtilizations();
-
 		
+		
+		//test sign up
+		ArrayList<HashMap<String, String>> registered_users;
+
+		registered_users=empcat.getRegistrations();
+
+		empcat.makeDecision(5, false);
 		
 	}
 }

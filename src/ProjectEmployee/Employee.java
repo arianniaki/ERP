@@ -17,6 +17,7 @@ public class Employee {
 	public boolean loggedin;
 	private String post;
 	private AccessRight accessRight;
+	private boolean is_confirmed;
 	DataBase DB;
 
 	public Employee() {
