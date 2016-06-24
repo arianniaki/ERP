@@ -102,6 +102,7 @@ public class NUserPage {
 	private JTextField search_informationname;
 	private JTextField search_humanname;
 	private JTextField search_physicalname;
+	private JTextField search_projectname;
 
 	/**
 	 * Launch the application.
@@ -1875,7 +1876,7 @@ public class NUserPage {
 			}
 		});
 
-		JButton projsearchBtn = new JButton("Search");
+		JButton project_btnSearch = new JButton("Search");
 
 		JScrollPane project_scrollPane = new JScrollPane();
 
@@ -1905,19 +1906,28 @@ public class NUserPage {
 
 			}
 		});
+		
+		search_projectname = new JTextField();
+		search_projectname.setColumns(10);
+		
+		JLabel lblProjectName = DefaultComponentFactory.getInstance().createLabel("Project Name");
 		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
 		gl_projectPanel.setHorizontalGroup(
-			gl_projectPanel.createParallelGroup(Alignment.TRAILING)
+			gl_projectPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_projectPanel.createSequentialGroup()
 					.addGap(40)
 					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
 					.addGap(40))
-				.addGroup(Alignment.LEADING, gl_projectPanel.createSequentialGroup()
-					.addGap(300)
-					.addComponent(projsearchBtn)
-					.addContainerGap(452, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, gl_projectPanel.createSequentialGroup()
+					.addContainerGap(517, Short.MAX_VALUE)
+					.addComponent(project_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblProjectName)
+					.addContainerGap())
 				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addContainerGap(581, Short.MAX_VALUE)
+					.addContainerGap(570, Short.MAX_VALUE)
 					.addComponent(viewsubsys_Btn)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(addprojectBtn))
@@ -1926,9 +1936,12 @@ public class NUserPage {
 			gl_projectPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_projectPanel.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(projsearchBtn)
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblProjectName)
+						.addComponent(project_btnSearch))
 					.addGap(74)
-					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
 					.addGap(11)
 					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(addprojectBtn)
