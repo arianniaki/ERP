@@ -35,7 +35,6 @@ public class EmployeeCatalogue {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("is_confirmed", "false");
-		System.out.println(vars.toString());
 		Table table = new Table("employee");
 		ArrayList<HashMap<String, String>> result = table.search(vars);
 		for (int i = 0; i < result.size(); i++) {
