@@ -42,4 +42,13 @@ public class ResourceCatalogue {
 		DB.delete(vars, "resource");
 	}
 
+	public ArrayList<HashMap<String, String>> SearchResource(HashMap<String, String> searchvars){
+		
+		Table table = new Table(tableName);
+		ArrayList<HashMap<String, String>> result = table.search(searchvars);
+		for (int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i).toString());
+		}
+		return result;		
+	}
 }

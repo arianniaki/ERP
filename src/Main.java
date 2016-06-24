@@ -32,8 +32,13 @@ public class Main {
 //			System.out.println("logged out");
 //		}
 		
-		// test resource
+		// test search resource
 //		ModuleCatalogue mcat = new ModuleCatalogue();
+//		HashMap <String,String> searchVars = new HashMap<String,String>();
+//		searchVars.put("modname", "\'"+"module4"+"\'");
+//		mcat.SearchResource(searchVars);
+		
+		
 //		System.out.println("all : ");
 //		mcat.readAllResources();
 //		mcat.addResource(6,2,"module 1");
@@ -49,7 +54,7 @@ public class Main {
 //		rscat.readAllResources();
 //
 //		InformationResourceCatalogue rscat = new InformationResourceCatalogue();
-		ResourceCatalogue rs = new ResourceCatalogue();
+//		ResourceCatalogue rs = new ResourceCatalogue();
 //		rs.readAllResources();
 //		System.out.println();
 //		rscat.addResource(90, 0, "temp");
@@ -131,11 +136,11 @@ public class Main {
 		
 		
 		//test sign up
-		ArrayList<HashMap<String, String>> registered_users;
+//		ArrayList<HashMap<String, String>> registered_users;
 
-		registered_users=empcat.getRegistrations();
+//		registered_users=empcat.getRegistrations();
 
-		empcat.makeDecision(5, false);
+//		empcat.makeDecision(5, false);
 		
 	}
 }
