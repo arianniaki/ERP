@@ -31,6 +31,7 @@ public class ProjectCatalogue {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("projid", Integer.toString(pid));
 		ResultSet res = DB.select("project", vars, null);
+
 		EmployeeCatalogue empcat = new EmployeeCatalogue();
 		Project proj = null;
 		try {
