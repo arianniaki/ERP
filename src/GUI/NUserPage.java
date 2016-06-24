@@ -37,6 +37,7 @@ import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
+import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
@@ -76,7 +77,7 @@ public class NUserPage {
 	private ArrayList<HashMap<String, String>> allprojects;
 	private ArrayList<HashMap<String, String>> allemployees;
 	private ArrayList<HashMap<String, String>> allsubsystems;
-	private ArrayList<HashMap<String, String>> allresourcerequirements;
+	private ArrayList<ResourceRequirement> allresourcerequirements;
 	private ArrayList<HashMap<String, String>> allregisteredusers;
 
 
@@ -626,7 +627,8 @@ public class NUserPage {
 
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
 			System.out.println(allresourcerequirements.get(i));
-			requirementlistModel.addElement("" + allresourcerequirements.get(i).get("rid") + "\t" + allresourcerequirements.get(i).get("sid"));
+			requirementlistModel.addElement("" + allresourcerequirements.get(i).toString());
+//			requirementlistModel.addElement("" + allresourcerequirements.get(i).get("rid") + "\t" + allresourcerequirements.get(i).get("sid"));
 		}
 		
 		
@@ -645,7 +647,7 @@ public class NUserPage {
 		requirement_table = new JTable(resreq_tableModel);
 
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
-			Object[] objs = { allresourcerequirements.get(i).get("rid"), allresourcerequirements.get(i).get("sid")};
+			Object[] objs = { allresourcerequirements.get(i).toString(), allresourcerequirements.get(i).toString()};
 			resreq_tableModel.addRow(objs);
 		}
 		
