@@ -627,7 +627,7 @@ public class NUserPage {
 
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
 			System.out.println(allresourcerequirements.get(i));
-			requirementlistModel.addElement("" + allresourcerequirements.get(i).toString());
+			requirementlistModel.addElement("" + allresourcerequirements.get(i).toHashMap().get("rid"));
 		}
 		
 		
@@ -646,7 +646,7 @@ public class NUserPage {
 		requirement_table = new JTable(resreq_tableModel);
 
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
-			Object[] objs = { allresourcerequirements.get(i).toString(), allresourcerequirements.get(i).toString()};
+			Object[] objs = { allresourcerequirements.get(i).toHashMap().get("rid"), allresourcerequirements.get(i).toHashMap().get("pid")};
 			resreq_tableModel.addRow(objs);
 		}
 		
