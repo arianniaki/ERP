@@ -14,9 +14,11 @@ import javax.swing.JPanel;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 import GUI.Form.Field;
+import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
 import ProjectEmployee.Employee;
+import ProjectEmployee.EmployeeCatalogue;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -62,97 +64,118 @@ public class NLoginPage {
 		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		SpringLayout springLayout = new SpringLayout();
 		loginFrame.getContentPane().setLayout(springLayout);
-		
+
 		username = new JTextField();
 		springLayout.putConstraint(SpringLayout.SOUTH, username, -183, SpringLayout.SOUTH, loginFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, username, -139, SpringLayout.EAST, loginFrame.getContentPane());
 		loginFrame.getContentPane().add(username);
 		username.setColumns(10);
-		
+
 		passwordField = new JPasswordField();
 		springLayout.putConstraint(SpringLayout.NORTH, passwordField, 16, SpringLayout.SOUTH, username);
-		springLayout.putConstraint(SpringLayout.WEST, passwordField, 135, SpringLayout.WEST, loginFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, passwordField, 135, SpringLayout.WEST,
+				loginFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, passwordField, 0, SpringLayout.EAST, username);
 		loginFrame.getContentPane().add(passwordField);
-		
+
 		final JLabel lblLoginFailed = DefaultComponentFactory.getInstance().createLabel("Login Failed");
-		springLayout.putConstraint(SpringLayout.NORTH, lblLoginFailed, 97, SpringLayout.NORTH, loginFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, lblLoginFailed, 97, SpringLayout.NORTH,
+				loginFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, lblLoginFailed, 30, SpringLayout.EAST, passwordField);
 		lblLoginFailed.setForeground(Color.RED);
 		lblLoginFailed.setVisible(false);
 		loginFrame.getContentPane().add(lblLoginFailed);
-		
+
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblLoginFailed.setVisible(false);
 
-				 Employee emp = new Employee();
-				 String pass = new String(passwordField.getPassword());
-					if(!(emp.login(username.getText(),pass))){
-						System.out.println("pass false");
-						lblLoginFailed.setVisible(true);
+				Employee emp = new Employee();
+				String pass = new String(passwordField.getPassword());
+				if (!(emp.login(username.getText(), pass))) {
+					System.out.println("pass false");
+					lblLoginFailed.setVisible(true);
 
-					}else{
-						NUserPage userpageWindow = new NUserPage();
-						
-//						UserPage userpage = new UserPage(emp);
-						userpageWindow.getUserpageFrame().setVisible(true);
-						loginFrame.dispose();
-					}
-					}
+				} else {
+					NUserPage userpageWindow = new NUserPage();
+
+					// UserPage userpage = new UserPage(emp);
+					userpageWindow.getUserpageFrame().setVisible(true);
+					loginFrame.dispose();
+				}
+			}
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, btnLogin, 6, SpringLayout.SOUTH, passwordField);
 		springLayout.putConstraint(SpringLayout.EAST, btnLogin, 0, SpringLayout.EAST, username);
 		loginFrame.getContentPane().add(btnLogin);
-		
+
 		JButton btnSignUp = new JButton("Sign up");
 		btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				ArrayList<Field> signupFields = new ArrayList<Field>();
-				signupFields.add(new Field("text","email","",10,"email"));
-				signupFields.add( new Field("text","username","",10,"username"));
-				signupFields.add( new Field("text","name","",10,"name"));
-				
-				signupFields.add(new Field("text","lastname","",10,"lastname"));
-				signupFields.add(new Field("text","password","",10,"password"));
-				signupFields.add(new Field("text","repeat password","",10,"repassword"));
 
-				Form signupForm = new Form(signupFields,"Sign up Form");
-				PanelBuilder signupPanel = new PanelBuilder(signupForm);
+				ArrayList<Field> signupFields = new ArrayList<Field>();
+				signupFields.add(new Field("text", "email", "", 10, "email"));
+				signupFields.add(new Field("text", "username", "", 10, "username"));
+				signupFields.add(new Field("text", "name", "", 10, "name"));
+
+				signupFields.add(new Field("text", "lastname", "", 10, "lastname"));
+				signupFields.add(new Field("text", "password", "", 10, "password"));
+				signupFields.add(new Field("text", "repeat password", "", 10, "repassword"));
+
+				Form signupForm = new Form(signupFields, "Sign up Form");
+				final PanelBuilder signupPanel = new PanelBuilder(signupForm);
 				signupPanel.makeForm();
-				JFrame SignupPage= new JFrame("Sign up Form");
-				SignupPage.getContentPane().add(signupPanel.getJPanel(),BorderLayout.NORTH);
-				
+				JFrame SignupPage = new JFrame("Sign up Form");
+				SignupPage.getContentPane().add(signupPanel.getJPanel(), BorderLayout.NORTH);
+
 				JButton submit = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
-    		    buttonPanel.add(submit);
-    		    SignupPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				buttonPanel.add(submit);
+				SignupPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
 				SignupPage.pack();
 				SignupPage.setVisible(true);
-//				NSignupPage signupWindow = new NSignupPage();
-//				signupWindow.getSignupFrame().setVisible(true);
+				// NSignupPage signupWindow = new NSignupPage();
+				// signupWindow.getSignupFrame().setVisible(true);
+				submit.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < signupPanel.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) signupPanel.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + "adasa");
+						}
+						EmployeeCatalogue empcat = new EmployeeCatalogue();
+						//++section e default mikhaim ke badan avaz she
+//						empcat.addEmployee( false, inputs.get(2)+""+inputs.get(3), "Default post", 1, inputs.get(1), inputs.get(4), false, false);
+						System.out.println("Employee added");
+					}
+				});
 			}
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, btnSignUp, 6, SpringLayout.SOUTH, passwordField);
 		springLayout.putConstraint(SpringLayout.EAST, btnSignUp, -6, SpringLayout.WEST, btnLogin);
 		loginFrame.getContentPane().add(btnSignUp);
-		
+
 		JLabel lblUsername = DefaultComponentFactory.getInstance().createLabel("Username");
-		springLayout.putConstraint(SpringLayout.EAST, lblUsername, -340, SpringLayout.EAST, loginFrame.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, lblUsername, -340, SpringLayout.EAST,
+				loginFrame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, username, 25, SpringLayout.EAST, lblUsername);
 		springLayout.putConstraint(SpringLayout.NORTH, lblUsername, 6, SpringLayout.NORTH, username);
 		loginFrame.getContentPane().add(lblUsername);
-		
+
 		JLabel lblPassword = DefaultComponentFactory.getInstance().createLabel("Password");
 		springLayout.putConstraint(SpringLayout.NORTH, lblPassword, 6, SpringLayout.NORTH, passwordField);
 		springLayout.putConstraint(SpringLayout.WEST, lblPassword, 0, SpringLayout.WEST, lblUsername);
 		loginFrame.getContentPane().add(lblPassword);
-		
-	
+
 	}
+
 	public JFrame getloginpageFrame() {
 		return loginFrame;
 	}
