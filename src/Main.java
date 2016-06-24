@@ -17,16 +17,18 @@ import ResourceManagement.Section.Resource.*;
 public class Main {
 	public static void main(String[] args) throws ParseException {
 		// test employee
-		Employee emp = new Employee();
+		/*Employee emp = new Employee();
 		if((emp.login("ali","123"))){
 			System.out.println("huraaa" + AuthenticatedEmployee.getInstance().getEmployee().getUsername());
 		}else{
 			System.out.println("shit");
-		}
+		}*/
+		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+		physResCat.getReport().printRep();
 		
-		Employee gholam = new Employee();
-		gholam.getFromDB(1);
-		gholam.setAccessRight(1);
+		//Employee gholam = new Employee();
+		//gholam.getFromDB(1);
+		//gholam.setAccessRight(1);
 		
 //		if(emp.logout()){
 //			System.out.println("logged out");

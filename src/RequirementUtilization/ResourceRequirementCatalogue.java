@@ -49,7 +49,7 @@ public class ResourceRequirementCatalogue{
 		vars.put("sid", Integer.toString(sid));
 		vars.put("pid", Integer.toString(pid));
 
-		ResultSet res = DB.select(vars, "resourcerequirement");
+		ResultSet res = DB.select("resourcerequirement",vars,null);
 
 		
 		ProjectCatalogue pcat = new ProjectCatalogue();

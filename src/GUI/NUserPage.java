@@ -628,7 +628,6 @@ public class NUserPage {
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
 			System.out.println(allresourcerequirements.get(i));
 			requirementlistModel.addElement("" + allresourcerequirements.get(i).toString());
-//			requirementlistModel.addElement("" + allresourcerequirements.get(i).get("rid") + "\t" + allresourcerequirements.get(i).get("sid"));
 		}
 		
 		

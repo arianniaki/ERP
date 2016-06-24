@@ -36,7 +36,7 @@ public class Resource{
 	public boolean getFromDB(int rid){
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(rid));
-		ResultSet rs = DB.select(vars, tableName);
+		ResultSet rs = DB.select(tableName, vars, null);
 		try {
 			if (rs.next()) {
 				this.id = rs.getInt("rid");

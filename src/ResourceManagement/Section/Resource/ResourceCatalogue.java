@@ -8,6 +8,7 @@ import java.util.HashMap;
 import DataBase.Column;
 import DataBase.DataBase;
 import DataBase.Table;
+import Report.Report;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
@@ -48,6 +49,22 @@ public class ResourceCatalogue {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(id));
 		DB.delete(vars, "resource");
+	}
+	
+	public Report getReport(){
+		Report rep = new Report();
+		Table table = new Table(tableName);
+		ArrayList<HashMap<String,String>> results = table.getReportTable();
+		rep.setResults(results);
+		for(int i=0; i<results.size(); i++){
+			String line="";
+			for(String key : results.get(i).keySet()){
+				line+= results.get(i).get(key).toString()+", ";
+			}
+			line = line.substring(0, line.length() - 2);
+			rep.addLine(line);
+		}
+		return rep;
 	}
 
 	public ArrayList<HashMap<String, String>> SearchResource(HashMap<String, String> searchvars){

@@ -53,7 +53,7 @@ public class Employee {
 		vars.put("username", "\'"+username+"\'");
 		vars.put("password", "\'"+password+"\'");
 		System.out.println(vars.toString());
-		ResultSet results = DB.select(vars, "Employee");
+		ResultSet results = DB.select("Employee", vars, null);
 
 		boolean ret = false;
 		try {
@@ -167,7 +167,7 @@ public class Employee {
 	public boolean getFromDB(int empId){
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", Integer.toString(empId));
-		ResultSet rs = DB.select(vars, "Employee");
+		ResultSet rs = DB.select("Employee", vars, null);
 		try {
 			if (rs.next()) {
 				this.id = rs.getInt("empid");

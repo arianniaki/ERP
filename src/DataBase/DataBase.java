@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DataBase {
@@ -54,7 +55,7 @@ public class DataBase {
 
 	}
 
-	public ResultSet select(HashMap<String, String> vars, String tableName) {
+	public ResultSet select(String tableName, HashMap<String, String> vars, ArrayList<String> groupBy) {
 		try {
 			Class.forName("org.postgresql.Driver");
 			c = DriverManager.getConnection(
@@ -62,15 +63,30 @@ public class DataBase {
 					"123456m.");
 			c.setAutoCommit(false);
 			System.out.println("select : Opened database successfully");
-
 			stmt = c.createStatement();
-			String sql = "SELECT * FROM " + tableName + " where ";
-			for (String key : vars.keySet()) {
-				sql += key + "=" + vars.get(key) + " AND ";
+			String sql = new String();
+			if(groupBy!=null){
+				sql = "SELECT "+groupBy.get(0)+", sid, count(*) FROM "+tableName;
 			}
-			sql = sql.substring(0, sql.length() - 5) + ";";
-			System.out.println(sql);
+			else{
+				sql = "SELECT * FROM " + tableName;
+			}
+			if(vars!=null){
+				sql += " where ";
+				for (String key : vars.keySet()) {
+					sql += key + "=" + vars.get(key) + " AND ";
+				}
+				sql = sql.substring(0, sql.length() - 5);
+			}
+			if(groupBy!=null){
+				sql += " group by ";
+				for (int i=0; i<groupBy.size(); i++)
+					sql += groupBy.get(i) + ", ";
+				sql = sql.substring(0, sql.length() - 2);
+			}
+			sql+=";";
 			ResultSet rs = stmt.executeQuery(sql);
+			
 			// stmt.close();
 			// c.close();
 			return rs;
@@ -137,28 +153,6 @@ public class DataBase {
 			return null;
 		}
 
-
-	}
-	
-	public ResultSet selectAll(String tableName) {
-		try {
-			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection(dbName, user, pass);
-
-			c.setAutoCommit(false);
-			System.out.println("SelectAll : Opened database successfully");
-
-			stmt = c.createStatement();
-			ResultSet rs = stmt
-					.executeQuery("SELECT * FROM " + tableName + ";");
-			
-			return rs;
-
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-			return null;
-		}
 
 	}
 
