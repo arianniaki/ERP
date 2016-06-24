@@ -903,7 +903,53 @@ public class NUserPage {
 		information_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// System.out.println(information_tableModel.getDataVector().elementAt(information_table.getSelectedRow()).toString().contains("1"));
+				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
+				information_moduleFields.add(new Field("text", "infosname", "", 20, "name"));
 
+				Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
+				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
+				information_modulePanel.makeForm();
+				JFrame Add_InformationModulePage = new JFrame("Edit Information Module Form");
+				Add_InformationModulePage.getContentPane().add(information_modulePanel.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitaddinformationmoduleBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddinformationmoduleBtn);
+				Add_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Add_InformationModulePage.pack();
+				Add_InformationModulePage.setVisible(true);
+
+				submitaddinformationmoduleBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+						System.out.println("all : ");
+						infocat.readAllResources();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < information_modulePanel.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) information_modulePanel.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + " information");
+						}
+//						infocat.addResource((inputs.get(0)));
+//						// tu resource ham bayad insert she
+//						allinformation.clear();
+//						allinformation = infocat.readAllResources();
+//						System.out.println(information_tableModel.getRowCount() + " ---");
+//						int rowcount = information_tableModel.getRowCount();
+//						for (int j = rowcount - 1; j >= 0; j--) {
+//							information_tableModel.removeRow(j);
+//						}
+//						System.out.println(information_tableModel.getRowCount() + " ---");
+//						for (int i = 0; i < allinformation.size(); i++) {
+//							Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
+//							information_tableModel.addRow(objs);
+//						}
+					}
+				});
 			}
 		});
 
@@ -1073,6 +1119,59 @@ public class NUserPage {
 		resourcesTab.addTab("Financial", null, financialPanel, null);
 		JButton btnAddFinancial = new JButton("Add Financial Resource");
 		JButton financial_btnEdit = new JButton("Edit");
+		financial_btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
+				information_moduleFields.add(new Field("text", "infosname", "", 20, "name"));
+
+				Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
+				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
+				information_modulePanel.makeForm();
+				JFrame Add_InformationModulePage = new JFrame("Edit Information Module Form");
+				Add_InformationModulePage.getContentPane().add(information_modulePanel.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitaddinformationmoduleBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddinformationmoduleBtn);
+				Add_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Add_InformationModulePage.pack();
+				Add_InformationModulePage.setVisible(true);
+
+				submitaddinformationmoduleBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+						System.out.println("all : ");
+						infocat.readAllResources();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < information_modulePanel.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) information_modulePanel.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + " information");
+						}
+//						infocat.addResource((inputs.get(0)));
+//						// tu resource ham bayad insert she
+//						allinformation.clear();
+//						allinformation = infocat.readAllResources();
+//						System.out.println(information_tableModel.getRowCount() + " ---");
+//						int rowcount = information_tableModel.getRowCount();
+//						for (int j = rowcount - 1; j >= 0; j--) {
+//							information_tableModel.removeRow(j);
+//						}
+//						System.out.println(information_tableModel.getRowCount() + " ---");
+//						for (int i = 0; i < allinformation.size(); i++) {
+//							Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
+//							information_tableModel.addRow(objs);
+//						}
+					}
+				});
+				
+			}
+		});
 
 		for (int i = 0; i < allfinance.size(); i++) {
 			financiallistModel.addElement("" + allfinance.get(i).get("finanname"));
@@ -1331,6 +1430,61 @@ public class NUserPage {
 		JScrollPane module_scrollPane = new JScrollPane();
 
 		JButton module_btnEdit = new JButton("Edit");
+		module_btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Field> moduleFields = new ArrayList<Field>();
+				moduleFields.add(new Field("text", "name", "", 10, "name"));
+
+				Form moduleForm = new Form(moduleFields, "Module Form");
+				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
+				modulePanel.makeForm();
+				JFrame AddModulePage = new JFrame("Edit Module Form");
+				AddModulePage.getContentPane().add(modulePanel.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitaddmoduleBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddmoduleBtn);
+				AddModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				AddModulePage.pack();
+				AddModulePage.setVisible(true);
+
+				submitaddmoduleBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						ModuleCatalogue mcat = new ModuleCatalogue();
+						System.out.println("all : ");
+						mcat.readAllResources();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < modulePanel.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) modulePanel.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + "adasa");
+						}
+//						mcat.addResource((inputs.get(0)));
+//						// tu resource ham bayad insert she
+//						allmodules.clear();
+//						allmodules = mcat.readAllResources();
+//						System.out.println(module_tableModel.getRowCount() + " ---");
+//						int rowcount = module_tableModel.getRowCount();
+//						for (int j = rowcount - 1; j >= 0; j--) {
+//							System.out.println(j);
+//							module_tableModel.removeRow(j);
+//						}
+//						System.out.println(module_tableModel.getRowCount() + " ---");
+//						for (int i = 0; i < allmodules.size(); i++) {
+//							Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
+//							module_tableModel.addRow(objs);
+//						}
+					}
+				});
+
+
+			}
+		});
 
 		JButton module_btnDelete = new JButton("Delete");
 		final JPanel maintaining_panel = new JPanel();
@@ -1617,6 +1771,67 @@ public class NUserPage {
 		JScrollPane physical_scrollPane = new JScrollPane();
 
 		JButton physical_btnEdit = new JButton("Edit");
+		physical_btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			//
+				int rowIndex = physical_table.getSelectedRow();
+				int colIndex = physical_table.getSelectedColumn();
+
+				String Table_click = (physical_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
+				System.out.println(Table_click+" this was clicked");
+
+				
+				
+				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
+				physical_moduleFields.add(new Field("text", "physname", "", 20, "name"));
+
+				Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
+				final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
+				physical_modulePanel.makeForm();
+				JFrame Edit_PhysicalModulePage = new JFrame("Edit Physical Module Form");
+				Edit_PhysicalModulePage.getContentPane().add(physical_modulePanel.getJPanel(), BorderLayout.NORTH);
+
+				JButton submiteditphysicalmoduleBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submiteditphysicalmoduleBtn);
+				Edit_PhysicalModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Edit_PhysicalModulePage.pack();
+				Edit_PhysicalModulePage.setVisible(true);
+				
+				submiteditphysicalmoduleBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+						System.out.println("all : ");
+						physcat.readAllResources();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < physical_modulePanel.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) physical_modulePanel.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + " physical");
+						}
+//						physcat.addResource((inputs.get(0)));
+//						// tu resource ham bayad insert she
+//						allphysicals.clear();
+//						allphysicals = physcat.readAllResources();
+//						System.out.println(phyiscal_tableModel.getRowCount() + " ---");
+//						int rowcount = phyiscal_tableModel.getRowCount();
+//						for (int j = rowcount - 1; j >= 0; j--) {
+//							phyiscal_tableModel.removeRow(j);
+//						}
+//						System.out.println(phyiscal_tableModel.getRowCount() + " ---");
+//						for (int i = 0; i < allphysicals.size(); i++) {
+//							Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
+//							phyiscal_tableModel.addRow(objs);
+//						}						
+					}
+				});
+				
+			}
+		});
 
 		JButton physical_btnDelete = new JButton("Delete");
 		
