@@ -117,8 +117,11 @@ public class Main {
 //	    System.out.println(date.toString());
 		
 		//test resourcerequirement:
-//		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
-//		resreqCat.getResourceRequirements();
+		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+		ArrayList<ResourceRequirement> resreqs = resreqCat.getResourceRequirements();
+		for (int i = 0; i < resreqs.size(); i++) {
+			System.out.println(resreqs.get(i).toString());
+		}
 //		resreqCat.addResourceRequirement(2, 1, 7, "2016-01-02", "2016-01-03");
 //		resreqCat.getResourceRequirements();
 //		resreqCat.deleteResourceRequirement(2, 1, 7);

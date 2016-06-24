@@ -6,6 +6,7 @@ import ProjectEmployee.SubSystem.SubSystem;
 
 public class Section {
 
+	int sid;
 	String name;
 	ArrayList<SubSystem> subSystems;
 	
@@ -14,6 +15,14 @@ public class Section {
 		subSystems = new ArrayList<SubSystem>();
 	}
 	
+	public void setId(int inputId) {
+		this.sid = inputId;
+	}
+
+	public int getId() {
+		return this.sid;
+	}
+
 	public void addSubSystem(SubSystem sub){
 		subSystems.add(sub);
 	}

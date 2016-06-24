@@ -8,6 +8,9 @@ import java.util.HashMap;
 import DataBase.Column;
 import DataBase.DataBase;
 import DataBase.Table;
+import ProjectEmployee.Employee;
+import ProjectEmployee.EmployeeCatalogue;
+import ProjectEmployee.Project;
 
 public class ResourceCatalogue {
 	DataBase DB;
@@ -27,6 +30,11 @@ public class ResourceCatalogue {
 		return result;
 	}
 
+	public Resource getResource (int rid){
+		Resource res = new Resource();		
+		res.getFromDB(rid);
+		return res;
+	}
 	public long addResource(String name) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 //		vars.put("rid", Integer.toString(rid));

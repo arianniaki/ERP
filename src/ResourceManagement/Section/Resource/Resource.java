@@ -14,6 +14,7 @@ public class Resource{
 	
 	public Resource(){
 		DB = new DataBase();
+		tableName = "resource";
 	}
 	
 	public void setId(int inputId) {
@@ -50,6 +51,14 @@ public class Resource{
 			return false;
 		}
 	}
+	
+	public void editResource(String name){
+		this.name = name;
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("rname", "\'"+name+"\'");
+		submitToDB(setVars);
+	}
+
 
 	public void submitToDB(HashMap<String, String> setVars) {
 		HashMap<String, String> condVars = new HashMap<String, String>();

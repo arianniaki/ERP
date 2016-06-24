@@ -1,10 +1,18 @@
 package RequirementUtilization;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import DataBase.DataBase;
 import DataBase.Table;
+import ProjectEmployee.Project;
+import ProjectEmployee.ProjectCatalogue;
+import ResourceManagement.Section.Section;
+import ResourceManagement.Section.SectionCatalogue;
+import ResourceManagement.Section.Resource.Resource;
+import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 public class ResourceRequirementCatalogue{
 	
@@ -16,13 +24,50 @@ public class ResourceRequirementCatalogue{
 		tableName = "resourcerequirement";
 	}
 	
-	public ArrayList<HashMap<String, String>> getResourceRequirements() {
+	public ArrayList<ResourceRequirement> getResourceRequirements() {
+		ArrayList<ResourceRequirement> resReqs = new ArrayList<ResourceRequirement>();
 		Table table = new Table(tableName);
 		ArrayList<HashMap<String, String>> result = table.readAll();
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
+			ProjectCatalogue pcat = new ProjectCatalogue();
+			SectionCatalogue scat = new SectionCatalogue();
+			ResourceCatalogue rcat = new ResourceCatalogue();
+			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("pid")));
+			Section sc = scat.getSection(Integer.parseInt(result.get(i).get("sid")));
+			Resource rs = rcat.getResource(Integer.parseInt(result.get(i).get("rid")));
+			ResourceRequirement rr = new ResourceRequirement(pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"));
+			resReqs.add(rr);
 		}
-		return result;
+		return resReqs;
+	}
+	
+	public ResourceRequirement getResourceRequirement(int rid, int pid, int sid){
+		
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("rid", Integer.toString(rid));
+		vars.put("sid", Integer.toString(sid));
+		vars.put("pid", Integer.toString(pid));
+
+		ResultSet res = DB.select(vars, "resourcerequirement");
+
+		
+		ProjectCatalogue pcat = new ProjectCatalogue();
+		SectionCatalogue scat = new SectionCatalogue();
+		ResourceCatalogue rcat = new ResourceCatalogue();
+		ResourceRequirement rr = null;
+		Project pr;
+		try {
+			pr = pcat.getProject(res.getInt("pid"));
+			Section sc = scat.getSection(res.getInt("sid"));
+			Resource rs = rcat.getResource(res.getInt("rid"));
+			rr = new ResourceRequirement(pr, sc, rs, res.getString("fromdate"), res.getString("todate"));
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rr;
 	}
 	
 	public long addResourceRequirement(int rid, int sid, int pid, String from, String to) {

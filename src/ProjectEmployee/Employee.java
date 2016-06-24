@@ -24,7 +24,30 @@ public class Employee {
 		DB = new DataBase();
 	}
 	
+	public void editHuman(String name, int sectionId, String password, String post){
+		this.name = name;
+		this.sectionId = sectionId;
+		this.password = password;
+		this.post = post;
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("empname", "\'"+name+"\'");
+		setVars.put("sectionid", Integer.toString(sectionId));
+		setVars.put("password", "\'"+password+"\'");
+		setVars.put("post", "\'"+post+"\'");
+		submitToDB(setVars);
 
+	}
+
+	public void editEmployeeInformation(String name, String password){
+		this.name = name;
+		this.password = password;
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("empname", "\'"+name+"\'");
+		setVars.put("password", "\'"+password+"\'");
+		submitToDB(setVars);
+	}
+
+	
 	public boolean login(String username, String password) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("username", "\'"+username+"\'");

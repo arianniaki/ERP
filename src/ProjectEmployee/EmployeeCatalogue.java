@@ -43,6 +43,7 @@ public class EmployeeCatalogue {
 		return result;
 
 	}
+	
 
 	public ArrayList<HashMap<String, String>> readAllEmployees() {
 		Table table = new Table("employee");
