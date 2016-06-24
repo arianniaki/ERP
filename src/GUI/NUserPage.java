@@ -956,28 +956,31 @@ public class NUserPage {
 		JButton financial_btnDelete = new JButton("Delete");
 
 		GroupLayout gl_financialPanel = new GroupLayout(financialPanel);
-		gl_financialPanel
-				.setHorizontalGroup(gl_financialPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_financialPanel.createSequentialGroup()
-								.addComponent(financial_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(financial_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(461).addComponent(btnAddFinancial))
-						.addGroup(gl_financialPanel.createSequentialGroup().addGap(30)
-								.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
-										Short.MAX_VALUE)
-								.addGap(30)));
-		gl_financialPanel
-				.setVerticalGroup(gl_financialPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_financialPanel.createSequentialGroup().addContainerGap()
-								.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(btnAddFinancial).addComponent(financial_btnEdit)
-										.addComponent(financial_btnDelete))
-								.addGap(30).addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 374,
-										Short.MAX_VALUE)
-								.addGap(30)));
+		gl_financialPanel.setHorizontalGroup(
+			gl_financialPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_financialPanel.createSequentialGroup()
+					.addComponent(financial_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(financial_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 450, Short.MAX_VALUE)
+					.addComponent(btnAddFinancial))
+				.addGroup(gl_financialPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
+					.addGap(30))
+		);
+		gl_financialPanel.setVerticalGroup(
+			gl_financialPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_financialPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(financial_btnEdit)
+						.addComponent(financial_btnDelete)
+						.addComponent(btnAddFinancial))
+					.addGap(30)
+					.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+					.addGap(30))
+		);
 
 		financialPanel.setLayout(gl_financialPanel);
 		btnAddFinancial.addActionListener(new ActionListener() {
