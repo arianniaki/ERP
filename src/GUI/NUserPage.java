@@ -1670,8 +1670,58 @@ public class NUserPage {
 		JScrollPane registered_scrollPane = new JScrollPane();
 		
 		JButton btnConfirm = new JButton("Confirm");
+		btnConfirm.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				System.out.println("-----");
+			    int rowIndex = registered_table.getSelectedRow();
+			    int colIndex = registered_table.getSelectedColumn();
+
+			    String Table_click = (registered_table.getModel().getValueAt(rowIndex, 0).toString()); //return the thing in the 0st column
+			    System.out.println(Table_click);
+			    regempcat.makeDecision(Integer.parseInt(Table_click), true);
+			    regempcat.readAllEmployees();
+				int rowcount= allregisteredusers_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					allregisteredusers_tableModel.removeRow(j);
+				}
+				allregisteredusers = regempcat.getRegistrations();
+				for (int i = 0; i < allregisteredusers.size(); i++) {
+					Object[] objs = { allregisteredusers.get(i).get("empid"), allregisteredusers.get(i).get("empname") };
+					allregisteredusers_tableModel.addRow(objs);
+				}
+				
+			    
+				
+			}
+		});
 		
 		JButton btnDeny = new JButton("Deny");
+		btnDeny.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("-----");
+			    int rowIndex = registered_table.getSelectedRow();
+			    int colIndex = registered_table.getSelectedColumn();
+
+			    String Table_click = (registered_table.getModel().getValueAt(rowIndex, 0).toString()); //return the thing in the 0st column
+			    System.out.println(Table_click);
+			    regempcat.makeDecision(Integer.parseInt(Table_click), false);
+			    regempcat.readAllEmployees();
+				int rowcount= allregisteredusers_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					allregisteredusers_tableModel.removeRow(j);
+				}
+				allregisteredusers = regempcat.getRegistrations();
+				for (int i = 0; i < allregisteredusers.size(); i++) {
+					Object[] objs = { allregisteredusers.get(i).get("empid"), allregisteredusers.get(i).get("empname") };
+					allregisteredusers_tableModel.addRow(objs);
+				}
+				
+			    				
+			}
+		});
 		GroupLayout gl_RegisteredUserspanel = new GroupLayout(RegisteredUserspanel);
 		gl_RegisteredUserspanel.setHorizontalGroup(
 			gl_RegisteredUserspanel.createParallelGroup(Alignment.LEADING)
