@@ -626,7 +626,7 @@ public class NUserPage {
 			requirementlistModel.addElement("" + allresourcerequirements.get(i).toHashMap().get("rid"));
 		}
 
-		String[] resreq_columns = new String[] { "rid", "sid" };
+		String[] resreq_columns = new String[] { "rid", "sid" ,"pid"};
 
 		final DefaultTableModel resreq_tableModel = new DefaultTableModel(resreq_columns, 0) {
 			@Override
@@ -640,7 +640,7 @@ public class NUserPage {
 
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
 			Object[] objs = { allresourcerequirements.get(i).toHashMap().get("rid"),
-					allresourcerequirements.get(i).toHashMap().get("pid") };
+							allresourcerequirements.get(i).toHashMap().get("sid"),allresourcerequirements.get(i).toHashMap().get("pid"), };
 			resreq_tableModel.addRow(objs);
 		}
 
