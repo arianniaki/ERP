@@ -26,5 +26,10 @@ public class Section {
 	public void addSubSystem(SubSystem sub){
 		subSystems.add(sub);
 	}
+
+	public String getName() {
+		// TODO Auto-generated method stub
+		return this.name;
+	}
 	
 }

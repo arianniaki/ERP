@@ -25,7 +25,12 @@ public class Main {
 		}*/
 		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
 		physResCat.getReport().printRep();
-		
+		System.out.println("This is Resource Requirement Report:");
+		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
+		ProjectCatalogue projCat = new ProjectCatalogue();
+		Project proj = projCat.getProject(1);
+		resReqCat.getReport(proj).printRep();
+		System.out.println("Yay! ");
 		//Employee gholam = new Employee();
 		//gholam.getFromDB(1);
 		//gholam.setAccessRight(1);

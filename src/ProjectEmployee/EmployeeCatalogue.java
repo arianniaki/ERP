@@ -81,7 +81,7 @@ public class EmployeeCatalogue {
 		Employee emp = new Employee();
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", Integer.toString(empid));
-		ResultSet res = DB.select(vars, "employee");
+		ResultSet res = DB.select("employee",vars,null);
 		try {
 			if (res.next()) {
 				emp.setId(res.getInt("empid"));

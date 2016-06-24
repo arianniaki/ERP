@@ -9,6 +9,7 @@ import DataBase.DataBase;
 import DataBase.Table;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
+import Report.Report;
 import ResourceManagement.Section.Section;
 import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.Resource;
@@ -90,6 +91,29 @@ public class ResourceRequirementCatalogue{
 		vars.put("pid", Integer.toString(pid));
 
 		DB.delete(vars, "resourcerequirement");
+	}
+	public Report getReport(Project project){
+		Report rep = new Report();
+		Table table = new Table(tableName);
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("pid",  "\'"+project.getId()+"\'");
+		ArrayList<HashMap<String,String>> results = table.search(vars);
+		rep.setResults(results);
+		for(int i=0; i<results.size(); i++){
+			String line="";
+			SectionCatalogue secCat = new SectionCatalogue();
+			ResourceCatalogue resCat = new ResourceCatalogue();
+			ProjectCatalogue projCat = new ProjectCatalogue();
+			results.get(i).put("sname", ""+secCat.getSection(Integer.valueOf(results.get(i).get("sid"))).getName());
+			results.get(i).put("rname", ""+resCat.getResource((Integer.valueOf(results.get(i).get("rid")))).getName());
+			results.get(i).put("pname", ""+projCat.getProject((Integer.valueOf(results.get(i).get("pid")))).getName());
+			for(String key : results.get(i).keySet()){
+				line+= results.get(i).get(key).toString()+", ";
+			}
+			line = line.substring(0, line.length() - 2);
+			rep.addLine(line);
+		}
+		return rep;
 	}
 
 }

@@ -68,5 +68,10 @@ public class Project {
 		String str="name: "+this.name;
 		return str;
 	}
+
+	public String getName() {
+		// TODO Auto-generated method stub
+		return this.name;
+	}
 	
 }
