@@ -7,8 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
-import javax.swing.JList;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -197,16 +195,11 @@ public class NUserPage {
 		}
 
 		// get employee list
-		final DefaultListModel<String> employeelistModel = new DefaultListModel<String>();
 
 		final EmployeeCatalogue empcat = new EmployeeCatalogue();
 		System.out.println("all : ");
 		allemployees = empcat.readAllEmployees();
 
-		for (int i = 0; i < allemployees.size(); i++) {
-			System.out.println(allemployees.get(i));
-			employeelistModel.addElement("" + allemployees.get(i).get("username"));
-		}
 		// end employee list
 
 		String[] accessright_columns = new String[] { "Id", "Username", "AccessRight" };
@@ -676,17 +669,10 @@ public class NUserPage {
 						.addComponent(requirement_btnSatisfy)))
 		);
 
-		// get req list
-		final DefaultListModel<String> requirementlistModel = new DefaultListModel<String>();
 
 		ResourceRequirementCatalogue resreqcat = new ResourceRequirementCatalogue();
 		System.out.println("all : ");
 		allresourcerequirements = resreqcat.getResourceRequirements();
-
-		for (int i = 0; i < allresourcerequirements.size(); i++) {
-			System.out.println(allresourcerequirements.get(i));
-			requirementlistModel.addElement("" + allresourcerequirements.get(i).toHashMap().get("rid"));
-		}
 
 		String[] resreq_columns = new String[] { "rid", "sid" ,"pid"};
 
@@ -727,16 +713,11 @@ public class NUserPage {
 
 		//
 		// get human list
-		final DefaultListModel<String> humanlistModel = new DefaultListModel<String>();
 
 		EmployeeCatalogue employeecat = new EmployeeCatalogue();
 		System.out.println("all : ");
 		allemployees = employeecat.readAllEmployees();
 
-		for (int i = 0; i < allemployees.size(); i++) {
-			System.out.println(allemployees.get(i));
-			humanlistModel.addElement("" + allemployees.get(i).get("irname") + "\t" + allemployees.get(i).get("rid"));
-		}
 
 		JPanel humanPanel = new JPanel();
 		resourcesTab.addTab("Human", null, humanPanel, null);
@@ -885,17 +866,11 @@ public class NUserPage {
 		//
 
 		// get information list
-		final DefaultListModel<String> informationlistModel = new DefaultListModel<String>();
 
 		InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 		System.out.println("all : ");
 		allinformation = infocat.readAllResources();
 
-		for (int i = 0; i < allinformation.size(); i++) {
-			System.out.println(allinformation.get(i));
-			informationlistModel
-					.addElement("" + allinformation.get(i).get("irname") + "\t" + allinformation.get(i).get("rid"));
-		}
 
 		// end get information list
 
@@ -1048,7 +1023,7 @@ public class NUserPage {
 				}
 				System.out.println(information_tableModel.getRowCount() + " ---");
 				for (int i = 0; i < allinformation.size(); i++) {
-					Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("infoname") };
+					Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
 					information_tableModel.addRow(objs);
 				}
 
@@ -1151,16 +1126,10 @@ public class NUserPage {
 		});
 
 		// get financial list
-		final DefaultListModel<String> financiallistModel = new DefaultListModel<String>();
 
 		FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 		System.out.println("all : ");
 		allfinance = financat.readAllResources();
-
-		for (int i = 0; i < allfinance.size(); i++) {
-			System.out.println(allfinance.get(i));
-			financiallistModel.addElement("" + allfinance.get(i).get("finanname"));
-		}
 
 		// end get financial list
 
@@ -1222,9 +1191,6 @@ public class NUserPage {
 			}
 		});
 
-		for (int i = 0; i < allfinance.size(); i++) {
-			financiallistModel.addElement("" + allfinance.get(i).get("finanname"));
-		}
 		String[] finan_columns = new String[] { "Id", "Name" };
 
 		final DefaultTableModel financial_tableModel = new DefaultTableModel(finan_columns, 0) {
@@ -1424,16 +1390,10 @@ public class NUserPage {
 		});
 
 		// get module list
-		final DefaultListModel<String> modulelistModel = new DefaultListModel<String>();
-
 		ModuleCatalogue mcat = new ModuleCatalogue();
 		System.out.println("all : ");
 		allmodules = mcat.readAllResources();
 
-		for (int i = 0; i < allmodules.size(); i++) {
-			System.out.println(allmodules.get(i));
-			modulelistModel.addElement("" + allmodules.get(i).get("modname"));
-		}
 		// end module list
 		final JPanel modulePanel = new JPanel();
 		resourcesTab.addTab("Module", null, modulePanel, null);
@@ -1723,16 +1683,11 @@ public class NUserPage {
 		modulePanel.setLayout(gl_modulePanel_1);
 
 		// get phys res list
-		final DefaultListModel<String> physicalreslistModel = new DefaultListModel<String>();
 
 		PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 		System.out.println("all : ");
 		allphysicals = physcat.readAllResources();
 
-		for (int i = 0; i < allphysicals.size(); i++) {
-			System.out.println(allphysicals.get(i));
-			physicalreslistModel.addElement("" + allphysicals.get(i).get("physname"));
-		}
 
 		resourcesTab.addTab("Maintaining Module", null, maintaining_panel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
@@ -2064,16 +2019,11 @@ public class NUserPage {
 		JPanel allPanel = new JPanel();
 		resourcesTab.addTab("All", null, allPanel, null);
 
-		final DefaultListModel<String> allreslistModel = new DefaultListModel<String>();
 		// get all res list
 		final ResourceCatalogue rcat = new ResourceCatalogue();
 		System.out.println("all : ");
 		allres = rcat.readAllResources();
 
-		for (int i = 0; i < allres.size(); i++) {
-			System.out.println(allres.get(i));
-			allreslistModel.addElement("" + allres.get(i).get("rname"));
-		}
 
 		JScrollPane allres_scrollPane = new JScrollPane();
 		String[] allres_columns = new String[] { "Id", "Name" };
@@ -2129,8 +2079,6 @@ public class NUserPage {
 
 		tabbedPane.addTab("Project Management", null, projectPanel, null);
 
-		DefaultListModel<String> projectlistModel = new DefaultListModel<String>();
-		projectlistModel.addElement("hello");
 
 		String[] allproject_columns = new String[] { "Id", "Name" };
 
@@ -2293,16 +2241,10 @@ public class NUserPage {
 						.addComponent(viewsubsys_Btn)))
 		);
 
-		final DefaultListModel<String> allprojectlistModel = new DefaultListModel<String>();
 		// get all res list
 		final ProjectCatalogue pcat = new ProjectCatalogue();
 		System.out.println("all : ");
 		allprojects = pcat.getProjects();
-
-		for (int i = 0; i < allprojects.size(); i++) {
-			System.out.println(allprojects.get(i));
-			allprojectlistModel.addElement("" + allprojects.get(i).get("projname"));
-		}
 
 		for (int i = 0; i < allprojects.size(); i++) {
 			Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname") };
@@ -2329,15 +2271,10 @@ public class NUserPage {
 				return false;
 			}
 		};
-		final DefaultListModel<String> allregisteredlistModel = new DefaultListModel<String>();
 		final EmployeeCatalogue regempcat = new EmployeeCatalogue();
 		System.out.println("all registered: ");
 		allregisteredusers = regempcat.getRegistrations();
 
-		for (int i = 0; i < allregisteredusers.size(); i++) {
-			System.out.println(allregisteredusers.get(i));
-			allregisteredlistModel.addElement("" + allregisteredusers.get(i).get("empid"));
-		}
 
 		for (int i = 0; i < allregisteredusers.size(); i++) {
 			Object[] objs = { allregisteredusers.get(i).get("empid"), allregisteredusers.get(i).get("empname") };
