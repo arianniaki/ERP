@@ -101,6 +101,9 @@ public class NUserPage {
 	private JTextField search_humanname;
 	private JTextField search_physicalname;
 	private JTextField search_projectname;
+	private JTable resavail_table;
+	private JTable resreq_table;
+	private JTable cycle_table;
 
 	/**
 	 * Launch the application.
@@ -2258,9 +2261,90 @@ public class NUserPage {
 		projectPanel.setLayout(gl_projectPanel);
 
 		JPanel reportPanel = new JPanel();
-		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")) {
+//		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")) {
 			tabbedPane.addTab("Report", null, reportPanel, null);
-		}
+			SpringLayout sl_reportPanel = new SpringLayout();
+			reportPanel.setLayout(sl_reportPanel);
+			
+			JTabbedPane reportsTab = new JTabbedPane(JTabbedPane.TOP);
+			sl_reportPanel.putConstraint(SpringLayout.NORTH, reportsTab, 0, SpringLayout.NORTH, reportPanel);
+			sl_reportPanel.putConstraint(SpringLayout.WEST, reportsTab, 10, SpringLayout.WEST, reportPanel);
+			sl_reportPanel.putConstraint(SpringLayout.SOUTH, reportsTab, 495, SpringLayout.NORTH, reportPanel);
+			sl_reportPanel.putConstraint(SpringLayout.EAST, reportsTab, 827, SpringLayout.WEST, reportPanel);
+			reportPanel.add(reportsTab);
+			
+			JPanel cyclePanel = new JPanel();
+			reportsTab.addTab("Cycle Report", null, cyclePanel, null);
+			
+			JScrollPane cycle_scrollPane = new JScrollPane();
+			GroupLayout gl_cyclePanel = new GroupLayout(cyclePanel);
+			gl_cyclePanel.setHorizontalGroup(
+				gl_cyclePanel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_cyclePanel.createSequentialGroup()
+						.addGap(43)
+						.addComponent(cycle_scrollPane, GroupLayout.PREFERRED_SIZE, 644, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(109, Short.MAX_VALUE))
+			);
+			gl_cyclePanel.setVerticalGroup(
+				gl_cyclePanel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_cyclePanel.createSequentialGroup()
+						.addGap(102)
+						.addComponent(cycle_scrollPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(124, Short.MAX_VALUE))
+			);
+			
+			cycle_table = new JTable();
+			cycle_scrollPane.setViewportView(cycle_table);
+			cyclePanel.setLayout(gl_cyclePanel);
+			
+			JPanel resourcereqPanel = new JPanel();
+			reportsTab.addTab("Resource Requirement Report", null, resourcereqPanel, null);
+			
+			JScrollPane resreq_scrollPane = new JScrollPane();
+			GroupLayout gl_resourcereqPanel = new GroupLayout(resourcereqPanel);
+			gl_resourcereqPanel.setHorizontalGroup(
+				gl_resourcereqPanel.createParallelGroup(Alignment.LEADING)
+					.addGroup(Alignment.TRAILING, gl_resourcereqPanel.createSequentialGroup()
+						.addContainerGap(113, Short.MAX_VALUE)
+						.addComponent(resreq_scrollPane, GroupLayout.PREFERRED_SIZE, 644, GroupLayout.PREFERRED_SIZE)
+						.addGap(39))
+			);
+			gl_resourcereqPanel.setVerticalGroup(
+				gl_resourcereqPanel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_resourcereqPanel.createSequentialGroup()
+						.addGap(103)
+						.addComponent(resreq_scrollPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(123, Short.MAX_VALUE))
+			);
+			
+			resreq_table = new JTable();
+			resreq_scrollPane.setViewportView(resreq_table);
+			resourcereqPanel.setLayout(gl_resourcereqPanel);
+			
+			JPanel resourceavailPanel = new JPanel();
+			reportsTab.addTab("Resource Available Report", null, resourceavailPanel, null);
+			
+			JScrollPane resavail_scrollpane = new JScrollPane();
+			GroupLayout gl_resourceavailPanel = new GroupLayout(resourceavailPanel);
+			gl_resourceavailPanel.setHorizontalGroup(
+				gl_resourceavailPanel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_resourceavailPanel.createSequentialGroup()
+						.addGap(70)
+						.addComponent(resavail_scrollpane, GroupLayout.PREFERRED_SIZE, 644, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(82, Short.MAX_VALUE))
+			);
+			gl_resourceavailPanel.setVerticalGroup(
+				gl_resourceavailPanel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_resourceavailPanel.createSequentialGroup()
+						.addGap(48)
+						.addComponent(resavail_scrollpane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(178, Short.MAX_VALUE))
+			);
+			
+			resavail_table = new JTable();
+			resavail_scrollpane.setViewportView(resavail_table);
+			resourceavailPanel.setLayout(gl_resourceavailPanel);
+//		}
 
 		String[] allregisteredusers_columns = new String[] { "Id", "Name" };
 
