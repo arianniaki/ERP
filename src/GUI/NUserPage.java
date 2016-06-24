@@ -434,6 +434,7 @@ public class NUserPage {
 				resource_types.add("Financial");
 				resource_types.add("Physical");
 				resource_types.add("Employee");
+				resource_types.add("Module");
 				ArrayList<Field> requirement_moduleFields = new ArrayList<Field>();
 				Field reqname = new Field("text", "req name       ", "", 10, "name");
 				Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
@@ -532,6 +533,14 @@ public class NUserPage {
 							ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 							for (int i = 0; i < employee_resource.size(); i++) {
 								resourceCombo.addItem(employee_resource.get(i).toString());
+							}
+						}
+						if (resource_type.getSelectedItem().toString().equals("Module")) {
+							resourceCombo.removeAllItems();
+							ModuleCatalogue modcat = new ModuleCatalogue();
+							ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
+							for (int i = 0; i < module_resource.size(); i++) {
+								resourceCombo.addItem(module_resource.get(i).toString());
 							}
 						}
 					}
