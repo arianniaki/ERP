@@ -33,6 +33,7 @@ import GUI.Form.PanelBuilder;
 import ProjectEmployee.AuthenticatedEmployee;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
+import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import RequirementUtilization.ResourceRequirement;
@@ -2277,20 +2278,26 @@ public class NUserPage {
 			reportsTab.addTab("Cycle Report", null, cyclePanel, null);
 			
 			JScrollPane cycle_scrollPane = new JScrollPane();
+			
+			JButton cycle_btnGetReport = new JButton("Get Report");
 			GroupLayout gl_cyclePanel = new GroupLayout(cyclePanel);
 			gl_cyclePanel.setHorizontalGroup(
 				gl_cyclePanel.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_cyclePanel.createSequentialGroup()
-						.addGap(43)
-						.addComponent(cycle_scrollPane, GroupLayout.PREFERRED_SIZE, 644, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(109, Short.MAX_VALUE))
+						.addGap(20)
+						.addComponent(cycle_scrollPane, GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
+						.addGap(20))
+					.addGroup(Alignment.TRAILING, gl_cyclePanel.createSequentialGroup()
+						.addContainerGap(679, Short.MAX_VALUE)
+						.addComponent(cycle_btnGetReport))
 			);
 			gl_cyclePanel.setVerticalGroup(
 				gl_cyclePanel.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_cyclePanel.createSequentialGroup()
-						.addGap(102)
-						.addComponent(cycle_scrollPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(124, Short.MAX_VALUE))
+						.addComponent(cycle_btnGetReport)
+						.addGap(20)
+						.addComponent(cycle_scrollPane, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+						.addGap(20))
 			);
 			
 			cycle_table = new JTable();
@@ -2301,20 +2308,102 @@ public class NUserPage {
 			reportsTab.addTab("Resource Requirement Report", null, resourcereqPanel, null);
 			
 			JScrollPane resreq_scrollPane = new JScrollPane();
+			
+			JButton resreq_btnGetReport = new JButton("Get Report");
+			resreq_btnGetReport.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					ArrayList<String> project_arraylist = new ArrayList<String>();
+
+					ProjectCatalogue projcat = new ProjectCatalogue();
+					ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
+					for (int i = 0; i < project_hashmap.size(); i++) {
+						project_arraylist.add(project_hashmap.get(i).toString());
+					}
+					
+					ArrayList<Field> getreport_resreqFields = new ArrayList<Field>();
+					Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
+
+					getreport_resreqFields.add(projects);
+					
+					Form getreport_resreqForm = new Form(getreport_resreqFields, "Report Resource Requirement Form");
+					final PanelBuilder report_resreq_panel = new PanelBuilder(getreport_resreqForm);
+					report_resreq_panel.makeForm();
+
+					JFrame getReport_ResReqPage = new JFrame("Get Report Resource Requirement Form");
+					getReport_ResReqPage.getContentPane().add(report_resreq_panel.getJPanel(), BorderLayout.NORTH);
+					
+					JButton submitresreqreportBtn = new JButton("Submit");
+					JPanel buttonPanel = new JPanel();
+					buttonPanel.add(submitresreqreportBtn);
+					getReport_ResReqPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+					getReport_ResReqPage.pack();
+					getReport_ResReqPage.setVisible(true);
+					ComboBoxJPanel comboBoxpanel_project = (ComboBoxJPanel) report_resreq_panel.getJPanel().getComponent(0);
+					final JComboBox projectCombo = comboBoxpanel_project.getComboBox();
+
+					submitresreqreportBtn.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							for (int i = 0; i < report_resreq_panel.getJPanel().getComponentCount(); i++) {
+								// System.out.println(fpanel.selected_Choice);
+							}
+							System.out.println(projectCombo.getSelectedItem()+" ino select");
+							
+							
+							ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
+							ProjectCatalogue projCat = new ProjectCatalogue();
+//							Project proj = projCat.getProject(projectCombo.getSelectedItem().toString().);
+							//do regex to find proj id
+//							resReqCat.getReport(proj).printRep();
+//							System.out.println("Yay! ");
+//							
+							//sending data to table
+							// resreqCat.addResourceRequirement(rid, sid, pid, '2-z,
+							// to);
+							// // tu resource ham bayad insert she
+							// allmodules.clear();
+							// allmodules = mcat.readAllResources();
+							// System.out.println(module_tableModel.getRowCount()+"
+							// ---");
+							// int rowcount= module_tableModel.getRowCount();
+							// for (int j = rowcount - 1; j >= 0; j--) {
+							// System.out.println(j);
+							// module_tableModel.removeRow(j);
+							// }
+							// System.out.println(module_tableModel.getRowCount()+"
+							// ---");
+							// for (int i = 0; i < allmodules.size(); i++) {
+							// Object[] objs = { allmodules.get(i).get("rid"),
+							// allmodules.get(i).get("modname") };
+							// module_tableModel.addRow(objs);
+							// }
+							//
+
+
+				}
+			});
+				}
+			});
 			GroupLayout gl_resourcereqPanel = new GroupLayout(resourcereqPanel);
 			gl_resourcereqPanel.setHorizontalGroup(
-				gl_resourcereqPanel.createParallelGroup(Alignment.LEADING)
-					.addGroup(Alignment.TRAILING, gl_resourcereqPanel.createSequentialGroup()
-						.addContainerGap(113, Short.MAX_VALUE)
-						.addComponent(resreq_scrollPane, GroupLayout.PREFERRED_SIZE, 644, GroupLayout.PREFERRED_SIZE)
-						.addGap(39))
+				gl_resourcereqPanel.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_resourcereqPanel.createSequentialGroup()
+						.addGap(20)
+						.addGroup(gl_resourcereqPanel.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_resourcereqPanel.createSequentialGroup()
+								.addComponent(resreq_scrollPane, GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+								.addGap(20))
+							.addComponent(resreq_btnGetReport, Alignment.TRAILING)))
 			);
 			gl_resourcereqPanel.setVerticalGroup(
 				gl_resourcereqPanel.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_resourcereqPanel.createSequentialGroup()
-						.addGap(103)
-						.addComponent(resreq_scrollPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(123, Short.MAX_VALUE))
+						.addComponent(resreq_btnGetReport)
+						.addGap(20)
+						.addComponent(resreq_scrollPane, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+						.addGap(20))
 			);
 			
 			resreq_table = new JTable();
@@ -2325,20 +2414,26 @@ public class NUserPage {
 			reportsTab.addTab("Resource Available Report", null, resourceavailPanel, null);
 			
 			JScrollPane resavail_scrollpane = new JScrollPane();
+			
+			JButton resavail_btnGetReport = new JButton("Get Report");
 			GroupLayout gl_resourceavailPanel = new GroupLayout(resourceavailPanel);
 			gl_resourceavailPanel.setHorizontalGroup(
 				gl_resourceavailPanel.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_resourceavailPanel.createSequentialGroup()
-						.addGap(70)
-						.addComponent(resavail_scrollpane, GroupLayout.PREFERRED_SIZE, 644, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(82, Short.MAX_VALUE))
+						.addGap(20)
+						.addComponent(resavail_scrollpane, GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+						.addGap(20))
+					.addGroup(Alignment.TRAILING, gl_resourceavailPanel.createSequentialGroup()
+						.addContainerGap(679, Short.MAX_VALUE)
+						.addComponent(resavail_btnGetReport))
 			);
 			gl_resourceavailPanel.setVerticalGroup(
 				gl_resourceavailPanel.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_resourceavailPanel.createSequentialGroup()
-						.addGap(48)
-						.addComponent(resavail_scrollpane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(178, Short.MAX_VALUE))
+						.addComponent(resavail_btnGetReport)
+						.addGap(20)
+						.addComponent(resavail_scrollpane, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+						.addGap(20))
 			);
 			
 			resavail_table = new JTable();
