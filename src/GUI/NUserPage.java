@@ -39,6 +39,7 @@ import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
+import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
@@ -428,6 +429,20 @@ public class NUserPage {
 
 		addreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				ArrayList<String> project_arraylist = new ArrayList<String>();
+
+				ProjectCatalogue projcat = new ProjectCatalogue();
+				ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
+				for (int i = 0; i < project_hashmap.size(); i++) {
+					project_arraylist.add(project_hashmap.get(i).toString());
+				}
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+
 				ArrayList<String> resource_types = new ArrayList<String>();
 				final ArrayList<String> resources = new ArrayList<String>();
 				resource_types.add("Information");
@@ -439,10 +454,18 @@ public class NUserPage {
 				Field reqname = new Field("text", "req name       ", "", 10, "name");
 				Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
 				Field req_res = new Field("comboBox", "resources", resources, 20, "items");
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+				Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
 
+
+				
 				requirement_moduleFields.add(reqname);
 				requirement_moduleFields.add(req_res_type);
 				requirement_moduleFields.add(req_res);
+				requirement_moduleFields.add(sections);
+				requirement_moduleFields.add(projects);
+
+
 
 				Form requirement_Form = new Form(requirement_moduleFields, "Requirement Form");
 				final PanelBuilder requirement_Panel = new PanelBuilder(requirement_Form);
@@ -483,17 +506,27 @@ public class NUserPage {
 				Add_RequirementPage.setVisible(true);
 				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) requirement_Panel.getJPanel().getComponent(1);
 				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) requirement_Panel.getJPanel().getComponent(2);
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) requirement_Panel.getJPanel().getComponent(3);
+				ComboBoxJPanel comboBoxpane_projects = (ComboBoxJPanel) requirement_Panel.getJPanel().getComponent(4);
+
 				final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
 				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
+				final JComboBox sectionCombo = comboBoxpane_sections.getComboBox();
+				final JComboBox projectCombo = comboBoxpane_projects.getComboBox();
+
 
 				resourceCombo.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						System.out.println(resourceCombo.getSelectedItem() + " ino select kardi balla");
+						System.out.println(resourceCombo.getSelectedItem() + " ino select kardi az resource");
+						System.out.println(sectionCombo.getSelectedItem() + " ino select kardi section");
+						System.out.println(projectCombo.getSelectedItem() + " ino select kardi proje");
+
 						System.out.println(from_datePicker.getJFormattedTextField().getText() + " from date");
 						System.out.println(to_datePicker.getJFormattedTextField().getText() + " to date");
 
+						
 					}
 				});
 
