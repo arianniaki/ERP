@@ -124,15 +124,15 @@ public class Main {
 //	    System.out.println(date.toString());
 		
 		//test resourcerequirement:
-//		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
-//		ArrayList<ResourceRequirement> resreqs = resreqCat.getResourceRequirements();
-//		for (int i = 0; i < resreqs.size(); i++) {
-//			System.out.println(resreqs.get(i).toString());
-//		}
-////		resreqCat.addResourceRequirement(3,2,9,"2016-01-01","2016-01-02");
-//		System.out.println(resreqCat.getResourceRequirement(2,2,9).toHashMap());
-//		resreqCat.getResourceRequirement(2,2,9).satisfy("2016-01-02");
-//		System.out.println(resreqCat.getResourceRequirement(2,2,9).toHashMap());
+		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+		ArrayList<ResourceRequirement> resreqs = resreqCat.getResourceRequirements();
+		for (int i = 0; i < resreqs.size(); i++) {
+			System.out.println(resreqs.get(i).toString());
+		}
+//		resreqCat.addResourceRequirement(3,2,9,"2016-01-01","2016-01-02");
+		System.out.println(resreqCat.getResourceRequirement(2,2,9).toHashMap());
+		resreqCat.getResourceRequirement(2,2,9).edit("2016-04-04", "2016-04-05", false);
+		System.out.println(resreqCat.getResourceRequirement(2,2,9).toHashMap());
 
 
 //		resreqCat.addResourceRequirement(2, 1, 7, "2016-01-02", "2016-01-03");
