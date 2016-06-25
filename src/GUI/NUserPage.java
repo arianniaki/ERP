@@ -268,9 +268,24 @@ public class NUserPage {
 						Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
 						emp_access.setAccessRight(selected_accessright_forassignment);
 						// table should be update later
-						empcat.readAllEmployees();
+						
 						System.out.println("ACCESS RIGHT O DADAM");
+						
 //						Assign_AccessRightPage.dispose();
+						allemployees = empcat.readAllEmployees();
+						int rowcount = accessright_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							accessright_tableModel.removeRow(j);
+						}
+						System.out.println(accessright_tableModel.getRowCount() + " ---");
+						for (int i = 0; i < allemployees.size(); i++) {
+							Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname"),allemployees.get(i).get("accessrightid"), };
+							accessright_tableModel.addRow(objs);
+						}
+
+						
+						
+						
 					}
 				});
 				
@@ -810,14 +825,48 @@ public class NUserPage {
 				EmployeeCatalogue empcat  = new EmployeeCatalogue();
 				HashMap <String,String> searchVars = new HashMap<String,String>();
 				searchVars.put("empname", "\'"+search_humanname.getText()+"\'");
-//				empcat.SearchResource(searchVars);
 
+
+				
+				
+				allemployees.clear();
+				allemployees = 	empcat.SearchEmployee(searchVars);
+
+				System.out.println(human_tableModel.getRowCount() + " ---");
+				int rowcount = human_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					human_tableModel.removeRow(j);
+				}
+				System.out.println(human_tableModel.getRowCount() + " ---");
+				for (int i = 0; i < allemployees.size(); i++) {
+					Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
+					human_tableModel.addRow(objs);
+				}
 			}
 		});
 		
 		JLabel lblHumanName = DefaultComponentFactory.getInstance().createLabel("Human name");
 		
 		JButton search_humanbtnRefresh = new JButton("Refresh");
+		search_humanbtnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				allemployees.clear();
+				EmployeeCatalogue empcat = new EmployeeCatalogue();
+				allemployees = empcat.readAllEmployees();
+
+				System.out.println(human_tableModel.getRowCount() + " ---");
+				int rowcount = human_tableModel.getRowCount();
+				for (int j = rowcount - 1; j >= 0; j--) {
+					human_tableModel.removeRow(j);
+				}
+				System.out.println(human_tableModel.getRowCount() + " ---");
+				for (int i = 0; i < allemployees.size(); i++) {
+					Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
+					human_tableModel.addRow(objs);
+				}			
+				
+			}
+		});
 		GroupLayout gl_humanPanel = new GroupLayout(humanPanel);
 		gl_humanPanel.setHorizontalGroup(
 			gl_humanPanel.createParallelGroup(Alignment.TRAILING)
