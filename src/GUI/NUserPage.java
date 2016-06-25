@@ -268,9 +268,24 @@ public class NUserPage {
 						Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
 						emp_access.setAccessRight(selected_accessright_forassignment);
 						// table should be update later
-						empcat.readAllEmployees();
+						
 						System.out.println("ACCESS RIGHT O DADAM");
+						
 //						Assign_AccessRightPage.dispose();
+						allemployees = empcat.readAllEmployees();
+						int rowcount = accessright_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							accessright_tableModel.removeRow(j);
+						}
+						System.out.println(accessright_tableModel.getRowCount() + " ---");
+						for (int i = 0; i < allemployees.size(); i++) {
+							Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname"),allemployees.get(i).get("accessrightid"), };
+							accessright_tableModel.addRow(objs);
+						}
+
+						
+						
+						
 					}
 				});
 				
