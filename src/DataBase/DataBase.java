@@ -86,7 +86,6 @@ public class DataBase {
 			}
 			sql+=";";
 			ResultSet rs = stmt.executeQuery(sql);
-			
 			// stmt.close();
 			// c.close();
 			return rs;

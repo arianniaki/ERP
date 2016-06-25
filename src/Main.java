@@ -23,14 +23,14 @@ public class Main {
 		}else{
 			System.out.println("shit");
 		}*/
-		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
-		physResCat.getReport().printRep();
-		System.out.println("This is Resource Requirement Report:");
-		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
-		ProjectCatalogue projCat = new ProjectCatalogue();
-		Project proj = projCat.getProject(1);
-		resReqCat.getReport(proj).printRep();
-		System.out.println("Yay! ");
+//		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+//		physResCat.getReport().printRep();
+//		System.out.println("This is Resource Requirement Report:");
+//		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
+//		ProjectCatalogue projCat = new ProjectCatalogue();
+//		Project proj = projCat.getProject(1);
+//		resReqCat.getReport(proj).printRep();
+//		System.out.println("Yay! ");
 		//Employee gholam = new Employee();
 		//gholam.getFromDB(1);
 		//gholam.setAccessRight(1);
@@ -124,11 +124,17 @@ public class Main {
 //	    System.out.println(date.toString());
 		
 		//test resourcerequirement:
-		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
-		ArrayList<ResourceRequirement> resreqs = resreqCat.getResourceRequirements();
-		for (int i = 0; i < resreqs.size(); i++) {
-			System.out.println(resreqs.get(i).toString());
-		}
+//		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+//		ArrayList<ResourceRequirement> resreqs = resreqCat.getResourceRequirements();
+//		for (int i = 0; i < resreqs.size(); i++) {
+//			System.out.println(resreqs.get(i).toString());
+//		}
+////		resreqCat.addResourceRequirement(3,2,9,"2016-01-01","2016-01-02");
+//		System.out.println(resreqCat.getResourceRequirement(2,2,9).toHashMap());
+//		resreqCat.getResourceRequirement(2,2,9).satisfy("2016-01-02");
+//		System.out.println(resreqCat.getResourceRequirement(2,2,9).toHashMap());
+
+
 //		resreqCat.addResourceRequirement(2, 1, 7, "2016-01-02", "2016-01-03");
 //		resreqCat.getResourceRequirements();
 //		resreqCat.deleteResourceRequirement(2, 1, 7);

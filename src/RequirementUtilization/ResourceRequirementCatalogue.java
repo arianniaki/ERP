@@ -37,13 +37,13 @@ public class ResourceRequirementCatalogue{
 			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("pid")));
 			Section sc = scat.getSection(Integer.parseInt(result.get(i).get("sid")));
 			Resource rs = rcat.getResource(Integer.parseInt(result.get(i).get("rid")));
-			ResourceRequirement rr = new ResourceRequirement(pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"));
+			ResourceRequirement rr = new ResourceRequirement(pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"),Boolean.parseBoolean(result.get(i).get("is_satisfied")));
 			resReqs.add(rr);
 		}
 		return resReqs;
 	}
 	
-	public ResourceRequirement getResourceRequirement(int rid, int pid, int sid){
+	public ResourceRequirement getResourceRequirement(int rid, int sid, int pid){
 		
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(rid));
@@ -59,11 +59,12 @@ public class ResourceRequirementCatalogue{
 		ResourceRequirement rr = null;
 		Project pr;
 		try {
-			pr = pcat.getProject(res.getInt("pid"));
-			Section sc = scat.getSection(res.getInt("sid"));
-			Resource rs = rcat.getResource(res.getInt("rid"));
-			rr = new ResourceRequirement(pr, sc, rs, res.getString("fromdate"), res.getString("todate"));
-			
+			if(res.next()){
+				pr = pcat.getProject(res.getInt("pid"));
+				Section sc = scat.getSection(res.getInt("sid"));
+				Resource rs = rcat.getResource(res.getInt("rid"));
+				rr = new ResourceRequirement(pr, sc, rs, res.getString("fromdate"), res.getString("todate"),res.getBoolean("is_satisfied"));
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,6 +79,7 @@ public class ResourceRequirementCatalogue{
 		vars.put("pid", "\'"+pid+"\'");
 		vars.put("fromdate", "\'"+from+"\'");
 		vars.put("todate", "\'"+to+"\'");
+		vars.put("is_satisfied", "false");
 		
 		long pk=DB.insert(vars, "resourcerequirement");
 		System.out.println("inserted into resourcerequirement table: " + pk);

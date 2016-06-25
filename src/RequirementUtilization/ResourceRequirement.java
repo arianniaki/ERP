@@ -21,13 +21,13 @@ public class ResourceRequirement{
 	String satisfyDate;
 	DataBase DB;
 	
-	public ResourceRequirement(Project project, Section section, Resource resource, String from, String to){
+	public ResourceRequirement(Project project, Section section, Resource resource, String from, String to,boolean isSatisfied){
 		this.from = from;
 		this.to = to;
 		this.project = project;
 		this.section = section;
 		this.resource = resource;
-		isSatisfied = false;
+		this.isSatisfied = isSatisfied;
 		DB = new DataBase();
 	}
 	
@@ -56,7 +56,9 @@ public class ResourceRequirement{
 	public void satisfy(String date){
 		isSatisfied = true;
 		this.satisfyDate = date;
-		
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("is_satisfied","true");
+		submitToDB(setVars, this.resource.getId(), this.section.getId(), this.project.getId());
 	}
 	
 	public void submitToDB(HashMap<String, String> setVars, int rid, int sid, int pid) {
@@ -80,6 +82,8 @@ public class ResourceRequirement{
 		resreq.put("pid",Integer.toString(this.project.getId()));
 		resreq.put("fromdate", this.from);
 		resreq.put("todate", this.to);
+		resreq.put("is_satisfied", Boolean.toString(this.isSatisfied));
+
 		return resreq;
 	}
 
