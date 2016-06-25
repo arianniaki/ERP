@@ -64,6 +64,7 @@ public class EmployeeCatalogue {
 			String password, boolean is_loggedin, boolean is_confirmed) {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
+//		vars.put("empid", Integer.toString(empid));
 		vars.put("empname", "\'" + empname + "\'");
 		vars.put("sectionid", Integer.toString(sectionId));
 		vars.put("post", "\'" + post + "\'");
