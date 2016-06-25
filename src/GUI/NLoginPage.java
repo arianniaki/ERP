@@ -123,11 +123,11 @@ public class NLoginPage {
 				signupFields.add(new Field("text", "password", "", 10, "password"));
 				signupFields.add(new Field("text", "repeat password", "", 10, "repassword"));
 
-				Form signupForm = new Form(signupFields, "Sign up Form");
+				final Form signupForm = new Form(signupFields, "Sign up Form");
 				final PanelBuilder signupPanel = new PanelBuilder(signupForm);
 				signupPanel.makeForm();
 				JFrame SignupPage = new JFrame("Sign up Form");
-				SignupPage.getContentPane().add(signupPanel.getJPanel(), BorderLayout.NORTH);
+				SignupPage.getContentPane().add(signupForm.getJPanel(), BorderLayout.NORTH);
 
 				JButton submit = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -143,8 +143,8 @@ public class NLoginPage {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < signupPanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) signupPanel.getJPanel().getComponent(i);
+						for (int i = 0; i < signupForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) signupForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
