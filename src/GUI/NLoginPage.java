@@ -152,7 +152,8 @@ public class NLoginPage {
 						}
 						EmployeeCatalogue empcat = new EmployeeCatalogue();
 						//++section e default mikhaim ke badan avaz she
-//						empcat.addEmployee( false, inputs.get(2)+""+inputs.get(3), "Default post", 1, inputs.get(1), inputs.get(4), false, false);
+						empcat.addEmployee( false, inputs.get(2)+""+inputs.get(3), "Default post", 1, inputs.get(1), inputs.get(4), false, false);
+						
 						System.out.println("Employee added");
 					}
 				});
