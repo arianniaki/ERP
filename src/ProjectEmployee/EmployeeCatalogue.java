@@ -103,5 +103,16 @@ public class EmployeeCatalogue {
 		return emp;
 
 	}
+	
+	public ArrayList<HashMap<String, String>> SearchEmployee(HashMap<String, String> searchvars){
+		
+		Table table = new Table("employee");
+		ArrayList<HashMap<String, String>> result = table.search(searchvars);
+		for (int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i).toString());
+		}
+		return result;		
+	}
+
 
 }
