@@ -94,6 +94,8 @@ public class ResourceRequirementCatalogue{
 
 		DB.delete(vars, "resourcerequirement");
 	}
+	
+	
 	public Report getReport(Project project){
 		Report rep = new Report();
 		Table table = new Table(tableName);

@@ -34,9 +34,6 @@ public class ResourceRequirement{
 	public void edit(String from, String to ,boolean isSatisfied){
 		this.from = from;
 		this.to = to;
-		ProjectCatalogue pcat = new ProjectCatalogue();
-		SectionCatalogue scat = new SectionCatalogue();
-		ResourceCatalogue rcat = new ResourceCatalogue();
 
 		int rid = this.resource.getId();
 		int pid = this.project.getId();
