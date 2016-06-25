@@ -60,7 +60,7 @@ public class Employee {
 			if (results.next()) {
 				getFromDB(results.getInt("empId"));
 				AuthenticatedEmployee auth = AuthenticatedEmployee.getInstance();
-				if(auth.setEmployee(this)){
+				if(auth.setEmployee(this) && this.is_confirmed){
 					this.loggedin = true;
 					HashMap<String, String> setVars = new HashMap<String, String>();
 					setVars.put("is_loggedin", Boolean.toString(this.loggedin));
@@ -178,6 +178,7 @@ public class Employee {
 				this.sectionId = rs.getInt("sectionid");
 				this.post = rs.getString("post");
 				this.setAccessRight(new AccessRight(rs.getInt("accessrightid")));
+				this.is_confirmed = rs.getBoolean("is_confirmed");
 			}
 			rs.close();
 			DB.connectionClose();

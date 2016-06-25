@@ -60,11 +60,10 @@ public class EmployeeCatalogue {
 		DB.delete(vars, "employee");
 	}
 
-	public void addEmployee(int empid, boolean ismodir, String empname, String post, int sectionId, String username,
+	public Employee addEmployee(boolean ismodir, String empname, String post, int sectionId, String username,
 			String password, boolean is_loggedin, boolean is_confirmed) {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("empid", Integer.toString(empid));
 		vars.put("empname", "\'" + empname + "\'");
 		vars.put("sectionid", Integer.toString(sectionId));
 		vars.put("post", "\'" + post + "\'");
@@ -74,7 +73,11 @@ public class EmployeeCatalogue {
 		vars.put("is_loggedin", Boolean.toString(is_loggedin));
 		vars.put("is_confirmed", Boolean.toString(is_confirmed));
 
-		DB.insert(vars, "employee");
+		long pk = DB.insert(vars, "employee");
+		Employee employee = new Employee();
+		employee.getFromDB((int) pk);
+		return employee;
+		
 	}
 
 	public Employee getEmployee(int empid) {
