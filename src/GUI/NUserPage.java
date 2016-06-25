@@ -240,7 +240,7 @@ public class NUserPage {
 				accessright_assignPanel.makeForm();
 
 				JFrame Assign_AccessRightPage = new JFrame("Assign Access Right Form");
-				Assign_AccessRightPage.getContentPane().add(accessright_assignPanel.getJPanel(), BorderLayout.NORTH);
+				Assign_AccessRightPage.getContentPane().add(accessright_Form.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitaccessrightassignmentBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -289,7 +289,7 @@ public class NUserPage {
 					}
 				});
 				
-				ComboBoxJPanel comboBoxpanel_accessright = (ComboBoxJPanel) accessright_assignPanel.getJPanel()
+				ComboBoxJPanel comboBoxpanel_accessright = (ComboBoxJPanel) accessright_Form.getJPanel()
 						.getComponent(0);
 				final JComboBox accessright_type = comboBoxpanel_accessright.getComboBox();
 
@@ -375,12 +375,12 @@ public class NUserPage {
 				subsystem_addFields.add(subsystem_name);
 				subsystem_addFields.add(subsystem_desc);
 
-				Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
+				final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
 				final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
 				subsystemAdd_Panel.makeForm();
 
 				JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
-				Add_SubsystemPage.getContentPane().add(subsystemAdd_Panel.getJPanel(), BorderLayout.NORTH);
+				Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitaddsubsystemBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -395,8 +395,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						subsyscat.getSubSystems();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < subsystemAdd_Panel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) subsystemAdd_Panel.getJPanel().getComponent(i);
+						for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -493,12 +493,12 @@ public class NUserPage {
 
 
 
-				Form requirement_Form = new Form(requirement_moduleFields, "Requirement Form");
+				final Form requirement_Form = new Form(requirement_moduleFields, "Requirement Form");
 				final PanelBuilder requirement_Panel = new PanelBuilder(requirement_Form);
 				requirement_Panel.makeForm();
 
 				JFrame Add_RequirementPage = new JFrame("Add Requirement Module Form");
-				Add_RequirementPage.getContentPane().add(requirement_Panel.getJPanel(), BorderLayout.NORTH);
+				Add_RequirementPage.getContentPane().add(requirement_Form.getJPanel(), BorderLayout.NORTH);
 
 				// adding date
 				UtilDateModel modelfor = new UtilDateModel();
@@ -530,10 +530,10 @@ public class NUserPage {
 				Add_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Add_RequirementPage.pack();
 				Add_RequirementPage.setVisible(true);
-				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) requirement_Panel.getJPanel().getComponent(1);
-				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) requirement_Panel.getJPanel().getComponent(2);
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) requirement_Panel.getJPanel().getComponent(3);
-				ComboBoxJPanel comboBoxpane_projects = (ComboBoxJPanel) requirement_Panel.getJPanel().getComponent(4);
+				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(1);
+				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(2);
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(3);
+				ComboBoxJPanel comboBoxpane_projects = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(4);
 
 				final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
 				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
@@ -608,15 +608,15 @@ public class NUserPage {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						for (int i = 0; i < requirement_Panel.getJPanel().getComponentCount(); i++) {
+						for (int i = 0; i < requirement_Form.getJPanel().getComponentCount(); i++) {
 							// System.out.println(fpanel.selected_Choice);
 						}
 						ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
 						System.out.println("all : ");
 						resreqCat.getResourceRequirements();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < requirement_Panel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) requirement_Panel.getJPanel().getComponent(i);
+						for (int i = 0; i < requirement_Form.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) requirement_Form.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -958,11 +958,11 @@ public class NUserPage {
 				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
 				information_moduleFields.add(new Field("text", "infosname", "", 20, "name"));
 
-				Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
+				final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
 				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
 				information_modulePanel.makeForm();
 				JFrame Add_InformationModulePage = new JFrame("Edit Information Module Form");
-				Add_InformationModulePage.getContentPane().add(information_modulePanel.getJPanel(), BorderLayout.NORTH);
+				Add_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitaddinformationmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -979,8 +979,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						infocat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < information_modulePanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) information_modulePanel.getJPanel().getComponent(i);
+						for (int i = 0; i < information_moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) information_moduleForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -1131,11 +1131,11 @@ public class NUserPage {
 				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
 				information_moduleFields.add(new Field("text", "infosname", "", 20, "name"));
 
-				Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
+				final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
 				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
 				information_modulePanel.makeForm();
 				JFrame Add_InformationModulePage = new JFrame("Add Information Module Form");
-				Add_InformationModulePage.getContentPane().add(information_modulePanel.getJPanel(), BorderLayout.NORTH);
+				Add_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitaddinformationmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -1152,8 +1152,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						infocat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < information_modulePanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) information_modulePanel.getJPanel().getComponent(i);
+						for (int i = 0; i < information_moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) information_moduleForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -1196,11 +1196,11 @@ public class NUserPage {
 				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
 				information_moduleFields.add(new Field("text", "infosname", "", 20, "name"));
 
-				Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
+				final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
 				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
 				information_modulePanel.makeForm();
 				JFrame Add_InformationModulePage = new JFrame("Edit Information Module Form");
-				Add_InformationModulePage.getContentPane().add(information_modulePanel.getJPanel(), BorderLayout.NORTH);
+				Add_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitaddinformationmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -1217,8 +1217,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						infocat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < information_modulePanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) information_modulePanel.getJPanel().getComponent(i);
+						for (int i = 0; i < information_moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) information_moduleForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -1394,11 +1394,11 @@ public class NUserPage {
 				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
 				financial_moduleFields.add(new Field("text", "financename", "", 20, "name"));
 
-				Form financial_moduleForm = new Form(financial_moduleFields, "Information Module Form");
+				final Form financial_moduleForm = new Form(financial_moduleFields, "Information Module Form");
 				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
 				financial_modulePanel.makeForm();
 				JFrame Add_FinancialModulePage = new JFrame("Add Financial Module Form");
-				Add_FinancialModulePage.getContentPane().add(financial_modulePanel.getJPanel(), BorderLayout.NORTH);
+				Add_FinancialModulePage.getContentPane().add(financial_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitaddfinancialmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -1414,8 +1414,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						financat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < financial_modulePanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) financial_modulePanel.getJPanel().getComponent(i);
+						for (int i = 0; i < financial_moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) financial_moduleForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -1467,11 +1467,11 @@ public class NUserPage {
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
 				moduleFields.add(new Field("text", "name", "", 10, "name"));
 
-				Form moduleForm = new Form(moduleFields, "Module Form");
+				final Form moduleForm = new Form(moduleFields, "Module Form");
 				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
 				modulePanel.makeForm();
 				JFrame AddModulePage = new JFrame("Add Module Form");
-				AddModulePage.getContentPane().add(modulePanel.getJPanel(), BorderLayout.NORTH);
+				AddModulePage.getContentPane().add(moduleForm.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitaddmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -1489,8 +1489,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						mcat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < modulePanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) modulePanel.getJPanel().getComponent(i);
+						for (int i = 0; i < moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) moduleForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -1525,11 +1525,11 @@ public class NUserPage {
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
 				moduleFields.add(new Field("text", "name", "", 10, "name"));
 
-				Form moduleForm = new Form(moduleFields, "Module Form");
+				final Form moduleForm = new Form(moduleFields, "Module Form");
 				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
 				modulePanel.makeForm();
 				JFrame AddModulePage = new JFrame("Edit Module Form");
-				AddModulePage.getContentPane().add(modulePanel.getJPanel(), BorderLayout.NORTH);
+				AddModulePage.getContentPane().add(moduleForm.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitaddmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -1547,8 +1547,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						mcat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < modulePanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) modulePanel.getJPanel().getComponent(i);
+						for (int i = 0; i < moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) moduleForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -1834,11 +1834,11 @@ public class NUserPage {
 				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
 				physical_moduleFields.add(new Field("text", "physname", "", 20, "name"));
 
-				Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
+				final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
 				final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
 				physical_modulePanel.makeForm();
 				JFrame Add_PhysicalModulePage = new JFrame("Add Physical Module Form");
-				Add_PhysicalModulePage.getContentPane().add(physical_modulePanel.getJPanel(), BorderLayout.NORTH);
+				Add_PhysicalModulePage.getContentPane().add(physical_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitaddphysicalmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -1854,8 +1854,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						physcat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < physical_modulePanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) physical_modulePanel.getJPanel().getComponent(i);
+						for (int i = 0; i < physical_moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) physical_moduleForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -1898,11 +1898,11 @@ public class NUserPage {
 				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
 				physical_moduleFields.add(new Field("text", "physname", "", 20, "name"));
 
-				Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
+				final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
 				final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
 				physical_modulePanel.makeForm();
 				JFrame Edit_PhysicalModulePage = new JFrame("Edit Physical Module Form");
-				Edit_PhysicalModulePage.getContentPane().add(physical_modulePanel.getJPanel(), BorderLayout.NORTH);
+				Edit_PhysicalModulePage.getContentPane().add(physical_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 				JButton submiteditphysicalmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -1919,8 +1919,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						physcat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < physical_modulePanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) physical_modulePanel.getJPanel().getComponent(i);
+						for (int i = 0; i < physical_moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) physical_moduleForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -2161,13 +2161,13 @@ public class NUserPage {
 				System.out.println(employees + " 00");
 				projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
 
-				Form projectForm = new Form(projectFields, "Project Form");
+				final Form projectForm = new Form(projectFields, "Project Form");
 				final PanelBuilder project_addPanel = new PanelBuilder(projectForm);
 				project_addPanel.makeForm();
 				JFrame Add_ProjectPage = new JFrame("Add Project Form");
-				Add_ProjectPage.getContentPane().add(project_addPanel.getJPanel(), BorderLayout.NORTH);
+				Add_ProjectPage.getContentPane().add(projectForm.getJPanel(), BorderLayout.NORTH);
 
-				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) project_addPanel.getJPanel().getComponent(1);
+				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) projectForm.getJPanel().getComponent(1);
 				final JComboBox employees_comboBox = comboBoxpane.getComboBox();
 
 				JButton submitaddprojectBtn = new JButton("Submit");
@@ -2192,8 +2192,8 @@ public class NUserPage {
 						System.out.println("all : ");
 						projcat.getProjects();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < project_addPanel.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) project_addPanel.getJPanel().getComponent(i);
+						for (int i = 0; i < projectForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) projectForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
@@ -2375,12 +2375,12 @@ public class NUserPage {
 
 					getreport_resreqFields.add(projects);
 					
-					Form getreport_resreqForm = new Form(getreport_resreqFields, "Report Resource Requirement Form");
+					final Form getreport_resreqForm = new Form(getreport_resreqFields, "Report Resource Requirement Form");
 					final PanelBuilder report_resreq_panel = new PanelBuilder(getreport_resreqForm);
 					report_resreq_panel.makeForm();
 
 					JFrame getReport_ResReqPage = new JFrame("Get Report Resource Requirement Form");
-					getReport_ResReqPage.getContentPane().add(report_resreq_panel.getJPanel(), BorderLayout.NORTH);
+					getReport_ResReqPage.getContentPane().add(getreport_resreqForm.getJPanel(), BorderLayout.NORTH);
 					
 					JButton submitresreqreportBtn = new JButton("Submit");
 					JPanel buttonPanel = new JPanel();
@@ -2388,14 +2388,14 @@ public class NUserPage {
 					getReport_ResReqPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 					getReport_ResReqPage.pack();
 					getReport_ResReqPage.setVisible(true);
-					ComboBoxJPanel comboBoxpanel_project = (ComboBoxJPanel) report_resreq_panel.getJPanel().getComponent(0);
+					ComboBoxJPanel comboBoxpanel_project = (ComboBoxJPanel) getreport_resreqForm.getJPanel().getComponent(0);
 					final JComboBox projectCombo = comboBoxpanel_project.getComboBox();
 
 					submitresreqreportBtn.addActionListener(new ActionListener() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							for (int i = 0; i < report_resreq_panel.getJPanel().getComponentCount(); i++) {
+							for (int i = 0; i < getreport_resreqForm.getJPanel().getComponentCount(); i++) {
 								// System.out.println(fpanel.selected_Choice);
 							}
 							System.out.println(projectCombo.getSelectedItem()+" ino select");
