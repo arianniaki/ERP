@@ -218,7 +218,7 @@ public class NUserPage {
 
 		accessright_table = new JTable(accessright_tableModel);
 		for (int i = 0; i < allemployees.size(); i++) {
-			Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
+			Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname"),  allemployees.get(i).get("accessrightid")};
 			accessright_tableModel.addRow(objs);
 		}
 

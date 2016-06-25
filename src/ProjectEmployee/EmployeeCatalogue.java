@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import AccessRight.AccessRight;
 import DataBase.DataBase;
 import DataBase.Table;
 
@@ -93,6 +94,7 @@ public class EmployeeCatalogue {
 				emp.setUsername(res.getString("username"));
 				emp.setSectionId(res.getInt("sectionid"));
 				emp.setPassword(res.getString("password"));
+				emp.setAccessRight(new AccessRight(res.getInt("accessrightid")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
