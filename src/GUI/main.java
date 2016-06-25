@@ -73,7 +73,7 @@ public class main {
 							EmployeeCatalogue empcat = new EmployeeCatalogue();
 							System.out.println(signupform.getText(0)+" "+signupform.getText(1)+" "+signupform.getText(2)+" "+signupform.getText(3)+" "+signupform.getText(4));
 							
-							empcat.addEmployee(Integer.parseInt(signupform.getText(1)), false, signupform.getText(0), "newuser",Integer.parseInt(signupform.getText(2)),signupform.getText(3), signupform.getText(4),false,false);
+//							empcat.addEmployee(Integer.parseInt(signupform.getText(1)), false, signupform.getText(0), "newuser",Integer.parseInt(signupform.getText(2)),signupform.getText(3), signupform.getText(4),false,false);
 							empcat.readAllEmployees();
 							signup.dispose();
 						}
