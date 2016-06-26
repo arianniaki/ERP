@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -218,7 +220,8 @@ public class NUserPage {
 
 		accessright_table = new JTable(accessright_tableModel);
 		for (int i = 0; i < allemployees.size(); i++) {
-			Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname"),  allemployees.get(i).get("accessrightid")};
+			Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname"),
+					allemployees.get(i).get("accessrightid") };
 			accessright_tableModel.addRow(objs);
 		}
 
@@ -245,7 +248,7 @@ public class NUserPage {
 				JButton submitaccessrightassignmentBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submitaccessrightassignmentBtn);
-				
+
 				Assign_AccessRightPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Assign_AccessRightPage.pack();
 				Assign_AccessRightPage.setVisible(true);
@@ -268,10 +271,10 @@ public class NUserPage {
 						Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
 						emp_access.setAccessRight(selected_accessright_forassignment);
 						// table should be update later
-						
+
 						System.out.println("ACCESS RIGHT O DADAM");
-						
-//						Assign_AccessRightPage.dispose();
+
+						// Assign_AccessRightPage.dispose();
 						allemployees = empcat.readAllEmployees();
 						int rowcount = accessright_tableModel.getRowCount();
 						for (int j = rowcount - 1; j >= 0; j--) {
@@ -279,16 +282,14 @@ public class NUserPage {
 						}
 						System.out.println(accessright_tableModel.getRowCount() + " ---");
 						for (int i = 0; i < allemployees.size(); i++) {
-							Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname"),allemployees.get(i).get("accessrightid"), };
+							Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname"),
+									allemployees.get(i).get("accessrightid"), };
 							accessright_tableModel.addRow(objs);
 						}
 
-						
-						
-						
 					}
 				});
-				
+
 				ComboBoxJPanel comboBoxpanel_accessright = (ComboBoxJPanel) accessright_Form.getJPanel()
 						.getComponent(0);
 				final JComboBox accessright_type = comboBoxpanel_accessright.getComboBox();
@@ -422,27 +423,20 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
-		gl_subsystemPanel.setHorizontalGroup(
-			gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-				.addGroup(gl_subsystemPanel.createSequentialGroup()
-					.addComponent(btnBacktoProject)
-					.addPreferredGap(ComponentPlacement.RELATED, 640, Short.MAX_VALUE)
-					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE))
-		);
-		gl_subsystemPanel.setVerticalGroup(
-			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
-					.addGap(11)
-					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnBacktoProject)
-						.addComponent(addsubsystemBtn)))
-		);
+		gl_subsystemPanel.setHorizontalGroup(gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
+						.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE).addGap(40))
+				.addGroup(gl_subsystemPanel.createSequentialGroup().addComponent(btnBacktoProject)
+						.addPreferredGap(ComponentPlacement.RELATED, 640, Short.MAX_VALUE)
+						.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)));
+		gl_subsystemPanel
+				.setVerticalGroup(
+						gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
+										.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 425,
+												Short.MAX_VALUE)
+										.addGap(11).addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+												.addComponent(btnBacktoProject).addComponent(addsubsystemBtn))));
 
 		subsystem_table = new JTable(subsystem_tableModel);
 		subsystem_scrollPane.setViewportView(subsystem_table);
@@ -452,6 +446,20 @@ public class NUserPage {
 		tabbedPane.addTab("Requirment Management", null, requirementPanel, null);
 
 		JButton addreqBtn = new JButton("Add Requirement");
+
+		ResourceRequirementCatalogue resreqcat = new ResourceRequirementCatalogue();
+		System.out.println("all : ");
+		allresourcerequirements = resreqcat.getResourceRequirements();
+
+		String[] resreq_columns = new String[] { "rid", "sid", "pid" };
+
+		final DefaultTableModel resreq_tableModel = new DefaultTableModel(resreq_columns, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
+		};
 
 		addreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -483,15 +491,11 @@ public class NUserPage {
 				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 				Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
 
-
-				
 				requirement_moduleFields.add(reqname);
 				requirement_moduleFields.add(req_res_type);
 				requirement_moduleFields.add(req_res);
 				requirement_moduleFields.add(sections);
 				requirement_moduleFields.add(projects);
-
-
 
 				final Form requirement_Form = new Form(requirement_moduleFields, "Requirement Form");
 				final PanelBuilder requirement_Panel = new PanelBuilder(requirement_Form);
@@ -540,19 +544,26 @@ public class NUserPage {
 				final JComboBox sectionCombo = comboBoxpane_sections.getComboBox();
 				final JComboBox projectCombo = comboBoxpane_projects.getComboBox();
 
-
 				resourceCombo.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						System.out.println(resourceCombo.getSelectedItem() + " ino select kardi az resource");
-						System.out.println(sectionCombo.getSelectedItem() + " ino select kardi section");
-						System.out.println(projectCombo.getSelectedItem() + " ino select kardi proje");
+						// System.out.println(resourceCombo.getSelectedItem() +
+						// " ino select kardi az resource");
+						// System.out.println(sectionCombo.getSelectedItem() + "
+						// ino select kardi section");
+						// System.out.println(projectCombo.getSelectedItem() + "
+						// ino select kardi proje");
+						// System.out.println(from_datePicker.getJFormattedTextField().getText()
+						// + " from date");
+						// System.out.println(to_datePicker.getJFormattedTextField().getText()
+						// + " to date");
+						//
+						 System.out.println(from_datePicker.getJFormattedTextField().getText()
+						 + " from date");
+						 System.out.println(to_datePicker.getJFormattedTextField().getText()
+						 + " to date");
 
-						System.out.println(from_datePicker.getJFormattedTextField().getText() + " from date");
-						System.out.println(to_datePicker.getJFormattedTextField().getText() + " to date");
-
-						
 					}
 				});
 
@@ -619,29 +630,56 @@ public class NUserPage {
 							FieldPanel fpanel = (FieldPanel) requirement_Form.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + "adasa");
+						// for (int i = 0; i < inputs.size(); i++) {
+						// System.out.println(inputs.get(i) + "adasa");
+						// }
+
+						String rid = "";
+						Pattern p = Pattern.compile("rid=\\d+");
+						Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
+						if (m.find()) {
+							rid = m.group();
 						}
-						// resreqCat.addResourceRequirement(rid, sid, pid, '2-z,
-						// to);
+
+						String sectionid = "";
+						Pattern p1 = Pattern.compile("sectionid=\\d+");
+						Matcher m1 = p1.matcher((CharSequence) sectionCombo.getSelectedItem());
+						if (m1.find()) {
+							sectionid = m1.group();
+						}
+
+						String projid = "";
+						Pattern p2 = Pattern.compile("projid=\\d+");
+						Matcher m2 = p2.matcher((CharSequence) projectCombo.getSelectedItem());
+						if (m2.find()) {
+							projid = m2.group();
+						}
+
+						String fromdate = from_datePicker.getJFormattedTextField().getText();
+						String todate = to_datePicker.getJFormattedTextField().getText();
+
+						System.out.println("--------------");
+						System.out.println(rid + " " + sectionid + " "
+								+ projid+ " " + fromdate + " " + todate);
+
+						resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")), Integer.parseInt(sectionid.replace("sectionid=", "")),
+								Integer.parseInt(projid.replace("projid=", "")), fromdate, todate);
 						// // tu resource ham bayad insert she
 						// allmodules.clear();
-						// allmodules = mcat.readAllResources();
-						// System.out.println(module_tableModel.getRowCount()+"
-						// ---");
-						// int rowcount= module_tableModel.getRowCount();
-						// for (int j = rowcount - 1; j >= 0; j--) {
-						// System.out.println(j);
-						// module_tableModel.removeRow(j);
-						// }
-						// System.out.println(module_tableModel.getRowCount()+"
-						// ---");
-						// for (int i = 0; i < allmodules.size(); i++) {
-						// Object[] objs = { allmodules.get(i).get("rid"),
-						// allmodules.get(i).get("modname") };
-						// module_tableModel.addRow(objs);
-						// }
-						//
+						allresourcerequirements = resreqCat.getResourceRequirements();
+						System.out.println(resreq_tableModel.getRowCount() + "");
+						int rowcount = resreq_tableModel.getRowCount();
+						for (int j = rowcount - 1; j >= 0; j--) {
+							System.out.println(j);
+							resreq_tableModel.removeRow(j);
+						}
+						System.out.println(resreq_tableModel.getRowCount() + "");
+						for (int i = 0; i < allresourcerequirements.size(); i++) {
+							Object[] objs = { allresourcerequirements.get(i).toHashMap().get("rid"),
+									allresourcerequirements.get(i).toHashMap().get("sid"),
+									allresourcerequirements.get(i).toHashMap().get("pid"), };
+							resreq_tableModel.addRow(objs);
+						}
 
 					}
 				});
@@ -657,57 +695,34 @@ public class NUserPage {
 
 		JButton requirement_btnSatisfy = new JButton("Satisfy");
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
-		gl_requirementPanel.setHorizontalGroup(
-			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_requirementPanel.createSequentialGroup()
-					.addContainerGap(358, Short.MAX_VALUE)
-					.addComponent(searchreqBtn)
-					.addGap(394))
-				.addGroup(gl_requirementPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-				.addGroup(Alignment.TRAILING, gl_requirementPanel.createSequentialGroup()
-					.addComponent(requirement_btnEdit)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(requirement_btnSatisfy)
-					.addPreferredGap(ComponentPlacement.RELATED, 529, Short.MAX_VALUE)
-					.addComponent(addreqBtn))
-		);
-		gl_requirementPanel.setVerticalGroup(
-			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_requirementPanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(searchreqBtn)
-					.addGap(40)
-					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-					.addGap(11)
-					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(addreqBtn)
-						.addComponent(requirement_btnEdit)
-						.addComponent(requirement_btnSatisfy)))
-		);
-
-
-		ResourceRequirementCatalogue resreqcat = new ResourceRequirementCatalogue();
-		System.out.println("all : ");
-		allresourcerequirements = resreqcat.getResourceRequirements();
-
-		String[] resreq_columns = new String[] { "rid", "sid" ,"pid"};
-
-		final DefaultTableModel resreq_tableModel = new DefaultTableModel(resreq_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
+		gl_requirementPanel
+				.setHorizontalGroup(
+						gl_requirementPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(Alignment.TRAILING, gl_requirementPanel.createSequentialGroup()
+										.addContainerGap(358, Short.MAX_VALUE).addComponent(searchreqBtn).addGap(394))
+								.addGroup(gl_requirementPanel.createSequentialGroup().addGap(40)
+										.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
+												Short.MAX_VALUE)
+										.addGap(40))
+								.addGroup(Alignment.TRAILING,
+										gl_requirementPanel.createSequentialGroup().addComponent(requirement_btnEdit)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(requirement_btnSatisfy)
+												.addPreferredGap(ComponentPlacement.RELATED, 529, Short.MAX_VALUE)
+												.addComponent(addreqBtn)));
+		gl_requirementPanel.setVerticalGroup(gl_requirementPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_requirementPanel.createSequentialGroup().addContainerGap().addComponent(searchreqBtn)
+						.addGap(40).addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+						.addGap(11)
+						.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE).addComponent(addreqBtn)
+								.addComponent(requirement_btnEdit).addComponent(requirement_btnSatisfy))));
 
 		requirement_table = new JTable(resreq_tableModel);
 
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
 			Object[] objs = { allresourcerequirements.get(i).toHashMap().get("rid"),
-							allresourcerequirements.get(i).toHashMap().get("sid"),allresourcerequirements.get(i).toHashMap().get("pid"), };
+					allresourcerequirements.get(i).toHashMap().get("sid"),
+					allresourcerequirements.get(i).toHashMap().get("pid"), };
 			resreq_tableModel.addRow(objs);
 		}
 
@@ -737,7 +752,6 @@ public class NUserPage {
 		System.out.println("all : ");
 		allemployees = employeecat.readAllEmployees();
 
-
 		JPanel humanPanel = new JPanel();
 		resourcesTab.addTab("Human", null, humanPanel, null);
 
@@ -755,15 +769,15 @@ public class NUserPage {
 		JButton human_btnEdit = new JButton("Edit");
 		human_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				int rowIndex = human_table.getSelectedRow();
 				int colIndex = human_table.getSelectedColumn();
 
-				String Table_click = (human_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
-				System.out.println(Table_click+" this was clicked");
+				String Table_click = (human_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				System.out.println(Table_click + " this was clicked");
 				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				empcat.deleteEmployee(Integer.parseInt(Table_click));
-				
+
 				empcat.readAllEmployees();
 				allemployees.clear();
 				allemployees = empcat.readAllEmployees();
@@ -777,8 +791,7 @@ public class NUserPage {
 					Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
 					human_tableModel.addRow(objs);
 				}
-				
-				
+
 			}
 		});
 
@@ -815,22 +828,19 @@ public class NUserPage {
 
 			}
 		});
-		
+
 		search_humanname = new JTextField();
 		search_humanname.setColumns(10);
-		
+
 		JButton human_btnSearch = new JButton("Search");
 		human_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EmployeeCatalogue empcat  = new EmployeeCatalogue();
-				HashMap <String,String> searchVars = new HashMap<String,String>();
-				searchVars.put("empname", "\'"+search_humanname.getText()+"\'");
+				EmployeeCatalogue empcat = new EmployeeCatalogue();
+				HashMap<String, String> searchVars = new HashMap<String, String>();
+				searchVars.put("empname", "\'" + search_humanname.getText() + "\'");
 
-
-				
-				
 				allemployees.clear();
-				allemployees = 	empcat.SearchEmployee(searchVars);
+				allemployees = empcat.SearchEmployee(searchVars);
 
 				System.out.println(human_tableModel.getRowCount() + " ---");
 				int rowcount = human_tableModel.getRowCount();
@@ -844,9 +854,9 @@ public class NUserPage {
 				}
 			}
 		});
-		
+
 		JLabel lblHumanName = DefaultComponentFactory.getInstance().createLabel("Human name");
-		
+
 		JButton search_humanbtnRefresh = new JButton("Refresh");
 		search_humanbtnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -863,49 +873,40 @@ public class NUserPage {
 				for (int i = 0; i < allemployees.size(); i++) {
 					Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
 					human_tableModel.addRow(objs);
-				}			
-				
+				}
+
 			}
 		});
 		GroupLayout gl_humanPanel = new GroupLayout(humanPanel);
-		gl_humanPanel.setHorizontalGroup(
-			gl_humanPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(640, Short.MAX_VALUE))
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addComponent(search_humanbtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 359, Short.MAX_VALUE)
-					.addComponent(human_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblHumanName)
-					.addContainerGap())
-		);
-		gl_humanPanel.setVerticalGroup(
-			gl_humanPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(human_btnSearch)
-						.addComponent(lblHumanName)
-						.addComponent(search_humanbtnRefresh))
-					.addGap(31)
-					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(human_btnEdit)
-						.addComponent(human_btnDelete))
-					.addContainerGap())
-		);
+		gl_humanPanel.setHorizontalGroup(gl_humanPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_humanPanel.createSequentialGroup().addGap(30)
+						.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE).addGap(30))
+				.addGroup(
+						gl_humanPanel.createSequentialGroup()
+								.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
+										GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(640,
+										Short.MAX_VALUE))
+				.addGroup(gl_humanPanel.createSequentialGroup().addComponent(search_humanbtnRefresh)
+						.addPreferredGap(ComponentPlacement.RELATED, 359, Short.MAX_VALUE).addComponent(human_btnSearch)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblHumanName).addContainerGap()));
+		gl_humanPanel.setVerticalGroup(gl_humanPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_humanPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(human_btnSearch).addComponent(lblHumanName)
+								.addComponent(search_humanbtnRefresh))
+						.addGap(31).addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE).addComponent(human_btnEdit)
+								.addComponent(human_btnDelete))
+						.addContainerGap()));
 
 		human_table = new JTable(human_tableModel);
 		human_scrollPane.setViewportView(human_table);
@@ -923,7 +924,6 @@ public class NUserPage {
 		InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 		System.out.println("all : ");
 		allinformation = infocat.readAllResources();
-
 
 		// end get information list
 
@@ -986,20 +986,23 @@ public class NUserPage {
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " information");
 						}
-//						infocat.addResource((inputs.get(0)));
-//						// tu resource ham bayad insert she
-//						allinformation.clear();
-//						allinformation = infocat.readAllResources();
-//						System.out.println(information_tableModel.getRowCount() + " ---");
-//						int rowcount = information_tableModel.getRowCount();
-//						for (int j = rowcount - 1; j >= 0; j--) {
-//							information_tableModel.removeRow(j);
-//						}
-//						System.out.println(information_tableModel.getRowCount() + " ---");
-//						for (int i = 0; i < allinformation.size(); i++) {
-//							Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
-//							information_tableModel.addRow(objs);
-//						}
+						// infocat.addResource((inputs.get(0)));
+						// // tu resource ham bayad insert she
+						// allinformation.clear();
+						// allinformation = infocat.readAllResources();
+						// System.out.println(information_tableModel.getRowCount()
+						// + " ---");
+						// int rowcount = information_tableModel.getRowCount();
+						// for (int j = rowcount - 1; j >= 0; j--) {
+						// information_tableModel.removeRow(j);
+						// }
+						// System.out.println(information_tableModel.getRowCount()
+						// + " ---");
+						// for (int i = 0; i < allinformation.size(); i++) {
+						// Object[] objs = { allinformation.get(i).get("rid"),
+						// allinformation.get(i).get("irname") };
+						// information_tableModel.addRow(objs);
+						// }
 					}
 				});
 			}
@@ -1011,11 +1014,11 @@ public class NUserPage {
 				int rowIndex = information_table.getSelectedRow();
 				int colIndex = information_table.getSelectedColumn();
 
-				String Table_click = (information_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
-				System.out.println(Table_click+" this was clicked");
+				String Table_click = (information_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				System.out.println(Table_click + " this was clicked");
 				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				infocat.deleteResource(Integer.parseInt(Table_click));
-				
+
 				infocat.readAllResources();
 				allinformation.clear();
 				allinformation = infocat.readAllResources();
@@ -1031,17 +1034,16 @@ public class NUserPage {
 				}
 			}
 		});
-		
+
 		search_informationname = new JTextField();
 		search_informationname.setColumns(10);
-		
+
 		JButton information_btnSearch = new JButton("Search");
 		information_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
-				HashMap <String,String> searchVars = new HashMap<String,String>();
-				searchVars.put("irname", "\'"+search_informationname.getText()+"\'");
-				
+				HashMap<String, String> searchVars = new HashMap<String, String>();
+				searchVars.put("irname", "\'" + search_informationname.getText() + "\'");
 
 				allinformation.clear();
 				allinformation = infocat.SearchResource(searchVars);
@@ -1058,13 +1060,13 @@ public class NUserPage {
 				}
 			}
 		});
-		
+
 		JLabel lblInformationName = DefaultComponentFactory.getInstance().createLabel("Information Name");
-		
+
 		JButton search_informationbtnRefresh = new JButton("Refresh");
 		search_informationbtnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				allinformation.clear();
 				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				allinformation = infocat.readAllResources();
@@ -1083,46 +1085,40 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_informationPanel = new GroupLayout(informationPanel);
-		gl_informationPanel.setHorizontalGroup(
-			gl_informationPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_informationPanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(information_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_informationPanel.createSequentialGroup()
-					.addComponent(information_btnEdit)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(information_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 432, Short.MAX_VALUE)
-					.addComponent(btnAddInformation))
-				.addGroup(gl_informationPanel.createSequentialGroup()
-					.addComponent(search_informationbtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 328, Short.MAX_VALUE)
-					.addComponent(information_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_informationname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblInformationName)
-					.addContainerGap())
-		);
-		gl_informationPanel.setVerticalGroup(
-			gl_informationPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_informationPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_informationPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_informationname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(information_btnSearch)
-						.addComponent(lblInformationName)
-						.addComponent(search_informationbtnRefresh))
-					.addGap(31)
-					.addComponent(information_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_informationPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(information_btnEdit)
-						.addComponent(information_btnDelete)
-						.addComponent(btnAddInformation))
-					.addContainerGap())
-		);
+		gl_informationPanel
+				.setHorizontalGroup(
+						gl_informationPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_informationPanel.createSequentialGroup().addGap(30)
+										.addComponent(information_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
+												Short.MAX_VALUE)
+										.addGap(30))
+								.addGroup(gl_informationPanel.createSequentialGroup().addComponent(information_btnEdit)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(information_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, 432, Short.MAX_VALUE)
+										.addComponent(btnAddInformation))
+								.addGroup(gl_informationPanel.createSequentialGroup()
+										.addComponent(search_informationbtnRefresh)
+										.addPreferredGap(ComponentPlacement.RELATED, 328, Short.MAX_VALUE)
+										.addComponent(information_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(search_informationname, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblInformationName)
+										.addContainerGap()));
+		gl_informationPanel.setVerticalGroup(gl_informationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_informationPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_informationPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_informationname, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(information_btnSearch).addComponent(lblInformationName)
+								.addComponent(search_informationbtnRefresh))
+						.addGap(31).addComponent(information_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_informationPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(information_btnEdit).addComponent(information_btnDelete)
+								.addComponent(btnAddInformation))
+						.addContainerGap()));
 
 		informationPanel.setLayout(gl_informationPanel);
 		btnAddInformation.addActionListener(new ActionListener() {
@@ -1224,23 +1220,26 @@ public class NUserPage {
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " information");
 						}
-//						infocat.addResource((inputs.get(0)));
-//						// tu resource ham bayad insert she
-//						allinformation.clear();
-//						allinformation = infocat.readAllResources();
-//						System.out.println(information_tableModel.getRowCount() + " ---");
-//						int rowcount = information_tableModel.getRowCount();
-//						for (int j = rowcount - 1; j >= 0; j--) {
-//							information_tableModel.removeRow(j);
-//						}
-//						System.out.println(information_tableModel.getRowCount() + " ---");
-//						for (int i = 0; i < allinformation.size(); i++) {
-//							Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
-//							information_tableModel.addRow(objs);
-//						}
+						// infocat.addResource((inputs.get(0)));
+						// // tu resource ham bayad insert she
+						// allinformation.clear();
+						// allinformation = infocat.readAllResources();
+						// System.out.println(information_tableModel.getRowCount()
+						// + " ---");
+						// int rowcount = information_tableModel.getRowCount();
+						// for (int j = rowcount - 1; j >= 0; j--) {
+						// information_tableModel.removeRow(j);
+						// }
+						// System.out.println(information_tableModel.getRowCount()
+						// + " ---");
+						// for (int i = 0; i < allinformation.size(); i++) {
+						// Object[] objs = { allinformation.get(i).get("rid"),
+						// allinformation.get(i).get("irname") };
+						// information_tableModel.addRow(objs);
+						// }
 					}
 				});
-				
+
 			}
 		});
 
@@ -1266,15 +1265,15 @@ public class NUserPage {
 		JButton financial_btnDelete = new JButton("Delete");
 		financial_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				int rowIndex = finan_table.getSelectedRow();
 				int colIndex = finan_table.getSelectedColumn();
 
-				String Table_click = (finan_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
-				System.out.println(Table_click+" this was clicked");
+				String Table_click = (finan_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				System.out.println(Table_click + " this was clicked");
 				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				financat.deleteResource(Integer.parseInt(Table_click));
-				
+
 				financat.readAllResources();
 				allfinance.clear();
 				allfinance = financat.readAllResources();
@@ -1288,20 +1287,19 @@ public class NUserPage {
 					Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
 					financial_tableModel.addRow(objs);
 				}
-				
-				
+
 			}
 		});
-		
+
 		search_financialname = new JTextField();
 		search_financialname.setColumns(10);
-		
+
 		JButton financial_btnSearch = new JButton("Search");
 		financial_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
-				HashMap <String,String> searchVars = new HashMap<String,String>();
-				searchVars.put("finanname", "\'"+search_financialname.getText()+"\'");
+				HashMap<String, String> searchVars = new HashMap<String, String>();
+				searchVars.put("finanname", "\'" + search_financialname.getText() + "\'");
 				financat.SearchResource(searchVars);
 
 				allfinance.clear();
@@ -1317,12 +1315,12 @@ public class NUserPage {
 					Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
 					financial_tableModel.addRow(objs);
 				}
-				
+
 			}
 		});
-		
+
 		JLabel lblFinancialName = DefaultComponentFactory.getInstance().createLabel("Financial Name");
-		
+
 		JButton search_financialbtnRefresh = new JButton("Refresh");
 		search_financialbtnRefresh.addActionListener(new ActionListener() {
 			@Override
@@ -1340,51 +1338,46 @@ public class NUserPage {
 				for (int i = 0; i < allfinance.size(); i++) {
 					Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
 					financial_tableModel.addRow(objs);
-				}				
+				}
 			}
 		});
 
 		GroupLayout gl_financialPanel = new GroupLayout(financialPanel);
-		gl_financialPanel.setHorizontalGroup(
-			gl_financialPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_financialPanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_financialPanel.createSequentialGroup()
-					.addComponent(financial_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(financial_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 450, Short.MAX_VALUE)
-					.addComponent(btnAddFinancial))
-				.addGroup(gl_financialPanel.createSequentialGroup()
-					.addComponent(search_financialbtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 346, Short.MAX_VALUE)
-					.addComponent(financial_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_financialname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblFinancialName)
-					.addContainerGap())
-		);
-		gl_financialPanel.setVerticalGroup(
-			gl_financialPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_financialPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_financialname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(financial_btnSearch)
-						.addComponent(lblFinancialName)
-						.addComponent(search_financialbtnRefresh))
-					.addGap(31)
-					.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(financial_btnEdit)
-						.addComponent(financial_btnDelete)
-						.addComponent(btnAddFinancial))
-					.addContainerGap())
-		);
+		gl_financialPanel
+				.setHorizontalGroup(gl_financialPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_financialPanel.createSequentialGroup().addGap(30)
+								.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
+										Short.MAX_VALUE)
+								.addGap(30))
+						.addGroup(gl_financialPanel.createSequentialGroup()
+								.addComponent(financial_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(financial_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 450, Short.MAX_VALUE).addComponent(
+										btnAddFinancial))
+						.addGroup(gl_financialPanel.createSequentialGroup().addComponent(search_financialbtnRefresh)
+								.addPreferredGap(ComponentPlacement.RELATED, 346, Short.MAX_VALUE)
+								.addComponent(financial_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(search_financialname, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblFinancialName)
+								.addContainerGap()));
+		gl_financialPanel.setVerticalGroup(gl_financialPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_financialPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_financialname, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(financial_btnSearch).addComponent(lblFinancialName)
+								.addComponent(search_financialbtnRefresh))
+						.addGap(31)
+						.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(financial_btnEdit).addComponent(financial_btnDelete)
+								.addComponent(btnAddFinancial))
+						.addContainerGap()));
 
 		financialPanel.setLayout(gl_financialPanel);
 		btnAddFinancial.addActionListener(new ActionListener() {
@@ -1554,24 +1547,26 @@ public class NUserPage {
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + "adasa");
 						}
-//						mcat.addResource((inputs.get(0)));
-//						// tu resource ham bayad insert she
-//						allmodules.clear();
-//						allmodules = mcat.readAllResources();
-//						System.out.println(module_tableModel.getRowCount() + " ---");
-//						int rowcount = module_tableModel.getRowCount();
-//						for (int j = rowcount - 1; j >= 0; j--) {
-//							System.out.println(j);
-//							module_tableModel.removeRow(j);
-//						}
-//						System.out.println(module_tableModel.getRowCount() + " ---");
-//						for (int i = 0; i < allmodules.size(); i++) {
-//							Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
-//							module_tableModel.addRow(objs);
-//						}
+						// mcat.addResource((inputs.get(0)));
+						// // tu resource ham bayad insert she
+						// allmodules.clear();
+						// allmodules = mcat.readAllResources();
+						// System.out.println(module_tableModel.getRowCount() +
+						// " ---");
+						// int rowcount = module_tableModel.getRowCount();
+						// for (int j = rowcount - 1; j >= 0; j--) {
+						// System.out.println(j);
+						// module_tableModel.removeRow(j);
+						// }
+						// System.out.println(module_tableModel.getRowCount() +
+						// " ---");
+						// for (int i = 0; i < allmodules.size(); i++) {
+						// Object[] objs = { allmodules.get(i).get("rid"),
+						// allmodules.get(i).get("modname") };
+						// module_tableModel.addRow(objs);
+						// }
 					}
 				});
-
 
 			}
 		});
@@ -1579,15 +1574,15 @@ public class NUserPage {
 		JButton module_btnDelete = new JButton("Delete");
 		module_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				int rowIndex = module_table.getSelectedRow();
 				int colIndex = module_table.getSelectedColumn();
 
-				String Table_click = (module_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
-				System.out.println(Table_click+" this was clicked");
+				String Table_click = (module_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				System.out.println(Table_click + " this was clicked");
 				ModuleCatalogue modcat = new ModuleCatalogue();
 				modcat.deleteResource(Integer.parseInt(Table_click));
-				
+
 				modcat.readAllResources();
 				allmodules.clear();
 				allmodules = modcat.readAllResources();
@@ -1601,8 +1596,7 @@ public class NUserPage {
 					Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
 					module_tableModel.addRow(objs);
 				}
-				
-				
+
 			}
 		});
 		final JPanel maintaining_panel = new JPanel();
@@ -1630,17 +1624,16 @@ public class NUserPage {
 				resourcesTab.setSelectedComponent(maintaining_panel);
 			}
 		});
-		
+
 		search_modulename = new JTextField();
 		search_modulename.setColumns(10);
-		
+
 		JButton module_btnSearch = new JButton("Search");
 		module_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ModuleCatalogue mcat = new ModuleCatalogue();
-				HashMap <String,String> searchVars = new HashMap<String,String>();
-				searchVars.put("modname", "\'"+search_modulename.getText()+"\'");
-				
+				HashMap<String, String> searchVars = new HashMap<String, String>();
+				searchVars.put("modname", "\'" + search_modulename.getText() + "\'");
 
 				allmodules.clear();
 				allmodules = mcat.SearchResource(searchVars);
@@ -1656,11 +1649,11 @@ public class NUserPage {
 					module_tableModel.addRow(objs);
 				}
 			}
-			
-			});
-		
+
+		});
+
 		JLabel lblModuleName = DefaultComponentFactory.getInstance().createLabel("Module Name");
-		
+
 		JButton search_modulebtnRefresh = new JButton("Refresh");
 		search_modulebtnRefresh.addActionListener(new ActionListener() {
 			@Override
@@ -1678,54 +1671,46 @@ public class NUserPage {
 				for (int i = 0; i < allmodules.size(); i++) {
 					Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
 					module_tableModel.addRow(objs);
-				}	
-				
+				}
+
 			}
 		});
 		GroupLayout gl_modulePanel_1 = new GroupLayout(modulePanel);
-		gl_modulePanel_1.setHorizontalGroup(
-			gl_modulePanel_1.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addGap(30)
-					.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addComponent(module_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(module_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 368, Short.MAX_VALUE)
-					.addComponent(btnViewMaintaning)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnAddModule))
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addComponent(search_modulebtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 356, Short.MAX_VALUE)
-					.addComponent(module_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblModuleName)
-					.addContainerGap())
-		);
-		gl_modulePanel_1.setVerticalGroup(
-			gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(module_btnSearch)
-						.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblModuleName)
-						.addComponent(search_modulebtnRefresh))
-					.addGap(31)
-					.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(module_btnEdit)
-						.addComponent(module_btnDelete)
-						.addComponent(btnAddModule)
-						.addComponent(btnViewMaintaning))
-					.addContainerGap())
-		);
+		gl_modulePanel_1.setHorizontalGroup(gl_modulePanel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_modulePanel_1.createSequentialGroup().addGap(30)
+						.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE).addGap(30))
+				.addGroup(
+						gl_modulePanel_1.createSequentialGroup()
+								.addComponent(module_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(module_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 368, Short.MAX_VALUE)
+								.addComponent(btnViewMaintaning).addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(
+										btnAddModule))
+				.addGroup(gl_modulePanel_1.createSequentialGroup().addComponent(search_modulebtnRefresh)
+						.addPreferredGap(ComponentPlacement.RELATED, 356, Short.MAX_VALUE)
+						.addComponent(module_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblModuleName).addContainerGap()));
+		gl_modulePanel_1
+				.setVerticalGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_modulePanel_1.createSequentialGroup().addContainerGap()
+								.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
+										.addComponent(module_btnSearch)
+										.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblModuleName).addComponent(search_modulebtnRefresh))
+								.addGap(31)
+								.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
+										.addComponent(module_btnEdit).addComponent(module_btnDelete)
+										.addComponent(btnAddModule).addComponent(btnViewMaintaning))
+								.addContainerGap()));
 
 		module_table = new JTable(module_tableModel);
 		for (int i = 0; i < allmodules.size(); i++) {
@@ -1740,7 +1725,6 @@ public class NUserPage {
 		PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 		System.out.println("all : ");
 		allphysicals = physcat.readAllResources();
-
 
 		resourcesTab.addTab("Maintaining Module", null, maintaining_panel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
@@ -1776,34 +1760,31 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_maintaining_panel = new GroupLayout(maintaining_panel);
-		gl_maintaining_panel.setHorizontalGroup(
-			gl_maintaining_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_maintaining_panel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_maintaining_panel.createSequentialGroup()
-					.addComponent(maintaining_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnBacktoModule)
-					.addPreferredGap(ComponentPlacement.RELATED, 439, Short.MAX_VALUE)
-					.addComponent(btnAddMaintaining, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
-		);
-		gl_maintaining_panel.setVerticalGroup(
-			gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_maintaining_panel.createSequentialGroup()
-					.addGap(65)
-					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnAddMaintaining)
-						.addComponent(maintaining_btnEdit)
-						.addComponent(maintaining_btnDelete)
-						.addComponent(btnBacktoModule))
-					.addContainerGap())
-		);
+		gl_maintaining_panel
+				.setHorizontalGroup(
+						gl_maintaining_panel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_maintaining_panel.createSequentialGroup().addGap(30)
+										.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
+												Short.MAX_VALUE)
+										.addGap(30))
+								.addGroup(gl_maintaining_panel.createSequentialGroup()
+										.addComponent(maintaining_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnBacktoModule)
+										.addPreferredGap(ComponentPlacement.RELATED, 439, Short.MAX_VALUE)
+										.addComponent(btnAddMaintaining, GroupLayout.PREFERRED_SIZE, 131,
+												GroupLayout.PREFERRED_SIZE)));
+		gl_maintaining_panel.setVerticalGroup(gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_maintaining_panel.createSequentialGroup().addGap(65)
+						.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnAddMaintaining).addComponent(maintaining_btnEdit)
+								.addComponent(maintaining_btnDelete).addComponent(btnBacktoModule))
+						.addContainerGap()));
 
 		maintaining_table = new JTable();
 		maintaining_scrollPane.setViewportView(maintaining_table);
@@ -1886,15 +1867,13 @@ public class NUserPage {
 		JButton physical_btnEdit = new JButton("Edit");
 		physical_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			//
+				//
 				int rowIndex = physical_table.getSelectedRow();
 				int colIndex = physical_table.getSelectedColumn();
 
-				String Table_click = (physical_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
-				System.out.println(Table_click+" this was clicked");
+				String Table_click = (physical_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				System.out.println(Table_click + " this was clicked");
 
-				
-				
 				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
 				physical_moduleFields.add(new Field("text", "physname", "", 20, "name"));
 
@@ -1910,7 +1889,7 @@ public class NUserPage {
 				Edit_PhysicalModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Edit_PhysicalModulePage.pack();
 				Edit_PhysicalModulePage.setVisible(true);
-				
+
 				submiteditphysicalmoduleBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -1926,23 +1905,26 @@ public class NUserPage {
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " physical");
 						}
-//						physcat.addResource((inputs.get(0)));
-//						// tu resource ham bayad insert she
-//						allphysicals.clear();
-//						allphysicals = physcat.readAllResources();
-//						System.out.println(phyiscal_tableModel.getRowCount() + " ---");
-//						int rowcount = phyiscal_tableModel.getRowCount();
-//						for (int j = rowcount - 1; j >= 0; j--) {
-//							phyiscal_tableModel.removeRow(j);
-//						}
-//						System.out.println(phyiscal_tableModel.getRowCount() + " ---");
-//						for (int i = 0; i < allphysicals.size(); i++) {
-//							Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
-//							phyiscal_tableModel.addRow(objs);
-//						}						
+						// physcat.addResource((inputs.get(0)));
+						// // tu resource ham bayad insert she
+						// allphysicals.clear();
+						// allphysicals = physcat.readAllResources();
+						// System.out.println(phyiscal_tableModel.getRowCount()
+						// + " ---");
+						// int rowcount = phyiscal_tableModel.getRowCount();
+						// for (int j = rowcount - 1; j >= 0; j--) {
+						// phyiscal_tableModel.removeRow(j);
+						// }
+						// System.out.println(phyiscal_tableModel.getRowCount()
+						// + " ---");
+						// for (int i = 0; i < allphysicals.size(); i++) {
+						// Object[] objs = { allphysicals.get(i).get("rid"),
+						// allphysicals.get(i).get("physname") };
+						// phyiscal_tableModel.addRow(objs);
+						// }
 					}
 				});
-				
+
 			}
 		});
 
@@ -1952,11 +1934,11 @@ public class NUserPage {
 				int rowIndex = physical_table.getSelectedRow();
 				int colIndex = physical_table.getSelectedColumn();
 
-				String Table_click = (physical_table.getModel().getValueAt(rowIndex, 0).toString()); 																							// the
-				System.out.println(Table_click+" this was clicked");
+				String Table_click = (physical_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				System.out.println(Table_click + " this was clicked");
 				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				physcat.deleteResource(Integer.parseInt(Table_click));
-				
+
 				physcat.readAllResources();
 				allphysicals.clear();
 				allphysicals = physcat.readAllResources();
@@ -1972,19 +1954,19 @@ public class NUserPage {
 				}
 			}
 		});
-		
+
 		search_physicalname = new JTextField();
 		search_physicalname.setColumns(10);
-		
+
 		JButton physical_btnSearch = new JButton("Search");
 		physical_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
-				HashMap <String,String> searchVars = new HashMap<String,String>();
-				searchVars.put("physname", "\'"+search_physicalname.getText()+"\'");
-				
+				HashMap<String, String> searchVars = new HashMap<String, String>();
+				searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
+
 				allphysicals.clear();
-				allphysicals = 	physcat.SearchResource(searchVars);
+				allphysicals = physcat.SearchResource(searchVars);
 
 				System.out.println(phyiscal_tableModel.getRowCount() + " ---");
 				int rowcount = phyiscal_tableModel.getRowCount();
@@ -1998,9 +1980,9 @@ public class NUserPage {
 				}
 			}
 		});
-		
+
 		JLabel lblPhysicalName = DefaultComponentFactory.getInstance().createLabel("Physical Name");
-		
+
 		JButton search_physicalbtnRefresh = new JButton("Refresh");
 		search_physicalbtnRefresh.addActionListener(new ActionListener() {
 			@Override
@@ -2019,51 +2001,47 @@ public class NUserPage {
 				for (int i = 0; i < allphysicals.size(); i++) {
 					Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
 					phyiscal_tableModel.addRow(objs);
-				}	
+				}
 			}
 		});
 
 		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
-		gl_physicalPanel.setHorizontalGroup(
-			gl_physicalPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addComponent(physical_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(physical_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 455, Short.MAX_VALUE)
-					.addComponent(btnAddPhysicalResource))
-				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addComponent(search_physicalbtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 351, Short.MAX_VALUE)
-					.addComponent(physical_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblPhysicalName)
-					.addContainerGap())
-		);
-		gl_physicalPanel.setVerticalGroup(
-			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(physical_btnSearch)
-						.addComponent(lblPhysicalName)
-						.addComponent(search_physicalbtnRefresh))
-					.addGap(31)
-					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnAddPhysicalResource)
-						.addComponent(physical_btnEdit)
-						.addComponent(physical_btnDelete))
-					.addContainerGap())
-		);
+		gl_physicalPanel
+				.setHorizontalGroup(
+						gl_physicalPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_physicalPanel.createSequentialGroup().addGap(30)
+										.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
+												Short.MAX_VALUE)
+										.addGap(30))
+								.addGroup(gl_physicalPanel.createSequentialGroup()
+										.addComponent(physical_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(physical_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, 455, Short.MAX_VALUE)
+										.addComponent(btnAddPhysicalResource))
+								.addGroup(gl_physicalPanel.createSequentialGroup()
+										.addComponent(search_physicalbtnRefresh)
+										.addPreferredGap(ComponentPlacement.RELATED, 351, Short.MAX_VALUE)
+										.addComponent(physical_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblPhysicalName)
+										.addContainerGap()));
+		gl_physicalPanel.setVerticalGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_physicalPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(physical_btnSearch).addComponent(lblPhysicalName)
+								.addComponent(search_physicalbtnRefresh))
+						.addGap(31).addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnAddPhysicalResource).addComponent(physical_btnEdit)
+								.addComponent(physical_btnDelete))
+						.addContainerGap()));
 
 		physical_table = new JTable(phyiscal_tableModel);
 		physical_scrollPane.setViewportView(physical_table);
@@ -2076,7 +2054,6 @@ public class NUserPage {
 		final ResourceCatalogue rcat = new ResourceCatalogue();
 		System.out.println("all : ");
 		allres = rcat.readAllResources();
-
 
 		JScrollPane allres_scrollPane = new JScrollPane();
 		String[] allres_columns = new String[] { "Id", "Name" };
@@ -2131,7 +2108,6 @@ public class NUserPage {
 		allPanel.setLayout(gl_allPanel);
 
 		tabbedPane.addTab("Project Management", null, projectPanel, null);
-
 
 		String[] allproject_columns = new String[] { "Id", "Name" };
 
@@ -2252,47 +2228,34 @@ public class NUserPage {
 
 			}
 		});
-		
+
 		search_projectname = new JTextField();
 		search_projectname.setColumns(10);
-		
+
 		JLabel lblProjectName = DefaultComponentFactory.getInstance().createLabel("Project Name");
 		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
-		gl_projectPanel.setHorizontalGroup(
-			gl_projectPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-				.addGroup(Alignment.TRAILING, gl_projectPanel.createSequentialGroup()
-					.addContainerGap(517, Short.MAX_VALUE)
-					.addComponent(project_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblProjectName)
-					.addContainerGap())
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addContainerGap(570, Short.MAX_VALUE)
-					.addComponent(viewsubsys_Btn)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(addprojectBtn))
-		);
-		gl_projectPanel.setVerticalGroup(
-			gl_projectPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblProjectName)
-						.addComponent(project_btnSearch))
-					.addGap(74)
-					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
-					.addGap(11)
-					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(addprojectBtn)
-						.addComponent(viewsubsys_Btn)))
-		);
+		gl_projectPanel.setHorizontalGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectPanel.createSequentialGroup().addGap(40)
+						.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE).addGap(40))
+				.addGroup(Alignment.TRAILING,
+						gl_projectPanel.createSequentialGroup().addContainerGap(517, Short.MAX_VALUE)
+								.addComponent(project_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblProjectName)
+								.addContainerGap())
+				.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap(570, Short.MAX_VALUE)
+						.addComponent(viewsubsys_Btn).addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(addprojectBtn)));
+		gl_projectPanel.setVerticalGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblProjectName).addComponent(project_btnSearch))
+						.addGap(74).addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+						.addGap(11).addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(addprojectBtn).addComponent(viewsubsys_Btn))));
 
 		// get all res list
 		final ProjectCatalogue pcat = new ProjectCatalogue();
@@ -2311,184 +2274,166 @@ public class NUserPage {
 		projectPanel.setLayout(gl_projectPanel);
 
 		JPanel reportPanel = new JPanel();
-//		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")) {
-			tabbedPane.addTab("Report", null, reportPanel, null);
-			SpringLayout sl_reportPanel = new SpringLayout();
-			reportPanel.setLayout(sl_reportPanel);
-			
-			JTabbedPane reportsTab = new JTabbedPane(JTabbedPane.TOP);
-			sl_reportPanel.putConstraint(SpringLayout.NORTH, reportsTab, 0, SpringLayout.NORTH, reportPanel);
-			sl_reportPanel.putConstraint(SpringLayout.WEST, reportsTab, 10, SpringLayout.WEST, reportPanel);
-			sl_reportPanel.putConstraint(SpringLayout.SOUTH, reportsTab, 495, SpringLayout.NORTH, reportPanel);
-			sl_reportPanel.putConstraint(SpringLayout.EAST, reportsTab, 827, SpringLayout.WEST, reportPanel);
-			reportPanel.add(reportsTab);
-			
-			JPanel cyclePanel = new JPanel();
-			reportsTab.addTab("Cycle Report", null, cyclePanel, null);
-			
-			JScrollPane cycle_scrollPane = new JScrollPane();
-			
-			JButton cycle_btnGetReport = new JButton("Get Report");
-			GroupLayout gl_cyclePanel = new GroupLayout(cyclePanel);
-			gl_cyclePanel.setHorizontalGroup(
-				gl_cyclePanel.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_cyclePanel.createSequentialGroup()
-						.addGap(20)
-						.addComponent(cycle_scrollPane, GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
-						.addGap(20))
-					.addGroup(Alignment.TRAILING, gl_cyclePanel.createSequentialGroup()
-						.addContainerGap(679, Short.MAX_VALUE)
-						.addComponent(cycle_btnGetReport))
-			);
-			gl_cyclePanel.setVerticalGroup(
-				gl_cyclePanel.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_cyclePanel.createSequentialGroup()
-						.addComponent(cycle_btnGetReport)
-						.addGap(20)
-						.addComponent(cycle_scrollPane, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
-						.addGap(20))
-			);
-			
-			cycle_table = new JTable();
-			cycle_scrollPane.setViewportView(cycle_table);
-			cyclePanel.setLayout(gl_cyclePanel);
-			
-			JPanel resourcereqPanel = new JPanel();
-			reportsTab.addTab("Resource Requirement Report", null, resourcereqPanel, null);
-			
-			JScrollPane resreq_scrollPane = new JScrollPane();
-			
-			JButton resreq_btnGetReport = new JButton("Get Report");
-			resreq_btnGetReport.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					ArrayList<String> project_arraylist = new ArrayList<String>();
+		// if
+		// (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super"))
+		// {
+		tabbedPane.addTab("Report", null, reportPanel, null);
+		SpringLayout sl_reportPanel = new SpringLayout();
+		reportPanel.setLayout(sl_reportPanel);
 
-					ProjectCatalogue projcat = new ProjectCatalogue();
-					ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
-					for (int i = 0; i < project_hashmap.size(); i++) {
-						project_arraylist.add(project_hashmap.get(i).toString());
+		JTabbedPane reportsTab = new JTabbedPane(JTabbedPane.TOP);
+		sl_reportPanel.putConstraint(SpringLayout.NORTH, reportsTab, 0, SpringLayout.NORTH, reportPanel);
+		sl_reportPanel.putConstraint(SpringLayout.WEST, reportsTab, 10, SpringLayout.WEST, reportPanel);
+		sl_reportPanel.putConstraint(SpringLayout.SOUTH, reportsTab, 495, SpringLayout.NORTH, reportPanel);
+		sl_reportPanel.putConstraint(SpringLayout.EAST, reportsTab, 827, SpringLayout.WEST, reportPanel);
+		reportPanel.add(reportsTab);
+
+		JPanel cyclePanel = new JPanel();
+		reportsTab.addTab("Cycle Report", null, cyclePanel, null);
+
+		JScrollPane cycle_scrollPane = new JScrollPane();
+
+		JButton cycle_btnGetReport = new JButton("Get Report");
+		GroupLayout gl_cyclePanel = new GroupLayout(cyclePanel);
+		gl_cyclePanel.setHorizontalGroup(gl_cyclePanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_cyclePanel.createSequentialGroup().addGap(20)
+						.addComponent(cycle_scrollPane, GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE).addGap(20))
+				.addGroup(Alignment.TRAILING, gl_cyclePanel.createSequentialGroup()
+						.addContainerGap(679, Short.MAX_VALUE).addComponent(cycle_btnGetReport)));
+		gl_cyclePanel
+				.setVerticalGroup(gl_cyclePanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_cyclePanel.createSequentialGroup().addComponent(cycle_btnGetReport).addGap(20)
+								.addComponent(cycle_scrollPane, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+								.addGap(20)));
+
+		cycle_table = new JTable();
+		cycle_scrollPane.setViewportView(cycle_table);
+		cyclePanel.setLayout(gl_cyclePanel);
+
+		JPanel resourcereqPanel = new JPanel();
+		reportsTab.addTab("Resource Requirement Report", null, resourcereqPanel, null);
+
+		JScrollPane resreq_scrollPane = new JScrollPane();
+
+		JButton resreq_btnGetReport = new JButton("Get Report");
+		resreq_btnGetReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				ArrayList<String> project_arraylist = new ArrayList<String>();
+
+				ProjectCatalogue projcat = new ProjectCatalogue();
+				ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
+				for (int i = 0; i < project_hashmap.size(); i++) {
+					project_arraylist.add(project_hashmap.get(i).toString());
+				}
+
+				ArrayList<Field> getreport_resreqFields = new ArrayList<Field>();
+				Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
+
+				getreport_resreqFields.add(projects);
+
+				final Form getreport_resreqForm = new Form(getreport_resreqFields, "Report Resource Requirement Form");
+				final PanelBuilder report_resreq_panel = new PanelBuilder(getreport_resreqForm);
+				report_resreq_panel.makeForm();
+
+				JFrame getReport_ResReqPage = new JFrame("Get Report Resource Requirement Form");
+				getReport_ResReqPage.getContentPane().add(getreport_resreqForm.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitresreqreportBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitresreqreportBtn);
+				getReport_ResReqPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				getReport_ResReqPage.pack();
+				getReport_ResReqPage.setVisible(true);
+				ComboBoxJPanel comboBoxpanel_project = (ComboBoxJPanel) getreport_resreqForm.getJPanel()
+						.getComponent(0);
+				final JComboBox projectCombo = comboBoxpanel_project.getComboBox();
+
+				submitresreqreportBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						for (int i = 0; i < getreport_resreqForm.getJPanel().getComponentCount(); i++) {
+							// System.out.println(fpanel.selected_Choice);
+						}
+						System.out.println(projectCombo.getSelectedItem() + " ino select");
+
+						ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
+						ProjectCatalogue projCat = new ProjectCatalogue();
+						// Project proj =
+						// projCat.getProject(projectCombo.getSelectedItem().toString().);
+						// do regex to find proj id
+						// resReqCat.getReport(proj).printRep();
+						// System.out.println("Yay! ");
+						//
+						// sending data to table
+						// resreqCat.addResourceRequirement(rid, sid, pid, '2-z,
+						// to);
+						// // tu resource ham bayad insert she
+						// allmodules.clear();
+						// allmodules = mcat.readAllResources();
+						// System.out.println(module_tableModel.getRowCount()+"
+						// ---");
+						// int rowcount= module_tableModel.getRowCount();
+						// for (int j = rowcount - 1; j >= 0; j--) {
+						// System.out.println(j);
+						// module_tableModel.removeRow(j);
+						// }
+						// System.out.println(module_tableModel.getRowCount()+"
+						// ---");
+						// for (int i = 0; i < allmodules.size(); i++) {
+						// Object[] objs = { allmodules.get(i).get("rid"),
+						// allmodules.get(i).get("modname") };
+						// module_tableModel.addRow(objs);
+						// }
+						//
+
 					}
-					
-					ArrayList<Field> getreport_resreqFields = new ArrayList<Field>();
-					Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
+				});
+			}
+		});
+		GroupLayout gl_resourcereqPanel = new GroupLayout(resourcereqPanel);
+		gl_resourcereqPanel
+				.setHorizontalGroup(gl_resourcereqPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_resourcereqPanel.createSequentialGroup().addGap(20)
+								.addGroup(gl_resourcereqPanel.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_resourcereqPanel.createSequentialGroup()
+												.addComponent(resreq_scrollPane, GroupLayout.DEFAULT_SIZE, 644,
+														Short.MAX_VALUE)
+												.addGap(20))
+										.addComponent(resreq_btnGetReport, Alignment.TRAILING))));
+		gl_resourcereqPanel.setVerticalGroup(gl_resourcereqPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_resourcereqPanel.createSequentialGroup().addComponent(resreq_btnGetReport).addGap(20)
+						.addComponent(resreq_scrollPane, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE).addGap(20)));
 
-					getreport_resreqFields.add(projects);
-					
-					final Form getreport_resreqForm = new Form(getreport_resreqFields, "Report Resource Requirement Form");
-					final PanelBuilder report_resreq_panel = new PanelBuilder(getreport_resreqForm);
-					report_resreq_panel.makeForm();
+		resreq_table = new JTable();
+		resreq_scrollPane.setViewportView(resreq_table);
+		resourcereqPanel.setLayout(gl_resourcereqPanel);
 
-					JFrame getReport_ResReqPage = new JFrame("Get Report Resource Requirement Form");
-					getReport_ResReqPage.getContentPane().add(getreport_resreqForm.getJPanel(), BorderLayout.NORTH);
-					
-					JButton submitresreqreportBtn = new JButton("Submit");
-					JPanel buttonPanel = new JPanel();
-					buttonPanel.add(submitresreqreportBtn);
-					getReport_ResReqPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-					getReport_ResReqPage.pack();
-					getReport_ResReqPage.setVisible(true);
-					ComboBoxJPanel comboBoxpanel_project = (ComboBoxJPanel) getreport_resreqForm.getJPanel().getComponent(0);
-					final JComboBox projectCombo = comboBoxpanel_project.getComboBox();
+		JPanel resourceavailPanel = new JPanel();
+		reportsTab.addTab("Resource Available Report", null, resourceavailPanel, null);
 
-					submitresreqreportBtn.addActionListener(new ActionListener() {
+		JScrollPane resavail_scrollpane = new JScrollPane();
 
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							for (int i = 0; i < getreport_resreqForm.getJPanel().getComponentCount(); i++) {
-								// System.out.println(fpanel.selected_Choice);
-							}
-							System.out.println(projectCombo.getSelectedItem()+" ino select");
-							
-							
-							ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
-							ProjectCatalogue projCat = new ProjectCatalogue();
-//							Project proj = projCat.getProject(projectCombo.getSelectedItem().toString().);
-							//do regex to find proj id
-//							resReqCat.getReport(proj).printRep();
-//							System.out.println("Yay! ");
-//							
-							//sending data to table
-							// resreqCat.addResourceRequirement(rid, sid, pid, '2-z,
-							// to);
-							// // tu resource ham bayad insert she
-							// allmodules.clear();
-							// allmodules = mcat.readAllResources();
-							// System.out.println(module_tableModel.getRowCount()+"
-							// ---");
-							// int rowcount= module_tableModel.getRowCount();
-							// for (int j = rowcount - 1; j >= 0; j--) {
-							// System.out.println(j);
-							// module_tableModel.removeRow(j);
-							// }
-							// System.out.println(module_tableModel.getRowCount()+"
-							// ---");
-							// for (int i = 0; i < allmodules.size(); i++) {
-							// Object[] objs = { allmodules.get(i).get("rid"),
-							// allmodules.get(i).get("modname") };
-							// module_tableModel.addRow(objs);
-							// }
-							//
+		JButton resavail_btnGetReport = new JButton("Get Report");
+		GroupLayout gl_resourceavailPanel = new GroupLayout(resourceavailPanel);
+		gl_resourceavailPanel
+				.setHorizontalGroup(
+						gl_resourceavailPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_resourceavailPanel.createSequentialGroup().addGap(20)
+										.addComponent(resavail_scrollpane, GroupLayout.DEFAULT_SIZE, 644,
+												Short.MAX_VALUE)
+										.addGap(20))
+								.addGroup(Alignment.TRAILING, gl_resourceavailPanel.createSequentialGroup()
+										.addContainerGap(679, Short.MAX_VALUE).addComponent(resavail_btnGetReport)));
+		gl_resourceavailPanel.setVerticalGroup(gl_resourceavailPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_resourceavailPanel.createSequentialGroup().addComponent(resavail_btnGetReport).addGap(20)
+						.addComponent(resavail_scrollpane, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE).addGap(20)));
 
-
-				}
-			});
-				}
-			});
-			GroupLayout gl_resourcereqPanel = new GroupLayout(resourcereqPanel);
-			gl_resourcereqPanel.setHorizontalGroup(
-				gl_resourcereqPanel.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_resourcereqPanel.createSequentialGroup()
-						.addGap(20)
-						.addGroup(gl_resourcereqPanel.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_resourcereqPanel.createSequentialGroup()
-								.addComponent(resreq_scrollPane, GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
-								.addGap(20))
-							.addComponent(resreq_btnGetReport, Alignment.TRAILING)))
-			);
-			gl_resourcereqPanel.setVerticalGroup(
-				gl_resourcereqPanel.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_resourcereqPanel.createSequentialGroup()
-						.addComponent(resreq_btnGetReport)
-						.addGap(20)
-						.addComponent(resreq_scrollPane, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
-						.addGap(20))
-			);
-			
-			resreq_table = new JTable();
-			resreq_scrollPane.setViewportView(resreq_table);
-			resourcereqPanel.setLayout(gl_resourcereqPanel);
-			
-			JPanel resourceavailPanel = new JPanel();
-			reportsTab.addTab("Resource Available Report", null, resourceavailPanel, null);
-			
-			JScrollPane resavail_scrollpane = new JScrollPane();
-			
-			JButton resavail_btnGetReport = new JButton("Get Report");
-			GroupLayout gl_resourceavailPanel = new GroupLayout(resourceavailPanel);
-			gl_resourceavailPanel.setHorizontalGroup(
-				gl_resourceavailPanel.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_resourceavailPanel.createSequentialGroup()
-						.addGap(20)
-						.addComponent(resavail_scrollpane, GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
-						.addGap(20))
-					.addGroup(Alignment.TRAILING, gl_resourceavailPanel.createSequentialGroup()
-						.addContainerGap(679, Short.MAX_VALUE)
-						.addComponent(resavail_btnGetReport))
-			);
-			gl_resourceavailPanel.setVerticalGroup(
-				gl_resourceavailPanel.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_resourceavailPanel.createSequentialGroup()
-						.addComponent(resavail_btnGetReport)
-						.addGap(20)
-						.addComponent(resavail_scrollpane, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-						.addGap(20))
-			);
-			
-			resavail_table = new JTable();
-			resavail_scrollpane.setViewportView(resavail_table);
-			resourceavailPanel.setLayout(gl_resourceavailPanel);
-//		}
+		resavail_table = new JTable();
+		resavail_scrollpane.setViewportView(resavail_table);
+		resourceavailPanel.setLayout(gl_resourceavailPanel);
+		// }
 
 		String[] allregisteredusers_columns = new String[] { "Id", "Name" };
 
@@ -2502,7 +2447,6 @@ public class NUserPage {
 		final EmployeeCatalogue regempcat = new EmployeeCatalogue();
 		System.out.println("all registered: ");
 		allregisteredusers = regempcat.getRegistrations();
-
 
 		for (int i = 0; i < allregisteredusers.size(); i++) {
 			Object[] objs = { allregisteredusers.get(i).get("empid"), allregisteredusers.get(i).get("empname") };
@@ -2581,30 +2525,23 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_RegisteredUserspanel = new GroupLayout(RegisteredUserspanel);
-		gl_RegisteredUserspanel.setHorizontalGroup(
-			gl_RegisteredUserspanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
-					.addContainerGap(660, Short.MAX_VALUE)
-					.addComponent(btnDeny)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnConfirm)
-					.addContainerGap())
-		);
-		gl_RegisteredUserspanel.setVerticalGroup(
-			gl_RegisteredUserspanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnDeny)
-						.addComponent(btnConfirm))
-					.addGap(40)
-					.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-					.addGap(40))
-		);
+		gl_RegisteredUserspanel
+				.setHorizontalGroup(
+						gl_RegisteredUserspanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_RegisteredUserspanel.createSequentialGroup().addGap(40)
+										.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
+												Short.MAX_VALUE)
+										.addGap(40))
+								.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
+										.addContainerGap(660, Short.MAX_VALUE).addComponent(btnDeny)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnConfirm)
+										.addContainerGap()));
+		gl_RegisteredUserspanel.setVerticalGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_RegisteredUserspanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.BASELINE).addComponent(btnDeny)
+								.addComponent(btnConfirm))
+						.addGap(40).addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+						.addGap(40)));
 
 		registered_table = new JTable(allregisteredusers_tableModel);
 

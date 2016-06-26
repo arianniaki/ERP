@@ -241,7 +241,7 @@ displayemployees.addActionListener(new ActionListener() {
 	    		    JButton submitmodule = new JButton("Submit Module");
 
 //	    		    fresource.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    		    fmodule.getContentPane().add(myPanel.getJPanel(), BorderLayout.NORTH);
+//	    		    fmodule.getContentPane().add(myPanel.getJPanel(), BorderLayout.NORTH);
 	    		    JPanel p = new JPanel();
 	    		    p.add(submitmodule);
 	    		    fmodule.getContentPane().add(p, BorderLayout.SOUTH);
@@ -251,9 +251,9 @@ displayemployees.addActionListener(new ActionListener() {
 	    		    
 	    			submitmodule.addActionListener(new ActionListener() {
 	  			      public void actionPerformed(ActionEvent e) {
-	  			    	for(int i=0; i<myPanel.getJPanel().getComponentCount(); i++){
-	  			    		FieldPanel fpanel = (FieldPanel)myPanel.getJPanel().getComponent(i);
-	  			    	}
+//	  			    	for(int i=0; i<myPanel.getJPanel().getComponentCount(); i++){
+//	  			    		FieldPanel fpanel = (FieldPanel)myPanel.getJPanel().getComponent(i);
+//	  			    	}
 	  			        
 	  					/*ModuleCatalogue mcat = new ModuleCatalogue();
 	  					System.out.println("all : ");
