@@ -31,9 +31,6 @@ public class ProjectResourceUtilization {
 	
 	
 	public void edit(String from, String to){
-		this.from = from;
-		this.to = to;
- 
 		int rid = this.resource.getId();
 		int pid = this.project.getId();
 		int sid = this.section.getId();
@@ -41,19 +38,21 @@ public class ProjectResourceUtilization {
 		HashMap<String, String> setVars = new HashMap<String, String>();
 
 		setVars.put("fromdate", "\'"+from+"\'");
-		submitToDB(setVars, rid, sid, pid);
-		setVars.clear();
-
 		setVars.put("todate", "\'"+to+"\'");
-		submitToDB(setVars, rid, sid, pid);
-		setVars.clear();
+		submitToDB(setVars, rid, sid, pid, this.from, this.to);
+		this.from = from;
+		this.to = to;
+ 
+
 	}
 	
-	public void submitToDB(HashMap<String, String> setVars, int rid, int sid, int pid) {
+	public void submitToDB(HashMap<String, String> setVars, int rid, int sid, int pid, String from, String to) {
 		HashMap<String, String> condVars = new HashMap<String, String>();
 		condVars.put("rid", Integer.toString(rid));
 		condVars.put("sid", Integer.toString(sid));
 		condVars.put("pid", Integer.toString(pid));
+		condVars.put("fromdate", "\'"+from+ "\'");
+		condVars.put("todate",  "\'"+to+ "\'");
 
 		DB.update(condVars, setVars, "projectresourceutilization");
 	}

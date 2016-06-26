@@ -47,12 +47,15 @@ public class ProjectResourceUtilizationCatalogue {
 	}
 	
 
-	public ProjectResourceUtilization getProjectResourceUtilization(int rid, int sid, int pid){
+	public ProjectResourceUtilization getProjectResourceUtilization(int rid, int sid, int pid, String from, String to){
 		
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(rid));
 		vars.put("sid", Integer.toString(sid));
 		vars.put("pid", Integer.toString(pid));
+		vars.put("fromdate", "\'"+from+"\'");
+		vars.put("todate", "\'"+to+"\'");
+
 
 		ResultSet res = DB.select("ProjectResourceUtilization",vars,null);
 
@@ -92,11 +95,13 @@ public class ProjectResourceUtilizationCatalogue {
 		return pk;
 	}
 	
-	public void deleteProjectResourceUtilization(int rid, int sid, int pid) {
+	public void deleteProjectResourceUtilization(int rid, int sid, int pid, String from, String to) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("sid", Integer.toString(sid));
 		vars.put("rid", Integer.toString(rid));
 		vars.put("pid", Integer.toString(pid));
+		vars.put("fromdate", "\'"+from+"\'");
+		vars.put("todate", "\'"+to+"\'");
 
 		DB.delete(vars, "projectresourceutilization");
 	}
