@@ -21,38 +21,34 @@ public class ResourceRequirement{
 	String satisfyDate;
 	DataBase DB;
 	
-	public ResourceRequirement(Project project, Section section, Resource resource, String from, String to,boolean isSatisfied){
+	public ResourceRequirement(Project project, Section section, Resource resource, String from, String to,boolean isSatisfied, String satisfyDate){
 		this.from = from;
 		this.to = to;
 		this.project = project;
 		this.section = section;
 		this.resource = resource;
 		this.isSatisfied = isSatisfied;
+		this.satisfyDate = satisfyDate;
 		DB = new DataBase();
+		
 	}
 	
-	public void edit(String from, String to ,boolean isSatisfied){
-		this.from = from;
-		this.to = to;
+	public void edit(String from, String to ,boolean isSatisfied, String satisfyDate){
 
 		int rid = this.resource.getId();
 		int pid = this.project.getId();
 		int sid = this.section.getId();
-		this.isSatisfied = isSatisfied;
-		
+		this.satisfyDate = satisfyDate;
 		HashMap<String, String> setVars = new HashMap<String, String>();
 
 		setVars.put("fromdate", "\'"+from+"\'");
-		submitToDB(setVars, rid, sid, pid);
-		setVars.clear();
-
 		setVars.put("todate", "\'"+to+"\'");
-		submitToDB(setVars, rid, sid, pid);
-		setVars.clear();
-
 		setVars.put("is_satisfied", Boolean.toString(isSatisfied));
-		submitToDB(setVars, rid, sid, pid);
-		setVars.clear();
+		setVars.put("satisfydate", "\'"+satisfyDate+"\'");
+		submitToDB(setVars, rid, sid, pid, this.from, this.to);
+		this.from = from;
+		this.to = to;
+
 
 
 	}
@@ -62,15 +58,16 @@ public class ResourceRequirement{
 		this.satisfyDate = date;
 		HashMap<String, String> setVars = new HashMap<String, String>();
 		setVars.put("is_satisfied","true");
-		submitToDB(setVars, this.resource.getId(), this.section.getId(), this.project.getId());
+		submitToDB(setVars, this.resource.getId(), this.section.getId(), this.project.getId(),this.from, this.to);
 	}
 	
-	public void submitToDB(HashMap<String, String> setVars, int rid, int sid, int pid) {
+	public void submitToDB(HashMap<String, String> setVars, int rid, int sid, int pid, String from, String to) {
 		HashMap<String, String> condVars = new HashMap<String, String>();
 		condVars.put("rid", Integer.toString(rid));
 		condVars.put("sid", Integer.toString(sid));
 		condVars.put("pid", Integer.toString(pid));
-
+		condVars.put("fromdate", "\'"+from+"\'");
+		condVars.put("todate", "\'"+to+"\'");
 		DB.update(condVars, setVars, "resourcerequirement");
 	}
 	
@@ -87,6 +84,7 @@ public class ResourceRequirement{
 		resreq.put("fromdate", this.from);
 		resreq.put("todate", this.to);
 		resreq.put("is_satisfied", Boolean.toString(this.isSatisfied));
+		resreq.put("satisfydate", this.satisfyDate);
 
 		return resreq;
 	}

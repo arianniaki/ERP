@@ -30,25 +30,27 @@ public class ResourceRequirementCatalogue{
 		Table table = new Table(tableName);
 		ArrayList<HashMap<String, String>> result = table.readAll();
 		for (int i = 0; i < result.size(); i++) {
-			System.out.println(result.get(i).toString());
+//			System.out.println(result.get(i).toString());
 			ProjectCatalogue pcat = new ProjectCatalogue();
 			SectionCatalogue scat = new SectionCatalogue();
 			ResourceCatalogue rcat = new ResourceCatalogue();
 			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("pid")));
 			Section sc = scat.getSection(Integer.parseInt(result.get(i).get("sid")));
 			Resource rs = rcat.getResource(Integer.parseInt(result.get(i).get("rid")));
-			ResourceRequirement rr = new ResourceRequirement(pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"),Boolean.parseBoolean(result.get(i).get("is_satisfied")));
+			ResourceRequirement rr = new ResourceRequirement(pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"),Boolean.parseBoolean(result.get(i).get("is_satisfied")), result.get(i).get("satisfydate"));
 			resReqs.add(rr);
 		}
 		return resReqs;
 	}
 	
-	public ResourceRequirement getResourceRequirement(int rid, int sid, int pid){
+	public ResourceRequirement getResourceRequirement(int rid, int sid, int pid, String from, String to){
 		
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", Integer.toString(rid));
 		vars.put("sid", Integer.toString(sid));
 		vars.put("pid", Integer.toString(pid));
+		vars.put("fromdate", "\'"+from+"\'");
+		vars.put("todate", "\'"+to+"\'");
 
 		ResultSet res = DB.select("resourcerequirement",vars,null);
 
@@ -58,12 +60,13 @@ public class ResourceRequirementCatalogue{
 		ResourceCatalogue rcat = new ResourceCatalogue();
 		ResourceRequirement rr = null;
 		Project pr;
+		
 		try {
 			if(res.next()){
 				pr = pcat.getProject(res.getInt("pid"));
 				Section sc = scat.getSection(res.getInt("sid"));
 				Resource rs = rcat.getResource(res.getInt("rid"));
-				rr = new ResourceRequirement(pr, sc, rs, res.getString("fromdate"), res.getString("todate"),res.getBoolean("is_satisfied"));
+				rr = new ResourceRequirement(pr, sc, rs, res.getString("fromdate"), res.getString("todate"),res.getBoolean("is_satisfied"),res.getString("satisfydate"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -80,17 +83,20 @@ public class ResourceRequirementCatalogue{
 		vars.put("fromdate", "\'"+from+"\'");
 		vars.put("todate", "\'"+to+"\'");
 		vars.put("is_satisfied", "false");
+		vars.put("satisfydate", "\'"+"1111-11-11"+"\'");
 		
 		long pk=DB.insert(vars, "resourcerequirement");
 		System.out.println("inserted into resourcerequirement table: " + pk);
 		return pk;
 	}
 	
-	public void deleteResourceRequirement(int rid, int sid, int pid) {
+	public void deleteResourceRequirement(int rid, int sid, int pid, String from, String to) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("sid", Integer.toString(sid));
 		vars.put("rid", Integer.toString(rid));
 		vars.put("pid", Integer.toString(pid));
+		vars.put("fromdate", "\'"+from+"\'");
+		vars.put("todate", "\'"+to+"\'");
 
 		DB.delete(vars, "resourcerequirement");
 	}
