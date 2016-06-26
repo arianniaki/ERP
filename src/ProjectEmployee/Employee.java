@@ -4,8 +4,12 @@ import java.util.HashMap;
 
 import AccessRight.AccessRight;
 import DataBase.DataBase;
+import GUI.NotificationPage;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.swing.JFrame;
 
 public class Employee {
 	private int id;
