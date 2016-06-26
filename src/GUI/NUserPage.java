@@ -2161,7 +2161,7 @@ public class NUserPage {
 
 		tabbedPane.addTab("Project Management", null, projectPanel, null);
 
-		String[] allproject_columns = new String[] { "Id", "Name" };
+		String[] allproject_columns = new String[] { "Id", "Name","Project Manager" };
 
 		final DefaultTableModel allproject_tableModel = new DefaultTableModel(allproject_columns, 0) {
 			@Override
@@ -2241,7 +2241,7 @@ public class NUserPage {
 						}
 						System.out.println(allproject_tableModel.getRowCount() + " ---");
 						for (int i = 0; i < allprojects.size(); i++) {
-							Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname") };
+							Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname"), allprojects.get(i).get("projectmanager") };
 							allproject_tableModel.addRow(objs);
 						}
 
@@ -2315,7 +2315,7 @@ public class NUserPage {
 		allprojects = pcat.getProjects();
 
 		for (int i = 0; i < allprojects.size(); i++) {
-			Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname") };
+			Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname"),allprojects.get(i).get("projectmanager") };
 			allproject_tableModel.addRow(objs);
 		}
 
