@@ -1,7 +1,11 @@
 package RequirementUtilization;
 
 
+import java.awt.Component;
 import java.util.HashMap;
+import java.util.Hashtable;
+
+import javax.sound.sampled.Port;
 
 import DataBase.DataBase;
 import ProjectEmployee.Project;
@@ -87,6 +91,22 @@ public class ResourceRequirement{
 		resreq.put("satisfydate", this.satisfyDate);
 
 		return resreq;
+	}
+
+	public Resource getResource() {
+		// TODO Auto-generated method stub
+		
+		return resource;
+	}
+
+	public Section getSection() {
+		// TODO Auto-generated method stub
+		return section;
+	}
+	
+	public Project getProject() {
+		// TODO Auto-generated method stub
+		return project;
 	}
 
 }

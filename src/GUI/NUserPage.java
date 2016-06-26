@@ -501,7 +501,7 @@ public class NUserPage {
 		System.out.println("all : ");
 		allresourcerequirements = resreqcat.getResourceRequirements();
 
-		String[] resreq_columns = new String[] { "rid", "sid", "pid","from","to" };
+		String[] resreq_columns = new String[] { "rid", "resource","sid","section", "pid","project","from","to" };
 
 		final DefaultTableModel resreq_tableModel = new DefaultTableModel(resreq_columns, 0) {
 			@Override
@@ -726,8 +726,11 @@ public class NUserPage {
 						System.out.println(resreq_tableModel.getRowCount() + "");
 						for (int i = 0; i < allresourcerequirements.size(); i++) {
 							Object[] objs = { allresourcerequirements.get(i).toHashMap().get("rid"),
+									allresourcerequirements.get(i).getResource().getName(),
 									allresourcerequirements.get(i).toHashMap().get("sid"),
+									allresourcerequirements.get(i).getSection().getName(),
 									allresourcerequirements.get(i).toHashMap().get("pid"),
+									allresourcerequirements.get(i).getProject().getName(),
 									allresourcerequirements.get(i).toHashMap().get("fromdate"),
 									allresourcerequirements.get(i).toHashMap().get("todate")};
 							resreq_tableModel.addRow(objs);
@@ -821,10 +824,13 @@ public class NUserPage {
 
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
 			Object[] objs = { allresourcerequirements.get(i).toHashMap().get("rid"),
+					allresourcerequirements.get(i).getResource().getName(),
 					allresourcerequirements.get(i).toHashMap().get("sid"),
+					allresourcerequirements.get(i).getSection().getName(),
 					allresourcerequirements.get(i).toHashMap().get("pid"),
+					allresourcerequirements.get(i).getProject().getName(),
 					allresourcerequirements.get(i).toHashMap().get("fromdate"),
-					allresourcerequirements.get(i).toHashMap().get("todate"),};
+					allresourcerequirements.get(i).toHashMap().get("todate")};
 			resreq_tableModel.addRow(objs);
 		}
 
