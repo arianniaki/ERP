@@ -25,6 +25,19 @@ public class SubSystemCatalogue {
 		}
 		return result;
 	}
+
+	public ArrayList<HashMap<String, String>> getSubSystemsbyProject(int pid) {
+		Table table = new Table(tableName);
+		HashMap<String,String> vars = new HashMap<String,String>();
+		vars.put("pid", Integer.toString(pid));
+		
+		ArrayList<HashMap<String, String>> result = table.search(vars);
+		for (int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i).toString());
+		}
+		return result;
+	}
+
 	
 	public long addSubSystem(String name, int pid) {
 		HashMap<String, String> vars = new HashMap<String, String>();

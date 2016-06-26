@@ -43,8 +43,8 @@ public class ResourceRequirement{
 		int pid = this.project.getId();
 		int sid = this.section.getId();
 		this.satisfyDate = satisfyDate;
-		HashMap<String, String> setVars = new HashMap<String, String>();
 
+		HashMap<String, String> setVars = new HashMap<String, String>();
 		setVars.put("fromdate", "\'"+from+"\'");
 		setVars.put("todate", "\'"+to+"\'");
 		setVars.put("is_satisfied", Boolean.toString(isSatisfied));
@@ -52,9 +52,6 @@ public class ResourceRequirement{
 		submitToDB(setVars, rid, sid, pid, this.from, this.to);
 		this.from = from;
 		this.to = to;
-
-
-
 	}
 	
 	public void satisfy(String date){
