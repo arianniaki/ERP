@@ -34,7 +34,10 @@ public class Main {
 		//Employee gholam = new Employee();
 		//gholam.getFromDB(1);
 		//gholam.setAccessRight(1);
-		
+		ProjectResourceUtilizationCatalogue projResUtil = new ProjectResourceUtilizationCatalogue();
+		ResourceCatalogue resCat = new ResourceCatalogue();
+		Resource res = resCat.getResource(17);
+		projResUtil.getReport(res).printRep();
 //		if(emp.logout()){
 //			System.out.println("logged out");
 //		}
