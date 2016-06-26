@@ -43,6 +43,7 @@ import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
+import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
 import ResourceManagement.Section.Resource.PhysicalResourceCatalogue;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
@@ -82,22 +83,38 @@ public class NUserPage {
 	private ArrayList<ResourceRequirement> allresourcerequirements;
 	private ArrayList<HashMap<String, String>> allregisteredusers;
 
-	private JTable finan_table;
-	private JTable information_table;
-	private JTable module_table;
-	private JTable physical_table;
-	private JTable allresource_table;
-	private JTable project_table;
+//	private JTable finan_table;
+//	private JTable information_table;
+//	private JTable module_table;
+//	private JTable physical_table;
+//	private JTable allresource_table;
+//	private JTable project_table;
 	private JTable subsystem_table;
-	private JTable accessright_table;
-	private JTable registered_table;
-	private JTable human_table;
-	private JTable maintaining_table;
+	// private JTable accessright_table;
+//	private JTable registered_table;
+//	private JTable human_table;
+//	private JTable maintaining_table;
+	private JTable requirement_table;
+
+
+	private TableData accessright_tabledata;
+	private TableData registered_tabledata;
+	private TableData project_tabledata;
+	private TableData physical_tabledata;
+	private TableData information_tabledata;
+	private TableData financial_tabledata;
+	private TableData module_tabledata;
+	private TableData human_tabledata;
+	private TableData allresource_tabledata;
+	private TableData maintaining_tabledata;
+
+	
+
+
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
 
-	private JTable requirement_table;
 	private JTextField search_modulename;
 	private JTextField search_financialname;
 	private JTextField search_informationname;
@@ -203,28 +220,7 @@ public class NUserPage {
 
 		// get employee list
 
-		final EmployeeCatalogue empcat = new EmployeeCatalogue();
-		System.out.println("all : ");
-		allemployees = empcat.readAllEmployees();
-
-		// end employee list
-
-		String[] accessright_columns = new String[] { "Id", "Username", "AccessRight" };
-
-		final DefaultTableModel accessright_tableModel = new DefaultTableModel(accessright_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-
-		accessright_table = new JTable(accessright_tableModel);
-		for (int i = 0; i < allemployees.size(); i++) {
-			Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname"),
-					allemployees.get(i).get("accessrightid") };
-			accessright_tableModel.addRow(objs);
-		}
+		accessright_tabledata = new TableData(new EmployeeCatalogue(), "assign");
 
 		JButton btnAssignAccessright = new JButton("Assign AccessRight");
 		btnAssignAccessright.addActionListener(new ActionListener() {
@@ -258,35 +254,17 @@ public class NUserPage {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						System.out.println("-----");
-						int rowIndex = accessright_table.getSelectedRow();
-						int colIndex = accessright_table.getSelectedColumn();
+						int rowIndex = accessright_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = accessright_tabledata.getJdataTable().getSelectedColumn();
 
-						String Table_click = (accessright_table.getModel().getValueAt(rowIndex, 0).toString()); // return
-																												// the
-																												// thing
-																												// in
-																												// the
-																												// 0st
-																												// column
+						String Table_click = (accessright_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+								.toString());
 						System.out.println(Table_click);
+						EmployeeCatalogue empcat = new EmployeeCatalogue();
 						Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
 						emp_access.setAccessRight(selected_accessright_forassignment);
-						// table should be update later
-
 						System.out.println("ACCESS RIGHT O DADAM");
-
-						// Assign_AccessRightPage.dispose();
-						allemployees = empcat.readAllEmployees();
-						int rowcount = accessright_tableModel.getRowCount();
-						for (int j = rowcount - 1; j >= 0; j--) {
-							accessright_tableModel.removeRow(j);
-						}
-						System.out.println(accessright_tableModel.getRowCount() + " ---");
-						for (int i = 0; i < allemployees.size(); i++) {
-							Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname"),
-									allemployees.get(i).get("accessrightid"), };
-							accessright_tableModel.addRow(objs);
-						}
+						accessright_tabledata.update(empcat.readAllEmployees());
 
 					}
 				});
@@ -321,7 +299,7 @@ public class NUserPage {
 						.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
 						.addGap(32)));
 
-		accessright_scrollPane.setViewportView(accessright_table);
+		accessright_scrollPane.setViewportView(accessright_tabledata.getJdataTable());
 		accessrightPanel.setLayout(gl_accessrightPanel);
 
 		// project mgmt panel
@@ -424,39 +402,33 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
-		gl_subsystemPanel.setHorizontalGroup(
-			gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup()
-					.addComponent(btnBacktoProject)
-					.addPreferredGap(ComponentPlacement.RELATED, 640, Short.MAX_VALUE)
-					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_subsystemPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-		);
-		gl_subsystemPanel.setVerticalGroup(
-			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnBacktoProject)
-						.addComponent(addsubsystemBtn)))
-		);
+		gl_subsystemPanel.setHorizontalGroup(gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup().addComponent(btnBacktoProject)
+						.addPreferredGap(ComponentPlacement.RELATED, 640, Short.MAX_VALUE)
+						.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
+						.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+						.addGap(40)));
+		gl_subsystemPanel
+				.setVerticalGroup(
+						gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
+										.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 425,
+												Short.MAX_VALUE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+												.addComponent(btnBacktoProject).addComponent(addsubsystemBtn))));
 
 		subsystem_table = new JTable(subsystem_tableModel);
 		subsystem_scrollPane.setViewportView(subsystem_table);
 		subsystemPanel.setLayout(gl_subsystemPanel);
-		
+
 		final JPanel resourceutilpanel = new JPanel();
 		tabbedPane.addTab("Resource Utilization", null, resourceutilpanel, null);
 		tabbedPane.remove(tabbedPane.getTabCount() - 1); // remove resource tab
 
-		
 		JScrollPane resourceutil_scrollPane = new JScrollPane();
-		
+
 		JButton utilbtnBacktoProject = new JButton("Back");
 		utilbtnBacktoProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -469,25 +441,23 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_resourceutilpanel = new GroupLayout(resourceutilpanel);
-		gl_resourceutilpanel.setHorizontalGroup(
-			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_resourceutilpanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
-					.addGap(40))
-				.addGroup(gl_resourceutilpanel.createSequentialGroup()
-					.addComponent(utilbtnBacktoProject)
-					.addContainerGap(720, Short.MAX_VALUE))
-		);
-		gl_resourceutilpanel.setVerticalGroup(
-			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_resourceutilpanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-					.addGap(11)
-					.addComponent(utilbtnBacktoProject))
-		);
-		
+		gl_resourceutilpanel
+				.setHorizontalGroup(
+						gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_resourceutilpanel.createSequentialGroup().addGap(40)
+										.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 364,
+												Short.MAX_VALUE)
+										.addGap(40))
+								.addGroup(gl_resourceutilpanel.createSequentialGroup()
+										.addComponent(utilbtnBacktoProject).addContainerGap(720, Short.MAX_VALUE)));
+		gl_resourceutilpanel
+				.setVerticalGroup(
+						gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_resourceutilpanel
+										.createSequentialGroup().addGap(40).addComponent(resourceutil_scrollPane,
+												GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+										.addGap(11).addComponent(utilbtnBacktoProject)));
+
 		resourceutil_table = new JTable();
 		resourceutil_scrollPane.setViewportView(resourceutil_table);
 		resourceutilpanel.setLayout(gl_resourceutilpanel);
@@ -501,7 +471,7 @@ public class NUserPage {
 		System.out.println("all : ");
 		allresourcerequirements = resreqcat.getResourceRequirements();
 
-		String[] resreq_columns = new String[] { "rid", "resource","sid","section", "pid","project","from","to" };
+		String[] resreq_columns = new String[] { "rid", "resource", "sid", "section", "pid", "project", "from", "to" };
 
 		final DefaultTableModel resreq_tableModel = new DefaultTableModel(resreq_columns, 0) {
 			@Override
@@ -609,10 +579,8 @@ public class NUserPage {
 						// System.out.println(to_datePicker.getJFormattedTextField().getText()
 						// + " to date");
 						//
-						 System.out.println(from_datePicker.getJFormattedTextField().getText()
-						 + " from date");
-						 System.out.println(to_datePicker.getJFormattedTextField().getText()
-						 + " to date");
+						System.out.println(from_datePicker.getJFormattedTextField().getText() + " from date");
+						System.out.println(to_datePicker.getJFormattedTextField().getText() + " to date");
 
 					}
 				});
@@ -709,10 +677,10 @@ public class NUserPage {
 						String todate = to_datePicker.getJFormattedTextField().getText();
 
 						System.out.println("--------------");
-						System.out.println(rid + " " + sectionid + " "
-								+ projid+ " " + fromdate + " " + todate);
+						System.out.println(rid + " " + sectionid + " " + projid + " " + fromdate + " " + todate);
 
-						resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")), Integer.parseInt(sectionid.replace("sectionid=", "")),
+						resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")),
+								Integer.parseInt(sectionid.replace("sectionid=", "")),
 								Integer.parseInt(projid.replace("projid=", "")), fromdate, todate);
 						// // tu resource ham bayad insert she
 						// allmodules.clear();
@@ -732,7 +700,7 @@ public class NUserPage {
 									allresourcerequirements.get(i).toHashMap().get("pid"),
 									allresourcerequirements.get(i).getProject().getName(),
 									allresourcerequirements.get(i).toHashMap().get("fromdate"),
-									allresourcerequirements.get(i).toHashMap().get("todate")};
+									allresourcerequirements.get(i).toHashMap().get("todate") };
 							resreq_tableModel.addRow(objs);
 						}
 
@@ -753,7 +721,7 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+
 				ArrayList<Field> satisfy = new ArrayList<Field>();
 				Field reqname = new Field("text", "req name       ", "", 10, "name");
 				final Form satisfy_requirement_Form = new Form(satisfy, "Satisfy Requirement");
@@ -789,12 +757,11 @@ public class NUserPage {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						 System.out.println(from_datePicker.getJFormattedTextField().getText());
+						System.out.println(from_datePicker.getJFormattedTextField().getText());
 
 					}
 				});
-				
-				
+
 			}
 		});
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
@@ -830,7 +797,7 @@ public class NUserPage {
 					allresourcerequirements.get(i).toHashMap().get("pid"),
 					allresourcerequirements.get(i).getProject().getName(),
 					allresourcerequirements.get(i).toHashMap().get("fromdate"),
-					allresourcerequirements.get(i).toHashMap().get("todate")};
+					allresourcerequirements.get(i).toHashMap().get("todate") };
 			resreq_tableModel.addRow(objs);
 		}
 
@@ -862,44 +829,24 @@ public class NUserPage {
 
 		JPanel humanPanel = new JPanel();
 		resourcesTab.addTab("Human", null, humanPanel, null);
-
 		JScrollPane human_scrollPane = new JScrollPane();
-		String[] human_columns = new String[] { "Id", "Name" };
-
-		final DefaultTableModel human_tableModel = new DefaultTableModel(human_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
 
 		JButton human_btnEdit = new JButton("Edit");
 		human_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				int rowIndex = human_table.getSelectedRow();
-				int colIndex = human_table.getSelectedColumn();
+				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (human_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
 				EmployeeCatalogue empcat = new EmployeeCatalogue();
-				empcat.deleteEmployee(Integer.parseInt(Table_click));
+//				empcat.deleteEmployee(Integer.parseInt(Table_click));
 
 				empcat.readAllEmployees();
 				allemployees.clear();
 				allemployees = empcat.readAllEmployees();
-				System.out.println(human_tableModel.getRowCount() + " ---");
-				int rowcount = human_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					human_tableModel.removeRow(j);
-				}
-				System.out.println(human_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allemployees.size(); i++) {
-					Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
-					human_tableModel.addRow(objs);
-				}
-
+				human_tabledata.update(empcat.readAllEmployees());
 			}
 		});
 
@@ -909,10 +856,10 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 
 				System.out.println("-----");
-				int rowIndex = human_table.getSelectedRow();
-				int colIndex = human_table.getSelectedColumn();
+				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (human_table.getModel().getValueAt(rowIndex, 0).toString()); // return
+				String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
 																									// the
 																									// thing
 																									// in
@@ -923,16 +870,7 @@ public class NUserPage {
 				EmployeeCatalogue empcat_delete = new EmployeeCatalogue();
 				empcat_delete.deleteEmployee(Integer.parseInt(Table_click));
 				allemployees = empcat_delete.readAllEmployees();
-
-				int rowcount = human_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					human_tableModel.removeRow(j);
-				}
-				System.out.println(human_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allemployees.size(); i++) {
-					Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
-					human_tableModel.addRow(objs);
-				}
+				human_tabledata.update(empcat_delete.readAllEmployees());
 
 			}
 		});
@@ -949,17 +887,7 @@ public class NUserPage {
 
 				allemployees.clear();
 				allemployees = empcat.SearchEmployee(searchVars);
-
-				System.out.println(human_tableModel.getRowCount() + " ---");
-				int rowcount = human_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					human_tableModel.removeRow(j);
-				}
-				System.out.println(human_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allemployees.size(); i++) {
-					Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
-					human_tableModel.addRow(objs);
-				}
+				human_tabledata.update(empcat.SearchEmployee(searchVars));
 			}
 		});
 
@@ -970,18 +898,7 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				allemployees.clear();
 				EmployeeCatalogue empcat = new EmployeeCatalogue();
-				allemployees = empcat.readAllEmployees();
-
-				System.out.println(human_tableModel.getRowCount() + " ---");
-				int rowcount = human_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					human_tableModel.removeRow(j);
-				}
-				System.out.println(human_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allemployees.size(); i++) {
-					Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
-					human_tableModel.addRow(objs);
-				}
+				human_tabledata.update(empcat.readAllEmployees());
 
 			}
 		});
@@ -1016,24 +933,10 @@ public class NUserPage {
 								.addComponent(human_btnDelete))
 						.addContainerGap()));
 
-		human_table = new JTable(human_tableModel);
-		human_scrollPane.setViewportView(human_table);
+		human_tabledata = new TableData(new EmployeeCatalogue(),"human");
+		human_scrollPane.setViewportView(human_tabledata.getJdataTable());
 		humanPanel.setLayout(gl_humanPanel);
 
-		for (int i = 0; i < allemployees.size(); i++) {
-			Object[] objs = { allemployees.get(i).get("empid"), allemployees.get(i).get("empname") };
-			human_tableModel.addRow(objs);
-		}
-
-		//
-
-		// get information list
-
-		InformationResourceCatalogue infocat = new InformationResourceCatalogue();
-		System.out.println("all : ");
-		allinformation = infocat.readAllResources();
-
-		// end get information list
 
 		JPanel informationPanel = new JPanel();
 		resourcesTab.addTab("Information", null, informationPanel, null);
@@ -1041,23 +944,11 @@ public class NUserPage {
 		JButton btnAddInformation = new JButton("Add Information Resource");
 
 		JScrollPane information_scrollPane = new JScrollPane();
-		String[] info_columns = new String[] { "Id", "Name" };
 
-		final DefaultTableModel information_tableModel = new DefaultTableModel(info_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
+		information_tabledata = new TableData(new InformationResourceCatalogue(),"information");
 
-		information_table = new JTable(information_tableModel);
-		for (int i = 0; i < allinformation.size(); i++) {
-			Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
-			information_tableModel.addRow(objs);
-		}
 
-		information_scrollPane.setViewportView(information_table);
+		information_scrollPane.setViewportView(information_tabledata.getJdataTable());
 
 		JButton information_btnEdit = new JButton("Edit");
 		information_btnEdit.addActionListener(new ActionListener() {
@@ -1094,6 +985,7 @@ public class NUserPage {
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " information");
 						}
+						
 						// infocat.addResource((inputs.get(0)));
 						// // tu resource ham bayad insert she
 						// allinformation.clear();
@@ -1119,27 +1011,16 @@ public class NUserPage {
 		JButton information_btnDelete = new JButton("Delete");
 		information_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rowIndex = information_table.getSelectedRow();
-				int colIndex = information_table.getSelectedColumn();
+				int rowIndex = information_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = information_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (information_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				String Table_click = (information_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
 				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				infocat.deleteResource(Integer.parseInt(Table_click));
 
-				infocat.readAllResources();
-				allinformation.clear();
-				allinformation = infocat.readAllResources();
-				System.out.println(information_tableModel.getRowCount() + " ---");
-				int rowcount = information_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					information_tableModel.removeRow(j);
-				}
-				System.out.println(information_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allinformation.size(); i++) {
-					Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
-					information_tableModel.addRow(objs);
-				}
+				information_tabledata.update(infocat.readAllResources());
+			
 			}
 		});
 
@@ -1153,19 +1034,8 @@ public class NUserPage {
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 				searchVars.put("irname", "\'" + search_informationname.getText() + "\'");
 
-				allinformation.clear();
-				allinformation = infocat.SearchResource(searchVars);
+				information_tabledata.update(infocat.SearchResource(searchVars));
 
-				System.out.println(information_tableModel.getRowCount() + " ---");
-				int rowcount = information_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					information_tableModel.removeRow(j);
-				}
-				System.out.println(information_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allinformation.size(); i++) {
-					Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
-					information_tableModel.addRow(objs);
-				}
 			}
 		});
 
@@ -1174,23 +1044,10 @@ public class NUserPage {
 		JButton search_informationbtnRefresh = new JButton("Refresh");
 		search_informationbtnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				allinformation.clear();
 				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
-				allinformation = infocat.readAllResources();
-
-				System.out.println(information_tableModel.getRowCount() + " ---");
-				int rowcount = information_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					information_tableModel.removeRow(j);
-				}
-				System.out.println(information_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allinformation.size(); i++) {
-					Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
-					information_tableModel.addRow(objs);
-				}
-
+				information_tabledata.update(infocat.readAllResources());
 			}
+
 		});
 		GroupLayout gl_informationPanel = new GroupLayout(informationPanel);
 		gl_informationPanel
@@ -1265,18 +1122,9 @@ public class NUserPage {
 						}
 						infocat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
-						allinformation.clear();
-						allinformation = infocat.readAllResources();
-						System.out.println(information_tableModel.getRowCount() + " ---");
-						int rowcount = information_tableModel.getRowCount();
-						for (int j = rowcount - 1; j >= 0; j--) {
-							information_tableModel.removeRow(j);
-						}
-						System.out.println(information_tableModel.getRowCount() + " ---");
-						for (int i = 0; i < allinformation.size(); i++) {
-							Object[] objs = { allinformation.get(i).get("rid"), allinformation.get(i).get("irname") };
-							information_tableModel.addRow(objs);
-						}
+						information_tabledata.update(infocat.readAllResources());
+
+						
 					}
 				});
 			}
@@ -1351,50 +1199,25 @@ public class NUserPage {
 			}
 		});
 
-		String[] finan_columns = new String[] { "Id", "Name" };
-
-		final DefaultTableModel financial_tableModel = new DefaultTableModel(finan_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
 
 		JScrollPane financial_table_scrollPane = new JScrollPane();
-		finan_table = new JTable(financial_tableModel);
-		for (int i = 0; i < allfinance.size(); i++) {
-			Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
-			financial_tableModel.addRow(objs);
-		}
+		financial_tabledata = new TableData(new FinancialResourceCatalogue(),"financial");
 
-		financial_table_scrollPane.setViewportView(finan_table);
+
+		financial_table_scrollPane.setViewportView(financial_tabledata.getJdataTable());
 
 		JButton financial_btnDelete = new JButton("Delete");
 		financial_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				int rowIndex = finan_table.getSelectedRow();
-				int colIndex = finan_table.getSelectedColumn();
+				int rowIndex = financial_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = financial_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (finan_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
 				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				financat.deleteResource(Integer.parseInt(Table_click));
-
-				financat.readAllResources();
-				allfinance.clear();
-				allfinance = financat.readAllResources();
-				System.out.println(financial_tableModel.getRowCount() + " ---");
-				int rowcount = financial_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					financial_tableModel.removeRow(j);
-				}
-				System.out.println(financial_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allfinance.size(); i++) {
-					Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
-					financial_tableModel.addRow(objs);
-				}
+				financial_tabledata.update(financat.readAllResources());
 
 			}
 		});
@@ -1411,18 +1234,7 @@ public class NUserPage {
 				financat.SearchResource(searchVars);
 
 				allfinance.clear();
-				allfinance = financat.SearchResource(searchVars);
-
-				System.out.println(financial_tableModel.getRowCount() + " ---");
-				int rowcount = financial_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					financial_tableModel.removeRow(j);
-				}
-				System.out.println(financial_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allfinance.size(); i++) {
-					Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
-					financial_tableModel.addRow(objs);
-				}
+				financial_tabledata.update(financat.SearchResource(searchVars));
 
 			}
 		});
@@ -1436,17 +1248,7 @@ public class NUserPage {
 				allfinance.clear();
 				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				allfinance = financat.readAllResources();
-
-				System.out.println(financial_tableModel.getRowCount() + " ---");
-				int rowcount = financial_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					financial_tableModel.removeRow(j);
-				}
-				System.out.println(financial_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allfinance.size(); i++) {
-					Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
-					financial_tableModel.addRow(objs);
-				}
+				financial_tabledata.update(financat.readAllResources());
 			}
 		});
 
@@ -1526,18 +1328,7 @@ public class NUserPage {
 						// tu resource ham bayad insert she
 						allfinance.clear();
 						allfinance = financat.readAllResources();
-						System.out.println(financial_tableModel.getRowCount() + " ---");
-						int rowcount = financial_tableModel.getRowCount();
-						for (int j = rowcount - 1; j >= 0; j--) {
-							System.out.println(j);
-							financial_tableModel.removeRow(j);
-						}
-						System.out.println(financial_tableModel.getRowCount() + " ---");
-						for (int i = 0; i < allfinance.size(); i++) {
-							Object[] objs = { allfinance.get(i).get("rid"), allfinance.get(i).get("finanname") };
-							financial_tableModel.addRow(objs);
-						}
-
+						financial_tabledata.update(financat.readAllResources());
 					}
 				});
 			}
@@ -1599,19 +1390,7 @@ public class NUserPage {
 						}
 						mcat.addResource((inputs.get(0)));
 						// tu resource ham bayad insert she
-						allmodules.clear();
-						allmodules = mcat.readAllResources();
-						System.out.println(module_tableModel.getRowCount() + " ---");
-						int rowcount = module_tableModel.getRowCount();
-						for (int j = rowcount - 1; j >= 0; j--) {
-							System.out.println(j);
-							module_tableModel.removeRow(j);
-						}
-						System.out.println(module_tableModel.getRowCount() + " ---");
-						for (int i = 0; i < allmodules.size(); i++) {
-							Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
-							module_tableModel.addRow(objs);
-						}
+						module_tabledata.update(mcat.readAllResources());
 					}
 				});
 
@@ -1683,27 +1462,15 @@ public class NUserPage {
 		module_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				int rowIndex = module_table.getSelectedRow();
-				int colIndex = module_table.getSelectedColumn();
+				int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (module_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
 				ModuleCatalogue modcat = new ModuleCatalogue();
 				modcat.deleteResource(Integer.parseInt(Table_click));
 
-				modcat.readAllResources();
-				allmodules.clear();
-				allmodules = modcat.readAllResources();
-				System.out.println(module_tableModel.getRowCount() + " ---");
-				int rowcount = module_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					module_tableModel.removeRow(j);
-				}
-				System.out.println(module_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allmodules.size(); i++) {
-					Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
-					module_tableModel.addRow(objs);
-				}
+				module_tabledata.update(modcat.readAllResources());
 
 			}
 		});
@@ -1713,10 +1480,10 @@ public class NUserPage {
 		btnViewMaintaning.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("-----");
-				int rowIndex = module_table.getSelectedRow();
-				int colIndex = module_table.getSelectedColumn();
+				int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (module_table.getModel().getValueAt(rowIndex, 0).toString()); // return
+				String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
 																									// the
 																									// thing
 																									// in
@@ -1745,17 +1512,7 @@ public class NUserPage {
 
 				allmodules.clear();
 				allmodules = mcat.SearchResource(searchVars);
-
-				System.out.println(module_tableModel.getRowCount() + " ---");
-				int rowcount = module_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					module_tableModel.removeRow(j);
-				}
-				System.out.println(module_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allmodules.size(); i++) {
-					Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
-					module_tableModel.addRow(objs);
-				}
+				module_tabledata.update( mcat.SearchResource(searchVars));
 			}
 
 		});
@@ -1770,16 +1527,8 @@ public class NUserPage {
 				ModuleCatalogue modcat = new ModuleCatalogue();
 				allmodules = modcat.readAllResources();
 
-				System.out.println(module_tableModel.getRowCount() + " ---");
-				int rowcount = module_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					module_tableModel.removeRow(j);
-				}
-				System.out.println(module_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allmodules.size(); i++) {
-					Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
-					module_tableModel.addRow(objs);
-				}
+				module_tabledata.update( modcat.readAllResources());
+
 
 			}
 		});
@@ -1820,12 +1569,8 @@ public class NUserPage {
 										.addComponent(btnAddModule).addComponent(btnViewMaintaning))
 								.addContainerGap()));
 
-		module_table = new JTable(module_tableModel);
-		for (int i = 0; i < allmodules.size(); i++) {
-			Object[] objs = { allmodules.get(i).get("rid"), allmodules.get(i).get("modname") };
-			module_tableModel.addRow(objs);
-		}
-		module_scrollPane.setViewportView(module_table);
+		module_tabledata = new TableData(new ModuleCatalogue(),"module");
+		module_scrollPane.setViewportView(module_tabledata.getJdataTable());
 		modulePanel.setLayout(gl_modulePanel_1);
 
 		// get phys res list
@@ -1894,28 +1639,14 @@ public class NUserPage {
 								.addComponent(maintaining_btnDelete).addComponent(btnBacktoModule))
 						.addContainerGap()));
 
-		maintaining_table = new JTable();
-		maintaining_scrollPane.setViewportView(maintaining_table);
+		maintaining_tabledata = new TableData(new MaintainingModuleCatalogue());
+		maintaining_scrollPane.setViewportView(maintaining_tabledata.getJdataTable());
 		maintaining_panel.setLayout(gl_maintaining_panel);
 
 		// end phys res
 
 		JPanel physicalPanel = new JPanel();
 		resourcesTab.addTab("Physical", null, physicalPanel, null);
-		String[] physical_columns = new String[] { "Id", "Name" };
-
-		final DefaultTableModel phyiscal_tableModel = new DefaultTableModel(physical_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-
-		for (int i = 0; i < allphysicals.size(); i++) {
-			Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
-			phyiscal_tableModel.addRow(objs);
-		}
 
 		JButton btnAddPhysicalResource = new JButton("Add Physical Resource");
 		btnAddPhysicalResource.addActionListener(new ActionListener() {
@@ -1951,19 +1682,9 @@ public class NUserPage {
 							System.out.println(inputs.get(i) + " physical");
 						}
 						physcat.addResource((inputs.get(0)));
-						// tu resource ham bayad insert she
-						allphysicals.clear();
-						allphysicals = physcat.readAllResources();
-						System.out.println(phyiscal_tableModel.getRowCount() + " ---");
-						int rowcount = phyiscal_tableModel.getRowCount();
-						for (int j = rowcount - 1; j >= 0; j--) {
-							phyiscal_tableModel.removeRow(j);
-						}
-						System.out.println(phyiscal_tableModel.getRowCount() + " ---");
-						for (int i = 0; i < allphysicals.size(); i++) {
-							Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
-							phyiscal_tableModel.addRow(objs);
-						}
+						
+						physical_tabledata.update(physcat.readAllResources());
+
 
 					}
 				});
@@ -1976,10 +1697,10 @@ public class NUserPage {
 		physical_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//
-				int rowIndex = physical_table.getSelectedRow();
-				int colIndex = physical_table.getSelectedColumn();
+				int rowIndex = physical_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = physical_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (physical_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
 
 				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
@@ -2039,27 +1760,16 @@ public class NUserPage {
 		JButton physical_btnDelete = new JButton("Delete");
 		physical_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rowIndex = physical_table.getSelectedRow();
-				int colIndex = physical_table.getSelectedColumn();
+				int rowIndex = physical_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = physical_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (physical_table.getModel().getValueAt(rowIndex, 0).toString()); // the
+				String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
 				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				physcat.deleteResource(Integer.parseInt(Table_click));
+				
+				physical_tabledata.update(physcat.readAllResources());
 
-				physcat.readAllResources();
-				allphysicals.clear();
-				allphysicals = physcat.readAllResources();
-				System.out.println(phyiscal_tableModel.getRowCount() + " ---");
-				int rowcount = phyiscal_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					phyiscal_tableModel.removeRow(j);
-				}
-				System.out.println(phyiscal_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allphysicals.size(); i++) {
-					Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
-					phyiscal_tableModel.addRow(objs);
-				}
 			}
 		});
 
@@ -2072,20 +1782,9 @@ public class NUserPage {
 				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 				searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
+				
+				physical_tabledata.update(physcat.SearchResource(searchVars));
 
-				allphysicals.clear();
-				allphysicals = physcat.SearchResource(searchVars);
-
-				System.out.println(phyiscal_tableModel.getRowCount() + " ---");
-				int rowcount = phyiscal_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					phyiscal_tableModel.removeRow(j);
-				}
-				System.out.println(phyiscal_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allphysicals.size(); i++) {
-					Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
-					phyiscal_tableModel.addRow(objs);
-				}
 			}
 		});
 
@@ -2100,16 +1799,7 @@ public class NUserPage {
 				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				allphysicals = physcat.readAllResources();
 
-				System.out.println(phyiscal_tableModel.getRowCount() + " ---");
-				int rowcount = phyiscal_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					phyiscal_tableModel.removeRow(j);
-				}
-				System.out.println(phyiscal_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allphysicals.size(); i++) {
-					Object[] objs = { allphysicals.get(i).get("rid"), allphysicals.get(i).get("physname") };
-					phyiscal_tableModel.addRow(objs);
-				}
+				physical_tabledata.update(physcat.readAllResources());
 			}
 		});
 
@@ -2151,8 +1841,8 @@ public class NUserPage {
 								.addComponent(physical_btnDelete))
 						.addContainerGap()));
 
-		physical_table = new JTable(phyiscal_tableModel);
-		physical_scrollPane.setViewportView(physical_table);
+		physical_tabledata = new TableData(new PhysicalResourceCatalogue(),"physical");
+		physical_scrollPane.setViewportView(physical_tabledata.getJdataTable());
 		physicalPanel.setLayout(gl_physicalPanel);
 
 		JPanel allPanel = new JPanel();
@@ -2160,38 +1850,13 @@ public class NUserPage {
 
 		// get all res list
 		final ResourceCatalogue rcat = new ResourceCatalogue();
-		System.out.println("all : ");
-		allres = rcat.readAllResources();
 
 		JScrollPane allres_scrollPane = new JScrollPane();
-		String[] allres_columns = new String[] { "Id", "Name" };
-
-		final DefaultTableModel allres_tableModel = new DefaultTableModel(allres_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
 
 		JButton button = new JButton("Refresh");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				//
-				allres.clear();
-				allres = rcat.readAllResources();
-				System.out.println(allres_tableModel.getRowCount() + " ---");
-				int rowcount = allres_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					allres_tableModel.removeRow(j);
-				}
-				System.out.println(allres_tableModel.getRowCount() + " ---");
-				for (int i = 0; i < allres.size(); i++) {
-					Object[] objs = { allres.get(i).get("rid"), allres.get(i).get("rname") };
-					allres_tableModel.addRow(objs);
-				}
-
+				allresource_tabledata.update(rcat.readAllResources());
 			}
 		});
 		GroupLayout gl_allPanel = new GroupLayout(allPanel);
@@ -2206,26 +1871,12 @@ public class NUserPage {
 								.addComponent(allres_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
 								.addGap(30)));
 
-		for (int i = 0; i < allres.size(); i++) {
-			Object[] objs = { allres.get(i).get("rid"), allres.get(i).get("rname") };
-			allres_tableModel.addRow(objs);
-		}
 
-		allresource_table = new JTable(allres_tableModel);
-		allres_scrollPane.setViewportView(allresource_table);
+		allresource_tabledata = new TableData(new ResourceCatalogue(),"all");
+		allres_scrollPane.setViewportView(allresource_tabledata.getJdataTable());
 		allPanel.setLayout(gl_allPanel);
 
 		tabbedPane.addTab("Project Management", null, projectPanel, null);
-
-		String[] allproject_columns = new String[] { "Id", "Name","Project Manager" };
-
-		final DefaultTableModel allproject_tableModel = new DefaultTableModel(allproject_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
 
 		JButton addprojectBtn = new JButton("Add Project");
 
@@ -2288,18 +1939,9 @@ public class NUserPage {
 						Employee proj_manager = empcat.getEmployee(employeeID);
 						System.out.println(proj_manager.getName());
 						projcat.addProject(inputs.get(0).toString(), proj_manager);
-						// tu resource ham bayad insert she
+						
 						allprojects = projcat.getProjects();
-
-						int rowcount = allproject_tableModel.getRowCount();
-						for (int j = rowcount - 1; j >= 0; j--) {
-							allproject_tableModel.removeRow(j);
-						}
-						System.out.println(allproject_tableModel.getRowCount() + " ---");
-						for (int i = 0; i < allprojects.size(); i++) {
-							Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname"), allprojects.get(i).get("projectmanager") };
-							allproject_tableModel.addRow(objs);
-						}
+						project_tabledata.update(projcat.getProjects());
 
 					}
 				});
@@ -2315,10 +1957,10 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 
 				System.out.println("-----");
-				int rowIndex = project_table.getSelectedRow();
-				int colIndex = project_table.getSelectedColumn();
+				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (project_table.getModel().getValueAt(rowIndex, 0).toString()); // return
+				String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
 																									// the
 																									// thing
 																									// in
@@ -2341,24 +1983,18 @@ public class NUserPage {
 		search_projectname.setColumns(10);
 
 		JLabel lblProjectName = DefaultComponentFactory.getInstance().createLabel("Project Name");
-		
+
 		JButton btnViewResources = new JButton("View Resources");
 		btnViewResources.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				
-
 				System.out.println("-----");
-				int rowIndex = project_table.getSelectedRow();
-				int colIndex = project_table.getSelectedColumn();
+				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (project_table.getModel().getValueAt(rowIndex, 0).toString()); // return
-																									// the
-																									// thing
-																									// in
-																									// the
-																									// 0st
-																									// column
-				System.out.println(Table_click);
+				String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
+
 				selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
 				System.out.println("-----");
 				System.out.println("Change JPanel");
@@ -2366,64 +2002,42 @@ public class NUserPage {
 				tabbedPane.remove(selected_index);
 				tabbedPane.insertTab("Resource Utilization", null, resourceutilpanel, null, selected_index);
 				tabbedPane.setSelectedComponent(resourceutilpanel);
-				
-				
+
 			}
 		});
 		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
-		gl_projectPanel.setHorizontalGroup(
-			gl_projectPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addContainerGap(517, Short.MAX_VALUE)
-					.addComponent(project_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblProjectName)
-					.addContainerGap())
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addContainerGap(447, Short.MAX_VALUE)
-					.addComponent(btnViewResources)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(viewsubsys_Btn)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(addprojectBtn))
-		);
-		gl_projectPanel.setVerticalGroup(
-			gl_projectPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblProjectName)
-						.addComponent(project_btnSearch))
-					.addGap(74)
-					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
-					.addGap(11)
-					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(addprojectBtn)
-						.addComponent(viewsubsys_Btn)
-						.addComponent(btnViewResources)))
-		);
+		gl_projectPanel
+				.setHorizontalGroup(
+						gl_projectPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_projectPanel.createSequentialGroup().addGap(40)
+										.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
+												Short.MAX_VALUE)
+										.addGap(40))
+								.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap(517, Short.MAX_VALUE)
+										.addComponent(project_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblProjectName)
+										.addContainerGap())
+								.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap(447, Short.MAX_VALUE)
+										.addComponent(btnViewResources).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(viewsubsys_Btn).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(addprojectBtn)));
+		gl_projectPanel.setVerticalGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblProjectName).addComponent(project_btnSearch))
+						.addGap(74).addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+						.addGap(11)
+						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE).addComponent(addprojectBtn)
+								.addComponent(viewsubsys_Btn).addComponent(btnViewResources))));
+		project_tabledata = new TableData(new ProjectCatalogue());
 
-		// get all res list
-		final ProjectCatalogue pcat = new ProjectCatalogue();
-		System.out.println("all : ");
-		allprojects = pcat.getProjects();
+		project_tabledata.getJdataTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		for (int i = 0; i < allprojects.size(); i++) {
-			Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname"),allprojects.get(i).get("projectmanager") };
-			allproject_tableModel.addRow(objs);
-		}
-
-		project_table = new JTable(allproject_tableModel);
-		project_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		project_scrollPane.setViewportView(project_table);
+		project_scrollPane.setViewportView(project_tabledata.getJdataTable());
 		projectPanel.setLayout(gl_projectPanel);
 
 		JPanel reportPanel = new JPanel();
@@ -2588,24 +2202,6 @@ public class NUserPage {
 		resourceavailPanel.setLayout(gl_resourceavailPanel);
 		// }
 
-		String[] allregisteredusers_columns = new String[] { "Id", "Name" };
-
-		final DefaultTableModel allregisteredusers_tableModel = new DefaultTableModel(allregisteredusers_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-		final EmployeeCatalogue regempcat = new EmployeeCatalogue();
-		System.out.println("all registered: ");
-		allregisteredusers = regempcat.getRegistrations();
-
-		for (int i = 0; i < allregisteredusers.size(); i++) {
-			Object[] objs = { allregisteredusers.get(i).get("empid"), allregisteredusers.get(i).get("empname") };
-			allregisteredusers_tableModel.addRow(objs);
-		}
-
 		JPanel RegisteredUserspanel = new JPanel();
 		// if(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")
 		// ){
@@ -2619,29 +2215,14 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 
 				System.out.println("-----");
-				int rowIndex = registered_table.getSelectedRow();
-				int colIndex = registered_table.getSelectedColumn();
+				int rowIndex = registered_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = registered_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (registered_table.getModel().getValueAt(rowIndex, 0).toString()); // return
-																										// the
-																										// thing
-																										// in
-																										// the
-																										// 0st
-																										// column
+				String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString());
 				System.out.println(Table_click);
+				EmployeeCatalogue regempcat = new EmployeeCatalogue();
 				regempcat.makeDecision(Integer.parseInt(Table_click), true);
-				regempcat.readAllEmployees();
-				int rowcount = allregisteredusers_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					allregisteredusers_tableModel.removeRow(j);
-				}
-				allregisteredusers = regempcat.getRegistrations();
-				for (int i = 0; i < allregisteredusers.size(); i++) {
-					Object[] objs = { allregisteredusers.get(i).get("empid"),
-							allregisteredusers.get(i).get("empname") };
-					allregisteredusers_tableModel.addRow(objs);
-				}
+				registered_tabledata.update(regempcat.getRegistrations());
 
 			}
 		});
@@ -2651,29 +2232,14 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("-----");
-				int rowIndex = registered_table.getSelectedRow();
-				int colIndex = registered_table.getSelectedColumn();
+				int rowIndex = registered_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = registered_tabledata.getJdataTable().getSelectedColumn();
 
-				String Table_click = (registered_table.getModel().getValueAt(rowIndex, 0).toString()); // return
-																										// the
-																										// thing
-																										// in
-																										// the
-																										// 0st
-																										// column
+				String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString());
 				System.out.println(Table_click);
+				EmployeeCatalogue regempcat = new EmployeeCatalogue();
 				regempcat.makeDecision(Integer.parseInt(Table_click), false);
-				regempcat.readAllEmployees();
-				int rowcount = allregisteredusers_tableModel.getRowCount();
-				for (int j = rowcount - 1; j >= 0; j--) {
-					allregisteredusers_tableModel.removeRow(j);
-				}
-				allregisteredusers = regempcat.getRegistrations();
-				for (int i = 0; i < allregisteredusers.size(); i++) {
-					Object[] objs = { allregisteredusers.get(i).get("empid"),
-							allregisteredusers.get(i).get("empname") };
-					allregisteredusers_tableModel.addRow(objs);
-				}
+				registered_tabledata.update(regempcat.getRegistrations());
 
 			}
 		});
@@ -2696,9 +2262,9 @@ public class NUserPage {
 						.addGap(40).addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
 						.addGap(40)));
 
-		registered_table = new JTable(allregisteredusers_tableModel);
+		registered_tabledata = new TableData(new EmployeeCatalogue(), "registered");
 
-		registered_scrollPane.setViewportView(registered_table);
+		registered_scrollPane.setViewportView(registered_tabledata.getJdataTable());
 		RegisteredUserspanel.setLayout(gl_RegisteredUserspanel);
 		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("default")) {
 			addreqBtn.setEnabled(false);
@@ -2717,4 +2283,5 @@ public class NUserPage {
 	public JFrame getUserpageFrame() {
 		return userpageFrame;
 	}
+
 }
