@@ -107,6 +107,7 @@ public class NUserPage {
 	private JTable resavail_table;
 	private JTable resreq_table;
 	private JTable cycle_table;
+	private JTable resourceutil_table;
 
 	/**
 	 * Launch the application.
@@ -423,24 +424,73 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
-		gl_subsystemPanel.setHorizontalGroup(gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
-						.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE).addGap(40))
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addComponent(btnBacktoProject)
-						.addPreferredGap(ComponentPlacement.RELATED, 640, Short.MAX_VALUE)
-						.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)));
-		gl_subsystemPanel
-				.setVerticalGroup(
-						gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
-										.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 425,
-												Short.MAX_VALUE)
-										.addGap(11).addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(btnBacktoProject).addComponent(addsubsystemBtn))));
+		gl_subsystemPanel.setHorizontalGroup(
+			gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addComponent(btnBacktoProject)
+					.addPreferredGap(ComponentPlacement.RELATED, 640, Short.MAX_VALUE)
+					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+		);
+		gl_subsystemPanel.setVerticalGroup(
+			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnBacktoProject)
+						.addComponent(addsubsystemBtn)))
+		);
 
 		subsystem_table = new JTable(subsystem_tableModel);
 		subsystem_scrollPane.setViewportView(subsystem_table);
 		subsystemPanel.setLayout(gl_subsystemPanel);
+		
+		final JPanel resourceutilpanel = new JPanel();
+		tabbedPane.addTab("Resource Utilization", null, resourceutilpanel, null);
+		tabbedPane.remove(tabbedPane.getTabCount() - 1); // remove resource tab
+
+		
+		JScrollPane resourceutil_scrollPane = new JScrollPane();
+		
+		JButton utilbtnBacktoProject = new JButton("Back");
+		utilbtnBacktoProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("change tab to project mgmt");
+				System.out.println("Change JPanel");
+				int selected_index = tabbedPane.getSelectedIndex();
+				tabbedPane.remove(selected_index);
+				tabbedPane.insertTab("Project Management", null, projectPanel, null, selected_index);
+				tabbedPane.setSelectedComponent(projectPanel);
+			}
+		});
+		GroupLayout gl_resourceutilpanel = new GroupLayout(resourceutilpanel);
+		gl_resourceutilpanel.setHorizontalGroup(
+			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addComponent(utilbtnBacktoProject)
+					.addContainerGap(720, Short.MAX_VALUE))
+		);
+		gl_resourceutilpanel.setVerticalGroup(
+			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+					.addGap(11)
+					.addComponent(utilbtnBacktoProject))
+		);
+		
+		resourceutil_table = new JTable();
+		resourceutil_scrollPane.setViewportView(resourceutil_table);
+		resourceutilpanel.setLayout(gl_resourceutilpanel);
 		//
 		JPanel requirementPanel = new JPanel();
 		tabbedPane.addTab("Requirment Management", null, requirementPanel, null);
@@ -2285,29 +2335,74 @@ public class NUserPage {
 		search_projectname.setColumns(10);
 
 		JLabel lblProjectName = DefaultComponentFactory.getInstance().createLabel("Project Name");
+		
+		JButton btnViewResources = new JButton("View Resources");
+		btnViewResources.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+
+				System.out.println("-----");
+				int rowIndex = project_table.getSelectedRow();
+				int colIndex = project_table.getSelectedColumn();
+
+				String Table_click = (project_table.getModel().getValueAt(rowIndex, 0).toString()); // return
+																									// the
+																									// thing
+																									// in
+																									// the
+																									// 0st
+																									// column
+				System.out.println(Table_click);
+				selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
+				System.out.println("-----");
+				System.out.println("Change JPanel");
+				int selected_index = tabbedPane.getSelectedIndex();
+				tabbedPane.remove(selected_index);
+				tabbedPane.insertTab("Resource Utilization", null, resourceutilpanel, null, selected_index);
+				tabbedPane.setSelectedComponent(resourceutilpanel);
+				
+				
+			}
+		});
 		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
-		gl_projectPanel.setHorizontalGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectPanel.createSequentialGroup().addGap(40)
-						.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE).addGap(40))
-				.addGroup(Alignment.TRAILING,
-						gl_projectPanel.createSequentialGroup().addContainerGap(517, Short.MAX_VALUE)
-								.addComponent(project_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblProjectName)
-								.addContainerGap())
-				.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap(570, Short.MAX_VALUE)
-						.addComponent(viewsubsys_Btn).addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(addprojectBtn)));
-		gl_projectPanel.setVerticalGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblProjectName).addComponent(project_btnSearch))
-						.addGap(74).addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
-						.addGap(11).addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(addprojectBtn).addComponent(viewsubsys_Btn))));
+		gl_projectPanel.setHorizontalGroup(
+			gl_projectPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap(517, Short.MAX_VALUE)
+					.addComponent(project_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblProjectName)
+					.addContainerGap())
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap(447, Short.MAX_VALUE)
+					.addComponent(btnViewResources)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(viewsubsys_Btn)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(addprojectBtn))
+		);
+		gl_projectPanel.setVerticalGroup(
+			gl_projectPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblProjectName)
+						.addComponent(project_btnSearch))
+					.addGap(74)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+					.addGap(11)
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addprojectBtn)
+						.addComponent(viewsubsys_Btn)
+						.addComponent(btnViewResources)))
+		);
 
 		// get all res list
 		final ProjectCatalogue pcat = new ProjectCatalogue();
