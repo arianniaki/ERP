@@ -31,26 +31,30 @@ public class ResourceRequirement{
 		DB = new DataBase();
 	}
 	
-	public void edit(int pid, int sid, int rid, String from, String to ,boolean isSatisfied){
+	public void edit(String from, String to ,boolean isSatisfied){
 		this.from = from;
 		this.to = to;
-		ProjectCatalogue pcat = new ProjectCatalogue();
-		SectionCatalogue scat = new SectionCatalogue();
-		ResourceCatalogue rcat = new ResourceCatalogue();
-		this.project = pcat.getProject(pid);
-		this.section = scat.getSection(sid);
-		this.resource = rcat.getResource(rid);
+
+		int rid = this.resource.getId();
+		int pid = this.project.getId();
+		int sid = this.section.getId();
 		this.isSatisfied = isSatisfied;
 		
 		HashMap<String, String> setVars = new HashMap<String, String>();
-		setVars.put("rid", Integer.toString(rid));
-		setVars.put("sid", Integer.toString(sid));
-		setVars.put("pid", Integer.toString(pid));
-		setVars.put("fromdate", "\'"+from+"\'");
-		setVars.put("todate", "\'"+to+"\'");
-		setVars.put("is_satisfied", Boolean.toString(isSatisfied));
 
+		setVars.put("fromdate", "\'"+from+"\'");
 		submitToDB(setVars, rid, sid, pid);
+		setVars.clear();
+
+		setVars.put("todate", "\'"+to+"\'");
+		submitToDB(setVars, rid, sid, pid);
+		setVars.clear();
+
+		setVars.put("is_satisfied", Boolean.toString(isSatisfied));
+		submitToDB(setVars, rid, sid, pid);
+		setVars.clear();
+
+
 	}
 	
 	public void satisfy(String date){
