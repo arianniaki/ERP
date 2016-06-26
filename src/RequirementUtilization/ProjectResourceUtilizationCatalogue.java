@@ -80,6 +80,32 @@ public class ProjectResourceUtilizationCatalogue {
 		return pru;
 	}
 
+	public ArrayList<ProjectResourceUtilization> getProjectResourceUtilizationbyProject(int pid){
+		
+		ArrayList<ProjectResourceUtilization> ProjResUtil = new ArrayList<ProjectResourceUtilization>();
+
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("pid", "\'"+pid+"\'");
+
+		Table table = new Table(tableName);
+		ArrayList<HashMap<String, String>> result = table.search(vars);
+		for (int i = 0; i < result.size(); i++) {
+			
+			ProjectCatalogue pcat = new ProjectCatalogue();
+			SectionCatalogue scat = new SectionCatalogue();
+			ResourceCatalogue rcat = new ResourceCatalogue();
+			
+			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("pid")));
+			Section sc = scat.getSection(Integer.parseInt(result.get(i).get("sid")));
+			Resource rs = rcat.getResource(Integer.parseInt(result.get(i).get("rid")));
+			ProjectResourceUtilization pru = new ProjectResourceUtilization(pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"));
+			ProjResUtil.add(pru);
+		}
+		return ProjResUtil;
+
+
+	}
+
 	
 	public long addProjectResourceUtilization(int rid, int sid, int pid, String from, String to) {
 		HashMap<String, String> vars = new HashMap<String, String>();
@@ -94,6 +120,7 @@ public class ProjectResourceUtilizationCatalogue {
 		System.out.println("inserted into projectresourceutilization table: " + pk);
 		return pk;
 	}
+	
 	
 	public void deleteProjectResourceUtilization(int rid, int sid, int pid, String from, String to) {
 		HashMap<String, String> vars = new HashMap<String, String>();

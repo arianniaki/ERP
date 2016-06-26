@@ -156,28 +156,32 @@ public class Main {
 		
 		
 		ProjectResourceUtilizationCatalogue projres = new ProjectResourceUtilizationCatalogue();
-		System.out.println("read all:");
-		ArrayList<ProjectResourceUtilization> pru = projres.getProjectResourceUtilizations();
-		System.out.println("read all");
+//		System.out.println("read all:");
+//		ArrayList<ProjectResourceUtilization> pru = projres.getProjectResourceUtilizations();
+//		for (int i = 0; i < pru.size(); i++) {
+//			System.out.println(pru.get(i).toString());
+//		}
+//
+//		System.out.println("add:");
+//		projres.addProjectResourceUtilization(3,2,9,"2016-01-01","2016-01-01");
+//		System.out.println("get :");
+//		System.out.println(projres.getProjectResourceUtilization(3,2,9,"2016-01-01","2016-01-01").toHashMap());
+//		projres.getProjectResourceUtilization(3,2,9,"2016-01-01","2016-01-01").edit("2016-04-04", "2016-04-05");
+//		System.out.println("get :");
+//		System.out.println(projres.getProjectResourceUtilization(3,2,9,"2016-04-04","2016-04-05").toHashMap());
+//		System.out.println("delete");
+//		projres.deleteProjectResourceUtilization(3, 2, 9,"2016-01-04","2016-01-05");
+//		System.out.println("read all");
+//		ArrayList<ProjectResourceUtilization> prus = projres.getProjectResourceUtilizations();
+//		for (int i = 0; i < prus.size(); i++) {
+//			System.out.println(prus.get(i).toString());
+//		}
+		
+		ArrayList<ProjectResourceUtilization> pru = projres.getProjectResourceUtilizationbyProject(6);
 		for (int i = 0; i < pru.size(); i++) {
 			System.out.println(pru.get(i).toString());
 		}
 
-		System.out.println("add:");
-		projres.addProjectResourceUtilization(3,2,9,"2016-01-01","2016-01-01");
-		System.out.println("get :");
-		System.out.println(projres.getProjectResourceUtilization(3,2,9,"2016-01-01","2016-01-01").toHashMap());
-		projres.getProjectResourceUtilization(3,2,9,"2016-01-01","2016-01-01").edit("2016-04-04", "2016-04-05");
-		System.out.println("get :");
-		System.out.println(projres.getProjectResourceUtilization(3,2,9,"2016-04-04","2016-04-05").toHashMap());
-		System.out.println("delete");
-		projres.deleteProjectResourceUtilization(3, 2, 9,"2016-01-04","2016-01-05");
-		System.out.println("read all");
-		ArrayList<ProjectResourceUtilization> prus = projres.getProjectResourceUtilizations();
-		for (int i = 0; i < prus.size(); i++) {
-			System.out.println(prus.get(i).toString());
-		}
-		
 		
 		//test sign up
 //		ArrayList<HashMap<String, String>> registered_users;
