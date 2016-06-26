@@ -696,6 +696,54 @@ public class NUserPage {
 		JButton requirement_btnEdit = new JButton("Edit");
 
 		JButton requirement_btnSatisfy = new JButton("Satisfy");
+		requirement_btnSatisfy.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				ArrayList<Field> satisfy = new ArrayList<Field>();
+				Field reqname = new Field("text", "req name       ", "", 10, "name");
+				final Form satisfy_requirement_Form = new Form(satisfy, "Satisfy Requirement");
+				final PanelBuilder satisfy_requirement_Panel = new PanelBuilder(satisfy_requirement_Form);
+				satisfy_requirement_Panel.makeForm();
+
+				JFrame Satisfy_RequirementPage = new JFrame("Satisfy Requirement Form");
+				Satisfy_RequirementPage.getContentPane().add(satisfy_requirement_Form.getJPanel(), BorderLayout.NORTH);
+
+				// adding date
+				UtilDateModel modelfor = new UtilDateModel();
+
+				Properties p = new Properties();
+				p.put("text.today", "Today");
+				p.put("text.month", "Month");
+				p.put("text.year", "Year");
+				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+
+				JPanel date_panel = new JPanel(new FlowLayout());
+
+				date_panel.add(from_datePanel);
+				Satisfy_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
+				// end date
+
+				JButton submitsatisfyBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitsatisfyBtn);
+				Satisfy_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Satisfy_RequirementPage.pack();
+				Satisfy_RequirementPage.setVisible(true);
+				submitsatisfyBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						 System.out.println(from_datePicker.getJFormattedTextField().getText());
+
+					}
+				});
+				
+				
+			}
+		});
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
 		gl_requirementPanel
 				.setHorizontalGroup(
@@ -2113,7 +2161,7 @@ public class NUserPage {
 
 		tabbedPane.addTab("Project Management", null, projectPanel, null);
 
-		String[] allproject_columns = new String[] { "Id", "Name" };
+		String[] allproject_columns = new String[] { "Id", "Name","Project Manager" };
 
 		final DefaultTableModel allproject_tableModel = new DefaultTableModel(allproject_columns, 0) {
 			@Override
@@ -2193,7 +2241,7 @@ public class NUserPage {
 						}
 						System.out.println(allproject_tableModel.getRowCount() + " ---");
 						for (int i = 0; i < allprojects.size(); i++) {
-							Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname") };
+							Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname"), allprojects.get(i).get("projectmanager") };
 							allproject_tableModel.addRow(objs);
 						}
 
@@ -2267,7 +2315,7 @@ public class NUserPage {
 		allprojects = pcat.getProjects();
 
 		for (int i = 0; i < allprojects.size(); i++) {
-			Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname") };
+			Object[] objs = { allprojects.get(i).get("projid"), allprojects.get(i).get("projname"),allprojects.get(i).get("projectmanager") };
 			allproject_tableModel.addRow(objs);
 		}
 
