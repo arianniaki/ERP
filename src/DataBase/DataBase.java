@@ -62,7 +62,7 @@ public class DataBase {
 					dbName, "postgres",
 					"123456m.");
 			c.setAutoCommit(false);
-			System.out.println("select : Opened database successfully");
+//			System.out.println("select : Opened database successfully");
 			stmt = c.createStatement();
 			String sql = new String();
 			if(groupBy!=null){
@@ -106,12 +106,12 @@ public class DataBase {
 			System.out.println("update : Opened database successfully");
 
 			stmt = c.createStatement();
-			String sql = "UPDATE " + tableName + " set ";// SALARY = 25000.00
-															// where ID=1;";
+			String sql = "UPDATE " + tableName + " set ";
+
 			for (String key : setVars.keySet()) {
-				sql += key + "=" + setVars.get(key) + " AND ";
+				sql += key + "=" + setVars.get(key) + ", ";
 			}
-			sql = sql.substring(0, sql.length() - 5) + " where ";
+			sql = sql.substring(0, sql.length() - 2) + " where ";
 			for (String key : condVars.keySet()) {
 				sql += key + "=" + condVars.get(key) + " AND ";
 			}
