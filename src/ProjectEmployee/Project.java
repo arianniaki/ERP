@@ -1,21 +1,20 @@
 package ProjectEmployee;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import DataBase.DataBase;
 import ProjectEmployee.SubSystem.SubSystem;
 
 public class Project {
 	int pid;
-	DataBase DB;
 	String name;
 	String description;
 	String projectSize;
 	String technologiesUsed;
 	boolean isComplete;
 	Employee projectManager;
-	ArrayList<SubSystem> subSystems;
-	ArrayList<Employee> employees;
+	DataBase DB;
 	
 	
 	public Project(String name, String desc, String size, Employee manager, String tech){
@@ -26,8 +25,6 @@ public class Project {
 		projectManager = manager;
 		technologiesUsed = tech;
 		isComplete = false;
-		subSystems = new ArrayList<>();
-		employees = new ArrayList<>();
 	}
 	
 	public void setId(int inputId) {
@@ -39,28 +36,20 @@ public class Project {
 	}
 
 	
-	public void editProject(String name, String desc, String size, Employee manager, String tech, boolean isComp, ArrayList<SubSystem> subs, ArrayList<Employee> emps){
+	public void editProject(String name, String desc, String size, Employee manager, String tech, boolean isComp){
 		this.name = name;
 		description = desc;
 		projectSize = size;
 		projectManager = manager;
 		technologiesUsed = tech;
 		isComplete = isComp;
-		subSystems = subs;
-		employees = emps;	
-	}
-	public void addSubSystem(SubSystem subSystem){
-		if(!subSystems.contains(subSystem))
-			subSystems.add(subSystem);
-		else
-			System.out.println("This subsystem already exits in this project");
-	}
-	
-	public void addEmployee(Employee employee){
-		if(!employees.contains(employee))
-			employees.add(employee);
-		else
-			System.out.println("This employee already exits in this project");
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("projname", "\'"+name+"\'");
+		setVars.put("projmanager", Integer.toString(manager.getId()));
+		setVars.put("size", "\'"+size+"\'");
+		setVars.put("tech", "\'"+tech+"\'");
+		setVars.put("is_complete", "\'"+Boolean.toString(isComp)+"\'");
+		submitToDB(setVars);
 
 	}
 	
@@ -73,5 +62,12 @@ public class Project {
 		// TODO Auto-generated method stub
 		return this.name;
 	}
+	
+	public void submitToDB(HashMap<String, String> setVars) {
+		HashMap<String, String> condVars = new HashMap<String, String>();
+		condVars.put("projid", Integer.toString(this.pid));
+		DB.update(condVars, setVars, "project");
+	}
+
 	
 }
