@@ -105,7 +105,7 @@ public class Main {
 //		SubSystemCatalogue subCat = new SubSystemCatalogue();
 //		subCat.addSubSystem("sub1", 6);
 //		subCat.addSubSystem("sub2", 7);
-//		subCat.getSubSystems();
+//		subCat.getSubSystemsbyProject(7);
 //		subCat.deleteSubSystem(2);
 //		subCat.getSubSystems();
 		
@@ -177,10 +177,10 @@ public class Main {
 //			System.out.println(prus.get(i).toString());
 //		}
 		
-		ArrayList<ProjectResourceUtilization> pru = projres.getProjectResourceUtilizationbyProject(6);
-		for (int i = 0; i < pru.size(); i++) {
-			System.out.println(pru.get(i).toString());
-		}
+//		ArrayList<ProjectResourceUtilization> pru = projres.getProjectResourceUtilizationbyProject(6);
+//		for (int i = 0; i < pru.size(); i++) {
+//			System.out.println(pru.get(i).toString());
+//		}
 
 		
 		//test sign up
