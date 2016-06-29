@@ -52,6 +52,7 @@ import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -69,6 +70,11 @@ import javax.swing.JTable;
 
 public class NUserPage {
 
+	private Color userpage_color= new Color(0,150, 130) ;
+	private Color tab_color= new Color(128,203, 196) ;
+
+
+	
 	private JFrame userpageFrame;
 	private JTextField editname_textField;
 	private JTextField editpassword_textField;
@@ -160,12 +166,15 @@ public class NUserPage {
 		userpageFrame.setBounds(100, 100, 870, 585);
 		userpageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		userpageFrame.getContentPane().setLayout(null);
+		userpageFrame.getContentPane().setBackground(userpage_color);
+
 
 		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(6, 6, 858, 551);
 		userpageFrame.getContentPane().add(tabbedPane);
 
 		JPanel editPanel = new JPanel();
+		editPanel.setBackground(tab_color);
 		tabbedPane.addTab("Edit Info", null, editPanel, null);
 
 		JButton btnLogout = new JButton("Logout");
@@ -181,7 +190,7 @@ public class NUserPage {
 			}
 		});
 
-		JLabel lblName = new JLabel("Name and Family Name");
+		JLabel lblName = new JLabel("First and Last Name");
 
 		editname_textField = new JTextField();
 		editname_textField.setColumns(10);
@@ -246,9 +255,10 @@ public class NUserPage {
 		editPanel.setLayout(gl_editPanel);
 
 		JPanel accessrightPanel = new JPanel();
-		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")) {
+		accessrightPanel.setBackground(tab_color);
+//		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")) {
 			tabbedPane.addTab("AccessRight Management", null, accessrightPanel, null);
-		}
+//		}
 
 		// get employee list
 
@@ -336,11 +346,13 @@ public class NUserPage {
 
 		// project mgmt panel
 		final JPanel projectPanel = new JPanel();
+		projectPanel.setBackground(tab_color);
 
 		//
 
 		// subsystem panel
 		final JPanel subsystemPanel = new JPanel();
+		subsystemPanel.setBackground(tab_color);
 		tabbedPane.addTab("SubSystem", null, subsystemPanel, null);
 		tabbedPane.remove(tabbedPane.getTabCount() - 1); // remove subsystem tab
 		JScrollPane subsystem_scrollPane = new JScrollPane();
@@ -456,6 +468,7 @@ public class NUserPage {
 		subsystemPanel.setLayout(gl_subsystemPanel);
 
 		final JPanel resourceutilpanel = new JPanel();
+		resourceutilpanel.setBackground(tab_color);
 		tabbedPane.addTab("Resource Utilization", null, resourceutilpanel, null);
 		tabbedPane.remove(tabbedPane.getTabCount() - 1); // remove resource tab
 
@@ -495,6 +508,7 @@ public class NUserPage {
 		resourceutilpanel.setLayout(gl_resourceutilpanel);
 		//
 		JPanel requirementPanel = new JPanel();
+		requirementPanel.setBackground(tab_color);
 		tabbedPane.addTab("Requirment Management", null, requirementPanel, null);
 
 		JButton addreqBtn = new JButton("Add Requirement");
@@ -841,6 +855,7 @@ public class NUserPage {
 		});
 
 		JPanel resourcePanel = new JPanel();
+		resourcePanel.setBackground(tab_color);
 		tabbedPane.addTab("Resource Management", null, resourcePanel, null);
 		SpringLayout sl_resourcePanel = new SpringLayout();
 		resourcePanel.setLayout(sl_resourcePanel);
@@ -859,115 +874,7 @@ public class NUserPage {
 		System.out.println("all : ");
 		allemployees = employeecat.readAllEmployees();
 
-		JPanel humanPanel = new JPanel();
-		resourcesTab.addTab("Human", null, humanPanel, null);
-		JScrollPane human_scrollPane = new JScrollPane();
-
-		JButton human_btnEdit = new JButton("Edit");
-		human_btnEdit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
-
-				String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
-				System.out.println(Table_click + " this was clicked");
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
-//				empcat.deleteEmployee(Integer.parseInt(Table_click));
-
-				empcat.readAllEmployees();
-				allemployees.clear();
-				allemployees = empcat.readAllEmployees();
-				human_tabledata.update(empcat.readAllEmployees());
-			}
-		});
-
-		JButton human_btnDelete = new JButton("Delete");
-
-		human_btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				System.out.println("-----");
-				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
-
-				String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
-																									// the
-																									// thing
-																									// in
-																									// the
-																									// 0st
-																									// column
-				System.out.println(Table_click);
-				EmployeeCatalogue empcat_delete = new EmployeeCatalogue();
-				empcat_delete.deleteEmployee(Integer.parseInt(Table_click));
-				allemployees = empcat_delete.readAllEmployees();
-				human_tabledata.update(empcat_delete.readAllEmployees());
-
-			}
-		});
-
-		search_humanname = new JTextField();
-		search_humanname.setColumns(10);
-
-		JButton human_btnSearch = new JButton("Search");
-		human_btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
-				HashMap<String, String> searchVars = new HashMap<String, String>();
-				searchVars.put("empname", "\'" + search_humanname.getText() + "\'");
-
-				allemployees.clear();
-				allemployees = empcat.SearchEmployee(searchVars);
-				human_tabledata.update(empcat.SearchEmployee(searchVars));
-			}
-		});
-
-		JLabel lblHumanName = DefaultComponentFactory.getInstance().createLabel("Human name");
-
-		JButton search_humanbtnRefresh = new JButton("Refresh");
-		search_humanbtnRefresh.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				allemployees.clear();
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
-				human_tabledata.update(empcat.readAllEmployees());
-
-			}
-		});
-		GroupLayout gl_humanPanel = new GroupLayout(humanPanel);
-		gl_humanPanel.setHorizontalGroup(gl_humanPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_humanPanel.createSequentialGroup().addGap(30)
-						.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE).addGap(30))
-				.addGroup(
-						gl_humanPanel.createSequentialGroup()
-								.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
-										GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(640,
-										Short.MAX_VALUE))
-				.addGroup(gl_humanPanel.createSequentialGroup().addComponent(search_humanbtnRefresh)
-						.addPreferredGap(ComponentPlacement.RELATED, 359, Short.MAX_VALUE).addComponent(human_btnSearch)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblHumanName).addContainerGap()));
-		gl_humanPanel.setVerticalGroup(gl_humanPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_humanPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(human_btnSearch).addComponent(lblHumanName)
-								.addComponent(search_humanbtnRefresh))
-						.addGap(31).addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE).addComponent(human_btnEdit)
-								.addComponent(human_btnDelete))
-						.addContainerGap()));
-
 		human_tabledata = new TableData(new EmployeeCatalogue(),"human");
-		human_scrollPane.setViewportView(human_tabledata.getJdataTable());
-		humanPanel.setLayout(gl_humanPanel);
 
 
 		JPanel informationPanel = new JPanel();
@@ -1734,6 +1641,114 @@ public class NUserPage {
 		maintaining_tabledata = new TableData(new MaintainingModuleCatalogue());
 		maintaining_scrollPane.setViewportView(maintaining_tabledata.getJdataTable());
 		maintaining_panel.setLayout(gl_maintaining_panel);
+		
+				JPanel humanPanel = new JPanel();
+				resourcesTab.addTab("Human", null, humanPanel, null);
+				JScrollPane human_scrollPane = new JScrollPane();
+				
+						JButton human_btnEdit = new JButton("Edit");
+						human_btnEdit.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+
+								int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
+								int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
+
+								String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
+								System.out.println(Table_click + " this was clicked");
+								EmployeeCatalogue empcat = new EmployeeCatalogue();
+//				empcat.deleteEmployee(Integer.parseInt(Table_click));
+
+								empcat.readAllEmployees();
+								allemployees.clear();
+								allemployees = empcat.readAllEmployees();
+								human_tabledata.update(empcat.readAllEmployees());
+							}
+						});
+						
+								JButton human_btnDelete = new JButton("Delete");
+								
+										human_btnDelete.addActionListener(new ActionListener() {
+											public void actionPerformed(ActionEvent e) {
+								
+												System.out.println("-----");
+												int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
+												int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
+								
+												String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
+																																	// the
+																																	// thing
+																																	// in
+																																	// the
+																																	// 0st
+																																	// column
+												System.out.println(Table_click);
+												EmployeeCatalogue empcat_delete = new EmployeeCatalogue();
+												empcat_delete.deleteEmployee(Integer.parseInt(Table_click));
+												allemployees = empcat_delete.readAllEmployees();
+												human_tabledata.update(empcat_delete.readAllEmployees());
+								
+											}
+										});
+										
+												search_humanname = new JTextField();
+												search_humanname.setColumns(10);
+												
+														JButton human_btnSearch = new JButton("Search");
+														human_btnSearch.addActionListener(new ActionListener() {
+															public void actionPerformed(ActionEvent e) {
+																EmployeeCatalogue empcat = new EmployeeCatalogue();
+																HashMap<String, String> searchVars = new HashMap<String, String>();
+																searchVars.put("empname", "\'" + search_humanname.getText() + "\'");
+
+																allemployees.clear();
+																allemployees = empcat.SearchEmployee(searchVars);
+																human_tabledata.update(empcat.SearchEmployee(searchVars));
+															}
+														});
+														
+																JLabel lblHumanName = DefaultComponentFactory.getInstance().createLabel("Human name");
+																
+																		JButton search_humanbtnRefresh = new JButton("Refresh");
+																		search_humanbtnRefresh.addActionListener(new ActionListener() {
+																			public void actionPerformed(ActionEvent e) {
+																				allemployees.clear();
+																				EmployeeCatalogue empcat = new EmployeeCatalogue();
+																				human_tabledata.update(empcat.readAllEmployees());
+
+																			}
+																		});
+																		GroupLayout gl_humanPanel = new GroupLayout(humanPanel);
+																		gl_humanPanel.setHorizontalGroup(gl_humanPanel.createParallelGroup(Alignment.TRAILING)
+																				.addGroup(gl_humanPanel.createSequentialGroup().addGap(30)
+																						.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE).addGap(30))
+																				.addGroup(
+																						gl_humanPanel.createSequentialGroup()
+																								.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+																								.addPreferredGap(ComponentPlacement.RELATED)
+																								.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
+																										GroupLayout.PREFERRED_SIZE)
+																								.addContainerGap(640,
+																										Short.MAX_VALUE))
+																				.addGroup(gl_humanPanel.createSequentialGroup().addComponent(search_humanbtnRefresh)
+																						.addPreferredGap(ComponentPlacement.RELATED, 359, Short.MAX_VALUE).addComponent(human_btnSearch)
+																						.addPreferredGap(ComponentPlacement.RELATED)
+																						.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.PREFERRED_SIZE)
+																						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblHumanName).addContainerGap()));
+																		gl_humanPanel.setVerticalGroup(gl_humanPanel.createParallelGroup(Alignment.LEADING)
+																				.addGroup(gl_humanPanel.createSequentialGroup().addContainerGap()
+																						.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
+																								.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+																										GroupLayout.PREFERRED_SIZE)
+																								.addComponent(human_btnSearch).addComponent(lblHumanName)
+																								.addComponent(search_humanbtnRefresh))
+																						.addGap(31).addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+																						.addPreferredGap(ComponentPlacement.RELATED)
+																						.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE).addComponent(human_btnEdit)
+																								.addComponent(human_btnDelete))
+																						.addContainerGap()));
+																		human_scrollPane.setViewportView(human_tabledata.getJdataTable());
+																		humanPanel.setLayout(gl_humanPanel);
 
 		// end phys res
 
@@ -2199,6 +2214,7 @@ public class NUserPage {
 		projectPanel.setLayout(gl_projectPanel);
 
 		JPanel reportPanel = new JPanel();
+		reportPanel.setBackground(tab_color);
 		// if
 		// (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super"))
 		// {
@@ -2501,6 +2517,7 @@ public class NUserPage {
 		// }
 
 		JPanel RegisteredUserspanel = new JPanel();
+		RegisteredUserspanel.setBackground(tab_color);
 		// if(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")
 		// ){
 		tabbedPane.addTab("Registered Users", null, RegisteredUserspanel, null);

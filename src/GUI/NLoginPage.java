@@ -33,6 +33,7 @@ public class NLoginPage {
 	private JFrame loginFrame;
 	private JTextField username;
 	private JPasswordField passwordField;
+	private Color color= new Color(0,150, 130) ;
 
 	/**
 	 * Launch the application.
@@ -156,6 +157,8 @@ public class NLoginPage {
 			}
 		});
 		loginFrame.getContentPane().add(btnSignUp);
+		loginFrame.getContentPane().setBackground(color);
+
 
 		JLabel lblUsername = DefaultComponentFactory.getInstance().createLabel("Username");
 		lblUsername.setBounds(28, 72, 62, 16);
