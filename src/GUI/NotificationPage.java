@@ -26,6 +26,9 @@ public class NotificationPage extends JDialog implements ActionListener {
     buttonPane.add(button); 
     button.addActionListener(this);
     getContentPane().add(buttonPane, BorderLayout.SOUTH);
+    this.setSize(400, 300);
+    this.setLocationRelativeTo(null);
+
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     pack(); 
     setVisible(true);
