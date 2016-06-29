@@ -2285,33 +2285,15 @@ public class NUserPage {
 
 						ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
 						ProjectCatalogue projCat = new ProjectCatalogue();
-						// Project proj =
-						// projCat.getProject(projectCombo.getSelectedItem().toString().);
-						// do regex to find proj id
-						// resReqCat.getReport(proj).printRep();
-						// System.out.println("Yay! ");
-						//
-						// sending data to table
-						// resreqCat.addResourceRequirement(rid, sid, pid, '2-z,
-						// to);
-						// // tu resource ham bayad insert she
-						// allmodules.clear();
-						// allmodules = mcat.readAllResources();
-						// System.out.println(module_tableModel.getRowCount()+"
-						// ---");
-						// int rowcount= module_tableModel.getRowCount();
-						// for (int j = rowcount - 1; j >= 0; j--) {
-						// System.out.println(j);
-						// module_tableModel.removeRow(j);
-						// }
-						// System.out.println(module_tableModel.getRowCount()+"
-						// ---");
-						// for (int i = 0; i < allmodules.size(); i++) {
-						// Object[] objs = { allmodules.get(i).get("rid"),
-						// allmodules.get(i).get("modname") };
-						// module_tableModel.addRow(objs);
-						// }
-						//
+				    	Pattern p = Pattern.compile("projid=\\d+");
+				    	Matcher m = p.matcher(projectCombo.getSelectedItem().toString());
+				    	if (m.find()) {
+				    	  System.out.println(m.group().replace("projid=", ""));
+				    	  int projid=Integer.parseInt(m.group().replace("projid=", ""));
+				    	  Project proj = projCat.getProject(projid);
+				    	  resReqCat.getReport(proj).printRep();
+				    	  // print doesnt work with table gimme sth else
+				    	}
 
 					}
 				});
