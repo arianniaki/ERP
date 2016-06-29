@@ -1,11 +1,13 @@
 package GUI;
 
 import java.awt.EventQueue;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.SpringLayout;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.TextField;
 import javax.swing.JLabel;
@@ -62,31 +64,25 @@ public class NLoginPage {
 		loginFrame = new JFrame();
 		loginFrame.setBounds(100, 100, 450, 300);
 		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		SpringLayout springLayout = new SpringLayout();
-		loginFrame.getContentPane().setLayout(springLayout);
+		loginFrame.getContentPane().setLayout(null);
 
 		username = new JTextField();
-		springLayout.putConstraint(SpringLayout.SOUTH, username, -183, SpringLayout.SOUTH, loginFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, username, -139, SpringLayout.EAST, loginFrame.getContentPane());
+		username.setBounds(115, 66, 176, 28);
 		loginFrame.getContentPane().add(username);
 		username.setColumns(10);
 
 		passwordField = new JPasswordField();
-		springLayout.putConstraint(SpringLayout.NORTH, passwordField, 16, SpringLayout.SOUTH, username);
-		springLayout.putConstraint(SpringLayout.WEST, passwordField, 135, SpringLayout.WEST,
-				loginFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, passwordField, 0, SpringLayout.EAST, username);
+		passwordField.setBounds(115, 115, 176, 28);
 		loginFrame.getContentPane().add(passwordField);
 
 		final JLabel lblLoginFailed = DefaultComponentFactory.getInstance().createLabel("Login Failed");
-		springLayout.putConstraint(SpringLayout.NORTH, lblLoginFailed, 97, SpringLayout.NORTH,
-				loginFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, lblLoginFailed, 30, SpringLayout.EAST, passwordField);
+		lblLoginFailed.setBounds(341, 160, 76, 16);
 		lblLoginFailed.setForeground(Color.RED);
 		lblLoginFailed.setVisible(false);
 		loginFrame.getContentPane().add(lblLoginFailed);
 
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setBounds(212, 155, 79, 29);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblLoginFailed.setVisible(false);
@@ -106,11 +102,10 @@ public class NLoginPage {
 				}
 			}
 		});
-		springLayout.putConstraint(SpringLayout.NORTH, btnLogin, 6, SpringLayout.SOUTH, passwordField);
-		springLayout.putConstraint(SpringLayout.EAST, btnLogin, 0, SpringLayout.EAST, username);
 		loginFrame.getContentPane().add(btnLogin);
 
 		JButton btnSignUp = new JButton("Sign up");
+		btnSignUp.setBounds(115, 155, 91, 29);
 		btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -160,21 +155,21 @@ public class NLoginPage {
 				});
 			}
 		});
-		springLayout.putConstraint(SpringLayout.NORTH, btnSignUp, 6, SpringLayout.SOUTH, passwordField);
-		springLayout.putConstraint(SpringLayout.EAST, btnSignUp, -6, SpringLayout.WEST, btnLogin);
 		loginFrame.getContentPane().add(btnSignUp);
 
 		JLabel lblUsername = DefaultComponentFactory.getInstance().createLabel("Username");
-		springLayout.putConstraint(SpringLayout.EAST, lblUsername, -340, SpringLayout.EAST,
-				loginFrame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, username, 25, SpringLayout.EAST, lblUsername);
-		springLayout.putConstraint(SpringLayout.NORTH, lblUsername, 6, SpringLayout.NORTH, username);
+		lblUsername.setBounds(28, 72, 62, 16);
 		loginFrame.getContentPane().add(lblUsername);
 
 		JLabel lblPassword = DefaultComponentFactory.getInstance().createLabel("Password");
-		springLayout.putConstraint(SpringLayout.NORTH, lblPassword, 6, SpringLayout.NORTH, passwordField);
-		springLayout.putConstraint(SpringLayout.WEST, lblPassword, 0, SpringLayout.WEST, lblUsername);
+		lblPassword.setBounds(28, 121, 59, 16);
 		loginFrame.getContentPane().add(lblPassword);
+		
+		JLabel lblImage = new JLabel();
+		lblImage.setBounds(306, 6, 123, 125);
+
+		lblImage.setIcon(new ImageIcon(new ImageIcon("src/images/erp.png").getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT)));
+		loginFrame.getContentPane().add(lblImage);
 
 	}
 
