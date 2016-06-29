@@ -2363,6 +2363,9 @@ public class NUserPage {
 		JScrollPane cycle_scrollPane = new JScrollPane();
 
 		JButton cycle_btnGetReport = new JButton("Get Report");
+		cycle_btnGetReport.setIcon(new ImageIcon(
+				new ImageIcon("images/report.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
 		cycle_btnGetReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> resource_types = new ArrayList<String>();
@@ -2384,6 +2387,7 @@ public class NUserPage {
 				cylic_Panel.makeForm();
 
 				JFrame getReport_CycliclPage = new JFrame("Get Report Cyclic Resource Form");
+				
 
 				getReport_CycliclPage.getContentPane().add(cycliclreport_Form.getJPanel(), BorderLayout.NORTH);
 
@@ -2486,6 +2490,9 @@ public class NUserPage {
 		JScrollPane resreq_scrollPane = new JScrollPane();
 
 		JButton resreq_btnGetReport = new JButton("Get Report");
+		resreq_btnGetReport.setIcon(new ImageIcon(
+				new ImageIcon("images/report.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
 		resreq_btnGetReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -2568,6 +2575,9 @@ public class NUserPage {
 		JScrollPane resavail_scrollpane = new JScrollPane();
 
 		JButton resavail_btnGetReport = new JButton("Get Report");
+		resavail_btnGetReport.setIcon(new ImageIcon(
+				new ImageIcon("images/report.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
 		resavail_btnGetReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> resource_types = new ArrayList<String>();
@@ -2676,6 +2686,9 @@ public class NUserPage {
 		});
 
 		JButton btnDeny = new JButton("Deny");
+		btnDeny.setIcon(new ImageIcon(
+				new ImageIcon("images/remove.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
 		btnDeny.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
