@@ -71,7 +71,7 @@ public class NUserPage {
 
 	private JFrame userpageFrame;
 	private JTextField editname_textField;
-	private JTextField editfamilyname_textField;
+	private JTextField editpassword_textField;
 	private ArrayList<HashMap<String, String>> allmodules;
 	private ArrayList<HashMap<String, String>> allphysicals;
 	private ArrayList<HashMap<String, String>> allfinance;
@@ -125,6 +125,7 @@ public class NUserPage {
 	private JTable resreq_table;
 	private JTable cycle_table;
 	private JTable resourceutil_table;
+	private JTextField repassword_textField;
 
 	/**
 	 * Launch the application.
@@ -180,37 +181,68 @@ public class NUserPage {
 			}
 		});
 
-		JLabel lblName = new JLabel("Name");
+		JLabel lblName = new JLabel("Name and Family Name");
 
 		editname_textField = new JTextField();
 		editname_textField.setColumns(10);
-		editname_textField.setText("TO BE SET LATER");
-		editfamilyname_textField = new JTextField();
-		editfamilyname_textField.setColumns(10);
+		editname_textField.setText(AuthenticatedEmployee.getInstance().getEmployee().getName());
+		editpassword_textField = new JTextField();
+		editpassword_textField.setColumns(10);
 
-		JLabel lblFamilyName = new JLabel("Family Name");
+		JLabel password = new JLabel("Password");
+		
+		repassword_textField = new JTextField();
+		repassword_textField.setColumns(10);
+		
+		JLabel lblRepassword = DefaultComponentFactory.getInstance().createLabel("Re-Password");
+		
+		JButton btnEditInformation = new JButton("Edit Information");
+		btnEditInformation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(editpassword_textField.getText()+" "+repassword_textField.getText()+" "+editname_textField.getText());
+				NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification", "You have been successfully edited your information!");
+
+			}
+		});
 		GroupLayout gl_editPanel = new GroupLayout(editPanel);
-		gl_editPanel.setHorizontalGroup(gl_editPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_editPanel.createSequentialGroup().addContainerGap(575, Short.MAX_VALUE)
-						.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(editfamilyname_textField, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(40).addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblFamilyName).addComponent(lblName).addComponent(btnLogout))));
-		gl_editPanel.setVerticalGroup(gl_editPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_editPanel
-				.createSequentialGroup().addContainerGap().addComponent(btnLogout).addGap(59)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+		gl_editPanel.setHorizontalGroup(
+			gl_editPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_editPanel.createSequentialGroup()
+					.addContainerGap(515, Short.MAX_VALUE)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(editpassword_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(repassword_textField, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE))
+					.addGap(40)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblRepassword)
+						.addComponent(password)
+						.addComponent(lblName)
+						.addComponent(btnLogout)))
+				.addGroup(Alignment.LEADING, gl_editPanel.createSequentialGroup()
+					.addComponent(btnEditInformation)
+					.addContainerGap(720, Short.MAX_VALUE))
+		);
+		gl_editPanel.setVerticalGroup(
+			gl_editPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_editPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnLogout)
+					.addGap(59)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblName))
-				.addGap(26)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(editfamilyname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblFamilyName))
-				.addContainerGap(329, Short.MAX_VALUE)));
+					.addGap(26)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(editpassword_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(password))
+					.addGap(31)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(repassword_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblRepassword))
+					.addPreferredGap(ComponentPlacement.RELATED, 241, Short.MAX_VALUE)
+					.addComponent(btnEditInformation))
+		);
 		editPanel.setLayout(gl_editPanel);
 
 		JPanel accessrightPanel = new JPanel();
@@ -2283,5 +2315,4 @@ public class NUserPage {
 	public JFrame getUserpageFrame() {
 		return userpageFrame;
 	}
-
 }
