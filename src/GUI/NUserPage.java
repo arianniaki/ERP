@@ -997,7 +997,9 @@ public class NUserPage {
 				
 				// System.out.println(information_tableModel.getDataVector().elementAt(information_table.getSelectedRow()).toString().contains("1"));
 				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
-				information_moduleFields.add(new Field("text", "infosname", "", 20, "name"));
+				information_moduleFields.add(new Field("text", "information name", "", 20, "name"));
+				information_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+
 				information_moduleFields.add(sections);
 				final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
 				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
@@ -1143,7 +1145,9 @@ public class NUserPage {
 
 				
 				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
-				information_moduleFields.add(new Field("text", "infosname", "", 20, "name"));
+				information_moduleFields.add(new Field("text", "information name", "", 20, "name"));
+				information_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+
 				information_moduleFields.add(sections);
 				final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
 				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
@@ -1208,6 +1212,11 @@ public class NUserPage {
 				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
 				financial_moduleFields.add(new Field("text", "financial name", "", 20, "name"));
 				financial_moduleFields.add(sections);
+				financial_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+				financial_moduleFields.add(new Field("text", "net value", "", 20, "value"));
+				financial_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+
+
 				
 				final Form financial_moduleForm = new Form(financial_moduleFields, "Financial Edit Module Form");
 				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
@@ -1354,6 +1363,10 @@ public class NUserPage {
 				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
 				financial_moduleFields.add(new Field("text", "financename", "", 20, "name"));
 				financial_moduleFields.add(sections);
+				financial_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+				financial_moduleFields.add(new Field("text", "net value", "", 20, "value"));
+				financial_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+
 				final Form financial_moduleForm = new Form(financial_moduleFields, "Information Module Form");
 				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
 				financial_modulePanel.makeForm();
@@ -1412,7 +1425,7 @@ public class NUserPage {
 		JButton btnAddModule = new JButton("Add Module");
 		btnAddModule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+			
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
 				moduleFields.add(new Field("text", "name", "", 10, "name"));
 				ArrayList<String> section_arraylist = new ArrayList<String>();
@@ -1424,7 +1437,8 @@ public class NUserPage {
 
 				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 				moduleFields.add(sections);
-				
+				moduleFields.add(new Field("text", "duration", "", 20, "duration"));
+
 				final Form moduleForm = new Form(moduleFields, "Module Form");
 				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
 				modulePanel.makeForm();
@@ -1481,6 +1495,8 @@ public class NUserPage {
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
 				moduleFields.add(new Field("text", "name", "", 10, "name"));
 				moduleFields.add(sections);
+				moduleFields.add(new Field("text", "duration", "", 20, "duration"));
+
 				final Form moduleForm = new Form(moduleFields, "Module Form");
 				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
 				modulePanel.makeForm();
@@ -1738,7 +1754,9 @@ public class NUserPage {
 
 				
 				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
-				physical_moduleFields.add(new Field("text", "physname", "", 20, "name"));
+				physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
+				physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+
 				physical_moduleFields.add(sections);
 				final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
 				final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
@@ -1801,7 +1819,9 @@ public class NUserPage {
 				
 				
 				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
-				physical_moduleFields.add(new Field("text", "physname", "", 20, "name"));
+				physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
+				physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+
 				physical_moduleFields.add(sections);
 				final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
 				final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
