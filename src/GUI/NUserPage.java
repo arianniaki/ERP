@@ -168,6 +168,7 @@ public class NUserPage {
 		userpageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		userpageFrame.getContentPane().setLayout(null);
 		userpageFrame.getContentPane().setBackground(userpage_color);
+		userpageFrame.setResizable(false);
 
 
 		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);

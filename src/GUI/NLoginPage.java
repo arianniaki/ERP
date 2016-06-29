@@ -158,6 +158,7 @@ public class NLoginPage {
 		});
 		loginFrame.getContentPane().add(btnSignUp);
 		loginFrame.getContentPane().setBackground(color);
+		loginFrame.setResizable(false);
 
 
 		JLabel lblUsername = DefaultComponentFactory.getInstance().createLabel("Username");
