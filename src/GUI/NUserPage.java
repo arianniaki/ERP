@@ -298,6 +298,11 @@ public class NUserPage {
 						System.out.println("-----");
 						int rowIndex = accessright_tabledata.getJdataTable().getSelectedRow();
 						int colIndex = accessright_tabledata.getJdataTable().getSelectedColumn();
+						if(rowIndex==-1)
+						{
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a User!");
+						}
+					else{
 
 						String Table_click = (accessright_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 								.toString());
@@ -307,7 +312,7 @@ public class NUserPage {
 						emp_access.setAccessRight(selected_accessright_forassignment);
 						System.out.println("ACCESS RIGHT O DADAM");
 						accessright_tabledata.update(empcat.readAllEmployees());
-
+					}
 					}
 				});
 
@@ -1246,6 +1251,11 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				int rowIndex = information_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = information_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Resource!");
+				}
+			else{
 
 				String Table_click = (information_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 						.toString()); // the
@@ -1257,7 +1267,7 @@ public class NUserPage {
 					infocat.deleteResource(Integer.parseInt(Table_click));
 					information_tabledata.update(infocat.readAllResources());
 				}
-
+			}
 			}
 		});
 
@@ -1468,6 +1478,11 @@ public class NUserPage {
 
 				int rowIndex = financial_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = financial_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Resource!");
+				}
+			else{
 
 				String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 						.toString()); // the
@@ -1479,7 +1494,7 @@ public class NUserPage {
 					financat.deleteResource(Integer.parseInt(Table_click));
 					financial_tabledata.update(financat.readAllResources());
 				}
-
+			}
 			}
 		});
 
@@ -1772,6 +1787,11 @@ public class NUserPage {
 
 				int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Module!");
+				}
+			else{
 
 				String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
@@ -1782,6 +1802,7 @@ public class NUserPage {
 					modcat.deleteResource(Integer.parseInt(Table_click));
 					module_tabledata.update(modcat.readAllResources());
 				}
+			}
 			}
 		});
 		final JPanel maintaining_panel = new JPanel();
@@ -1795,8 +1816,14 @@ public class NUserPage {
 				System.out.println("-----");
 				int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
-
+				if(rowIndex==-1)
+					{
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a module!");
+					}
+				else{
 				String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
+					
+
 				System.out.println(Table_click);
 				System.out.println("-----");
 				System.out.println("Change JPanel");
@@ -1804,6 +1831,7 @@ public class NUserPage {
 				resourcesTab.remove(selected_index);
 				resourcesTab.insertTab("Maintaining", null, maintaining_panel, null, selected_index);
 				resourcesTab.setSelectedComponent(maintaining_panel);
+				}
 			}
 		});
 
@@ -2070,6 +2098,11 @@ public class NUserPage {
 
 				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select an Employee!");
+				}
+			else{
 
 				String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
@@ -2081,6 +2114,7 @@ public class NUserPage {
 				allemployees = empcat.readAllEmployees();
 				human_tabledata.update(empcat.readAllEmployees());
 			}
+				}
 		});
 
 		JButton human_btnDelete = new JButton("Delete");
@@ -2093,6 +2127,11 @@ public class NUserPage {
 				System.out.println("-----");
 				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select an Employee!");
+				}
+			else{
 
 				String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
 				System.out.println(Table_click);
@@ -2104,6 +2143,7 @@ public class NUserPage {
 					allemployees = empcat_delete.readAllEmployees();
 					human_tabledata.update(empcat_delete.readAllEmployees());
 				}
+			}
 			}
 		});
 
@@ -2242,6 +2282,11 @@ public class NUserPage {
 				//
 				int rowIndex = physical_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = physical_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Resource!");
+				}
+			else{
 
 				String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
@@ -2307,7 +2352,7 @@ public class NUserPage {
 						// }
 					}
 				});
-
+			}
 			}
 		});
 
@@ -2320,6 +2365,12 @@ public class NUserPage {
 				int rowIndex = physical_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = physical_tabledata.getJdataTable().getSelectedColumn();
 
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Resource!");
+				}
+			else{
+
 				String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
 				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
@@ -2329,6 +2380,7 @@ public class NUserPage {
 					physcat.deleteResource(Integer.parseInt(Table_click));
 					physical_tabledata.update(physcat.readAllResources());
 				}
+			}
 			}
 		});
 
@@ -2532,14 +2584,13 @@ public class NUserPage {
 				System.out.println("-----");
 				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Project!");
+				}
+			else{
 
 				String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
-				// the
-				// thing
-				// in
-				// the
-				// 0st
-				// column
 				System.out.println(Table_click);
 				selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
 				System.out.println("-----");
@@ -2548,7 +2599,7 @@ public class NUserPage {
 				tabbedPane.remove(selected_index);
 				tabbedPane.insertTab("Subsystem", null, subsystemPanel, null, selected_index);
 				tabbedPane.setSelectedComponent(subsystemPanel);
-
+			}
 			}
 		});
 
@@ -2567,6 +2618,11 @@ public class NUserPage {
 				System.out.println("-----");
 				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a module!");
+				}
+			else{
 
 				String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
 
@@ -2577,7 +2633,7 @@ public class NUserPage {
 				tabbedPane.remove(selected_index);
 				tabbedPane.insertTab("Resource Utilization", null, resourceutilpanel, null, selected_index);
 				tabbedPane.setSelectedComponent(resourceutilpanel);
-
+			}
 			}
 		});
 
@@ -2600,6 +2656,11 @@ public class NUserPage {
 				System.out.println("-----");
 				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Project!");
+				}
+			else{
 
 				String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
 				ProjectCatalogue projcat = new ProjectCatalogue();
@@ -2609,6 +2670,7 @@ public class NUserPage {
 					projcat.deleteProject(Integer.parseInt(Table_click));
 					project_tabledata.update(projcat.getProjects());
 				}
+			}
 
 			}
 		});
@@ -2983,6 +3045,11 @@ public class NUserPage {
 				System.out.println("-----");
 				int rowIndex = registered_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = registered_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a User!");
+				}
+			else{
 
 				String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 						.toString());
@@ -2990,7 +3057,7 @@ public class NUserPage {
 				EmployeeCatalogue regempcat = new EmployeeCatalogue();
 				regempcat.makeDecision(Integer.parseInt(Table_click), true);
 				registered_tabledata.update(regempcat.getRegistrations());
-
+			}
 			}
 		});
 
@@ -3004,6 +3071,11 @@ public class NUserPage {
 				System.out.println("-----");
 				int rowIndex = registered_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = registered_tabledata.getJdataTable().getSelectedColumn();
+				if(rowIndex==-1)
+				{
+				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a User!");
+				}
+			else{
 
 				String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 						.toString());
@@ -3015,7 +3087,7 @@ public class NUserPage {
 					regempcat.makeDecision(Integer.parseInt(Table_click), false);
 					registered_tabledata.update(regempcat.getRegistrations());
 				}
-
+			}
 			}
 		});
 		GroupLayout gl_RegisteredUserspanel = new GroupLayout(RegisteredUserspanel);
