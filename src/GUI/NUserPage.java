@@ -2219,6 +2219,107 @@ public class NUserPage {
 		JScrollPane cycle_scrollPane = new JScrollPane();
 
 		JButton cycle_btnGetReport = new JButton("Get Report");
+		cycle_btnGetReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> resource_types = new ArrayList<String>();
+				final ArrayList<String> resources = new ArrayList<String>();
+				resource_types.add("Information");
+				resource_types.add("Financial");
+				resource_types.add("Physical");
+				resource_types.add("Employee");
+				resource_types.add("Module");
+				ArrayList<Field> cyclicReport_Fields = new ArrayList<Field>();
+				Field res_type = new Field("comboBox", "resource types", resource_types, 30, "items");
+				Field res = new Field("comboBox", "resources", resources, 30, "items");
+
+				cyclicReport_Fields.add(res_type);
+				cyclicReport_Fields.add(res);
+
+				final Form cycliclreport_Form = new Form(cyclicReport_Fields, "Cyclic Report Form");
+				final PanelBuilder cylic_Panel = new PanelBuilder(cycliclreport_Form);
+				cylic_Panel.makeForm();
+
+				JFrame getReport_CycliclPage = new JFrame("Get Report Cyclic Resource Form");
+
+				getReport_CycliclPage.getContentPane().add(cycliclreport_Form.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitgetReportBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitgetReportBtn);
+				getReport_CycliclPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				getReport_CycliclPage.pack();
+				getReport_CycliclPage.setVisible(true);
+				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) cycliclreport_Form.getJPanel().getComponent(0);
+				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) cycliclreport_Form.getJPanel().getComponent(1);
+
+				final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
+				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
+				resource_type.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						if (resource_type.getSelectedItem().toString().equals("Financial")) {
+							resourceCombo.removeAllItems();
+							FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+							ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
+							for (int i = 0; i < financial_resource.size(); i++) {
+								resourceCombo.addItem(financial_resource.get(i).toString());
+							}
+						}
+						if (resource_type.getSelectedItem().toString().equals("Physical")) {
+							resourceCombo.removeAllItems();
+							PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+							ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
+							for (int i = 0; i < physical_resource.size(); i++) {
+								resourceCombo.addItem(physical_resource.get(i).toString());
+							}
+
+						}
+						if (resource_type.getSelectedItem().toString().equals("Information")) {
+							resourceCombo.removeAllItems();
+							InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+							ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
+							for (int i = 0; i < information_resource.size(); i++) {
+								resourceCombo.addItem(information_resource.get(i).toString());
+							}
+
+						}
+						if (resource_type.getSelectedItem().toString().equals("Employee")) {
+							resourceCombo.removeAllItems();
+							EmployeeCatalogue empcat = new EmployeeCatalogue();
+							ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
+							for (int i = 0; i < employee_resource.size(); i++) {
+								resourceCombo.addItem(employee_resource.get(i).toString());
+							}
+						}
+						if (resource_type.getSelectedItem().toString().equals("Module")) {
+							resourceCombo.removeAllItems();
+							ModuleCatalogue modcat = new ModuleCatalogue();
+							ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
+							for (int i = 0; i < module_resource.size(); i++) {
+								resourceCombo.addItem(module_resource.get(i).toString());
+							}
+						}
+					}
+				});
+				submitgetReportBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(resourceCombo.getSelectedItem()+" this is resource combo");
+						System.out.println(resource_type.getSelectedItem()+" this is resource combo");
+						String rid = "";
+						Pattern p = Pattern.compile("rid=\\d+");
+						Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
+						if (m.find()) {
+							rid = m.group();
+						}
+						System.out.println("rid: "+rid);
+						
+					}
+				});
+			}
+		});
 		GroupLayout gl_cyclePanel = new GroupLayout(cyclePanel);
 		gl_cyclePanel.setHorizontalGroup(gl_cyclePanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_cyclePanel.createSequentialGroup().addGap(20)
