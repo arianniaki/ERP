@@ -494,23 +494,223 @@ public class NUserPage {
 				tabbedPane.setSelectedComponent(projectPanel);
 			}
 		});
+		
+		JButton btnAddResourceUtilization = new JButton("Add Resource Utilization");
+		btnAddResourceUtilization.setIcon(new ImageIcon(
+				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		btnAddResourceUtilization.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+
+				ArrayList<String> resource_types = new ArrayList<String>();
+				final ArrayList<String> resources = new ArrayList<String>();
+				resource_types.add("Information");
+				resource_types.add("Financial");
+				resource_types.add("Physical");
+				resource_types.add("Employee");
+				resource_types.add("Module");
+				ArrayList<Field> resutil_Fields = new ArrayList<Field>();
+				Field reqname = new Field("text", "req name       ", "", 10, "name");
+				Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
+				Field req_res = new Field("comboBox", "resources", resources, 20, "items");
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+				resutil_Fields.add(reqname);
+				resutil_Fields.add(req_res_type);
+				resutil_Fields.add(req_res);
+				resutil_Fields.add(sections);
+
+				final Form resutil_Form = new Form(resutil_Fields, "Resource Utilization Form");
+				final PanelBuilder requirement_Panel = new PanelBuilder(resutil_Form);
+				requirement_Panel.makeForm();
+
+				JFrame Add_ResUtilPage = new JFrame("Add Resource Utilization Form");
+				Add_ResUtilPage.getContentPane().add(resutil_Form.getJPanel(), BorderLayout.NORTH);
+
+				// adding date
+				UtilDateModel modelfor = new UtilDateModel();
+				UtilDateModel modelto = new UtilDateModel();
+
+				Properties p = new Properties();
+				p.put("text.today", "Today");
+				p.put("text.month", "Month");
+				p.put("text.year", "Year");
+				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+				JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
+				JLabel from = new JLabel("From");
+				JLabel to = new JLabel("To");
+				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+				final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
+
+				JPanel date_panel = new JPanel(new FlowLayout());
+				date_panel.add(from);
+
+				date_panel.add(from_datePanel);
+				date_panel.add(to);
+				date_panel.add(to_datePanel);
+				Add_ResUtilPage.getContentPane().add(date_panel, BorderLayout.CENTER);
+				// end date
+
+				JButton submitaddresutilBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddresutilBtn);
+				Add_ResUtilPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Add_ResUtilPage.pack();
+				Add_ResUtilPage.setVisible(true);
+				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(1);
+				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(2);
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(3);
+
+				final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
+				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
+				final JComboBox sectionCombo = comboBoxpane_sections.getComboBox();
+
+				resourceCombo.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						// System.out.println(resourceCombo.getSelectedItem() +
+						// " ino select kardi az resource");
+						// System.out.println(sectionCombo.getSelectedItem() + "
+						// ino select kardi section");
+						// System.out.println(projectCombo.getSelectedItem() + "
+						// ino select kardi proje");
+						// System.out.println(from_datePicker.getJFormattedTextField().getText()
+						// + " from date");
+						// System.out.println(to_datePicker.getJFormattedTextField().getText()
+						// + " to date");
+						//
+						System.out.println(from_datePicker.getJFormattedTextField().getText() + " from date");
+						System.out.println(to_datePicker.getJFormattedTextField().getText() + " to date");
+
+					}
+				});
+
+				resource_type.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						if (resource_type.getSelectedItem().toString().equals("Financial")) {
+							resourceCombo.removeAllItems();
+							FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+							ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
+							for (int i = 0; i < financial_resource.size(); i++) {
+								resourceCombo.addItem(financial_resource.get(i).toString());
+							}
+						}
+						if (resource_type.getSelectedItem().toString().equals("Physical")) {
+							resourceCombo.removeAllItems();
+							PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+							ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
+							for (int i = 0; i < physical_resource.size(); i++) {
+								resourceCombo.addItem(physical_resource.get(i).toString());
+							}
+
+						}
+						if (resource_type.getSelectedItem().toString().equals("Information")) {
+							resourceCombo.removeAllItems();
+							InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+							ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
+							for (int i = 0; i < information_resource.size(); i++) {
+								resourceCombo.addItem(information_resource.get(i).toString());
+							}
+
+						}
+						if (resource_type.getSelectedItem().toString().equals("Employee")) {
+							resourceCombo.removeAllItems();
+							EmployeeCatalogue empcat = new EmployeeCatalogue();
+							ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
+							for (int i = 0; i < employee_resource.size(); i++) {
+								resourceCombo.addItem(employee_resource.get(i).toString());
+							}
+						}
+						if (resource_type.getSelectedItem().toString().equals("Module")) {
+							resourceCombo.removeAllItems();
+							ModuleCatalogue modcat = new ModuleCatalogue();
+							ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
+							for (int i = 0; i < module_resource.size(); i++) {
+								resourceCombo.addItem(module_resource.get(i).toString());
+							}
+						}
+					}
+				});
+				submitaddresutilBtn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						for (int i = 0; i < resutil_Form.getJPanel().getComponentCount(); i++) {
+							// System.out.println(fpanel.selected_Choice);
+						}
+						ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+						System.out.println("all : ");
+						resreqCat.getResourceRequirements();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < resutil_Form.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) resutil_Form.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						String rid = "";
+						Pattern p = Pattern.compile("rid=\\d+");
+						Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
+						if (m.find()) {
+							rid = m.group();
+						}
+						String sectionid = "";
+						Pattern p1 = Pattern.compile("sectionid=\\d+");
+						Matcher m1 = p1.matcher((CharSequence) sectionCombo.getSelectedItem());
+						if (m1.find()) {
+							sectionid = m1.group();
+						}
+
+
+						String fromdate = from_datePicker.getJFormattedTextField().getText();
+						String todate = to_datePicker.getJFormattedTextField().getText();
+
+						System.out.println("--------------");
+						System.out.println(rid + " " + sectionid  + " " + fromdate + " " + todate);
+
+//						resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")),
+//								Integer.parseInt(sectionid.replace("sectionid=", "")),
+//								Integer.parseInt(projid.replace("projid=", "")), fromdate, todate);
+						// // tu resource ham bayad insert she
+						// allmodules.clear();
+					}
+				});
+			}
+			
+			
+		});
 		GroupLayout gl_resourceutilpanel = new GroupLayout(resourceutilpanel);
-		gl_resourceutilpanel
-				.setHorizontalGroup(
-						gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_resourceutilpanel.createSequentialGroup().addGap(40)
-										.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 364,
-												Short.MAX_VALUE)
-										.addGap(40))
-								.addGroup(gl_resourceutilpanel.createSequentialGroup()
-										.addComponent(utilbtnBacktoProject).addContainerGap(720, Short.MAX_VALUE)));
-		gl_resourceutilpanel
-				.setVerticalGroup(
-						gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_resourceutilpanel
-										.createSequentialGroup().addGap(40).addComponent(resourceutil_scrollPane,
-												GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-										.addGap(11).addComponent(utilbtnBacktoProject)));
+		gl_resourceutilpanel.setHorizontalGroup(
+			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addComponent(utilbtnBacktoProject)
+					.addPreferredGap(ComponentPlacement.RELATED, 680, Short.MAX_VALUE)
+					.addComponent(btnAddResourceUtilization))
+		);
+		gl_resourceutilpanel.setVerticalGroup(
+			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(utilbtnBacktoProject)
+						.addGroup(gl_resourceutilpanel.createSequentialGroup()
+							.addComponent(btnAddResourceUtilization)
+							.addContainerGap())))
+		);
 
 		resourceutil_table = new JTable();
 		resourceutil_scrollPane.setViewportView(resourceutil_table);
