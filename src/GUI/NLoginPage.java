@@ -172,7 +172,7 @@ public class NLoginPage {
 		JLabel lblImage = new JLabel();
 		lblImage.setBounds(306, 6, 123, 125);
 
-		lblImage.setIcon(new ImageIcon(new ImageIcon("src/images/erp.png").getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT)));
+		lblImage.setIcon(new ImageIcon(new ImageIcon("images/erp.png").getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT)));
 		loginFrame.getContentPane().add(lblImage);
 
 	}
