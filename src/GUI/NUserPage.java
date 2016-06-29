@@ -988,9 +988,12 @@ public class NUserPage {
 						.toString()); // the
 				System.out.println(Table_click + " this was clicked");
 				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
-				infocat.deleteResource(Integer.parseInt(Table_click));
-
-				information_tabledata.update(infocat.readAllResources());
+				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+						"Are you sure you want to Delete this item?");
+				if (myDialog.getAnswer()) {
+					infocat.deleteResource(Integer.parseInt(Table_click));
+					information_tabledata.update(infocat.readAllResources());
+				}
 
 			}
 		});
@@ -1024,46 +1027,42 @@ public class NUserPage {
 
 		});
 		GroupLayout gl_informationPanel = new GroupLayout(informationPanel);
-		gl_informationPanel.setHorizontalGroup(
-			gl_informationPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_informationPanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(information_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_informationPanel.createSequentialGroup()
-					.addComponent(information_btnEdit, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(information_btnDelete, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 463, Short.MAX_VALUE)
-					.addComponent(btnAddInformation))
-				.addGroup(gl_informationPanel.createSequentialGroup()
-					.addComponent(search_informationbtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 388, Short.MAX_VALUE)
-					.addComponent(information_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_informationname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblInformationName)
-					.addContainerGap())
-		);
-		gl_informationPanel.setVerticalGroup(
-			gl_informationPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_informationPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_informationPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_informationname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(information_btnSearch)
-						.addComponent(lblInformationName)
-						.addComponent(search_informationbtnRefresh))
-					.addGap(31)
-					.addComponent(information_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_informationPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(information_btnEdit)
-						.addComponent(information_btnDelete)
-						.addComponent(btnAddInformation))
-					.addContainerGap())
-		);
+		gl_informationPanel
+				.setHorizontalGroup(
+						gl_informationPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_informationPanel.createSequentialGroup().addGap(30)
+										.addComponent(information_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
+												Short.MAX_VALUE)
+										.addGap(30))
+								.addGroup(gl_informationPanel.createSequentialGroup()
+										.addComponent(information_btnEdit, GroupLayout.PREFERRED_SIZE, 78,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(information_btnDelete, GroupLayout.PREFERRED_SIZE, 86,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, 463, Short.MAX_VALUE)
+										.addComponent(btnAddInformation))
+								.addGroup(gl_informationPanel.createSequentialGroup()
+										.addComponent(search_informationbtnRefresh)
+										.addPreferredGap(ComponentPlacement.RELATED, 388, Short.MAX_VALUE)
+										.addComponent(information_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(search_informationname, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblInformationName)
+										.addContainerGap()));
+		gl_informationPanel.setVerticalGroup(gl_informationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_informationPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_informationPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_informationname, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(information_btnSearch).addComponent(lblInformationName)
+								.addComponent(search_informationbtnRefresh))
+						.addGap(31).addComponent(information_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_informationPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(information_btnEdit).addComponent(information_btnDelete)
+								.addComponent(btnAddInformation))
+						.addContainerGap()));
 
 		informationPanel.setLayout(gl_informationPanel);
 		btnAddInformation.addActionListener(new ActionListener() {
@@ -1211,8 +1210,12 @@ public class NUserPage {
 						.toString()); // the
 				System.out.println(Table_click + " this was clicked");
 				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
-				financat.deleteResource(Integer.parseInt(Table_click));
-				financial_tabledata.update(financat.readAllResources());
+				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+						"Are you sure you want to Delete this item?");
+				if (myDialog.getAnswer()) {
+					financat.deleteResource(Integer.parseInt(Table_click));
+					financial_tabledata.update(financat.readAllResources());
+				}
 
 			}
 		});
@@ -1251,46 +1254,41 @@ public class NUserPage {
 		});
 
 		GroupLayout gl_financialPanel = new GroupLayout(financialPanel);
-		gl_financialPanel.setHorizontalGroup(
-			gl_financialPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_financialPanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_financialPanel.createSequentialGroup()
-					.addComponent(financial_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(financial_btnDelete, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 490, Short.MAX_VALUE)
-					.addComponent(btnAddFinancial))
-				.addGroup(gl_financialPanel.createSequentialGroup()
-					.addComponent(search_financialbtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 406, Short.MAX_VALUE)
-					.addComponent(financial_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_financialname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblFinancialName)
-					.addContainerGap())
-		);
-		gl_financialPanel.setVerticalGroup(
-			gl_financialPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_financialPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_financialname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(financial_btnSearch)
-						.addComponent(lblFinancialName)
-						.addComponent(search_financialbtnRefresh))
-					.addGap(31)
-					.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(financial_btnEdit)
-						.addComponent(financial_btnDelete)
-						.addComponent(btnAddFinancial))
-					.addContainerGap())
-		);
+		gl_financialPanel
+				.setHorizontalGroup(gl_financialPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_financialPanel.createSequentialGroup().addGap(30)
+								.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
+										Short.MAX_VALUE)
+								.addGap(30))
+						.addGroup(gl_financialPanel.createSequentialGroup()
+								.addComponent(financial_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(financial_btnDelete, GroupLayout.PREFERRED_SIZE, 84,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 490, Short.MAX_VALUE).addComponent(
+										btnAddFinancial))
+						.addGroup(gl_financialPanel.createSequentialGroup().addComponent(search_financialbtnRefresh)
+								.addPreferredGap(ComponentPlacement.RELATED, 406, Short.MAX_VALUE)
+								.addComponent(financial_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(search_financialname, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblFinancialName)
+								.addContainerGap()));
+		gl_financialPanel.setVerticalGroup(gl_financialPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_financialPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_financialname, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(financial_btnSearch).addComponent(lblFinancialName)
+								.addComponent(search_financialbtnRefresh))
+						.addGap(31)
+						.addComponent(financial_table_scrollPane, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_financialPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(financial_btnEdit).addComponent(financial_btnDelete)
+								.addComponent(btnAddFinancial))
+						.addContainerGap()));
 
 		financialPanel.setLayout(gl_financialPanel);
 		btnAddFinancial.addActionListener(new ActionListener() {
@@ -1515,10 +1513,12 @@ public class NUserPage {
 				String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
 				ModuleCatalogue modcat = new ModuleCatalogue();
-				modcat.deleteResource(Integer.parseInt(Table_click));
-
-				module_tabledata.update(modcat.readAllResources());
-
+				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+						"Are you sure you want to Delete this item?");
+				if (myDialog.getAnswer()) {
+					modcat.deleteResource(Integer.parseInt(Table_click));
+					module_tabledata.update(modcat.readAllResources());
+				}
 			}
 		});
 		final JPanel maintaining_panel = new JPanel();
@@ -1585,49 +1585,41 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_modulePanel_1 = new GroupLayout(modulePanel);
-		gl_modulePanel_1.setHorizontalGroup(
-			gl_modulePanel_1.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addGap(30)
-					.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addComponent(module_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(module_btnDelete, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 444, Short.MAX_VALUE)
-					.addComponent(btnViewMaintaning)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnAddModule))
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addComponent(search_modulebtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 416, Short.MAX_VALUE)
-					.addComponent(module_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblModuleName)
-					.addContainerGap())
-		);
-		gl_modulePanel_1.setVerticalGroup(
-			gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(module_btnSearch)
-						.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblModuleName)
-						.addComponent(search_modulebtnRefresh))
-					.addGap(31)
-					.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(module_btnEdit)
-						.addComponent(module_btnDelete)
-						.addComponent(btnAddModule)
-						.addComponent(btnViewMaintaning))
-					.addContainerGap())
-		);
+		gl_modulePanel_1.setHorizontalGroup(gl_modulePanel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_modulePanel_1.createSequentialGroup().addGap(30)
+						.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE).addGap(30))
+				.addGroup(
+						gl_modulePanel_1.createSequentialGroup()
+								.addComponent(module_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(module_btnDelete, GroupLayout.PREFERRED_SIZE, 83,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 444, Short.MAX_VALUE)
+								.addComponent(btnViewMaintaning).addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(
+										btnAddModule))
+				.addGroup(gl_modulePanel_1.createSequentialGroup().addComponent(search_modulebtnRefresh)
+						.addPreferredGap(ComponentPlacement.RELATED, 416, Short.MAX_VALUE)
+						.addComponent(module_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblModuleName).addContainerGap()));
+		gl_modulePanel_1
+				.setVerticalGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_modulePanel_1.createSequentialGroup().addContainerGap()
+								.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
+										.addComponent(module_btnSearch)
+										.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblModuleName).addComponent(search_modulebtnRefresh))
+								.addGap(31)
+								.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
+										.addComponent(module_btnEdit).addComponent(module_btnDelete)
+										.addComponent(btnAddModule).addComponent(btnViewMaintaning))
+								.addContainerGap()));
 
 		module_tabledata = new TableData(new ModuleCatalogue(), "module");
 		module_scrollPane.setViewportView(module_tabledata.getJdataTable());
@@ -1656,6 +1648,12 @@ public class NUserPage {
 
 		maintaining_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+						"Are you sure you want to Delete this item?");
+				if (myDialog.getAnswer()) {
+					System.out.println("DLETE");
+				}
 			}
 		});
 
@@ -1669,7 +1667,7 @@ public class NUserPage {
 		});
 
 		JButton btnBacktoModule = new JButton("Back");
-		
+
 		btnBacktoModule.setIcon(new ImageIcon(
 				new ImageIcon("images/back.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
@@ -1775,18 +1773,15 @@ public class NUserPage {
 				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
 
 				String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
-				// the
-				// thing
-				// in
-				// the
-				// 0st
-				// column
 				System.out.println(Table_click);
 				EmployeeCatalogue empcat_delete = new EmployeeCatalogue();
 				empcat_delete.deleteEmployee(Integer.parseInt(Table_click));
-				allemployees = empcat_delete.readAllEmployees();
-				human_tabledata.update(empcat_delete.readAllEmployees());
-
+				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+						"Are you sure you want to Delete this item?");
+				if (myDialog.getAnswer()) {
+					allemployees = empcat_delete.readAllEmployees();
+					human_tabledata.update(empcat_delete.readAllEmployees());
+				}
 			}
 		});
 
@@ -1821,44 +1816,35 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_humanPanel = new GroupLayout(humanPanel);
-		gl_humanPanel.setHorizontalGroup(
-			gl_humanPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(631, Short.MAX_VALUE))
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addComponent(search_humanbtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 419, Short.MAX_VALUE)
-					.addComponent(human_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblHumanName)
-					.addContainerGap())
-		);
-		gl_humanPanel.setVerticalGroup(
-			gl_humanPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(human_btnSearch)
-						.addComponent(lblHumanName)
-						.addComponent(search_humanbtnRefresh))
-					.addGap(31)
-					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(human_btnEdit)
-						.addComponent(human_btnDelete))
-					.addContainerGap())
-		);
+		gl_humanPanel.setHorizontalGroup(gl_humanPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_humanPanel.createSequentialGroup().addGap(30)
+						.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE).addGap(30))
+				.addGroup(
+						gl_humanPanel.createSequentialGroup()
+								.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 84,
+										GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(631,
+										Short.MAX_VALUE))
+				.addGroup(gl_humanPanel.createSequentialGroup().addComponent(search_humanbtnRefresh)
+						.addPreferredGap(ComponentPlacement.RELATED, 419, Short.MAX_VALUE).addComponent(human_btnSearch)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblHumanName).addContainerGap()));
+		gl_humanPanel.setVerticalGroup(gl_humanPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_humanPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(human_btnSearch).addComponent(lblHumanName)
+								.addComponent(search_humanbtnRefresh))
+						.addGap(31).addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE).addComponent(human_btnEdit)
+								.addComponent(human_btnDelete))
+						.addContainerGap()));
 		human_scrollPane.setViewportView(human_tabledata.getJdataTable());
 		humanPanel.setLayout(gl_humanPanel);
 
@@ -2015,10 +2001,12 @@ public class NUserPage {
 				String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
 				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
-				physcat.deleteResource(Integer.parseInt(Table_click));
-
-				physical_tabledata.update(physcat.readAllResources());
-
+				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+						"Are you sure you want to Delete this item?");
+				if (myDialog.getAnswer()) {
+					physcat.deleteResource(Integer.parseInt(Table_click));
+					physical_tabledata.update(physcat.readAllResources());
+				}
 			}
 		});
 
@@ -2056,46 +2044,42 @@ public class NUserPage {
 		});
 
 		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
-		gl_physicalPanel.setHorizontalGroup(
-			gl_physicalPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addComponent(physical_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(physical_btnDelete, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 494, Short.MAX_VALUE)
-					.addComponent(btnAddPhysicalResource))
-				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addComponent(search_physicalbtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 411, Short.MAX_VALUE)
-					.addComponent(physical_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblPhysicalName)
-					.addContainerGap())
-		);
-		gl_physicalPanel.setVerticalGroup(
-			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_physicalPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(physical_btnSearch)
-						.addComponent(lblPhysicalName)
-						.addComponent(search_physicalbtnRefresh))
-					.addGap(31)
-					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnAddPhysicalResource)
-						.addComponent(physical_btnEdit)
-						.addComponent(physical_btnDelete))
-					.addContainerGap())
-		);
+		gl_physicalPanel
+				.setHorizontalGroup(
+						gl_physicalPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_physicalPanel.createSequentialGroup().addGap(30)
+										.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
+												Short.MAX_VALUE)
+										.addGap(30))
+								.addGroup(gl_physicalPanel.createSequentialGroup()
+										.addComponent(physical_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(physical_btnDelete, GroupLayout.PREFERRED_SIZE, 84,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, 494, Short.MAX_VALUE)
+										.addComponent(btnAddPhysicalResource))
+								.addGroup(gl_physicalPanel.createSequentialGroup()
+										.addComponent(search_physicalbtnRefresh)
+										.addPreferredGap(ComponentPlacement.RELATED, 411, Short.MAX_VALUE)
+										.addComponent(physical_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblPhysicalName)
+										.addContainerGap()));
+		gl_physicalPanel.setVerticalGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_physicalPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(physical_btnSearch).addComponent(lblPhysicalName)
+								.addComponent(search_physicalbtnRefresh))
+						.addGap(31).addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnAddPhysicalResource).addComponent(physical_btnEdit)
+								.addComponent(physical_btnDelete))
+						.addContainerGap()));
 
 		physical_tabledata = new TableData(new PhysicalResourceCatalogue(), "physical");
 		physical_scrollPane.setViewportView(physical_tabledata.getJdataTable());
@@ -2297,8 +2281,12 @@ public class NUserPage {
 
 				String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
 				ProjectCatalogue projcat = new ProjectCatalogue();
-				projcat.deleteProject(Integer.parseInt(Table_click));
-				project_tabledata.update(projcat.getProjects());
+				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+						"Are you sure you want to Delete this item?");
+				if (myDialog.getAnswer()) {
+					projcat.deleteProject(Integer.parseInt(Table_click));
+					project_tabledata.update(projcat.getProjects());
+				}
 
 			}
 		});
@@ -2387,7 +2375,6 @@ public class NUserPage {
 				cylic_Panel.makeForm();
 
 				JFrame getReport_CycliclPage = new JFrame("Get Report Cyclic Resource Form");
-				
 
 				getReport_CycliclPage.getContentPane().add(cycliclreport_Form.getJPanel(), BorderLayout.NORTH);
 
@@ -2699,9 +2686,13 @@ public class NUserPage {
 				String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 						.toString());
 				System.out.println(Table_click);
-				EmployeeCatalogue regempcat = new EmployeeCatalogue();
-				regempcat.makeDecision(Integer.parseInt(Table_click), false);
-				registered_tabledata.update(regempcat.getRegistrations());
+				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+						"Are you sure you want to Deny this user?");
+				if (myDialog.getAnswer()) {
+					EmployeeCatalogue regempcat = new EmployeeCatalogue();
+					regempcat.makeDecision(Integer.parseInt(Table_click), false);
+					registered_tabledata.update(regempcat.getRegistrations());
+				}
 
 			}
 		});
