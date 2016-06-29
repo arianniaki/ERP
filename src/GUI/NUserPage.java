@@ -2323,6 +2323,63 @@ public class NUserPage {
 		JScrollPane resavail_scrollpane = new JScrollPane();
 
 		JButton resavail_btnGetReport = new JButton("Get Report");
+		resavail_btnGetReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> resource_types = new ArrayList<String>();
+				resource_types.add("Information");
+				resource_types.add("Financial");
+				resource_types.add("Physical");
+				resource_types.add("Employee");
+				resource_types.add("Module");
+
+
+				ArrayList<Field> getreport_resavailFields = new ArrayList<Field>();
+				Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
+
+				getreport_resavailFields.add(req_res_type);
+
+				final Form getreport_resavailForm = new Form(getreport_resavailFields, "Report Resource Available Form");
+				final PanelBuilder report_resavail_panel = new PanelBuilder(getreport_resavailForm);
+				report_resavail_panel.makeForm();
+
+				JFrame getReport_ResAvailPage = new JFrame("Get Report Resource Available Form");
+				getReport_ResAvailPage.getContentPane().add(getreport_resavailForm.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitresavailreportBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitresavailreportBtn);
+				getReport_ResAvailPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				getReport_ResAvailPage.pack();
+				getReport_ResAvailPage.setVisible(true);
+				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) getreport_resavailForm.getJPanel()
+						.getComponent(0);
+				final JComboBox resourceRepCombo = comboBoxpanel_restype.getComboBox();
+				submitresavailreportBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(resourceRepCombo.getSelectedItem().toString()+" ine res type");
+//						PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+//						physResCat.getReport().printRep();
+//						FinancialResourceCatalogue finanResCat= new FinancialResourceCatalogue();
+//						finanResCat.getReport().printRep();
+//						
+						if (resourceRepCombo.getSelectedItem().toString().equals("Financial")) {
+							}
+						if (resourceRepCombo.getSelectedItem().toString().equals("Physical")) {
+						}
+						if (resourceRepCombo.getSelectedItem().toString().equals("Information")) {
+						}
+						if (resourceRepCombo.getSelectedItem().toString().equals("Employee")) {
+						}
+						if (resourceRepCombo.getSelectedItem().toString().equals("Module")) {
+						}
+						
+						
+					}
+				});
+			}
+		});
 		GroupLayout gl_resourceavailPanel = new GroupLayout(resourceavailPanel);
 		gl_resourceavailPanel
 				.setHorizontalGroup(
