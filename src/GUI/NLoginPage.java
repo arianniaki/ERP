@@ -25,6 +25,8 @@ import ProjectEmployee.EmployeeCatalogue;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
@@ -33,7 +35,7 @@ public class NLoginPage {
 	private JFrame loginFrame;
 	private JTextField username;
 	private JPasswordField passwordField;
-	private Color color= new Color(0,150, 130) ;
+	private Color color = new Color(0, 150, 130);
 
 	/**
 	 * Launch the application.
@@ -72,9 +74,39 @@ public class NLoginPage {
 		loginFrame.getContentPane().add(username);
 		username.setColumns(10);
 
+		
+		final JButton btnLogin = new JButton("Login");
+		btnLogin.setBounds(212, 155, 79, 29);
+		
+		
+		
 		passwordField = new JPasswordField();
 		passwordField.setBounds(115, 115, 176, 28);
 		loginFrame.getContentPane().add(passwordField);
+		passwordField.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				 if(e.getKeyChar() == KeyEvent.VK_ENTER){
+
+					 System.out.println("ENTER PRESSED");                 
+					 btnLogin.doClick();
+             }
+			}
+		});
 
 		final JLabel lblLoginFailed = DefaultComponentFactory.getInstance().createLabel("Login Failed");
 		lblLoginFailed.setBounds(341, 160, 76, 16);
@@ -82,10 +114,10 @@ public class NLoginPage {
 		lblLoginFailed.setVisible(false);
 		loginFrame.getContentPane().add(lblLoginFailed);
 
-		JButton btnLogin = new JButton("Login");
-		btnLogin.setBounds(212, 155, 79, 29);
+		
 		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+
+	public void actionPerformed(ActionEvent e) {
 				lblLoginFailed.setVisible(false);
 
 				Employee emp = new Employee();
