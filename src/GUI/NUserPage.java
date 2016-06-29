@@ -1177,54 +1177,40 @@ public class NUserPage {
 		financial_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
-				information_moduleFields.add(new Field("text", "infosname", "", 20, "name"));
+				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
+				financial_moduleFields.add(new Field("text", "financial name", "", 20, "name"));
 
-				final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
-				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
-				information_modulePanel.makeForm();
+				final Form financial_moduleForm = new Form(financial_moduleFields, "Financial Edit Module Form");
+				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
+				financial_modulePanel.makeForm();
 				JFrame Add_InformationModulePage = new JFrame("Edit Information Module Form");
-				Add_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
+				Add_InformationModulePage.getContentPane().add(financial_moduleForm.getJPanel(), BorderLayout.NORTH);
 
-				JButton submitaddinformationmoduleBtn = new JButton("Submit");
+				JButton submitaddfinancialBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddinformationmoduleBtn);
+				buttonPanel.add(submitaddfinancialBtn);
 				Add_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Add_InformationModulePage.pack();
 				Add_InformationModulePage.setVisible(true);
 
-				submitaddinformationmoduleBtn.addActionListener(new ActionListener() {
+				submitaddfinancialBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+						FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 						System.out.println("all : ");
-						infocat.readAllResources();
+						financat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < information_moduleForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) information_moduleForm.getJPanel().getComponent(i);
+						for (int i = 0; i < financial_moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) financial_moduleForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
+						
 						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " information");
+							System.out.println(inputs.get(i) + " financial edit");
 						}
-						// infocat.addResource((inputs.get(0)));
-						// // tu resource ham bayad insert she
-						// allinformation.clear();
-						// allinformation = infocat.readAllResources();
-						// System.out.println(information_tableModel.getRowCount()
-						// + " ---");
-						// int rowcount = information_tableModel.getRowCount();
-						// for (int j = rowcount - 1; j >= 0; j--) {
-						// information_tableModel.removeRow(j);
-						// }
-						// System.out.println(information_tableModel.getRowCount()
-						// + " ---");
-						// for (int i = 0; i < allinformation.size(); i++) {
-						// Object[] objs = { allinformation.get(i).get("rid"),
-						// allinformation.get(i).get("irname") };
-						// information_tableModel.addRow(objs);
-						// }
+						financial_tabledata.update(financat.readAllResources());
+
 					}
 				});
 
