@@ -8,8 +8,6 @@ import javax.swing.table.DefaultTableModel;
 
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
-
 
 public class CheckBoxJPanel extends FieldPanel {
 	private CheckBoxTable cbt;
@@ -40,6 +38,7 @@ public class CheckBoxJPanel extends FieldPanel {
 	public ArrayList<String> getCheckedValues() {
 		return cbt.getSelectedValues();
 	}
+
 
 }
 

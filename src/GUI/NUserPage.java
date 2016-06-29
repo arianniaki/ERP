@@ -8,6 +8,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -27,6 +28,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
+import GUI.Form.CheckBoxJPanel;
 import GUI.Form.ComboBoxJPanel;
 import GUI.Form.Field;
 import GUI.Form.FieldPanel;
@@ -52,6 +54,7 @@ import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
+import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -769,6 +772,62 @@ public class NUserPage {
 		JScrollPane requirement_scrollPane = new JScrollPane();
 
 		JButton requirement_btnEdit = new JButton("Edit");
+		requirement_btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Field> requirement_editFields = new ArrayList<Field>();
+		      	ArrayList<String> options = new ArrayList<String>();
+		      	options.add("satisfied");
+
+				Field reqname = new Field("text", "req name       ", "", 10, "name");
+				Field satisfied = new Field("checkBox", "satisfied", options, 20, "items");
+				requirement_editFields.add(reqname);
+				requirement_editFields.add(satisfied);
+
+				final Form editrequirement_Form = new Form(requirement_editFields, "Edit Requirement Form");
+				final PanelBuilder editrequirement_Panel = new PanelBuilder(editrequirement_Form);
+				editrequirement_Panel.makeForm();
+
+				JFrame Edit_RequirementPage = new JFrame("Edit Requirement Module Form");
+				Edit_RequirementPage.getContentPane().add(editrequirement_Form.getJPanel(), BorderLayout.NORTH);
+
+				// adding date
+				UtilDateModel modelfor = new UtilDateModel();
+
+				Properties p = new Properties();
+				p.put("text.today", "Today");
+				p.put("text.month", "Month");
+				p.put("text.year", "Year");
+				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+
+				JPanel date_panel = new JPanel(new FlowLayout());
+
+				date_panel.add(from_datePanel);
+				Edit_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
+				// end date
+
+				
+				JButton submiteditrequeirementBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submiteditrequeirementBtn);
+				Edit_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Edit_RequirementPage.pack();
+				Edit_RequirementPage.setVisible(true);
+				CheckBoxJPanel checkBoxpane = (CheckBoxJPanel) editrequirement_Form.getJPanel().getComponent(1);
+				final ArrayList<String>checked = checkBoxpane.getCheckedValues();
+				 final ArrayList<String>vales = checkBoxpane.getValues();
+
+
+				submiteditrequeirementBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(vales);
+					}
+				});
+
+			}
+		});
 		requirement_btnEdit.setIcon(new ImageIcon(
 				new ImageIcon("images/edit.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
