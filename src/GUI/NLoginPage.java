@@ -64,7 +64,7 @@ public class NLoginPage {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		loginFrame = new JFrame();
+		loginFrame = new JFrame("ERP System");
 		loginFrame.setBounds(100, 100, 450, 300);
 		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loginFrame.getContentPane().setLayout(null);
@@ -155,17 +155,16 @@ public class NLoginPage {
 				final PanelBuilder signupPanel = new PanelBuilder(signupForm);
 				signupPanel.makeForm();
 				JFrame SignupPage = new JFrame("Sign up Form");
+				SignupPage.setResizable(false);
+
 				SignupPage.getContentPane().add(signupForm.getJPanel(), BorderLayout.NORTH);
 
 				JButton submit = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submit);
 				SignupPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-
 				SignupPage.pack();
 				SignupPage.setVisible(true);
-				// NSignupPage signupWindow = new NSignupPage();
-				// signupWindow.getSignupFrame().setVisible(true);
 				submit.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {

@@ -159,7 +159,7 @@ public class NUserPage {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		userpageFrame = new JFrame();
+		userpageFrame = new JFrame("User Page");
 		userpageFrame.setBounds(100, 100, 870, 585);
 		userpageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		userpageFrame.getContentPane().setLayout(null);
