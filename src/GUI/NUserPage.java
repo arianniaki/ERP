@@ -2004,7 +2004,9 @@ public class NUserPage {
 				ArrayList<HashMap<String, String>> employees_fromcatalouge = empcat.readAllEmployees();
 				ArrayList<String> employees = new ArrayList<String>();
 
-				projectFields.add(new Field("text", "projname", "", 20, "name"));
+				projectFields.add(new Field("text", "project name", "", 20, "name"));
+				projectFields.add(new Field("text", "technology", "", 20, "tech"));
+				projectFields.add(new Field("text", "size", "", 20, "size"));
 
 				for (int i = 0; i < employees_fromcatalouge.size(); i++) {
 					employees.add("id:" + employees_fromcatalouge.get(i).get("empid").toString() + " "
@@ -2122,34 +2124,73 @@ public class NUserPage {
 
 			}
 		});
+		
+		JButton btnEditProject = new JButton("Edit");
+		btnEditProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		JButton btnDeleteProject = new JButton("Delete");
+		btnDeleteProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				System.out.println("-----");
+				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
+
+				String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
+				ProjectCatalogue projcat = new ProjectCatalogue();
+				projcat.deleteProject(Integer.parseInt(Table_click));
+				project_tabledata.update(projcat.getProjects());
+
+			}
+		});
 		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
-		gl_projectPanel
-				.setHorizontalGroup(
-						gl_projectPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_projectPanel.createSequentialGroup().addGap(40)
-										.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
-												Short.MAX_VALUE)
-										.addGap(40))
-								.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap(517, Short.MAX_VALUE)
-										.addComponent(project_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblProjectName)
-										.addContainerGap())
-								.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap(447, Short.MAX_VALUE)
-										.addComponent(btnViewResources).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(viewsubsys_Btn).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(addprojectBtn)));
-		gl_projectPanel.setVerticalGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblProjectName).addComponent(project_btnSearch))
-						.addGap(74).addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
-						.addGap(11)
-						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE).addComponent(addprojectBtn)
-								.addComponent(viewsubsys_Btn).addComponent(btnViewResources))));
+		gl_projectPanel.setHorizontalGroup(
+			gl_projectPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap(517, Short.MAX_VALUE)
+					.addComponent(project_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblProjectName)
+					.addContainerGap())
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnEditProject)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnDeleteProject)
+					.addPreferredGap(ComponentPlacement.RELATED, 231, Short.MAX_VALUE)
+					.addComponent(btnViewResources)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(viewsubsys_Btn)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(addprojectBtn))
+		);
+		gl_projectPanel.setVerticalGroup(
+			gl_projectPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblProjectName)
+						.addComponent(project_btnSearch))
+					.addGap(74)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+					.addGap(11)
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addprojectBtn)
+						.addComponent(viewsubsys_Btn)
+						.addComponent(btnViewResources)
+						.addComponent(btnEditProject)
+						.addComponent(btnDeleteProject)))
+		);
 		project_tabledata = new TableData(new ProjectCatalogue());
 
 		project_tabledata.getJdataTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
