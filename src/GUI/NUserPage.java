@@ -985,27 +985,38 @@ public class NUserPage {
 		JButton information_btnEdit = new JButton("Edit");
 		information_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+				
 				// System.out.println(information_tableModel.getDataVector().elementAt(information_table.getSelectedRow()).toString().contains("1"));
 				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
 				information_moduleFields.add(new Field("text", "infosname", "", 20, "name"));
-
+				information_moduleFields.add(sections);
 				final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
 				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
 				information_modulePanel.makeForm();
-				JFrame Add_InformationModulePage = new JFrame("Edit Information Module Form");
-				Add_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
+				JFrame Edit_InformationModulePage = new JFrame("Edit Information Module Form");
+				Edit_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
 
-				JButton submitaddinformationmoduleBtn = new JButton("Submit");
+				JButton submiteditinformationmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddinformationmoduleBtn);
-				Add_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_InformationModulePage.pack();
-				Add_InformationModulePage.setVisible(true);
+				buttonPanel.add(submiteditinformationmoduleBtn);
+				Edit_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Edit_InformationModulePage.pack();
+				Edit_InformationModulePage.setVisible(true);
 
-				submitaddinformationmoduleBtn.addActionListener(new ActionListener() {
+				submiteditinformationmoduleBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
+						
 						InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 						System.out.println("all : ");
 						infocat.readAllResources();
@@ -1121,9 +1132,19 @@ public class NUserPage {
 		btnAddInformation.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+				
 				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
 				information_moduleFields.add(new Field("text", "infosname", "", 20, "name"));
-
+				information_moduleFields.add(sections);
 				final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
 				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
 				information_modulePanel.makeForm();
@@ -1176,10 +1197,18 @@ public class NUserPage {
 		JButton financial_btnEdit = new JButton("Edit");
 		financial_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 
 				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
 				financial_moduleFields.add(new Field("text", "financial name", "", 20, "name"));
-
+				financial_moduleFields.add(sections);
+				
 				final Form financial_moduleForm = new Form(financial_moduleFields, "Financial Edit Module Form");
 				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
 				financial_modulePanel.makeForm();
@@ -1312,9 +1341,19 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
 				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
 				financial_moduleFields.add(new Field("text", "financename", "", 20, "name"));
-
+				financial_moduleFields.add(sections);
 				final Form financial_moduleForm = new Form(financial_moduleFields, "Information Module Form");
 				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
 				financial_modulePanel.makeForm();
@@ -1376,7 +1415,16 @@ public class NUserPage {
 
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
 				moduleFields.add(new Field("text", "name", "", 10, "name"));
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
 
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+				moduleFields.add(sections);
+				
 				final Form moduleForm = new Form(moduleFields, "Module Form");
 				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
 				modulePanel.makeForm();
@@ -1420,9 +1468,19 @@ public class NUserPage {
 		JButton module_btnEdit = new JButton("Edit");
 		module_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+				
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
 				moduleFields.add(new Field("text", "name", "", 10, "name"));
-
+				moduleFields.add(sections);
 				final Form moduleForm = new Form(moduleFields, "Module Form");
 				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
 				modulePanel.makeForm();
@@ -1669,9 +1727,19 @@ public class NUserPage {
 		JButton btnAddPhysicalResource = new JButton("Add Physical Resource");
 		btnAddPhysicalResource.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+				
 				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
 				physical_moduleFields.add(new Field("text", "physname", "", 20, "name"));
-
+				physical_moduleFields.add(sections);
 				final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
 				final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
 				physical_modulePanel.makeForm();
@@ -1721,9 +1789,20 @@ public class NUserPage {
 				String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
 				System.out.println(Table_click + " this was clicked");
 
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+				
+				
 				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
 				physical_moduleFields.add(new Field("text", "physname", "", 20, "name"));
-
+				physical_moduleFields.add(sections);
 				final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
 				final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
 				physical_modulePanel.makeForm();
