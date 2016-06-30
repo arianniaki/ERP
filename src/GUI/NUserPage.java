@@ -100,7 +100,7 @@ public class NUserPage {
 	// private JTable physical_table;
 	// private JTable allresource_table;
 	// private JTable project_table;
-	private JTable subsystem_table;
+//	private JTable subsystem_table;
 	// private JTable accessright_table;
 	// private JTable registered_table;
 	// private JTable human_table;
@@ -120,6 +120,7 @@ public class NUserPage {
 	private TableData resreq_tabledata;
 	private TableData cycle_tabledata;
 	private TableData resavail_tabledata;
+	private TableData subsystem_tabledata;
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
@@ -379,23 +380,6 @@ public class NUserPage {
 			}
 		});
 
-		String[] subsystem_columns = new String[] { "Name", "ProjectId" };
-
-		final DefaultTableModel subsystem_tableModel = new DefaultTableModel(subsystem_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-
-		// THIS SHOULD BE CHANGED +++
-		SubSystemCatalogue subsyscat = new SubSystemCatalogue();
-		allsubsystems = subsyscat.getSubSystems();
-		for (int i = 0; i < allsubsystems.size(); i++) {
-			Object[] objs = { allsubsystems.get(i).get("sname"), allsubsystems.get(i).get("pid") };
-			subsystem_tableModel.addRow(objs);
-		}
 
 		JButton addsubsystemBtn = new JButton("Add Subsystem");
 		addsubsystemBtn.setIcon(new ImageIcon(
@@ -437,31 +421,19 @@ public class NUserPage {
 				submitaddsubsystemBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						SubSystemCatalogue subsyscat = new SubSystemCatalogue();
-						System.out.println("all : ");
-						subsyscat.getSubSystems();
 						ArrayList<String> inputs = new ArrayList<String>();
 						for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
 							FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
 						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " subsystesm");
+							System.out.println(inputs.get(i) + " subsystem");
 						}
-
-						subsyscat.addSubSystem(inputs.get(0).toString(), selected_project_forsubsystem);
-
-						allsubsystems = subsyscat.getSubSystems();
-						int rowcount = subsystem_tableModel.getRowCount();
-						for (int j = rowcount - 1; j >= 0; j--) {
-							subsystem_tableModel.removeRow(j);
-						}
-						System.out.println(subsystem_tableModel.getRowCount() + " ---");
-						for (int i = 0; i < allsubsystems.size(); i++) {
-							Object[] objs = { allsubsystems.get(i).get("sname"), allsubsystems.get(i).get("pid") };
-							subsystem_tableModel.addRow(objs);
-						}
-
+						
+						SubSystemCatalogue subsyscat = new SubSystemCatalogue();
+						subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem);
+						subsystem_tabledata.update(subsyscat.getSubSystems());
+						System.out.println("add shoood ");
 					}
 				});
 
@@ -485,8 +457,8 @@ public class NUserPage {
 										.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
 												.addComponent(btnBacktoProject).addComponent(addsubsystemBtn))));
 
-		subsystem_table = new JTable(subsystem_tableModel);
-		subsystem_scrollPane.setViewportView(subsystem_table);
+		subsystem_tabledata = new TableData(new SubSystemCatalogue());
+		subsystem_scrollPane.setViewportView(subsystem_tabledata.getJdataTable());
 		subsystemPanel.setLayout(gl_subsystemPanel);
 
 		final JPanel resourceutilpanel = new JPanel();

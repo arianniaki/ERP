@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
+import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
@@ -107,6 +108,15 @@ public class TableData {
 		this.buildFilledJTable();
 
 	}
+	
+	public TableData(SubSystemCatalogue subsyscat) {
+		data = subsyscat.getSubSystems();
+		columns = new String[] { "Id", "Name"};
+		dbnames = new String[] { "pid", "sname"};
+		this.buildFilledJTable();
+
+	}
+
 
 	public TableData(MaintainingModuleCatalogue mainmodcat) {
 //		data = mainmodcat.
