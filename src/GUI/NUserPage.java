@@ -17,6 +17,7 @@ import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.Character.Subset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -798,6 +799,24 @@ public class NUserPage {
 			}
 
 		});
+		
+		JButton presutil_btnEdit = new JButton("Edit");
+		presutil_btnEdit.setIcon(new ImageIcon(
+				new ImageIcon("images/edit.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		presutil_btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		JButton presutil_btnDelete = new JButton("Delete");
+		presutil_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		presutil_btnDelete.setIcon(new ImageIcon(
+				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
 		GroupLayout gl_resourceutilpanel = new GroupLayout(resourceutilpanel);
 		gl_resourceutilpanel.setHorizontalGroup(
 			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
@@ -806,19 +825,25 @@ public class NUserPage {
 					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
 					.addGap(40))
 				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addComponent(presutil_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(presutil_btnDelete)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(utilbtnBacktoProject)
-					.addPreferredGap(ComponentPlacement.RELATED, 649, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 526, Short.MAX_VALUE)
 					.addComponent(btnAddResourceUtilization))
 		);
 		gl_resourceutilpanel.setVerticalGroup(
 			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_resourceutilpanel.createSequentialGroup()
 					.addGap(40)
-					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(utilbtnBacktoProject)
-						.addComponent(btnAddResourceUtilization)))
+						.addComponent(btnAddResourceUtilization)
+						.addComponent(presutil_btnEdit)
+						.addComponent(presutil_btnDelete)))
 		);
 
 
@@ -2727,6 +2752,9 @@ public class NUserPage {
 					selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
 					System.out.println("-----");
 					System.out.println("Change JPanel");
+					SubSystemCatalogue subsyscat = new SubSystemCatalogue();
+					subsystem_tabledata.update(subsyscat.getSubSystemsbyProject(selected_project_forsubsystem));
+
 					int selected_index = tabbedPane.getSelectedIndex();
 					tabbedPane.remove(selected_index);
 					tabbedPane.insertTab("Subsystem", null, subsystemPanel, null, selected_index);
@@ -2761,6 +2789,13 @@ public class NUserPage {
 					selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
 					System.out.println("-----");
 					System.out.println("Change JPanel");
+					ProjectResourceUtilizationCatalogue presutilcat = new ProjectResourceUtilizationCatalogue();
+					ArrayList<HashMap<String, String>> data= new ArrayList<HashMap<String, String>>();
+					ArrayList<ProjectResourceUtilization> projresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
+					for (int i = 0; i < projresutil.size(); i++) {
+						data.add((projresutil.get(i).toHashMap()));
+					}
+					resourceutil_tabledata.update(data);
 					int selected_index = tabbedPane.getSelectedIndex();
 					tabbedPane.remove(selected_index);
 					tabbedPane.insertTab("Resource Utilization", null, resourceutilpanel, null, selected_index);

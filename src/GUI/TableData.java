@@ -121,8 +121,8 @@ public class TableData {
 	public TableData(ProjectResourceUtilizationCatalogue presutilcat) {
 		
 		data= new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "rid", "sid", "pid","fromdate","todate" };
-		dbnames = new String[] { "rid", "sid", "pid","fromdate","todate"};
+		columns = new String[] { "presutilid","rid", "sid", "pid","fromdate","todate" };
+		dbnames = new String[] { "presutilid","rid", "sid", "pid","fromdate","todate"};
 		ArrayList<ProjectResourceUtilization> allpresutil;
 		allpresutil = presutilcat.getProjectResourceUtilizations();
 		for (int i = 0; i < allpresutil.size(); i++) {
@@ -143,8 +143,8 @@ public class TableData {
 	}
 	public TableData(ResourceRequirementCatalogue resreqcat) {
 		data= new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "rid", "sid", "pid","fromdate","todate" };
-		dbnames = new String[] { "rid", "sid", "pid","fromdate","todate"};
+		columns = new String[] { "resreqid","rid", "sid", "pid","fromdate","todate" };
+		dbnames = new String[] { "resreqid","rid", "sid", "pid","fromdate","todate"};
 		ArrayList<ResourceRequirement> allresourcerequirements;
 		allresourcerequirements = resreqcat.getResourceRequirements();
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
