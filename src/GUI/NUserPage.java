@@ -1107,12 +1107,12 @@ public class NUserPage {
 		requirement_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Field> requirement_editFields = new ArrayList<Field>();
-				ArrayList<String> options = new ArrayList<String>();
-				options.add("satisfied");
+				ArrayList<String> issatisfied = new ArrayList<String>();
+				issatisfied.add("satisfied");
 
-				Field satisfied = new Field("checkBox", "satisfied", options, 20, "items");
-				requirement_editFields.add(satisfied);
+				requirement_editFields.add(new Field("singlecheckbox", "is satisfied", issatisfied, 10, "items"));
 
+System.out.println("//////////////////");
 				final Form editrequirement_Form = new Form(requirement_editFields, "Edit Requirement Form");
 				final PanelBuilder editrequirement_Panel = new PanelBuilder(editrequirement_Form);
 				editrequirement_Panel.makeForm();
@@ -1130,11 +1130,6 @@ public class NUserPage {
 
 				final JDatePickerImpl satisfy_datePicker = new JDatePickerImpl(satisfy_datePanel,
 						new DateLabelFormatter());
-				JPanel satisfy_panel = new JPanel(new FlowLayout());
-				satisfy_panel.add(satisfylbl);
-
-				satisfy_panel.add(satisfy_datePanel);
-				Edit_RequirementPage.getContentPane().add(satisfy_panel, BorderLayout.NORTH);
 
 				// adding date
 				UtilDateModel modelfor = new UtilDateModel();
@@ -1148,6 +1143,8 @@ public class NUserPage {
 				final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
 
 				JPanel date_panel = new JPanel(new FlowLayout());
+				date_panel.add(satisfylbl);
+				date_panel.add(satisfy_datePanel);
 				date_panel.add(from);
 				date_panel.add(from_datePanel);
 				date_panel.add(to);
@@ -1161,6 +1158,8 @@ public class NUserPage {
 				Edit_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Edit_RequirementPage.pack();
 				Edit_RequirementPage.setVisible(true);
+				final SingleCheckBoxJPanel checkBoxpane = (SingleCheckBoxJPanel) editrequirement_Form.getJPanel().getComponent(0);
+
 				// CheckBoxJPanel checkBoxpane = (CheckBoxJPanel)
 				// editrequirement_Form.getJPanel().getComponent(1);
 				// final ArrayList<String>vales =
@@ -1187,6 +1186,7 @@ public class NUserPage {
 						}
 						resrequirement_table.update(data);
 					
+						System.out.println("what have you done "+checkBoxpane.getCheckedValues().toString());
 					}
 				});
 

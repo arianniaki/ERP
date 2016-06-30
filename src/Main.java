@@ -127,14 +127,14 @@ public class Main {
 //	    System.out.println(date.toString());
 		
 		//test resourcerequirement:
-//		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
 //		ArrayList<ResourceRequirement> resreqs = resreqCat.getResourceRequirements();
 //		for (int i = 0; i < resreqs.size(); i++) {
 //			System.out.println(resreqs.get(i).toHashMap());
 //		}
 //		resreqCat.addResourceRequirement(3,2,8,"2016-01-01","2016-01-02");
 //		System.out.println("get:");
-//		System.out.println(resreqCat.getResourceRequirement(3,2,8,"2016-01-01","2016-01-02").toHashMap());
+		System.out.println(resreqCat.getResourceRequirement(3,2,8,"2016-01-01","2016-01-02").toHashMap());
 //		System.out.println("satisfy:");
 //		resreqCat.getResourceRequirement(3,2,8,"2016-01-01","2016-01-02").satisfy("2016-09-09");
 //		System.out.println("edit:");
