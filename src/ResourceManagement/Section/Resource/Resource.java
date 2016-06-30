@@ -11,6 +11,7 @@ public class Resource{
 	private String name;
 	DataBase DB;
 	String tableName;
+	String description;
 	
 	public Resource(){
 		DB = new DataBase();

@@ -14,12 +14,15 @@ public class ModuleCatalogue extends ResourceCatalogue{
 		tableName = "module";
 	}
 	
-	public long addResource(String name) {
+	public long addResource(String name, int duration, String desc) {
 		long resid = super.addResource(name);
 		System.out.println("resid in module cata: "+resid);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", resid+"");
 		vars.put("modname", "\'" + name + "\'");
+		vars.put("duration",Integer.toString(duration));
+		vars.put("description", "\'" + desc + "\'");
+
 		return DB.insert(vars, tableName);
 	}
 	
@@ -30,8 +33,7 @@ public class ModuleCatalogue extends ResourceCatalogue{
 		Module mod = new Module();
 		try {
 			if(res.next()){
-				mod.setId(modid);
-				mod.setName(res.getString("modname"));
+				mod.getFromDB(modid);			
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

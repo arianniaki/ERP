@@ -9,12 +9,17 @@ public class PhysicalResourceCatalogue extends ResourceCatalogue {
 		tableName = "physres";
 	}
 
-	public long addResource(String name) {
+	public long addResource(String name, String modeldesc, String desc) {
 		long resid = super.addResource(name);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", resid+"");
 		vars.put("physname", "\'" + name + "\'");
+		vars.put("modeldesc", "\'" + modeldesc + "\'");
+		vars.put("description", "\'" + desc + "\'");
+
 		return DB.insert(vars, tableName);
 	}
+	
+	
 
 }

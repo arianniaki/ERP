@@ -59,6 +59,7 @@ public class ResourceRequirement{
 		this.satisfyDate = date;
 		HashMap<String, String> setVars = new HashMap<String, String>();
 		setVars.put("is_satisfied","true");
+		setVars.put("satisfydate", "\'"+date+"\'");
 		submitToDB(setVars, this.resource.getId(), this.section.getId(), this.project.getId(),this.from, this.to);
 	}
 	

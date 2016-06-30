@@ -8,6 +8,7 @@ import java.util.HashMap;
 import AccessRight.AccessRight;
 import DataBase.DataBase;
 import DataBase.Table;
+import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 public class EmployeeCatalogue {
 	DataBase DB;
@@ -19,8 +20,15 @@ public class EmployeeCatalogue {
 	public void makeDecision(int empid, boolean decision) {
 
 		if (decision) {
+			ResourceCatalogue resCat = new ResourceCatalogue();
+			String empname = getEmployee(empid).getName();
+			int rid = (int) resCat.addResource(empname);
+
 			HashMap<String, String> setVars = new HashMap<String, String>();
 			setVars.put("is_confirmed", "true");
+			setVars.put("sectionid", Integer.toString(6));
+			setVars.put("rid", Integer.toString(rid));
+			setVars.put("accessrightid", Integer.toString(1));
 			HashMap<String, String> condVars = new HashMap<String, String>();
 			condVars.put("empid", Integer.toString(empid));
 			DB.update(condVars, setVars, "EMPLOYEE");
@@ -61,11 +69,30 @@ public class EmployeeCatalogue {
 		DB.delete(vars, "employee");
 	}
 
+	public Employee signUp(boolean ismodir, String empname, String post, String username,
+			String password, boolean is_loggedin) {
+
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("empname", "\'" + empname + "\'");
+		vars.put("post", "\'" + post + "\'");
+		vars.put("ismodir", Boolean.toString(ismodir));
+		vars.put("username", "\'" + username + "\'");
+		vars.put("password", "\'" + password + "\'");
+		vars.put("is_loggedin", Boolean.toString(is_loggedin));
+		vars.put("is_confirmed", Boolean.toString(false));
+
+		long pk = DB.insert(vars, "employee");
+		Employee employee = new Employee();
+		employee.getFromDB((int) pk);
+		return employee;
+		
+	}
+
+
 	public Employee addEmployee(boolean ismodir, String empname, String post, int sectionId, String username,
 			String password, boolean is_loggedin, boolean is_confirmed) {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
-//		vars.put("empid", Integer.toString(empid));
 		vars.put("empname", "\'" + empname + "\'");
 		vars.put("sectionid", Integer.toString(sectionId));
 		vars.put("post", "\'" + post + "\'");
@@ -95,6 +122,7 @@ public class EmployeeCatalogue {
 				emp.setSectionId(res.getInt("sectionid"));
 				emp.setPassword(res.getString("password"));
 				emp.setAccessRight(new AccessRight(res.getInt("accessrightid")));
+				emp.setResId(res.getInt("rid"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

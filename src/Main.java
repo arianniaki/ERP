@@ -9,6 +9,8 @@ import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
+import ProjectEmployee.ProjectEmployee;
+import ProjectEmployee.ProjectEmployeeCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import RequirementUtilization.*;
 import ResourceManagement.Section.SectionCatalogue;
@@ -17,144 +19,73 @@ import ResourceManagement.Section.Resource.*;
 public class Main {
 	public static void main(String[] args) throws ParseException {
 		// test employee
-		/*Employee emp = new Employee();
-		if((emp.login("ali","123"))){
-			System.out.println("huraaa" + AuthenticatedEmployee.getInstance().getEmployee().getUsername());
-		}else{
-			System.out.println("shit");
-		}*/
-//		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
-//		physResCat.getReport().printRep();
-//		System.out.println("This is Resource Requirement Report:");
-//		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
-//		ProjectCatalogue projCat = new ProjectCatalogue();
-//		Project proj = projCat.getProject(1);
-//		resReqCat.getReport(proj).printRep();
-//		System.out.println("Yay! ");
-		//Employee gholam = new Employee();
-		//gholam.getFromDB(1);
-		//gholam.setAccessRight(1);
-//		ProjectResourceUtilizationCatalogue projResUtil = new ProjectResourceUtilizationCatalogue();
-//		ResourceCatalogue resCat = new ResourceCatalogue();
-//		Resource res = resCat.getResource(17);
-//		projResUtil.getReport(res).printRep();
-//		if(emp.logout()){
-//			System.out.println("logged out");
-//		}
-		
-		// test search resource
-//		ModuleCatalogue mcat = new ModuleCatalogue();
-//		HashMap <String,String> searchVars = new HashMap<String,String>();
-//		searchVars.put("modname", "\'"+"module4"+"\'");
-//		mcat.SearchResource(searchVars);
-		
-		
-//		System.out.println("all : ");
-//		mcat.readAllResources();
-//		mcat.addResource(6,2,"module 1");
-//		mcat.addResource(5,2,"module 3");
-//		System.out.println(":::::::after insert ::::::: ");
-//		mcat.readAllResources();
-//		mcat.deleteResource(5);
-//		System.out.println(":::::::after delete ::::::: ");
-//		mcat.readAllResources();
-
-//		rscat.deleteResource(4);
-//		System.out.println();
-//		rscat.readAllResources();
-//
-//		InformationResourceCatalogue rscat = new InformationResourceCatalogue();
-//		ResourceCatalogue rs = new ResourceCatalogue();
-//		rs.readAllResources();
-//		System.out.println();
-//		rscat.addResource(90, 0, "temp");
-//		System.out.println();
-//		rscat.readAllResources();
-//		System.out.println();
-//		rs.readAllResources();
-//
-//		rscat.deleteResource(90);
-//		System.out.println();
-//		rscat.readAllResources();
-//		System.out.println();
-//		rs.readAllResources();
-
+//		EmployeeCatalogue empCat = new EmployeeCatalogue();
+//		empCat.signUp(false, "negar Ghorbani", "developer", "negar", "123", false, false);
+//		empCat.readAllEmployees();
+//		empCat.makeDecision(4, true);
 //		
-//		// test EmployeeCatalogue
-//		empcat.readAllEmployees();
-//		empcat.addEmployee(12, false, "gholi", "hammal", 5, "gholi", "123", false);
-//		System.out.println(":::::: after insert ::::::::");
-//		empcat.readAllEmployees();
-//		empcat.deleteEmployee(10);
-//		System.out.println(":::::: after delete ::::::::");
-//
-//		empcat.readAllEmployees();
-//
+//		Employee emp = new Employee();
+//		if((emp.login("negar","123"))){
+//			System.out.println("huraaa : " + AuthenticatedEmployee.getInstance().getEmployee().getUsername());
+//		}else{
+//			System.out.println("shit");
+//		}
+//		System.out.println(empCat.getEmployee(4).getSectionId() + " &&&&&&&&&&");
+//		empCat.deleteEmployee(4);
 		
 		//test project
 //		EmployeeCatalogue empcat = new EmployeeCatalogue();
-//
-//		Employee emp = empcat.getEmployee(12);
-//
+//		Employee emp = empcat.getEmployee(3);
 //		ProjectCatalogue projCat = new ProjectCatalogue();
 //		projCat.getProjects();
 //		System.out.println(";;;;;;;;;;;;;");
+//		projCat.addProject("negarProject", emp, "10", "Java");
 //		projCat.searchProjects("10", "java");
+//		projCat.deleteProject(2);
+		
+		// test ProjectEmployee
+//		ProjectEmployeeCatalogue prempcat = new ProjectEmployeeCatalogue();
+//		prempcat.addProjectEmployee(1, 1);
+//		prempcat.addProjectEmployee(1, 2);
+//		ArrayList<ProjectEmployee> premps = prempcat.getProjectEmployeesByProject(1);
+//		System.out.println("%%%%%%%%%%%%%%");
+//		for (int i = 0; i < premps.size(); i++) {
+//			System.out.println(premps.get(i).getEmployee().getId());
+//		}
+//		prempcat.deleteProjectEmployee(1, 1);
+//		prempcat.deleteProjectEmployee(1, 2);
 		
 		// test subSystem:
 //		SubSystemCatalogue subCat = new SubSystemCatalogue();
-//		subCat.addSubSystem("sub1", 6);
-//		subCat.addSubSystem("sub2", 7);
-//		subCat.getSubSystemsbyProject(7);
+//		subCat.addSubSystem("subTest",1,1);
+//		System.out.println(subCat.getSubSystem(2).getId());
+//		subCat.getSubSystemsByProject(1);
 //		subCat.deleteSubSystem(2);
-//		subCat.getSubSystems();
 		
 		//test Section
 //		SectionCatalogue secCat = new SectionCatalogue();
-//		secCat.addSection("sec1");
-//		secCat.addSection("sec2");
+//		secCat.addSection("secTest");
 //		secCat.getSections();
 //		secCat.deleteSection(7);
-//		secCat.getSections();
-//		secCat.deleteSection(8);
-//		secCat.getSections();
 
-//		String strDate = "2011-12-31";
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-//        java.util.Date date = sdf.parse(strDate);
-//		Date sqldate = new Date(date.getTime());
-//		System.out.println(sqldate);
-//	    System.out.println(date.toString());
 		
 		//test resourcerequirement:
 //		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+//		resreqCat.addResourceRequirement(1, 1, 1, "2016-01-01", "2016-09-09");
 //		ArrayList<ResourceRequirement> resreqs = resreqCat.getResourceRequirements();
 //		for (int i = 0; i < resreqs.size(); i++) {
 //			System.out.println(resreqs.get(i).toHashMap());
 //		}
-//		resreqCat.addResourceRequirement(3,2,8,"2016-01-01","2016-01-02");
 //		System.out.println("get:");
-//		System.out.println(resreqCat.getResourceRequirement(3,2,8,"2016-01-01","2016-01-02").toHashMap());
+//		System.out.println(resreqCat.getResourceRequirement(1,1,1,"2016-04-04","2016-05-05").toHashMap());
 //		System.out.println("satisfy:");
-//		resreqCat.getResourceRequirement(3,2,8,"2016-01-01","2016-01-02").satisfy("2016-09-09");
+//		resreqCat.getResourceRequirement(1,1,1,"2016-04-04","2016-05-05").satisfy("2016-12-12");
 //		System.out.println("edit:");
-//		resreqCat.getResourceRequirement(3,2,8,"2016-01-01","2016-01-02").edit("2016-04-04", "2016-04-05", false, "1111-11-11");
-//		System.out.println("get:");
-//		System.out.println(resreqCat.getResourceRequirement(3,2,8,"2016-04-04","2016-04-05").toHashMap());
-//
-//	
-//		resreqCat.deleteResourceRequirement(3,2,8,"2016-01-01","2016-01-02");
-//		System.out.println("after delete:");
-//		ArrayList<ResourceRequirement> resreqsss = resreqCat.getResourceRequirements();
-//		for (int i = 0; i < resreqsss.size(); i++) {
-//			System.out.println(resreqsss.get(i).toString());
-//		}
-//
+//		resreqCat.getResourceRequirement(1,1,1,"2016-04-04","2016-05-05").edit("2016-08-08", "2016-09-09", false, "1111-11-11");
+//		resreqCat.deleteResourceRequirement(1,1,1,"2016-08-08","2016-09-09");
 
-
+		
 		// test projectresourceutilization
-		
-		
 //		ProjectResourceUtilizationCatalogue projres = new ProjectResourceUtilizationCatalogue();
 //		System.out.println("read all:");
 //		ArrayList<ProjectResourceUtilization> pru = projres.getProjectResourceUtilizations();
@@ -163,32 +94,21 @@ public class Main {
 //		}
 //
 //		System.out.println("add:");
-//		projres.addProjectResourceUtilization(3,2,9,"2016-01-01","2016-01-01");
+//		projres.addProjectResourceUtilization(3,2,1,"2016-01-01","2016-01-01");
 //		System.out.println("get :");
-//		System.out.println(projres.getProjectResourceUtilization(3,2,9,"2016-01-01","2016-01-01").toHashMap());
-//		projres.getProjectResourceUtilization(3,2,9,"2016-01-01","2016-01-01").edit("2016-04-04", "2016-04-05");
-//		System.out.println("get :");
-//		System.out.println(projres.getProjectResourceUtilization(3,2,9,"2016-04-04","2016-04-05").toHashMap());
+//		System.out.println(projres.getProjectResourceUtilization(3,2,1,"2016-01-01","2016-01-01").toHashMap());
+//		projres.getProjectResourceUtilization(3,2,1,"2016-01-01","2016-01-01").edit("2016-04-04", "2016-04-05");
 //		System.out.println("delete");
-//		projres.deleteProjectResourceUtilization(3, 2, 9,"2016-01-04","2016-01-05");
-//		System.out.println("read all");
-//		ArrayList<ProjectResourceUtilization> prus = projres.getProjectResourceUtilizations();
-//		for (int i = 0; i < prus.size(); i++) {
-//			System.out.println(prus.get(i).toString());
-//		}
+//		projres.deleteProjectResourceUtilization(3, 2, 1,"2016-04-04","2016-04-05");
 		
-//		ArrayList<ProjectResourceUtilization> pru = projres.getProjectResourceUtilizationbyProject(6);
-//		for (int i = 0; i < pru.size(); i++) {
-//			System.out.println(pru.get(i).toString());
-//		}
 
-		
 		//test sign up
+//		EmployeeCatalogue empcat = new EmployeeCatalogue();
+//		empcat.signUp(false, "negar", "developer", "negar", "123", false);
 //		ArrayList<HashMap<String, String>> registered_users;
-
 //		registered_users=empcat.getRegistrations();
-
-//		empcat.makeDecision(5, false);
+//		System.out.println(registered_users);
+//		empcat.makeDecision(9, true);
 		
 //		MaintainingModuleCatalogue mmcat = new MaintainingModuleCatalogue();
 //		mmcat.addMaintainingModule(5,"edit", 5);

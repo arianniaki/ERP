@@ -48,10 +48,13 @@ public class ProjectCatalogue {
 
 	}
 	
-	public long addProject(String name, Employee manager) {
+	public long addProject(String name, Employee manager, String size, String tech) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("projname", "\'"+name+"\'");
 		vars.put("projectmanager", "\'"+manager.getId()+"\'");
+		vars.put("size", "\'"+size+"\'");
+		vars.put("tech", "\'"+tech+"\'");
+		vars.put("is_complete", "false");
 
 		long pk=DB.insert(vars, "project");
 		System.out.println("inserted into project table: " + pk);

@@ -23,6 +23,7 @@ public class Employee {
 	private AccessRight accessRight;
 	private boolean is_confirmed;
 	DataBase DB;
+	int rid;
 
 	public Employee() {
 		DB = new DataBase();
@@ -101,6 +102,14 @@ public class Employee {
 
 	public int getId() {
 		return this.id;
+	}
+
+	public void setResId(int inputId) {
+		this.rid = inputId;
+	}
+
+	public int getResId() {
+		return this.rid;
 	}
 
 	public void setName(String inputName) {
@@ -194,11 +203,9 @@ public class Employee {
 		}
 	}
 
-
 	public AccessRight getAccessRight() {
 		return accessRight;
 	}
-
 
 	public void setAccessRight(AccessRight accessRight) {
 		this.accessRight = accessRight;

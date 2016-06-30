@@ -4,15 +4,22 @@ import java.util.HashMap;
 
 public class PhysicalResource extends Resource{
 
+	String modeldesc;
+	String description;
+	
 	public PhysicalResource(){
 		super();
 		tableName = "physres";
 	}
 	
-	public void editResource(String name){
+	public void editResource(String name, String modeldesc, String desc){
+		this.modeldesc = modeldesc;
+		this.description = desc;
 		super.editResource(name);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("physname", "\'" + name + "\'");
+		vars.put("modeldesc", "\'" + modeldesc + "\'");
+		vars.put("description", "\'" + desc + "\'");
 		submitToDB(vars);
 	}
 	

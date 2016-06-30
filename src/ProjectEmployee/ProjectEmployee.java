@@ -10,5 +10,12 @@ public class ProjectEmployee {
 		project = pr;
 	}
 	
+	public Employee getEmployee(){
+		return employee;
+	}
+	
+	public Project getProject(){
+		return project;
+	}
 	
 }
