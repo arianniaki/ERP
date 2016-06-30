@@ -34,6 +34,7 @@ import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
+import GUI.Form.SingleCheckBoxJPanel;
 import ProjectEmployee.AuthenticatedEmployee;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
@@ -2037,7 +2038,7 @@ public class NUserPage {
 		        submitmaintainmoduleBtn.addActionListener(new ActionListener() {
 		          @Override
 		          public void actionPerformed(ActionEvent e) {
-		            // TODO Auto-generated method stub
+		            //INJA TODO Auto-generated method stub
 		            final ArrayList<String>vales = checkBoxpane_emp.getCheckedValues();
 		            System.out.println(vales);
 		            System.out.println("----------");
@@ -2550,7 +2551,11 @@ public class NUserPage {
 				}
 				System.out.println(employees + " 00");
 				projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
-
+				ArrayList<String> iscomplete = new ArrayList<String>();
+				iscomplete.add("is complete");
+				projectFields.add(new Field("singlecheckbox", "is complete", iscomplete, 10, "items"));
+				
+				
 				final Form projectForm = new Form(projectFields, "Project Form");
 				final PanelBuilder project_addPanel = new PanelBuilder(projectForm);
 				project_addPanel.makeForm();
@@ -2560,6 +2565,7 @@ public class NUserPage {
 				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) projectForm.getJPanel().getComponent(3);
 				final JComboBox employees_comboBox = comboBoxpane.getComboBox();
 
+				final SingleCheckBoxJPanel checkBoxpane = (SingleCheckBoxJPanel) projectForm.getJPanel().getComponent(4);
 				JButton submitaddprojectBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submitaddprojectBtn);
@@ -2582,7 +2588,7 @@ public class NUserPage {
 						System.out.println("all : ");
 						projcat.getProjects();
 						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < projectForm.getJPanel().getComponentCount(); i++) {
+						for (int i = 0; i < projectForm.getJPanel().getComponentCount()-1; i++) {
 							FieldPanel fpanel = (FieldPanel) projectForm.getJPanel().getComponent(i);
 							inputs.add(fpanel.getValues().get(0));
 						}
@@ -2597,6 +2603,8 @@ public class NUserPage {
 
 						allprojects = projcat.getProjects();
 						project_tabledata.update(projcat.getProjects());
+			            final ArrayList<String>vales_phys = checkBoxpane.getCheckedValues();
+			            System.out.println(vales_phys.toString());
 
 					}
 				});

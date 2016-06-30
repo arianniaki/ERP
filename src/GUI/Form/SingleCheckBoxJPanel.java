@@ -21,7 +21,7 @@ public class SingleCheckBoxJPanel extends FieldPanel{
 		// TODO Auto-generated constructor stub
 		super(field.getName());
 		String optionString = field.options.get(0);
-		JCheckBox checkbox = new JCheckBox(new CheckboxAction(optionString));
+		checkbox = new JCheckBox(new CheckboxAction(optionString));
 		JPanel labelPanel = new JPanel();
 		JPanel fieldPanel = new JPanel();
 		add(labelPanel, BorderLayout.WEST);
@@ -50,14 +50,14 @@ public class SingleCheckBoxJPanel extends FieldPanel{
 	@Override
 	public ArrayList<String> getValues() {
 		ArrayList<String> ret = new ArrayList<String>();
-		ret.add(checkbox.getName());
+		ret.add(checkbox.getText());
 		return ret;
 	}
 
 	public ArrayList<String> getCheckedValues() {
 		ArrayList<String> ret = new ArrayList<String>();
 		if(checkbox.isSelected())
-			ret.add(checkbox.getName());
+			ret.add(checkbox.getText());
 		return ret;
 	}
 	

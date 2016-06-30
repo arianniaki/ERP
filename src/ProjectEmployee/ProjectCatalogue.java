@@ -25,10 +25,6 @@ public class ProjectCatalogue {
 			System.out.println(result.get(i).toString());
 			EmployeeCatalogue empcat = new EmployeeCatalogue();
 			result.get(i).put("managername", empcat.getEmployee(Integer.parseInt(result.get(i).get("projectmanager"))).getName());
-			System.out.println("------");
-			System.out.println(empcat.getEmployee(Integer.parseInt(result.get(i).get("projectmanager"))).getName());
-			System.out.println(empcat.getEmployee(Integer.parseInt(result.get(i).get("projectmanager"))));
-			System.out.println("---------");
 		}
 		return result;
 	}
