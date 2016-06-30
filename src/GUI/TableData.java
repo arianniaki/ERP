@@ -127,6 +127,14 @@ public class TableData {
 		this.buildFilledJTable();
 
 	}
+	
+	public TableData(ArrayList<HashMap<String, String>> report, String type) {
+		data= report;
+		columns = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
+		dbnames = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
+		this.buildFilledJTable();
+
+	}
 	public JTable buildFilledJTable() {
 
 		dataTableModel = new DefaultTableModel(columns, 0) {

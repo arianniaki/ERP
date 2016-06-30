@@ -116,6 +116,8 @@ public class NUserPage {
 	private TableData human_tabledata;
 	private TableData allresource_tabledata;
 	private TableData maintaining_tabledata;
+	private TableData resreq_tabledata;
+
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
@@ -127,7 +129,7 @@ public class NUserPage {
 	private JTextField search_physicalname;
 	private JTextField search_projectname;
 	private JTable resavail_table;
-	private JTable resreq_table;
+//	private JTable resreq_table;
 	private JTable cycle_table;
 	private JTable resourceutil_table;
 	private JTextField repassword_textField;
@@ -2940,8 +2942,9 @@ public class NUserPage {
 							System.out.println(m.group().replace("projid=", ""));
 							int projid = Integer.parseInt(m.group().replace("projid=", ""));
 							Project proj = projCat.getProject(projid);
-							resReqCat.getReport(proj).printRep();
-							// print doesnt work with table gimme sth else
+							resReqCat.getReport(proj).getResults();
+							resreq_tabledata.update(resReqCat.getReport(proj).getResults());
+
 						}
 
 					}
@@ -2962,8 +2965,8 @@ public class NUserPage {
 				.addGroup(gl_resourcereqPanel.createSequentialGroup().addComponent(resreq_btnGetReport).addGap(20)
 						.addComponent(resreq_scrollPane, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE).addGap(20)));
 
-		resreq_table = new JTable();
-		resreq_scrollPane.setViewportView(resreq_table);
+		resreq_tabledata = new TableData(new ArrayList<HashMap<String, String>>(),"report");
+		resreq_scrollPane.setViewportView(resreq_tabledata.getJdataTable());
 		resourcereqPanel.setLayout(gl_resourcereqPanel);
 
 		JPanel resourceavailPanel = new JPanel();
