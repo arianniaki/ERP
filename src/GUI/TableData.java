@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
+import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
@@ -115,10 +116,15 @@ public class TableData {
 
 	}
 	public TableData(ResourceRequirementCatalogue resreqcat) {
-//		data = resreqcat.getResourceRequirements();//this is buggy.
-//		columns = new String[] { "Id", "Name", "Project Manager" };
-//		dbnames = new String[] { "rid", "rname", "sid","sec... };
-//		this.buildFilledJTable();
+		data= new ArrayList<HashMap<String, String>>();
+		columns = new String[] { "rid", "sid", "pid","fromdate","todate" };
+		dbnames = new String[] { "rid", "sid", "pid","fromdate","todate"};
+		ArrayList<ResourceRequirement> allresourcerequirements;
+		allresourcerequirements = resreqcat.getResourceRequirements();
+		for (int i = 0; i < allresourcerequirements.size(); i++) {
+			data.add((allresourcerequirements.get(i).toHashMap()));
+		}
+		this.buildFilledJTable();
 
 	}
 	public JTable buildFilledJTable() {

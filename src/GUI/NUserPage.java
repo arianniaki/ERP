@@ -90,7 +90,7 @@ public class NUserPage {
 	private ArrayList<HashMap<String, String>> allprojects;
 	private ArrayList<HashMap<String, String>> allemployees;
 	private ArrayList<HashMap<String, String>> allsubsystems;
-	private ArrayList<ResourceRequirement> allresourcerequirements;
+//	private ArrayList<ResourceRequirement> allresourcerequirements;
 	private ArrayList<HashMap<String, String>> allregisteredusers;
 
 	// private JTable finan_table;
@@ -104,8 +104,8 @@ public class NUserPage {
 	// private JTable registered_table;
 	// private JTable human_table;
 	// private JTable maintaining_table;
-	private JTable requirement_table;
-
+//	private JTable requirement_table;
+	private TableData resrequirement_table;
 	private TableData accessright_tabledata;
 	private TableData registered_tabledata;
 	private TableData project_tabledata;
@@ -347,7 +347,6 @@ public class NUserPage {
 
 		accessright_scrollPane.setViewportView(accessright_tabledata.getJdataTable());
 		accessrightPanel.setLayout(gl_accessrightPanel);
-
 		// project mgmt panel
 		final JPanel projectPanel = new JPanel();
 		projectPanel.setBackground(tab_color);
@@ -740,20 +739,6 @@ public class NUserPage {
 		addreqBtn.setIcon(new ImageIcon(
 				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
-		ResourceRequirementCatalogue resreqcat = new ResourceRequirementCatalogue();
-		System.out.println("all : ");
-		allresourcerequirements = resreqcat.getResourceRequirements();
-
-		String[] resreq_columns = new String[] { "rid", "resource", "sid", "section", "pid", "project", "from", "to" };
-
-		final DefaultTableModel resreq_tableModel = new DefaultTableModel(resreq_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-
 		addreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> section_arraylist = new ArrayList<String>();
@@ -965,27 +950,28 @@ public class NUserPage {
 						resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")),
 								Integer.parseInt(sectionid.replace("sectionid=", "")),
 								Integer.parseInt(projid.replace("projid=", "")), fromdate, todate);
-						// // tu resource ham bayad insert she
-						// allmodules.clear();
-						allresourcerequirements = resreqCat.getResourceRequirements();
-						System.out.println(resreq_tableModel.getRowCount() + "");
-						int rowcount = resreq_tableModel.getRowCount();
-						for (int j = rowcount - 1; j >= 0; j--) {
-							System.out.println(j);
-							resreq_tableModel.removeRow(j);
-						}
-						System.out.println(resreq_tableModel.getRowCount() + "");
+						
+						
+						ArrayList<HashMap<String, String>> data= new ArrayList<HashMap<String, String>>();
+						ArrayList<ResourceRequirement> allresourcerequirements;
+						allresourcerequirements=resreqCat.getResourceRequirements();
 						for (int i = 0; i < allresourcerequirements.size(); i++) {
-							Object[] objs = { allresourcerequirements.get(i).toHashMap().get("rid"),
-									allresourcerequirements.get(i).getResource().getName(),
-									allresourcerequirements.get(i).toHashMap().get("sid"),
-									allresourcerequirements.get(i).getSection().getName(),
-									allresourcerequirements.get(i).toHashMap().get("pid"),
-									allresourcerequirements.get(i).getProject().getName(),
-									allresourcerequirements.get(i).toHashMap().get("fromdate"),
-									allresourcerequirements.get(i).toHashMap().get("todate") };
-							resreq_tableModel.addRow(objs);
+							data.add((allresourcerequirements.get(i).toHashMap()));
 						}
+						resrequirement_table.update(data);
+						
+//						System.out.println(resreq_tableModel.getRowCount() + "");
+//						for (int i = 0; i < allresourcerequirements.size(); i++) {
+//							Object[] objs = { allresourcerequirements.get(i).toHashMap().get("rid"),
+//									allresourcerequirements.get(i).getResource().getName(),
+//									allresourcerequirements.get(i).toHashMap().get("sid"),
+//									allresourcerequirements.get(i).getSection().getName(),
+//									allresourcerequirements.get(i).toHashMap().get("pid"),
+//									allresourcerequirements.get(i).getProject().getName(),
+//									allresourcerequirements.get(i).toHashMap().get("fromdate"),
+//									allresourcerequirements.get(i).toHashMap().get("todate") };
+//							resreq_tableModel.addRow(objs);
+//						}
 
 					}
 				});
@@ -1070,6 +1056,17 @@ public class NUserPage {
 						String fromdate = from_datePicker.getJFormattedTextField().getText();
 						String todate = to_datePicker.getJFormattedTextField().getText();
 						System.out.println(satisfydate + " " + fromdate + " " + todate);
+						
+						ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+						
+						ArrayList<HashMap<String, String>> data= new ArrayList<HashMap<String, String>>();
+						ArrayList<ResourceRequirement> allresourcerequirements;
+						allresourcerequirements=resreqCat.getResourceRequirements();
+						for (int i = 0; i < allresourcerequirements.size(); i++) {
+							data.add((allresourcerequirements.get(i).toHashMap()));
+						}
+						resrequirement_table.update(data);
+					
 					}
 				});
 
@@ -1152,21 +1149,9 @@ public class NUserPage {
 						.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE).addComponent(addreqBtn)
 								.addComponent(requirement_btnEdit).addComponent(requirement_btnSatisfy))));
 
-		requirement_table = new JTable(resreq_tableModel);
-
-		for (int i = 0; i < allresourcerequirements.size(); i++) {
-			Object[] objs = { allresourcerequirements.get(i).toHashMap().get("rid"),
-					allresourcerequirements.get(i).getResource().getName(),
-					allresourcerequirements.get(i).toHashMap().get("sid"),
-					allresourcerequirements.get(i).getSection().getName(),
-					allresourcerequirements.get(i).toHashMap().get("pid"),
-					allresourcerequirements.get(i).getProject().getName(),
-					allresourcerequirements.get(i).toHashMap().get("fromdate"),
-					allresourcerequirements.get(i).toHashMap().get("todate") };
-			resreq_tableModel.addRow(objs);
-		}
-
-		requirement_scrollPane.setViewportView(requirement_table);
+		resrequirement_table = new TableData(new ResourceRequirementCatalogue());
+		
+		requirement_scrollPane.setViewportView(resrequirement_table.getJdataTable());
 		requirementPanel.setLayout(gl_requirementPanel);
 		searchreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
