@@ -41,6 +41,8 @@ import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
+import RequirementUtilization.ProjectResourceUtilization;
+import RequirementUtilization.ProjectResourceUtilizationCatalogue;
 import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.SectionCatalogue;
@@ -121,6 +123,8 @@ public class NUserPage {
 	private TableData cycle_tabledata;
 	private TableData resavail_tabledata;
 	private TableData subsystem_tabledata;
+	private TableData resourceutil_tabledata;
+
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
@@ -134,7 +138,7 @@ public class NUserPage {
 //	private JTable resavail_table;
 //	private JTable resreq_table;
 //	private JTable cycle_table;
-	private JTable resourceutil_table;
+//	private JTable resourceutil_table;
 	private JTextField search_maintainingname;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_re;
@@ -751,9 +755,8 @@ public class NUserPage {
 						for (int i = 0; i < resutil_Form.getJPanel().getComponentCount(); i++) {
 							// System.out.println(fpanel.selected_Choice);
 						}
-						ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+						ProjectResourceUtilizationCatalogue presreqCat = new ProjectResourceUtilizationCatalogue();
 						System.out.println("all : ");
-						resreqCat.getResourceRequirements();
 						ArrayList<String> inputs = new ArrayList<String>();
 						for (int i = 0; i < resutil_Form.getJPanel().getComponentCount(); i++) {
 							FieldPanel fpanel = (FieldPanel) resutil_Form.getJPanel().getComponent(i);
@@ -778,14 +781,18 @@ public class NUserPage {
 						System.out.println("--------------");
 						System.out.println(rid + " " + sectionid + " " + fromdate + " " + todate);
 
-						// resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=",
-						// "")),
-						// Integer.parseInt(sectionid.replace("sectionid=",
-						// "")),
-						// Integer.parseInt(projid.replace("projid=", "")),
-						// fromdate, todate);
-						// // tu resource ham bayad insert she
-						// allmodules.clear();
+						presreqCat.addProjectResourceUtilization(Integer.parseInt(rid.replace("rid=","")),Integer.parseInt(sectionid.replace("sectionid=","")),selected_project_forsubsystem,fromdate, todate);
+						
+						
+						
+						ArrayList<HashMap<String, String>> data= new ArrayList<HashMap<String, String>>();
+						ArrayList<ProjectResourceUtilization> allpresutil;
+						allpresutil=presreqCat.getProjectResourceUtilizations();
+						for (int i = 0; i < allpresutil.size(); i++) {
+							data.add((allpresutil.get(i).toHashMap()));
+						}
+						resourceutil_tabledata.update(data);
+						
 					}
 				});
 			}
@@ -814,8 +821,9 @@ public class NUserPage {
 						.addComponent(btnAddResourceUtilization)))
 		);
 
-		resourceutil_table = new JTable();
-		resourceutil_scrollPane.setViewportView(resourceutil_table);
+
+		resourceutil_tabledata = new TableData(new ProjectResourceUtilizationCatalogue());
+		resourceutil_scrollPane.setViewportView(resourceutil_tabledata.getJdataTable());
 		resourceutilpanel.setLayout(gl_resourceutilpanel);
 		//
 		JPanel requirementPanel = new JPanel();

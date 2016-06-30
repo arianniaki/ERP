@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableModel;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
+import RequirementUtilization.ProjectResourceUtilization;
+import RequirementUtilization.ProjectResourceUtilizationCatalogue;
 import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
@@ -114,6 +116,20 @@ public class TableData {
 		columns = new String[] { "Subsystem Id","Project Id", "Name"};
 		dbnames = new String[] { "sid","pid", "sname"};
 		this.buildFilledJTable();
+
+	}
+	public TableData(ProjectResourceUtilizationCatalogue presutilcat) {
+		
+		data= new ArrayList<HashMap<String, String>>();
+		columns = new String[] { "rid", "sid", "pid","fromdate","todate" };
+		dbnames = new String[] { "rid", "sid", "pid","fromdate","todate"};
+		ArrayList<ProjectResourceUtilization> allpresutil;
+		allpresutil = presutilcat.getProjectResourceUtilizations();
+		for (int i = 0; i < allpresutil.size(); i++) {
+			data.add((allpresutil.get(i).toHashMap()));
+		}
+		this.buildFilledJTable();
+		
 
 	}
 
