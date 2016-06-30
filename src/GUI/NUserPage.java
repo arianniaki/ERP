@@ -74,6 +74,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.ListModel;
 import javax.swing.JTable;
+import javax.swing.JPasswordField;
 
 public class NUserPage {
 
@@ -82,7 +83,6 @@ public class NUserPage {
 
 	private JFrame userpageFrame;
 	private JTextField editname_textField;
-	private JTextField editpassword_textField;
 	private ArrayList<HashMap<String, String>> allmodules;
 	private ArrayList<HashMap<String, String>> allphysicals;
 	private ArrayList<HashMap<String, String>> allfinance;
@@ -135,8 +135,9 @@ public class NUserPage {
 //	private JTable resreq_table;
 //	private JTable cycle_table;
 	private JTable resourceutil_table;
-	private JTextField repassword_textField;
 	private JTextField search_maintainingname;
+	private JPasswordField passwordField;
+	private JPasswordField passwordField_re;
 
 	/**
 	 * Launch the application.
@@ -198,15 +199,14 @@ public class NUserPage {
 		JLabel lblName = new JLabel("First and Last Name");
 
 		editname_textField = new JTextField();
+		passwordField = new JPasswordField();
+		
+		passwordField_re = new JPasswordField();
+
 		editname_textField.setColumns(10);
 		editname_textField.setText(AuthenticatedEmployee.getInstance().getEmployee().getName());
-		editpassword_textField = new JTextField();
-		editpassword_textField.setColumns(10);
 
 		JLabel password = new JLabel("Password");
-
-		repassword_textField = new JTextField();
-		repassword_textField.setColumns(10);
 
 		JLabel lblRepassword = DefaultComponentFactory.getInstance().createLabel("Re-Password");
 
@@ -216,45 +216,62 @@ public class NUserPage {
 
 		btnEditInformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(editpassword_textField.getText() + " " + repassword_textField.getText() + " "
+				System.out.println(passwordField.getText() + " " + passwordField_re.getText() + " "
 						+ editname_textField.getText());
-				NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+				if(!(passwordField.getText().equals(passwordField_re.getText())))
+				{
+					NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+							"Passwords do not match!");
+	
+				}
+				else{
+				if(passwordField.getText()!=null && passwordField_re.getText()!=null)
+				{NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
 						"You have been successfully edited your information!");
-
+				}
+				}
 			}
 		});
+		
 		GroupLayout gl_editPanel = new GroupLayout(editPanel);
-		gl_editPanel.setHorizontalGroup(gl_editPanel.createParallelGroup(Alignment.TRAILING).addGroup(gl_editPanel
-				.createSequentialGroup().addContainerGap(515, Short.MAX_VALUE)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(editpassword_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(repassword_textField, GroupLayout.PREFERRED_SIZE, 134,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(40)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING).addComponent(lblRepassword)
-						.addComponent(password).addComponent(lblName).addComponent(btnLogout)))
-				.addGroup(Alignment.LEADING, gl_editPanel.createSequentialGroup().addComponent(btnEditInformation)
-						.addContainerGap(720, Short.MAX_VALUE)));
-		gl_editPanel.setVerticalGroup(gl_editPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_editPanel
-				.createSequentialGroup().addContainerGap().addComponent(btnLogout).addGap(59)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+		gl_editPanel.setHorizontalGroup(
+			gl_editPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_editPanel.createSequentialGroup()
+					.addContainerGap(538, Short.MAX_VALUE)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(passwordField)
+						.addComponent(editname_textField)
+						.addComponent(passwordField_re, Alignment.LEADING))
+					.addGap(40)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblRepassword)
+						.addComponent(password)
+						.addComponent(lblName)
+						.addComponent(btnLogout)))
+				.addGroup(gl_editPanel.createSequentialGroup()
+					.addComponent(btnEditInformation)
+					.addContainerGap(735, Short.MAX_VALUE))
+		);
+		gl_editPanel.setVerticalGroup(
+			gl_editPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_editPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnLogout)
+					.addGap(59)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblName))
-				.addGap(26)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(editpassword_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(password))
-				.addGap(31)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(repassword_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblRepassword))
-				.addPreferredGap(ComponentPlacement.RELATED, 241, Short.MAX_VALUE).addComponent(btnEditInformation)));
+					.addGap(26)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(password)
+						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+					.addGap(31)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblRepassword)
+						.addComponent(passwordField_re, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 260, Short.MAX_VALUE)
+					.addComponent(btnEditInformation))
+		);
 		editPanel.setLayout(gl_editPanel);
 
 		JPanel accessrightPanel = new JPanel();
@@ -775,31 +792,27 @@ public class NUserPage {
 
 		});
 		GroupLayout gl_resourceutilpanel = new GroupLayout(resourceutilpanel);
-		gl_resourceutilpanel
-				.setHorizontalGroup(
-						gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_resourceutilpanel.createSequentialGroup().addGap(40)
-										.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
-												Short.MAX_VALUE)
-										.addGap(40))
-								.addGroup(
-										gl_resourceutilpanel.createSequentialGroup().addComponent(utilbtnBacktoProject)
-												.addPreferredGap(ComponentPlacement.RELATED, 680, Short.MAX_VALUE)
-												.addComponent(btnAddResourceUtilization)));
-		gl_resourceutilpanel
-				.setVerticalGroup(
-						gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(
-										gl_resourceutilpanel.createSequentialGroup().addGap(40)
-												.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 428,
-														Short.MAX_VALUE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
-														.addComponent(utilbtnBacktoProject)
-														.addGroup(gl_resourceutilpanel.createSequentialGroup()
-																.addComponent(
-																		btnAddResourceUtilization)
-																.addContainerGap()))));
+		gl_resourceutilpanel.setHorizontalGroup(
+			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addComponent(utilbtnBacktoProject)
+					.addPreferredGap(ComponentPlacement.RELATED, 649, Short.MAX_VALUE)
+					.addComponent(btnAddResourceUtilization))
+		);
+		gl_resourceutilpanel.setVerticalGroup(
+			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(utilbtnBacktoProject)
+						.addComponent(btnAddResourceUtilization)))
+		);
 
 		resourceutil_table = new JTable();
 		resourceutil_scrollPane.setViewportView(resourceutil_table);
