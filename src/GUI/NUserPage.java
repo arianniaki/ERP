@@ -2589,7 +2589,7 @@ public class NUserPage {
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " project");
 						}
-						int employeeID = Integer.parseInt((inputs.get(1).substring(0, 4).replace("id:", "")));
+						int employeeID = Integer.parseInt((inputs.get(3).substring(0, 4).replace("id:", "")));
 						EmployeeCatalogue empcat = new EmployeeCatalogue();
 						Employee proj_manager = empcat.getEmployee(employeeID);
 						System.out.println(proj_manager.getName());
