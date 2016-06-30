@@ -298,21 +298,20 @@ public class NUserPage {
 						System.out.println("-----");
 						int rowIndex = accessright_tabledata.getJdataTable().getSelectedRow();
 						int colIndex = accessright_tabledata.getJdataTable().getSelectedColumn();
-						if(rowIndex==-1)
-						{
-						NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a User!");
-						}
-					else{
+						if (rowIndex == -1) {
+							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+									"Please Select a User!");
+						} else {
 
-						String Table_click = (accessright_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-								.toString());
-						System.out.println(Table_click);
-						EmployeeCatalogue empcat = new EmployeeCatalogue();
-						Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
-						emp_access.setAccessRight(selected_accessright_forassignment);
-						System.out.println("ACCESS RIGHT O DADAM");
-						accessright_tabledata.update(empcat.readAllEmployees());
-					}
+							String Table_click = (accessright_tabledata.getJdataTable().getModel()
+									.getValueAt(rowIndex, 0).toString());
+							System.out.println(Table_click);
+							EmployeeCatalogue empcat = new EmployeeCatalogue();
+							Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
+							emp_access.setAccessRight(selected_accessright_forassignment);
+							System.out.println("ACCESS RIGHT O DADAM");
+							accessright_tabledata.update(empcat.readAllEmployees());
+						}
 					}
 				});
 
@@ -403,12 +402,21 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
 
+				
 				Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
 				Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 
 				subsystem_addFields.add(subsystem_name);
 				subsystem_addFields.add(subsystem_desc);
+				subsystem_addFields.add(sections);
 
 				final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
 				final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
@@ -457,27 +465,22 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
-		gl_subsystemPanel.setHorizontalGroup(
-			gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup()
-					.addComponent(btnBacktoProject)
-					.addPreferredGap(ComponentPlacement.RELATED, 654, Short.MAX_VALUE)
-					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_subsystemPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-		);
-		gl_subsystemPanel.setVerticalGroup(
-			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnBacktoProject)
-						.addComponent(addsubsystemBtn)))
-		);
+		gl_subsystemPanel.setHorizontalGroup(gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup().addComponent(btnBacktoProject)
+						.addPreferredGap(ComponentPlacement.RELATED, 654, Short.MAX_VALUE)
+						.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
+						.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+						.addGap(40)));
+		gl_subsystemPanel
+				.setVerticalGroup(
+						gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
+										.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 433,
+												Short.MAX_VALUE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+												.addComponent(btnBacktoProject).addComponent(addsubsystemBtn))));
 
 		subsystem_table = new JTable(subsystem_tableModel);
 		subsystem_scrollPane.setViewportView(subsystem_table);
@@ -504,7 +507,7 @@ public class NUserPage {
 				tabbedPane.setSelectedComponent(projectPanel);
 			}
 		});
-		
+
 		JButton btnAddResourceUtilization = new JButton("Add Resource Utilization");
 		btnAddResourceUtilization.setIcon(new ImageIcon(
 				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
@@ -651,7 +654,7 @@ public class NUserPage {
 					}
 				});
 				submitaddresutilBtn.addActionListener(new ActionListener() {
-					
+
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
@@ -679,48 +682,51 @@ public class NUserPage {
 							sectionid = m1.group();
 						}
 
-
 						String fromdate = from_datePicker.getJFormattedTextField().getText();
 						String todate = to_datePicker.getJFormattedTextField().getText();
 
 						System.out.println("--------------");
-						System.out.println(rid + " " + sectionid  + " " + fromdate + " " + todate);
+						System.out.println(rid + " " + sectionid + " " + fromdate + " " + todate);
 
-//						resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")),
-//								Integer.parseInt(sectionid.replace("sectionid=", "")),
-//								Integer.parseInt(projid.replace("projid=", "")), fromdate, todate);
+						// resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=",
+						// "")),
+						// Integer.parseInt(sectionid.replace("sectionid=",
+						// "")),
+						// Integer.parseInt(projid.replace("projid=", "")),
+						// fromdate, todate);
 						// // tu resource ham bayad insert she
 						// allmodules.clear();
 					}
 				});
 			}
-			
-			
+
 		});
 		GroupLayout gl_resourceutilpanel = new GroupLayout(resourceutilpanel);
-		gl_resourceutilpanel.setHorizontalGroup(
-			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_resourceutilpanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-				.addGroup(gl_resourceutilpanel.createSequentialGroup()
-					.addComponent(utilbtnBacktoProject)
-					.addPreferredGap(ComponentPlacement.RELATED, 680, Short.MAX_VALUE)
-					.addComponent(btnAddResourceUtilization))
-		);
-		gl_resourceutilpanel.setVerticalGroup(
-			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_resourceutilpanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(utilbtnBacktoProject)
-						.addGroup(gl_resourceutilpanel.createSequentialGroup()
-							.addComponent(btnAddResourceUtilization)
-							.addContainerGap())))
-		);
+		gl_resourceutilpanel
+				.setHorizontalGroup(
+						gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_resourceutilpanel.createSequentialGroup().addGap(40)
+										.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
+												Short.MAX_VALUE)
+										.addGap(40))
+								.addGroup(
+										gl_resourceutilpanel.createSequentialGroup().addComponent(utilbtnBacktoProject)
+												.addPreferredGap(ComponentPlacement.RELATED, 680, Short.MAX_VALUE)
+												.addComponent(btnAddResourceUtilization)));
+		gl_resourceutilpanel
+				.setVerticalGroup(
+						gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(
+										gl_resourceutilpanel.createSequentialGroup().addGap(40)
+												.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 428,
+														Short.MAX_VALUE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
+														.addComponent(utilbtnBacktoProject)
+														.addGroup(gl_resourceutilpanel.createSequentialGroup()
+																.addComponent(
+																		btnAddResourceUtilization)
+																.addContainerGap()))));
 
 		resourceutil_table = new JTable();
 		resourceutil_scrollPane.setViewportView(resourceutil_table);
@@ -918,12 +924,22 @@ public class NUserPage {
 						// for (int i = 0; i < inputs.size(); i++) {
 						// System.out.println(inputs.get(i) + "adasa");
 						// }
-
-						String rid = "";
+						String empid = "";
+						String rid= "";
+						if(resource_type.getSelectedItem().toString().equals("Employee"))
+						{
+							Pattern p = Pattern.compile("empid=\\d+");
+							Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
+							if (m.find()) {
+								empid = m.group();
+							}
+						}
+						else{
 						Pattern p = Pattern.compile("rid=\\d+");
 						Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
 						if (m.find()) {
 							rid = m.group();
+						}
 						}
 
 						String sectionid = "";
@@ -944,7 +960,7 @@ public class NUserPage {
 						String todate = to_datePicker.getJFormattedTextField().getText();
 
 						System.out.println("--------------");
-						System.out.println(rid + " " + sectionid + " " + projid + " " + fromdate + " " + todate);
+						System.out.println(empid+ " " +rid + " " + sectionid + " " + projid + " " + fromdate + " " + todate);
 
 						resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")),
 								Integer.parseInt(sectionid.replace("sectionid=", "")),
@@ -985,8 +1001,8 @@ public class NUserPage {
 		requirement_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Field> requirement_editFields = new ArrayList<Field>();
-		      	ArrayList<String> options = new ArrayList<String>();
-		      	options.add("satisfied");
+				ArrayList<String> options = new ArrayList<String>();
+				options.add("satisfied");
 
 				Field satisfied = new Field("checkBox", "satisfied", options, 20, "items");
 				requirement_editFields.add(satisfied);
@@ -1006,7 +1022,8 @@ public class NUserPage {
 				final JDatePanelImpl satisfy_datePanel = new JDatePanelImpl(modelsatisfydate, p);
 				JLabel satisfylbl = new JLabel("Satisfy Date");
 
-				final JDatePickerImpl satisfy_datePicker = new JDatePickerImpl(satisfy_datePanel, new DateLabelFormatter());
+				final JDatePickerImpl satisfy_datePicker = new JDatePickerImpl(satisfy_datePanel,
+						new DateLabelFormatter());
 				JPanel satisfy_panel = new JPanel(new FlowLayout());
 				satisfy_panel.add(satisfylbl);
 
@@ -1032,27 +1049,27 @@ public class NUserPage {
 				Edit_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
 				// end date
 
-				
 				JButton submiteditrequeirementBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submiteditrequeirementBtn);
 				Edit_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Edit_RequirementPage.pack();
 				Edit_RequirementPage.setVisible(true);
-//				CheckBoxJPanel checkBoxpane = (CheckBoxJPanel) editrequirement_Form.getJPanel().getComponent(1);
-//				 final ArrayList<String>vales = checkBoxpane.getCheckedValues();
-
+				// CheckBoxJPanel checkBoxpane = (CheckBoxJPanel)
+				// editrequirement_Form.getJPanel().getComponent(1);
+				// final ArrayList<String>vales =
+				// checkBoxpane.getCheckedValues();
 
 				submiteditrequeirementBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-//						System.out.println(vales);
+						// System.out.println(vales);
 						String satisfydate = satisfy_datePicker.getJFormattedTextField().getText();
 
 						String fromdate = from_datePicker.getJFormattedTextField().getText();
 						String todate = to_datePicker.getJFormattedTextField().getText();
-System.out.println(satisfydate +" "+fromdate+" "+todate);
+						System.out.println(satisfydate + " " + fromdate + " " + todate);
 					}
 				});
 
@@ -1272,23 +1289,22 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 			public void actionPerformed(ActionEvent e) {
 				int rowIndex = information_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = information_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Resource!");
-				}
-			else{
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
 
-				String Table_click = (information_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-						.toString()); // the
-				System.out.println(Table_click + " this was clicked");
-				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
-				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-						"Are you sure you want to Delete this item?");
-				if (myDialog.getAnswer()) {
-					infocat.deleteResource(Integer.parseInt(Table_click));
-					information_tabledata.update(infocat.readAllResources());
+					String Table_click = (information_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						infocat.deleteResource(Integer.parseInt(Table_click));
+						information_tabledata.update(infocat.readAllResources());
+					}
 				}
-			}
 			}
 		});
 
@@ -1499,23 +1515,22 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 
 				int rowIndex = financial_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = financial_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Resource!");
-				}
-			else{
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
 
-				String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-						.toString()); // the
-				System.out.println(Table_click + " this was clicked");
-				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
-				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-						"Are you sure you want to Delete this item?");
-				if (myDialog.getAnswer()) {
-					financat.deleteResource(Integer.parseInt(Table_click));
-					financial_tabledata.update(financat.readAllResources());
+					String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						financat.deleteResource(Integer.parseInt(Table_click));
+						financial_tabledata.update(financat.readAllResources());
+					}
 				}
-			}
 			}
 		});
 
@@ -1808,22 +1823,22 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 
 				int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Module!");
-				}
-			else{
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Module!");
+				} else {
 
-				String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
-				System.out.println(Table_click + " this was clicked");
-				ModuleCatalogue modcat = new ModuleCatalogue();
-				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-						"Are you sure you want to Delete this item?");
-				if (myDialog.getAnswer()) {
-					modcat.deleteResource(Integer.parseInt(Table_click));
-					module_tabledata.update(modcat.readAllResources());
+					String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					ModuleCatalogue modcat = new ModuleCatalogue();
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						modcat.deleteResource(Integer.parseInt(Table_click));
+						module_tabledata.update(modcat.readAllResources());
+					}
 				}
-			}
 			}
 		});
 		final JPanel maintaining_panel = new JPanel();
@@ -1837,21 +1852,20 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				System.out.println("-----");
 				int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-					{
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a module!");
-					}
-				else{
-				String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
-					
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a module!");
+				} else {
+					String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // return
 
-				System.out.println(Table_click);
-				System.out.println("-----");
-				System.out.println("Change JPanel");
-				int selected_index = resourcesTab.getSelectedIndex();
-				resourcesTab.remove(selected_index);
-				resourcesTab.insertTab("Maintaining", null, maintaining_panel, null, selected_index);
-				resourcesTab.setSelectedComponent(maintaining_panel);
+					System.out.println(Table_click);
+					System.out.println("-----");
+					System.out.println("Change JPanel");
+					int selected_index = resourcesTab.getSelectedIndex();
+					resourcesTab.remove(selected_index);
+					resourcesTab.insertTab("Maintaining", null, maintaining_panel, null, selected_index);
+					resourcesTab.setSelectedComponent(maintaining_panel);
 				}
 			}
 		});
@@ -1984,7 +1998,7 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				for (int i = 0; i < financial_readall.size(); i++) {
 					financials.add(financial_readall.get(i).toString());
 				}
-				
+
 				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 				for (int i = 0; i < physical_readall.size(); i++) {
@@ -1997,7 +2011,6 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 					information.add(information_readall.get(i).toString());
 				}
 
-				
 				ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
 				Field change_type = new Field("text", "change type", "", 20, "change type");
 				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
@@ -2016,12 +2029,12 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				maintain_Panel.makeForm();
 
 				JFrame Add_MaintainPage = new JFrame("Add Maintain Module Form");
-				
 
 				JScrollPane scroll = new JScrollPane(maintain_Form.getJPanel());
 				Add_MaintainPage.add(scroll);
-				
-//				Add_MaintainPage.getContentPane().add(scroll, BorderLayout.NORTH);
+
+				// Add_MaintainPage.getContentPane().add(scroll,
+				// BorderLayout.NORTH);
 
 				JButton submitmaintainmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -2029,11 +2042,10 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				Add_MaintainPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Add_MaintainPage.pack();
 				Add_MaintainPage.setVisible(true);
-				
-				CheckBoxJPanel checkBoxpane = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
-				 final ArrayList<String>vales = checkBoxpane.getCheckedValues();
 
-				 
+				CheckBoxJPanel checkBoxpane = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
+				final ArrayList<String> vales = checkBoxpane.getCheckedValues();
+
 				submitmaintainmoduleBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -2072,46 +2084,43 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				new ImageIcon("images/refresh.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
 		GroupLayout gl_maintaining_panel = new GroupLayout(maintaining_panel);
-		gl_maintaining_panel.setHorizontalGroup(
-			gl_maintaining_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_maintaining_panel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(Alignment.LEADING, gl_maintaining_panel.createSequentialGroup()
-					.addComponent(maintaining_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnBacktoModule)
-					.addPreferredGap(ComponentPlacement.RELATED, 447, Short.MAX_VALUE)
-					.addComponent(btnAddMaintaining, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_maintaining_panel.createSequentialGroup()
-					.addComponent(search_maintainingbtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 382, Short.MAX_VALUE)
-					.addComponent(btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(132))
-		);
-		gl_maintaining_panel.setVerticalGroup(
-			gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_maintaining_panel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnSearch)
-						.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(search_maintainingbtnRefresh))
-					.addGap(30)
-					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnAddMaintaining)
-						.addComponent(maintaining_btnEdit)
-						.addComponent(maintaining_btnDelete)
-						.addComponent(btnBacktoModule))
-					.addContainerGap())
-		);
+		gl_maintaining_panel
+				.setHorizontalGroup(
+						gl_maintaining_panel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_maintaining_panel.createSequentialGroup().addGap(30)
+										.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
+												Short.MAX_VALUE)
+										.addGap(30))
+								.addGroup(Alignment.LEADING, gl_maintaining_panel.createSequentialGroup()
+										.addComponent(maintaining_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnBacktoModule)
+										.addPreferredGap(ComponentPlacement.RELATED, 447, Short.MAX_VALUE)
+										.addComponent(btnAddMaintaining, GroupLayout.PREFERRED_SIZE, 147,
+												GroupLayout.PREFERRED_SIZE))
+								.addGroup(
+										gl_maintaining_panel.createSequentialGroup()
+												.addComponent(search_maintainingbtnRefresh)
+												.addPreferredGap(ComponentPlacement.RELATED, 382, Short.MAX_VALUE)
+												.addComponent(btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(132)));
+		gl_maintaining_panel.setVerticalGroup(gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_maintaining_panel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE).addComponent(btnSearch)
+								.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(search_maintainingbtnRefresh))
+						.addGap(30).addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnAddMaintaining).addComponent(maintaining_btnEdit)
+								.addComponent(maintaining_btnDelete).addComponent(btnBacktoModule))
+						.addContainerGap()));
 
 		maintaining_tabledata = new TableData(new MaintainingModuleCatalogue());
 		maintaining_scrollPane.setViewportView(maintaining_tabledata.getJdataTable());
@@ -2130,23 +2139,23 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 
 				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select an Employee!");
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select an Employee!");
+				} else {
+
+					String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					EmployeeCatalogue empcat = new EmployeeCatalogue();
+					// empcat.deleteEmployee(Integer.parseInt(Table_click));
+
+					empcat.readAllEmployees();
+					allemployees.clear();
+					allemployees = empcat.readAllEmployees();
+					human_tabledata.update(empcat.readAllEmployees());
 				}
-			else{
-
-				String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
-				System.out.println(Table_click + " this was clicked");
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
-				// empcat.deleteEmployee(Integer.parseInt(Table_click));
-
-				empcat.readAllEmployees();
-				allemployees.clear();
-				allemployees = empcat.readAllEmployees();
-				human_tabledata.update(empcat.readAllEmployees());
 			}
-				}
 		});
 
 		JButton human_btnDelete = new JButton("Delete");
@@ -2159,23 +2168,23 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				System.out.println("-----");
 				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select an Employee!");
-				}
-			else{
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select an Employee!");
+				} else {
 
-				String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
-				System.out.println(Table_click);
-				EmployeeCatalogue empcat_delete = new EmployeeCatalogue();
-				empcat_delete.deleteEmployee(Integer.parseInt(Table_click));
-				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-						"Are you sure you want to Delete this item?");
-				if (myDialog.getAnswer()) {
-					allemployees = empcat_delete.readAllEmployees();
-					human_tabledata.update(empcat_delete.readAllEmployees());
+					String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // return
+					System.out.println(Table_click);
+					EmployeeCatalogue empcat_delete = new EmployeeCatalogue();
+					empcat_delete.deleteEmployee(Integer.parseInt(Table_click));
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						allemployees = empcat_delete.readAllEmployees();
+						human_tabledata.update(empcat_delete.readAllEmployees());
+					}
 				}
-			}
 			}
 		});
 
@@ -2314,77 +2323,77 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				//
 				int rowIndex = physical_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = physical_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Resource!");
-				}
-			else{
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
 
-				String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
-				System.out.println(Table_click + " this was clicked");
+					String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
 
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
-				physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
-				physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
-
-				physical_moduleFields.add(sections);
-				final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
-				final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
-				physical_modulePanel.makeForm();
-				JFrame Edit_PhysicalModulePage = new JFrame("Edit Physical Module Form");
-				Edit_PhysicalModulePage.getContentPane().add(physical_moduleForm.getJPanel(), BorderLayout.NORTH);
-
-				JButton submiteditphysicalmoduleBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submiteditphysicalmoduleBtn);
-				Edit_PhysicalModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Edit_PhysicalModulePage.pack();
-				Edit_PhysicalModulePage.setVisible(true);
-
-				submiteditphysicalmoduleBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
-						System.out.println("all : ");
-						physcat.readAllResources();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < physical_moduleForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) physical_moduleForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " physical");
-						}
-						// physcat.addResource((inputs.get(0)));
-						// // tu resource ham bayad insert she
-						// allphysicals.clear();
-						// allphysicals = physcat.readAllResources();
-						// System.out.println(phyiscal_tableModel.getRowCount()
-						// + " ---");
-						// int rowcount = phyiscal_tableModel.getRowCount();
-						// for (int j = rowcount - 1; j >= 0; j--) {
-						// phyiscal_tableModel.removeRow(j);
-						// }
-						// System.out.println(phyiscal_tableModel.getRowCount()
-						// + " ---");
-						// for (int i = 0; i < allphysicals.size(); i++) {
-						// Object[] objs = { allphysicals.get(i).get("rid"),
-						// allphysicals.get(i).get("physname") };
-						// phyiscal_tableModel.addRow(objs);
-						// }
+					ArrayList<String> section_arraylist = new ArrayList<String>();
+					SectionCatalogue seccat = new SectionCatalogue();
+					ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+					for (int i = 0; i < section_hashmap.size(); i++) {
+						section_arraylist.add(section_hashmap.get(i).toString());
 					}
-				});
-			}
+
+					Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+					ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
+					physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
+					physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+
+					physical_moduleFields.add(sections);
+					final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
+					final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
+					physical_modulePanel.makeForm();
+					JFrame Edit_PhysicalModulePage = new JFrame("Edit Physical Module Form");
+					Edit_PhysicalModulePage.getContentPane().add(physical_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+					JButton submiteditphysicalmoduleBtn = new JButton("Submit");
+					JPanel buttonPanel = new JPanel();
+					buttonPanel.add(submiteditphysicalmoduleBtn);
+					Edit_PhysicalModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+					Edit_PhysicalModulePage.pack();
+					Edit_PhysicalModulePage.setVisible(true);
+
+					submiteditphysicalmoduleBtn.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+							PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+							System.out.println("all : ");
+							physcat.readAllResources();
+							ArrayList<String> inputs = new ArrayList<String>();
+							for (int i = 0; i < physical_moduleForm.getJPanel().getComponentCount(); i++) {
+								FieldPanel fpanel = (FieldPanel) physical_moduleForm.getJPanel().getComponent(i);
+								inputs.add(fpanel.getValues().get(0));
+							}
+							for (int i = 0; i < inputs.size(); i++) {
+								System.out.println(inputs.get(i) + " physical");
+							}
+							// physcat.addResource((inputs.get(0)));
+							// // tu resource ham bayad insert she
+							// allphysicals.clear();
+							// allphysicals = physcat.readAllResources();
+							// System.out.println(phyiscal_tableModel.getRowCount()
+							// + " ---");
+							// int rowcount = phyiscal_tableModel.getRowCount();
+							// for (int j = rowcount - 1; j >= 0; j--) {
+							// phyiscal_tableModel.removeRow(j);
+							// }
+							// System.out.println(phyiscal_tableModel.getRowCount()
+							// + " ---");
+							// for (int i = 0; i < allphysicals.size(); i++) {
+							// Object[] objs = { allphysicals.get(i).get("rid"),
+							// allphysicals.get(i).get("physname") };
+							// phyiscal_tableModel.addRow(objs);
+							// }
+						}
+					});
+				}
 			}
 		});
 
@@ -2397,22 +2406,22 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				int rowIndex = physical_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = physical_tabledata.getJdataTable().getSelectedColumn();
 
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Resource!");
-				}
-			else{
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
 
-				String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // the
-				System.out.println(Table_click + " this was clicked");
-				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
-				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-						"Are you sure you want to Delete this item?");
-				if (myDialog.getAnswer()) {
-					physcat.deleteResource(Integer.parseInt(Table_click));
-					physical_tabledata.update(physcat.readAllResources());
+					String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						physcat.deleteResource(Integer.parseInt(Table_click));
+						physical_tabledata.update(physcat.readAllResources());
+					}
 				}
-			}
 			}
 		});
 
@@ -2616,22 +2625,22 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				System.out.println("-----");
 				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Project!");
-				}
-			else{
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Project!");
+				} else {
 
-				String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
-				System.out.println(Table_click);
-				selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
-				System.out.println("-----");
-				System.out.println("Change JPanel");
-				int selected_index = tabbedPane.getSelectedIndex();
-				tabbedPane.remove(selected_index);
-				tabbedPane.insertTab("Subsystem", null, subsystemPanel, null, selected_index);
-				tabbedPane.setSelectedComponent(subsystemPanel);
-			}
+					String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // return
+					System.out.println(Table_click);
+					selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
+					System.out.println("-----");
+					System.out.println("Change JPanel");
+					int selected_index = tabbedPane.getSelectedIndex();
+					tabbedPane.remove(selected_index);
+					tabbedPane.insertTab("Subsystem", null, subsystemPanel, null, selected_index);
+					tabbedPane.setSelectedComponent(subsystemPanel);
+				}
 			}
 		});
 
@@ -2650,22 +2659,22 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				System.out.println("-----");
 				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a module!");
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a module!");
+				} else {
+
+					String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // return
+
+					selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
+					System.out.println("-----");
+					System.out.println("Change JPanel");
+					int selected_index = tabbedPane.getSelectedIndex();
+					tabbedPane.remove(selected_index);
+					tabbedPane.insertTab("Resource Utilization", null, resourceutilpanel, null, selected_index);
+					tabbedPane.setSelectedComponent(resourceutilpanel);
 				}
-			else{
-
-				String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
-
-				selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
-				System.out.println("-----");
-				System.out.println("Change JPanel");
-				int selected_index = tabbedPane.getSelectedIndex();
-				tabbedPane.remove(selected_index);
-				tabbedPane.insertTab("Resource Utilization", null, resourceutilpanel, null, selected_index);
-				tabbedPane.setSelectedComponent(resourceutilpanel);
-			}
 			}
 		});
 
@@ -2688,21 +2697,21 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				System.out.println("-----");
 				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a Project!");
-				}
-			else{
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Project!");
+				} else {
 
-				String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
-				ProjectCatalogue projcat = new ProjectCatalogue();
-				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-						"Are you sure you want to Delete this item?");
-				if (myDialog.getAnswer()) {
-					projcat.deleteProject(Integer.parseInt(Table_click));
-					project_tabledata.update(projcat.getProjects());
+					String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // return
+					ProjectCatalogue projcat = new ProjectCatalogue();
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						projcat.deleteProject(Integer.parseInt(Table_click));
+						project_tabledata.update(projcat.getProjects());
+					}
 				}
-			}
 
 			}
 		});
@@ -3077,19 +3086,18 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				System.out.println("-----");
 				int rowIndex = registered_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = registered_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a User!");
-				}
-			else{
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a User!");
+				} else {
 
-				String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-						.toString());
-				System.out.println(Table_click);
-				EmployeeCatalogue regempcat = new EmployeeCatalogue();
-				regempcat.makeDecision(Integer.parseInt(Table_click), true);
-				registered_tabledata.update(regempcat.getRegistrations());
-			}
+					String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString());
+					System.out.println(Table_click);
+					EmployeeCatalogue regempcat = new EmployeeCatalogue();
+					regempcat.makeDecision(Integer.parseInt(Table_click), true);
+					registered_tabledata.update(regempcat.getRegistrations());
+				}
 			}
 		});
 
@@ -3103,23 +3111,22 @@ System.out.println(satisfydate +" "+fromdate+" "+todate);
 				System.out.println("-----");
 				int rowIndex = registered_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = registered_tabledata.getJdataTable().getSelectedColumn();
-				if(rowIndex==-1)
-				{
-				NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "Please Select a User!");
-				}
-			else{
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a User!");
+				} else {
 
-				String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-						.toString());
-				System.out.println(Table_click);
-				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-						"Are you sure you want to Deny this user?");
-				if (myDialog.getAnswer()) {
-					EmployeeCatalogue regempcat = new EmployeeCatalogue();
-					regempcat.makeDecision(Integer.parseInt(Table_click), false);
-					registered_tabledata.update(regempcat.getRegistrations());
+					String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString());
+					System.out.println(Table_click);
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Deny this user?");
+					if (myDialog.getAnswer()) {
+						EmployeeCatalogue regempcat = new EmployeeCatalogue();
+						regempcat.makeDecision(Integer.parseInt(Table_click), false);
+						registered_tabledata.update(regempcat.getRegistrations());
+					}
 				}
-			}
 			}
 		});
 		GroupLayout gl_RegisteredUserspanel = new GroupLayout(RegisteredUserspanel);
