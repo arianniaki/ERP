@@ -111,8 +111,8 @@ public class TableData {
 	
 	public TableData(SubSystemCatalogue subsyscat) {
 		data = subsyscat.getSubSystems();
-		columns = new String[] { "Id", "Name"};
-		dbnames = new String[] { "pid", "sname"};
+		columns = new String[] { "Subsystem Id","Project Id", "Name"};
+		dbnames = new String[] { "sid","pid", "sname"};
 		this.buildFilledJTable();
 
 	}

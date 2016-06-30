@@ -439,23 +439,121 @@ public class NUserPage {
 
 			}
 		});
+		
+		JButton subsystem_btnEdit = new JButton("Edit");
+		subsystem_btnEdit.setIcon(new ImageIcon(
+				new ImageIcon("images/edit.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		subsystem_btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+
+				
+				Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
+				Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+				subsystem_addFields.add(subsystem_name);
+				subsystem_addFields.add(subsystem_desc);
+				subsystem_addFields.add(sections);
+
+				final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
+				final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
+				subsystemAdd_Panel.makeForm();
+
+				JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
+				Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitaddsubsystemBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddsubsystemBtn);
+				Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Add_SubsystemPage.pack();
+				Add_SubsystemPage.setVisible(true);
+				submitaddsubsystemBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + " subsystem");
+						}
+						
+						SubSystemCatalogue subsyscat = new SubSystemCatalogue();
+//						subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem);
+						subsystem_tabledata.update(subsyscat.getSubSystems());
+						System.out.println("add shoood ");
+					}
+				});
+
+
+				
+			}
+		});
+		
+		JButton subsystem_btnDelete = new JButton("Delete");
+		subsystem_btnDelete.setIcon(new ImageIcon(
+				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		subsystem_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int rowIndex = subsystem_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = subsystem_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
+
+					String Table_click = (subsystem_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					SubSystemCatalogue subsyscat = new SubSystemCatalogue();
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						subsyscat.deleteSubSystem(Integer.parseInt(Table_click));
+						subsystem_tabledata.update(subsyscat.getSubSystems());
+					}
+				}
+			}
+		});
 		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
-		gl_subsystemPanel.setHorizontalGroup(gl_subsystemPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addComponent(btnBacktoProject)
-						.addPreferredGap(ComponentPlacement.RELATED, 654, Short.MAX_VALUE)
-						.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
-						.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-						.addGap(40)));
-		gl_subsystemPanel
-				.setVerticalGroup(
-						gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
-										.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 433,
-												Short.MAX_VALUE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(btnBacktoProject).addComponent(addsubsystemBtn))));
+		gl_subsystemPanel.setHorizontalGroup(
+			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addComponent(subsystem_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(subsystem_btnDelete)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnBacktoProject)
+					.addPreferredGap(ComponentPlacement.RELATED, 551, Short.MAX_VALUE)
+					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+		);
+		gl_subsystemPanel.setVerticalGroup(
+			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addsubsystemBtn)
+						.addComponent(subsystem_btnEdit)
+						.addComponent(subsystem_btnDelete)
+						.addComponent(btnBacktoProject)))
+		);
 
 		subsystem_tabledata = new TableData(new SubSystemCatalogue());
 		subsystem_scrollPane.setViewportView(subsystem_tabledata.getJdataTable());
@@ -1992,7 +2090,7 @@ public class NUserPage {
 				JFrame Add_MaintainPage = new JFrame("Add Maintain Module Form");
 
 				JScrollPane scroll = new JScrollPane(maintain_Form.getJPanel());
-				Add_MaintainPage.add(scroll);
+				Add_MaintainPage.getContentPane().add(scroll);
 
 				// Add_MaintainPage.getContentPane().add(scroll,
 				// BorderLayout.NORTH);
