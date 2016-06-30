@@ -102,8 +102,8 @@ public class TableData {
 
 	public TableData(ProjectCatalogue projcat) {
 		data = projcat.getProjects();
-		columns = new String[] { "Id", "Name", "Project Manager" };
-		dbnames = new String[] { "projid", "projname", "projectmanager" };
+		columns = new String[] { "Id", "Name", "Project Manager","managername" };
+		dbnames = new String[] { "projid", "projname", "projectmanager","managername" };
 		this.buildFilledJTable();
 
 	}
