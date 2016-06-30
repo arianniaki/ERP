@@ -1948,45 +1948,59 @@ public class NUserPage {
 
 		btnAddMaintaining.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				final ArrayList<String> resource_types = new ArrayList<String>();
 				final ArrayList<String> employees = new ArrayList<String>();
+				final ArrayList<String> financials = new ArrayList<String>();
+				final ArrayList<String> physicals = new ArrayList<String>();
+				final ArrayList<String> information = new ArrayList<String>();
 
 				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 				for (int i = 0; i < employe_readall.size(); i++) {
 					employees.add(employe_readall.get(i).toString());
 				}
+				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+				for (int i = 0; i < financial_readall.size(); i++) {
+					financials.add(financial_readall.get(i).toString());
+				}
+				
+				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+				for (int i = 0; i < physical_readall.size(); i++) {
+					physicals.add(physical_readall.get(i).toString());
+				}
+
+				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+				for (int i = 0; i < information_readall.size(); i++) {
+					information.add(information_readall.get(i).toString());
+				}
 
 				
-				ArrayList<String> options = new ArrayList<String>();
-		      	options.add("iphone");
-		      	options.add("macbook");
-		      	options.add("imac");
-				resource_types.add("Information");
-				resource_types.add("Financial");
-				resource_types.add("Physical");
-				resource_types.add("Employee");
-				resource_types.add("Module");
-				ArrayList<Field> maintaine_moduleFields = new ArrayList<Field>();
+				ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
 				Field change_type = new Field("text", "change type", "", 20, "change type");
-				Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "res type");
-				Field maintainers = new Field("comboBox", "resources", employees, 20, "res");
-				Field resources_check = new Field("checkBox", "items", options, 20, "items");
+				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+				Field information_check = new Field("checkBox", "information", information, 20, "information");
 
-				
-				
-				maintaine_moduleFields.add(change_type);
-				maintaine_moduleFields.add(req_res_type);
-				maintaine_moduleFields.add(maintainers);
-				maintaine_moduleFields.add(resources_check);
+				maintain_moduleFields.add(change_type);
+				maintain_moduleFields.add(financial_check);
+				maintain_moduleFields.add(physical_check);
+				maintain_moduleFields.add(information_check);
+				maintain_moduleFields.add(maintainers);
 
-				final Form maintain_Form = new Form(maintaine_moduleFields, "Maintain Module Form");
+				final Form maintain_Form = new Form(maintain_moduleFields, "Maintain Module Form");
 				final PanelBuilder maintain_Panel = new PanelBuilder(maintain_Form);
 				maintain_Panel.makeForm();
 
 				JFrame Add_MaintainPage = new JFrame("Add Maintain Module Form");
-				Add_MaintainPage.getContentPane().add(maintain_Form.getJPanel(), BorderLayout.NORTH);
+				
 
+				JScrollPane scroll = new JScrollPane(maintain_Form.getJPanel());
+				Add_MaintainPage.add(scroll);
+				
+//				Add_MaintainPage.getContentPane().add(scroll, BorderLayout.NORTH);
 
 				JButton submitmaintainmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -1997,8 +2011,6 @@ public class NUserPage {
 				
 				CheckBoxJPanel checkBoxpane = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
 				 final ArrayList<String>vales = checkBoxpane.getCheckedValues();
-					ComboBoxJPanel employeePane = (ComboBoxJPanel) maintain_Form.getJPanel().getComponent(2);
-					final JComboBox employees_comboBox = employeePane.getComboBox();
 
 				 
 				submitmaintainmoduleBtn.addActionListener(new ActionListener() {
@@ -2006,8 +2018,7 @@ public class NUserPage {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						System.out.println(vales);
-						
-						System.out.println(employees_comboBox.getSelectedItem().toString());
+
 					}
 				});
 			}
