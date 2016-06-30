@@ -117,7 +117,8 @@ public class NUserPage {
 	private TableData allresource_tabledata;
 	private TableData maintaining_tabledata;
 	private TableData resreq_tabledata;
-
+	private TableData cycle_tabledata;
+	private TableData resavail_tabledata;
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
@@ -128,9 +129,9 @@ public class NUserPage {
 	private JTextField search_humanname;
 	private JTextField search_physicalname;
 	private JTextField search_projectname;
-	private JTable resavail_table;
+//	private JTable resavail_table;
 //	private JTable resreq_table;
-	private JTable cycle_table;
+//	private JTable cycle_table;
 	private JTable resourceutil_table;
 	private JTextField repassword_textField;
 	private JTextField search_maintainingname;
@@ -2879,8 +2880,8 @@ public class NUserPage {
 								.addComponent(cycle_scrollPane, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
 								.addGap(20)));
 
-		cycle_table = new JTable();
-		cycle_scrollPane.setViewportView(cycle_table);
+		cycle_tabledata = new TableData(new ArrayList<HashMap<String, String>>(),"cycle report");
+		cycle_scrollPane.setViewportView(cycle_tabledata.getJdataTable());
 		cyclePanel.setLayout(gl_cyclePanel);
 
 		JPanel resourcereqPanel = new JPanel();
@@ -2965,7 +2966,7 @@ public class NUserPage {
 				.addGroup(gl_resourcereqPanel.createSequentialGroup().addComponent(resreq_btnGetReport).addGap(20)
 						.addComponent(resreq_scrollPane, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE).addGap(20)));
 
-		resreq_tabledata = new TableData(new ArrayList<HashMap<String, String>>(),"report");
+		resreq_tabledata = new TableData(new ArrayList<HashMap<String, String>>(),"req report");
 		resreq_scrollPane.setViewportView(resreq_tabledata.getJdataTable());
 		resourcereqPanel.setLayout(gl_resourcereqPanel);
 
@@ -3014,9 +3015,6 @@ public class NUserPage {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						System.out.println(resourceRepCombo.getSelectedItem().toString() + " ine res type");
-						// PhysicalResourceCatalogue physResCat = new
-						// PhysicalResourceCatalogue();
-						// physResCat.getReport().printRep();
 						// FinancialResourceCatalogue finanResCat= new
 						// FinancialResourceCatalogue();
 						// finanResCat.getReport().printRep();
@@ -3024,6 +3022,12 @@ public class NUserPage {
 						if (resourceRepCombo.getSelectedItem().toString().equals("Financial")) {
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Physical")) {
+							
+//							PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+//							System.out.println("JHERE");
+//							System.out.println(physResCat.getReport().getResults());
+//							resavail_tabledata.update(physResCat.getReport().getResults());
+							
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Information")) {
 						}
@@ -3050,8 +3054,8 @@ public class NUserPage {
 				.addGroup(gl_resourceavailPanel.createSequentialGroup().addComponent(resavail_btnGetReport).addGap(20)
 						.addComponent(resavail_scrollpane, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE).addGap(20)));
 
-		resavail_table = new JTable();
-		resavail_scrollpane.setViewportView(resavail_table);
+		resavail_tabledata = new TableData(new ArrayList<HashMap<String, String>>(),"res avail");
+		resavail_scrollpane.setViewportView(resavail_tabledata.getJdataTable());
 		resourceavailPanel.setLayout(gl_resourceavailPanel);
 		// }
 

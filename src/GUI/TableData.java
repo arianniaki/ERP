@@ -130,8 +130,11 @@ public class TableData {
 	
 	public TableData(ArrayList<HashMap<String, String>> report, String type) {
 		data= report;
-		columns = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
-		dbnames = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
+		if(type=="req report")
+		{
+			columns = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
+			dbnames = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
+		}
 		this.buildFilledJTable();
 
 	}
