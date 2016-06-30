@@ -23,6 +23,8 @@ public class ProjectCatalogue {
 		ArrayList<HashMap<String, String>> result = table.readAll();
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
+			EmployeeCatalogue empcat = new EmployeeCatalogue();
+			result.get(i).put("managername", empcat.getEmployee(Integer.parseInt(result.get(i).get("projectmanager"))).getName());
 		}
 		return result;
 	}

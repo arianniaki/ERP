@@ -27,14 +27,14 @@ public class main {
 		      public void actionPerformed(ActionEvent e) {
 		        System.out.println(form.getText(0) + " " + form.getText(1));
 		        Employee emp = new Employee();
-				if(!(emp.login(form.getText(0),form.getText(1)))){
-					System.out.println("huraaa");
-					form.failed_label.setVisible(true);
-
-
-				}else{
-					System.out.println("shit");
-				}
+//				if(!(emp.login(form.getText(0),form.getText(1)))){
+//					System.out.println("huraaa");
+//					form.failed_label.setVisible(true);
+//
+//
+//				}else{
+//					System.out.println("shit");
+//				}
 				if(emp.login(form.getText(0),form.getText(1))){
 					System.out.println(emp.getName());
 					System.out.println(emp.loggedin);

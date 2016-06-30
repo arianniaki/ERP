@@ -23,6 +23,9 @@ public class PanelBuilder {
 			else if(field.getType().equals("checkBox")){
 				form.addCheckField(field);
 			}
+			else if(field.getType().equals("singlecheckbox")){
+				form.addSingleCheckField(field);
+			}
 		}
 	}
 

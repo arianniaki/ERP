@@ -8,6 +8,10 @@ import javax.swing.table.DefaultTableModel;
 
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
+import ProjectEmployee.SubSystem.SubSystemCatalogue;
+import RequirementUtilization.ProjectResourceUtilization;
+import RequirementUtilization.ProjectResourceUtilizationCatalogue;
+import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
@@ -101,11 +105,34 @@ public class TableData {
 
 	public TableData(ProjectCatalogue projcat) {
 		data = projcat.getProjects();
-		columns = new String[] { "Id", "Name", "Project Manager" };
-		dbnames = new String[] { "projid", "projname", "projectmanager" };
+		columns = new String[] { "Id", "Name", "Project Manager","managername" };
+		dbnames = new String[] { "projid", "projname", "projectmanager","managername" };
 		this.buildFilledJTable();
 
 	}
+	
+	public TableData(SubSystemCatalogue subsyscat) {
+		data = subsyscat.getSubSystems();
+		columns = new String[] { "Subsystem Id","Project Id", "Name"};
+		dbnames = new String[] { "sid","pid", "sname"};
+		this.buildFilledJTable();
+
+	}
+	public TableData(ProjectResourceUtilizationCatalogue presutilcat) {
+		
+		data= new ArrayList<HashMap<String, String>>();
+		columns = new String[] { "presutilid","rid", "sid", "pid","fromdate","todate" };
+		dbnames = new String[] { "presutilid","rid", "sid", "pid","fromdate","todate"};
+		ArrayList<ProjectResourceUtilization> allpresutil;
+		allpresutil = presutilcat.getProjectResourceUtilizations();
+		for (int i = 0; i < allpresutil.size(); i++) {
+			data.add((allpresutil.get(i).toHashMap()));
+		}
+		this.buildFilledJTable();
+		
+
+	}
+
 
 	public TableData(MaintainingModuleCatalogue mainmodcat) {
 //		data = mainmodcat.
@@ -115,10 +142,26 @@ public class TableData {
 
 	}
 	public TableData(ResourceRequirementCatalogue resreqcat) {
-//		data = resreqcat.getResourceRequirements();//this is buggy.
-//		columns = new String[] { "Id", "Name", "Project Manager" };
-//		dbnames = new String[] { "rid", "rname", "sid","sec... };
-//		this.buildFilledJTable();
+		data= new ArrayList<HashMap<String, String>>();
+		columns = new String[] { "resreqid","rid", "sid", "pid","fromdate","todate" };
+		dbnames = new String[] { "resreqid","rid", "sid", "pid","fromdate","todate"};
+		ArrayList<ResourceRequirement> allresourcerequirements;
+		allresourcerequirements = resreqcat.getResourceRequirements();
+		for (int i = 0; i < allresourcerequirements.size(); i++) {
+			data.add((allresourcerequirements.get(i).toHashMap()));
+		}
+		this.buildFilledJTable();
+
+	}
+	
+	public TableData(ArrayList<HashMap<String, String>> report, String type) {
+		data= report;
+		if(type=="req report")
+		{
+			columns = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
+			dbnames = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
+		}
+		this.buildFilledJTable();
 
 	}
 	public JTable buildFilledJTable() {

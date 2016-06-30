@@ -43,4 +43,8 @@ public class Form{
 	public JPanel getJPanel(){
 		return this.formPanel;
 	}
+	public void addSingleCheckField(Field field) {
+		JPanel child = new SingleCheckBoxJPanel(field);
+		formPanel.add(child);
+	}
 }
