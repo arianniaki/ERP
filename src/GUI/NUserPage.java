@@ -2031,17 +2031,21 @@ public class NUserPage {
 				Add_MaintainPage.pack();
 				Add_MaintainPage.setVisible(true);
 
-				CheckBoxJPanel checkBoxpane = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
-				final ArrayList<String> vales = checkBoxpane.getCheckedValues();
+				final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(4);
+				final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(2);
 
-				submitmaintainmoduleBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println(vales);
+		        submitmaintainmoduleBtn.addActionListener(new ActionListener() {
+		          @Override
+		          public void actionPerformed(ActionEvent e) {
+		            // TODO Auto-generated method stub
+		            final ArrayList<String>vales = checkBoxpane_emp.getCheckedValues();
+		            System.out.println(vales);
+		            System.out.println("----------");
+		            final ArrayList<String>vales_phys = checkBoxpane_phys.getCheckedValues();
+		            System.out.println(vales_phys);
 
-					}
-				});
+		          }
+		        });
 			}
 		});
 
