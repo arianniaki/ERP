@@ -152,6 +152,11 @@ public class NUserPage {
 	private JTextField search_humanpost;
 	private JTextField search_humansection;
 	private JTextField search_physicalmodel;
+	private JTextField search_subsystemname;
+	private JTextField search_accessrightname;
+	private JTextField search_resourcename;
+	private JTextField search_reqresourcename;
+	private JTextField search_regemployeename;
 
 	/**
 	 * Launch the application.
@@ -368,18 +373,46 @@ public class NUserPage {
 		});
 
 		JScrollPane accessright_scrollPane = new JScrollPane();
+		
+		JLabel lblAccessrightName = DefaultComponentFactory.getInstance().createLabel("AccessRight Name");
+		
+		search_accessrightname = new JTextField();
+		search_accessrightname.setColumns(10);
+		
+		JButton accessright_btnSearch = new JButton("Search");
 
 		GroupLayout gl_accessrightPanel = new GroupLayout(accessrightPanel);
-		gl_accessrightPanel.setHorizontalGroup(gl_accessrightPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_accessrightPanel.createSequentialGroup().addGap(40).addComponent(btnAssignAccessright))
-				.addGroup(gl_accessrightPanel.createSequentialGroup().addGap(41)
-						.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-						.addGap(39)));
-		gl_accessrightPanel.setVerticalGroup(gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_accessrightPanel.createSequentialGroup().addContainerGap()
-						.addComponent(btnAssignAccessright).addGap(48)
-						.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-						.addGap(32)));
+		gl_accessrightPanel.setHorizontalGroup(
+			gl_accessrightPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addContainerGap(669, Short.MAX_VALUE)
+					.addComponent(btnAssignAccessright))
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addContainerGap(483, Short.MAX_VALUE)
+					.addComponent(accessright_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_accessrightname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblAccessrightName)
+					.addContainerGap())
+		);
+		gl_accessrightPanel.setVerticalGroup(
+			gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addGap(14)
+					.addGroup(gl_accessrightPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblAccessrightName)
+						.addComponent(search_accessrightname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(accessright_btnSearch))
+					.addGap(40)
+					.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+					.addGap(43)
+					.addComponent(btnAssignAccessright))
+		);
 
 		accessright_scrollPane.setViewportView(accessright_tabledata.getJdataTable());
 		accessrightPanel.setLayout(gl_accessrightPanel);
@@ -557,6 +590,13 @@ public class NUserPage {
 				}
 			}
 		});
+		
+		JLabel lblSubsystemName = DefaultComponentFactory.getInstance().createLabel("Subsystem Name");
+		
+		search_subsystemname = new JTextField();
+		search_subsystemname.setColumns(10);
+		
+		JButton subsystem_btnSearch = new JButton("Search");
 		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
 		gl_subsystemPanel.setHorizontalGroup(
 			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
@@ -572,13 +612,26 @@ public class NUserPage {
 					.addGap(40)
 					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
 					.addGap(40))
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addContainerGap(492, Short.MAX_VALUE)
+					.addComponent(subsystem_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_subsystemname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblSubsystemName)
+					.addContainerGap())
 		);
 		gl_subsystemPanel.setVerticalGroup(
 			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addGap(12)
+					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblSubsystemName)
+						.addComponent(subsystem_btnSearch)
+						.addComponent(search_subsystemname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(40)
-					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+					.addGap(40)
 					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(addsubsystemBtn)
 						.addComponent(subsystem_btnEdit)
@@ -825,10 +878,17 @@ public class NUserPage {
 		});
 		presutil_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+		
+		JLabel lblResourceName = DefaultComponentFactory.getInstance().createLabel("Resource Name");
+		
+		JButton resutil_btnSearch = new JButton("Search");
+		
+		search_resourcename = new JTextField();
+		search_resourcename.setColumns(10);
 
 		GroupLayout gl_resourceutilpanel = new GroupLayout(resourceutilpanel);
 		gl_resourceutilpanel.setHorizontalGroup(
-			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+			gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_resourceutilpanel.createSequentialGroup()
 					.addGap(40)
 					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
@@ -839,15 +899,28 @@ public class NUserPage {
 					.addComponent(presutil_btnDelete)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(utilbtnBacktoProject)
-					.addPreferredGap(ComponentPlacement.RELATED, 526, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
 					.addComponent(btnAddResourceUtilization))
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addContainerGap(503, Short.MAX_VALUE)
+					.addComponent(resutil_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_resourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblResourceName)
+					.addContainerGap())
 		);
 		gl_resourceutilpanel.setVerticalGroup(
 			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(12)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblResourceName)
+						.addComponent(resutil_btnSearch)
+						.addComponent(search_resourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(40)
-					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+					.addGap(40)
 					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(utilbtnBacktoProject)
 						.addComponent(btnAddResourceUtilization)
@@ -1255,28 +1328,49 @@ System.out.println("//////////////////");
 
 			}
 		});
+		
+		JLabel lblResourceName_1 = DefaultComponentFactory.getInstance().createLabel("Resource Name");
+		
+		search_reqresourcename = new JTextField();
+		search_reqresourcename.setColumns(10);
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
-		gl_requirementPanel
-				.setHorizontalGroup(
-						gl_requirementPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(Alignment.TRAILING, gl_requirementPanel.createSequentialGroup()
-										.addContainerGap(358, Short.MAX_VALUE).addComponent(searchreqBtn).addGap(394))
-								.addGroup(gl_requirementPanel.createSequentialGroup().addGap(40)
-										.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
-												Short.MAX_VALUE)
-										.addGap(40))
-								.addGroup(Alignment.TRAILING,
-										gl_requirementPanel.createSequentialGroup().addComponent(requirement_btnEdit)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(requirement_btnSatisfy)
-												.addPreferredGap(ComponentPlacement.RELATED, 529, Short.MAX_VALUE)
-												.addComponent(addreqBtn)));
-		gl_requirementPanel.setVerticalGroup(gl_requirementPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_requirementPanel.createSequentialGroup().addContainerGap().addComponent(searchreqBtn)
-						.addGap(40).addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-						.addGap(11)
-						.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE).addComponent(addreqBtn)
-								.addComponent(requirement_btnEdit).addComponent(requirement_btnSatisfy))));
+		gl_requirementPanel.setHorizontalGroup(
+			gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addContainerGap(381, Short.MAX_VALUE)
+					.addComponent(searchreqBtn)
+					.addGap(128)
+					.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblResourceName_1)
+					.addContainerGap())
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addComponent(requirement_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(requirement_btnSatisfy)
+					.addPreferredGap(ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
+					.addComponent(addreqBtn))
+		);
+		gl_requirementPanel.setVerticalGroup(
+			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(searchreqBtn)
+						.addComponent(lblResourceName_1)
+						.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(40)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+					.addGap(40)
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addreqBtn)
+						.addComponent(requirement_btnEdit)
+						.addComponent(requirement_btnSatisfy)))
+		);
 
 		resrequirement_table = new TableData(new ResourceRequirementCatalogue());
 		
@@ -3036,7 +3130,7 @@ System.out.println("//////////////////");
 						.addComponent(lblProjectManager)
 						.addComponent(lblSize)
 						.addComponent(search_projectsize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(40)
 					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
 					.addGap(40)
 					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
@@ -3432,24 +3526,51 @@ System.out.println("//////////////////");
 				}
 			}
 		});
+		
+		JLabel lblEmployeeName = DefaultComponentFactory.getInstance().createLabel("Employee Name");
+		
+		search_regemployeename = new JTextField();
+		search_regemployeename.setColumns(10);
+		
+		JButton employee_btnSearch = new JButton("Search");
 		GroupLayout gl_RegisteredUserspanel = new GroupLayout(RegisteredUserspanel);
-		gl_RegisteredUserspanel
-				.setHorizontalGroup(
-						gl_RegisteredUserspanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_RegisteredUserspanel.createSequentialGroup().addGap(40)
-										.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
-												Short.MAX_VALUE)
-										.addGap(40))
-								.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
-										.addContainerGap(660, Short.MAX_VALUE).addComponent(btnDeny)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnConfirm)
-										.addContainerGap()));
-		gl_RegisteredUserspanel.setVerticalGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_RegisteredUserspanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.BASELINE).addComponent(btnDeny)
-								.addComponent(btnConfirm))
-						.addGap(40).addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-						.addGap(40)));
+		gl_RegisteredUserspanel.setHorizontalGroup(
+			gl_RegisteredUserspanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
+					.addContainerGap(722, Short.MAX_VALUE)
+					.addComponent(btnDeny)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnConfirm)
+					.addContainerGap())
+				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
+					.addContainerGap(500, Short.MAX_VALUE)
+					.addComponent(employee_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_regemployeename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblEmployeeName)
+					.addContainerGap())
+		);
+		gl_RegisteredUserspanel.setVerticalGroup(
+			gl_RegisteredUserspanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
+					.addGap(14)
+					.addGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblEmployeeName)
+						.addComponent(search_regemployeename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(employee_btnSearch))
+					.addGap(40)
+					.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+					.addGap(40)
+					.addGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnConfirm)
+						.addComponent(btnDeny))
+					.addContainerGap())
+		);
 
 		registered_tabledata = new TableData(new EmployeeCatalogue(), "registered");
 
