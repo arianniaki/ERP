@@ -988,9 +988,7 @@ public class NUserPage {
 		      	ArrayList<String> options = new ArrayList<String>();
 		      	options.add("satisfied");
 
-				Field reqname = new Field("text", "req name       ", "", 10, "name");
 				Field satisfied = new Field("checkBox", "satisfied", options, 20, "items");
-				requirement_editFields.add(reqname);
 				requirement_editFields.add(satisfied);
 
 				final Form editrequirement_Form = new Form(requirement_editFields, "Edit Requirement Form");
@@ -1000,19 +998,37 @@ public class NUserPage {
 				JFrame Edit_RequirementPage = new JFrame("Edit Requirement Module Form");
 				Edit_RequirementPage.getContentPane().add(editrequirement_Form.getJPanel(), BorderLayout.NORTH);
 
-				// adding date
-				UtilDateModel modelfor = new UtilDateModel();
-
+				UtilDateModel modelsatisfydate = new UtilDateModel();
 				Properties p = new Properties();
 				p.put("text.today", "Today");
 				p.put("text.month", "Month");
 				p.put("text.year", "Year");
+				final JDatePanelImpl satisfy_datePanel = new JDatePanelImpl(modelsatisfydate, p);
+				JLabel satisfylbl = new JLabel("Satisfy Date");
+
+				final JDatePickerImpl satisfy_datePicker = new JDatePickerImpl(satisfy_datePanel, new DateLabelFormatter());
+				JPanel satisfy_panel = new JPanel(new FlowLayout());
+				satisfy_panel.add(satisfylbl);
+
+				satisfy_panel.add(satisfy_datePanel);
+				Edit_RequirementPage.getContentPane().add(satisfy_panel, BorderLayout.NORTH);
+
+				// adding date
+				UtilDateModel modelfor = new UtilDateModel();
+				UtilDateModel modelto = new UtilDateModel();
+
 				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+				JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
+				JLabel from = new JLabel("From");
+				JLabel to = new JLabel("To");
 				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+				final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
 
 				JPanel date_panel = new JPanel(new FlowLayout());
-
+				date_panel.add(from);
 				date_panel.add(from_datePanel);
+				date_panel.add(to);
+				date_panel.add(to_datePanel);
 				Edit_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
 				// end date
 
@@ -1023,15 +1039,20 @@ public class NUserPage {
 				Edit_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Edit_RequirementPage.pack();
 				Edit_RequirementPage.setVisible(true);
-				CheckBoxJPanel checkBoxpane = (CheckBoxJPanel) editrequirement_Form.getJPanel().getComponent(1);
-				 final ArrayList<String>vales = checkBoxpane.getCheckedValues();
+//				CheckBoxJPanel checkBoxpane = (CheckBoxJPanel) editrequirement_Form.getJPanel().getComponent(1);
+//				 final ArrayList<String>vales = checkBoxpane.getCheckedValues();
 
 
 				submiteditrequeirementBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						System.out.println(vales);
+//						System.out.println(vales);
+						String satisfydate = satisfy_datePicker.getJFormattedTextField().getText();
+
+						String fromdate = from_datePicker.getJFormattedTextField().getText();
+						String todate = to_datePicker.getJFormattedTextField().getText();
+System.out.println(satisfydate +" "+fromdate+" "+todate);
 					}
 				});
 
