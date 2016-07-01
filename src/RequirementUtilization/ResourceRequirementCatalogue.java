@@ -37,7 +37,7 @@ public class ResourceRequirementCatalogue{
 			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("pid")));
 			Section sc = scat.getSection(Integer.parseInt(result.get(i).get("sid")));
 			Resource rs = rcat.getResource(Integer.parseInt(result.get(i).get("rid")));
-			ResourceRequirement rr = new ResourceRequirement(pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"),Boolean.parseBoolean(result.get(i).get("is_satisfied")), result.get(i).get("satisfydate"));
+			ResourceRequirement rr = new ResourceRequirement(Integer.parseInt(result.get(i).get("resreqid")),pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"),Boolean.parseBoolean(result.get(i).get("is_satisfied")), result.get(i).get("satisfydate"));
 			resReqs.add(rr);
 		}
 		return resReqs;
@@ -62,7 +62,7 @@ public class ResourceRequirementCatalogue{
 				pr = pcat.getProject(res.getInt("pid"));
 				Section sc = scat.getSection(res.getInt("sid"));
 				Resource rs = rcat.getResource(res.getInt("rid"));
-				rr = new ResourceRequirement(pr, sc, rs, res.getString("fromdate"), res.getString("todate"),res.getBoolean("is_satisfied"),res.getString("satisfydate"));
+				rr = new ResourceRequirement(resreqId, pr, sc, rs, res.getString("fromdate"), res.getString("todate"),res.getBoolean("is_satisfied"),res.getString("satisfydate"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -26,7 +26,7 @@ public class ResourceRequirement{
 	int resReqId;
 	DataBase DB;
 	
-	public ResourceRequirement(Project project, Section section, Resource resource, String from, String to,boolean isSatisfied, String satisfyDate){
+	public ResourceRequirement(int resReqId,Project project, Section section, Resource resource, String from, String to,boolean isSatisfied, String satisfyDate){
 		this.from = from;
 		this.to = to;
 		this.project = project;
@@ -34,15 +34,13 @@ public class ResourceRequirement{
 		this.resource = resource;
 		this.isSatisfied = isSatisfied;
 		this.satisfyDate = satisfyDate;
+		this.resReqId = resReqId;
 		DB = new DataBase();
 		
 	}
 	
 	public void edit(String from, String to ,boolean isSatisfied, String satisfyDate){
 
-		int rid = this.resource.getId();
-		int pid = this.project.getId();
-		int sid = this.section.getId();
 		this.satisfyDate = satisfyDate;
 
 		HashMap<String, String> setVars = new HashMap<String, String>();
@@ -50,7 +48,7 @@ public class ResourceRequirement{
 		setVars.put("todate", "\'"+to+"\'");
 		setVars.put("is_satisfied", Boolean.toString(isSatisfied));
 		setVars.put("satisfydate", "\'"+satisfyDate+"\'");
-		submitToDB(setVars, rid, sid, pid, this.from, this.to);
+		submitToDB(setVars);
 		this.from = from;
 		this.to = to;
 	}
@@ -61,16 +59,12 @@ public class ResourceRequirement{
 		HashMap<String, String> setVars = new HashMap<String, String>();
 		setVars.put("is_satisfied","true");
 		setVars.put("satisfydate", "\'"+date+"\'");
-		submitToDB(setVars, this.resource.getId(), this.section.getId(), this.project.getId(),this.from, this.to);
+		submitToDB(setVars);
 	}
 	
-	public void submitToDB(HashMap<String, String> setVars, int rid, int sid, int pid, String from, String to) {
+	public void submitToDB(HashMap<String, String> setVars) {
 		HashMap<String, String> condVars = new HashMap<String, String>();
-		condVars.put("rid", Integer.toString(rid));
-		condVars.put("sid", Integer.toString(sid));
-		condVars.put("pid", Integer.toString(pid));
-		condVars.put("fromdate", "\'"+from+"\'");
-		condVars.put("todate", "\'"+to+"\'");
+		condVars.put("resreqid", Integer.toString(this.resReqId));
 		DB.update(condVars, setVars, "resourcerequirement");
 	}
 	
@@ -81,6 +75,7 @@ public class ResourceRequirement{
 	
 	public HashMap<String,String> toHashMap(){
 		HashMap<String,String> resreq = new HashMap<String,String>();
+		resreq.put("resReqid", Integer.toString(resReqId));
 		resreq.put("rid", Integer.toString(this.resource.getId()));
 		resreq.put("sid",Integer.toString(this.section.getId()));
 		resreq.put("pid",Integer.toString(this.project.getId()));
@@ -88,6 +83,10 @@ public class ResourceRequirement{
 		resreq.put("todate", this.to);
 		resreq.put("is_satisfied", Boolean.toString(this.isSatisfied));
 		resreq.put("satisfydate", this.satisfyDate);
+		resreq.put("resourceName", this.resource.getName());
+		resreq.put("projectName", this.resource.getName());
+		resreq.put("sectionName", this.resource.getName());
+
 
 		return resreq;
 	}
