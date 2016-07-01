@@ -129,6 +129,8 @@ public class NUserPage {
 	private TableData resavail_tabledata;
 	private TableData subsystem_tabledata;
 	private TableData resourceutil_tabledata;
+	private TableData moduledetail_tabledata;
+
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
@@ -2041,24 +2043,79 @@ public class NUserPage {
 			}
 		});
 
+		final JPanel modulePanel = new JPanel();
+		resourcesTab.addTab("Module", null, modulePanel, null);
+
+
 		// get module list
 		ModuleCatalogue mcat = new ModuleCatalogue();
 		System.out.println("all : ");
 		allmodules = mcat.readAllResources();
+		
+		final JPanel moduledetailpanel = new JPanel();
+		resourcesTab.addTab("Module Detail", null, moduledetailpanel, null);
+		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
+
+		
+//		moduledetail_tabledata = new TableData(new Modu);
+
+		JScrollPane module_detail_scrollPane = new JScrollPane();
+		
+		JButton moduledetail_btnEdit = new JButton("Edit");
+		moduledetail_btnEdit.setIcon(new ImageIcon(
+				new ImageIcon("images/edit.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		
+		JButton moduledetail_btnDelete = new JButton("Delete");
+		moduledetail_btnDelete.setIcon(new ImageIcon(
+				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		
+		JButton moduledetail_btnBack = new JButton("Back");
+		moduledetail_btnBack.setIcon(new ImageIcon(
+				new ImageIcon("images/back.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		moduledetail_btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					System.out.println("change tab to module");
+				System.out.println("Change JPanel");
+				int selected_index = resourcesTab.getSelectedIndex();
+				resourcesTab.remove(selected_index);
+				resourcesTab.insertTab("Module", null, modulePanel, null, selected_index);
+				resourcesTab.setSelectedComponent(modulePanel);
+
+			}
+		});
+		GroupLayout gl_moduledetailpanel = new GroupLayout(moduledetailpanel);
+		gl_moduledetailpanel.setHorizontalGroup(
+			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addComponent(moduledetail_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(moduledetail_btnDelete)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(moduledetail_btnBack)
+					.addContainerGap(550, Short.MAX_VALUE))
+		);
+		gl_moduledetailpanel.setVerticalGroup(
+			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(moduledetail_btnEdit)
+						.addComponent(moduledetail_btnDelete)
+						.addComponent(moduledetail_btnBack))
+					.addContainerGap())
+		);
+		moduledetailpanel.setLayout(gl_moduledetailpanel);
 
 		// end module list
-		final JPanel modulePanel = new JPanel();
-		resourcesTab.addTab("Module", null, modulePanel, null);
-		String[] module_columns = new String[] { "Id", "Name" };
-
-		final DefaultTableModel module_tableModel = new DefaultTableModel(module_columns, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				// all cells false
-				return false;
-			}
-		};
-
 		JButton btnAddModule = new JButton("Add Module");
 		btnAddModule.setIcon(new ImageIcon(
 				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
@@ -2436,53 +2493,102 @@ public class NUserPage {
 
 		search_moduleduration = new JTextField();
 		search_moduleduration.setColumns(10);
+		
+		JButton btnViewDetails = new JButton("View Details");
+		btnViewDetails.setIcon(new ImageIcon(
+				new ImageIcon("images/view.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+		btnViewDetails.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				System.out.println("-----");
+				int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a module!");
+				} else {
+
+					String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // return
+					selected_module = Integer.parseInt(Table_click.trim());
+
+					System.out.println(Table_click);
+					System.out.println("---module id-- " + selected_module);
+					System.out.println("Change JPanel");
+//					MaintainingModuleCatalogue maintainmodulecat = new MaintainingModuleCatalogue();
+//					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+//					ArrayList<MaintainingModule> allmaintainmodule;
+//					allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
+//					for (int i = 0; i < allmaintainmodule.size(); i++) {
+//						data.add((allmaintainmodule.get(i).toHashMap()));
+//					}
+//					System.out.println("DATA");
+//					System.out.println(data);
+//
+//					maintaining_tabledata.update(data);
+//
+					int selected_index = resourcesTab.getSelectedIndex();
+					resourcesTab.remove(selected_index);
+					resourcesTab.insertTab("Module Detaul", null, moduledetailpanel, null, selected_index);
+					resourcesTab.setSelectedComponent(moduledetailpanel);
+				}
+			}
+		});
 		GroupLayout gl_modulePanel_1 = new GroupLayout(modulePanel);
-		gl_modulePanel_1.setHorizontalGroup(gl_modulePanel_1.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_modulePanel_1.createSequentialGroup().addGap(30)
-						.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE).addGap(30))
-				.addGroup(
-						gl_modulePanel_1.createSequentialGroup()
-								.addComponent(module_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(module_btnDelete, GroupLayout.PREFERRED_SIZE, 83,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 444, Short.MAX_VALUE)
-								.addComponent(btnViewMaintaning).addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(btnAddModule))
-				.addGroup(gl_modulePanel_1.createSequentialGroup().addComponent(search_modulebtnRefresh)
-						.addPreferredGap(ComponentPlacement.RELATED, 276, Short.MAX_VALUE)
-						.addComponent(module_btnSearch).addGap(146)
-						.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
-								.addComponent(search_moduleduration, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(search_modulename, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblModuleName, Alignment.TRAILING)
-								.addComponent(lblDuration, Alignment.TRAILING))
-						.addContainerGap()));
-		gl_modulePanel_1
-				.setVerticalGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_modulePanel_1.createSequentialGroup().addContainerGap()
-								.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
-										.addComponent(module_btnSearch)
-										.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblModuleName).addComponent(search_modulebtnRefresh))
-								.addGap(3)
-								.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
-										.addComponent(lblDuration).addComponent(search_moduleduration,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
-										.addComponent(module_btnEdit).addComponent(module_btnDelete)
-										.addComponent(btnAddModule).addComponent(btnViewMaintaning))
-								.addContainerGap()));
+		gl_modulePanel_1.setHorizontalGroup(
+			gl_modulePanel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_modulePanel_1.createSequentialGroup()
+					.addGap(30)
+					.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+					.addGap(30))
+				.addGroup(gl_modulePanel_1.createSequentialGroup()
+					.addComponent(module_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(module_btnDelete, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 321, Short.MAX_VALUE)
+					.addComponent(btnViewDetails)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnViewMaintaning)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnAddModule))
+				.addGroup(gl_modulePanel_1.createSequentialGroup()
+					.addComponent(search_modulebtnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 276, Short.MAX_VALUE)
+					.addComponent(module_btnSearch)
+					.addGap(146)
+					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(search_moduleduration, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(search_modulename, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblModuleName, Alignment.TRAILING)
+						.addComponent(lblDuration, Alignment.TRAILING))
+					.addContainerGap())
+		);
+		gl_modulePanel_1.setVerticalGroup(
+			gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_modulePanel_1.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(module_btnSearch)
+						.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblModuleName)
+						.addComponent(search_modulebtnRefresh))
+					.addGap(3)
+					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblDuration)
+						.addComponent(search_moduleduration, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(module_btnEdit)
+						.addComponent(module_btnDelete)
+						.addComponent(btnAddModule)
+						.addComponent(btnViewMaintaning)
+						.addComponent(btnViewDetails))
+					.addContainerGap())
+		);
 
 		module_tabledata = new TableData(new ModuleCatalogue(), "module");
 		module_scrollPane.setViewportView(module_tabledata.getJdataTable());
