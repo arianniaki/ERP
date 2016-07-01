@@ -503,18 +503,18 @@ public class NUserPage {
 							System.out.println(inputs.get(i) + " subsystem");
 						}
 						System.out.println(sections_combo.getSelectedItem()+" //////");
-						Pattern p = Pattern.compile("sectionid=\\d+");
+						Pattern p = Pattern.compile("sid=\\d+");
 						String section = null;
 						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
 						if (m.find()) {
 							section = m.group();
 						}
-						System.out.println("sectionid: " + section);
+						System.out.println("sid: " + section);
 
 						
 						
 						SubSystemCatalogue subsyscat = new SubSystemCatalogue();
-						subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem, Integer.parseInt(section.replace("sectionid=", "")));
+						subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem, Integer.parseInt(section.replace("sid=", "")));
 						subsystem_tabledata.update(subsyscat.getSubSystems());
 						System.out.println("add shoood ");
 						
@@ -852,20 +852,20 @@ public class NUserPage {
 						if (m.find()) {
 							rid = m.group();
 						}
-						String sectionid = "";
-						Pattern p1 = Pattern.compile("sectionid=\\d+");
+						String sid = "";
+						Pattern p1 = Pattern.compile("sid=\\d+");
 						Matcher m1 = p1.matcher((CharSequence) sectionCombo.getSelectedItem());
 						if (m1.find()) {
-							sectionid = m1.group();
+							sid = m1.group();
 						}
 
 						String fromdate = from_datePicker.getJFormattedTextField().getText();
 						String todate = to_datePicker.getJFormattedTextField().getText();
 
 						System.out.println("--------------");
-						System.out.println(rid + " " + sectionid + " " + fromdate + " " + todate);
+						System.out.println(rid + " " + sid + " " + fromdate + " " + todate);
 
-						presreqCat.addProjectResourceUtilization(Integer.parseInt(rid.replace("rid=","")),Integer.parseInt(sectionid.replace("sectionid=","")),selected_project_forsubsystem,fromdate, todate);
+						presreqCat.addProjectResourceUtilization(Integer.parseInt(rid.replace("rid=","")),Integer.parseInt(sid.replace("sid=","")),selected_project_forsubsystem,fromdate, todate);
 						
 						
 						
@@ -1150,11 +1150,11 @@ public class NUserPage {
 						}
 						}
 
-						String sectionid = "";
-						Pattern p1 = Pattern.compile("sectionid=\\d+");
+						String sid = "";
+						Pattern p1 = Pattern.compile("sid=\\d+");
 						Matcher m1 = p1.matcher((CharSequence) sectionCombo.getSelectedItem());
 						if (m1.find()) {
-							sectionid = m1.group();
+							sid = m1.group();
 						}
 
 						String projid = "";
@@ -1168,10 +1168,10 @@ public class NUserPage {
 						String todate = to_datePicker.getJFormattedTextField().getText();
 
 						System.out.println("--------------");
-						System.out.println(empid+ " " +rid + " " + sectionid + " " + projid + " " + fromdate + " " + todate);
+						System.out.println(empid+ " " +rid + " " + sid + " " + projid + " " + fromdate + " " + todate);
 
 						resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")),
-								Integer.parseInt(sectionid.replace("sectionid=", "")),
+								Integer.parseInt(sid.replace("sid=", "")),
 								Integer.parseInt(projid.replace("projid=", "")), fromdate, todate);
 						
 						
@@ -1699,18 +1699,18 @@ System.out.println("//////////////////");
 						}
 						
 						System.out.println(sections_combo.getSelectedItem()+" //////");
-						Pattern p = Pattern.compile("sectionid=\\d+");
+						Pattern p = Pattern.compile("sid=\\d+");
 						String section = null;
 						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
 						if (m.find()) {
 							section = m.group();
 						}
-						System.out.println("sectionid: " + section);
+						System.out.println("sid: " + section);
 
 						String infodate = info_datePicker.getJFormattedTextField().getText();
 
 						
-						infocat.addResource(inputs.get(0), Integer.parseInt(section.replace("sectionid=", "")), infodate, inputs.get(1));
+						infocat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")), infodate, inputs.get(1));
 						// tu resource ham bayad insert she
 						information_tabledata.update(infocat.readAllResources());
 
@@ -2012,7 +2012,7 @@ System.out.println("//////////////////");
 						if (m.find()) {
 							section = m.group();
 						}
-						System.out.println("sectionid: " + section);
+						System.out.println("sid: " + section);
 						financat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sid=", "")),Integer.parseInt(inputs.get(2)) , inputs.get(1), inputs.get(3));
 						// tu resource ham bayad insert she
 						allfinance.clear();
@@ -2149,19 +2149,19 @@ System.out.println("//////////////////");
 							System.out.println(inputs.get(i) + "adasa");
 						}
 						System.out.println(sections_combo.getSelectedItem()+" //////");
-						Pattern p = Pattern.compile("sectionid=\\d+");
+						Pattern p = Pattern.compile("sid=\\d+");
 						String section = null;
 						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
 						if (m.find()) {
 							section = m.group();
 						}
-						System.out.println("sectionid: " + section);
+						System.out.println("sid: " + section);
 					
 			            System.out.println("----------");
 
 						
 						//
-						long modrid= mcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sectionid=", "")), Integer.parseInt(inputs.get(1)), inputs.get(2));
+						long modrid= mcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")), Integer.parseInt(inputs.get(1)), inputs.get(2));
 						// tu resource ham bayad insert she
 						module_tabledata.update(mcat.readAllResources());
 						
@@ -2971,15 +2971,15 @@ System.out.println("//////////////////");
 						}
 						
 						System.out.println(sections_combo.getSelectedItem()+" //////");
-						Pattern p = Pattern.compile("sectionid=\\d+");
+						Pattern p = Pattern.compile("sid=\\d+");
 						String section = null;
 						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
 						if (m.find()) {
 							section = m.group();
 						}
-						System.out.println("sectionid: " + section);
+						System.out.println("sid: " + section);
 						
-						physcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sectionid=", "")), inputs.get(1), inputs.get(1));
+						physcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")), inputs.get(1), inputs.get(1));
 
 						physical_tabledata.update(physcat.readAllResources());
 
@@ -3301,7 +3301,9 @@ System.out.println("//////////////////");
 						EmployeeCatalogue empcat = new EmployeeCatalogue();
 						Employee proj_manager = empcat.getEmployee(employeeID);
 						System.out.println(proj_manager.getName());
-						projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2), inputs.get(1));
+						
+						//FIX HERE TO GET IS_COMPLETE
+						projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2), inputs.get(1),false);
 
 						allprojects = projcat.getProjects();
 						project_tabledata.update(projcat.getProjects());

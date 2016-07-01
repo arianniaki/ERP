@@ -22,7 +22,7 @@ public class ProjectCatalogue {
 		Table table = new Table(tableName);
 		ArrayList<HashMap<String, String>> result = table.readAll();
 		for (int i = 0; i < result.size(); i++) {
-			System.out.println(result.get(i).toString());
+			System.out.println(result.get(i).toString()+" SSsssss");
 			EmployeeCatalogue empcat = new EmployeeCatalogue();
 			result.get(i).put("managername", empcat.getEmployee(Integer.parseInt(result.get(i).get("projectmanager"))).getName());
 		}
@@ -50,13 +50,14 @@ public class ProjectCatalogue {
 
 	}
 	
-	public long addProject(String name, Employee manager, String size, String tech) {
+	public long addProject(String name, Employee manager, String size, String tech,boolean isComp) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("projname", "\'"+name+"\'");
 		vars.put("projectmanager", "\'"+manager.getId()+"\'");
 		vars.put("size", "\'"+size+"\'");
 		vars.put("tech", "\'"+tech+"\'");
-		vars.put("is_complete", "false");
+		vars.put("is_complete", "\'"+Boolean.toString(isComp)+"\'");
+
 
 		long pk=DB.insert(vars, "project");
 		System.out.println("inserted into project table: " + pk);

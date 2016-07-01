@@ -87,8 +87,8 @@ public class TableData {
 	public TableData(EmployeeCatalogue empcat, String type) {
 		data = empcat.readAllEmployees();
 		if (type == "assign") {
-			columns = new String[] { "Id", "Username", "AccessRight" };
-			dbnames = new String[] { "empid", "empname", "accessrightid" };
+			columns = new String[] { "Id", "Username", "AccessRight", "Access Right" };
+			dbnames = new String[] { "empid", "empname", "accessrightid" ,"accessrightname"};
 		}
 
 		if (type == "registered") {
@@ -106,8 +106,8 @@ public class TableData {
 
 	public TableData(ProjectCatalogue projcat) {
 		data = projcat.getProjects();
-		columns = new String[] { "Id", "Name", "Project Manager","Manager Name","Size", "Technology" };
-		dbnames = new String[] { "projid", "projname", "projectmanager","managername","size","tech" };
+		columns = new String[] { "Id", "Name", "Project Manager","Manager Name","Size", "Technology","is complete" };
+		dbnames = new String[] { "projid", "projname", "projectmanager","managername","size","tech","is_complete" };
 		this.buildFilledJTable();
 
 	}
@@ -152,8 +152,8 @@ public class TableData {
 	}
 	public TableData(ResourceRequirementCatalogue resreqcat) {
 		data= new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate" };
-		dbnames = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate"};
+		columns = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate","projectName","sectionName","resourceName","is_satisfied" };
+		dbnames = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate","projectName","sectionName","resourceName","is_satisfied"};
 		ArrayList<ResourceRequirement> allresourcerequirements;
 		allresourcerequirements = resreqcat.getResourceRequirements();
 		for (int i = 0; i < allresourcerequirements.size(); i++) {

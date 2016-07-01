@@ -84,8 +84,8 @@ public class ResourceRequirement{
 		resreq.put("is_satisfied", Boolean.toString(this.isSatisfied));
 		resreq.put("satisfydate", this.satisfyDate);
 		resreq.put("resourceName", this.resource.getName());
-		resreq.put("projectName", this.resource.getName());
-		resreq.put("sectionName", this.resource.getName());
+		resreq.put("projectName", this.project.getName());
+		resreq.put("sectionName", this.section.getName());
 
 
 		return resreq;
