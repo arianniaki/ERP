@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import DataBase.DataBase;
 import DataBase.Table;
+import Report.Report;
 
 public class ProjectEmployeeCatalogue {
 
@@ -85,5 +86,25 @@ public class ProjectEmployeeCatalogue {
 
 
 	}
-	
+	public Report getCirculationReport(Employee emp){
+		Report rep = new Report();
+		Table table = new Table("projectemployee");
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("empid",  "\'"+emp.getId()+"\'");
+		ArrayList<HashMap<String,String>> results = table.search(vars);
+		rep.setResults(results);
+		for(int i=0; i<results.size(); i++){
+			String line="";
+			ProjectCatalogue projCat = new ProjectCatalogue();
+			EmployeeCatalogue empcat = new EmployeeCatalogue();
+			results.get(i).put("empname", ""+empcat.getEmployee(Integer.valueOf(results.get(i).get("empid"))).getName());
+			results.get(i).put("pname", ""+projCat.getProject((Integer.valueOf(results.get(i).get("projid")))).getName());
+			for(String key : results.get(i).keySet()){
+				line+= results.get(i).get(key).toString()+", ";
+			}
+			line = line.substring(0, line.length() - 2);
+			rep.addLine(line);
+		}
+		return rep;
+	}
 }
