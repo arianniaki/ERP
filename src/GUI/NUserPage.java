@@ -1707,7 +1707,7 @@ System.out.println("//////////////////");
 						String infodate = info_datePicker.getJFormattedTextField().getText();
 
 						
-						infocat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sectionid=", "")), infodate, inputs.get(1));
+						infocat.addResource(inputs.get(0), Integer.parseInt(section.replace("sectionid=", "")), infodate, inputs.get(1));
 						// tu resource ham bayad insert she
 						information_tabledata.update(infocat.readAllResources());
 
