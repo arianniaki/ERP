@@ -55,7 +55,7 @@ public class Resource{
 		}
 	}
 	
-	protected void editResource(String name, int sid){
+	public void editResource(String name, int sid){
 		this.name = name;
 		this.sectionId = sid;
 		HashMap<String, String> setVars = new HashMap<String, String>();

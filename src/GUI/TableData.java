@@ -13,6 +13,7 @@ import RequirementUtilization.ProjectResourceUtilization;
 import RequirementUtilization.ProjectResourceUtilizationCatalogue;
 import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
+import ResourceManagement.Section.Resource.MaintainingModule;
 import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
 
@@ -134,11 +135,19 @@ public class TableData {
 	}
 
 
-	public TableData(MaintainingModuleCatalogue mainmodcat) {
-//		data = mainmodcat.
-//		columns = new String[] { "Id", "Name", "Project Manager" };
-//		dbnames = new String[] { "projid", "projname", "projectmanager" };
-//		this.buildFilledJTable();
+	public TableData(MaintainingModuleCatalogue mainmodcat,int moduleid) {
+		data = new ArrayList<HashMap<String, String>>();
+		columns = new String[] { "maintainid", "modrid", "duration","changetype" };
+		dbnames = new String[] { "maintainid", "modrid", "duration","changetype" };
+		ArrayList<MaintainingModule> allmaintainmod;
+		allmaintainmod = mainmodcat.getMaintainingModules(moduleid);
+		for (int i = 0; i < allmaintainmod.size(); i++) {
+			data.add((allmaintainmod.get(i).toHashMap()));
+		}
+		this.buildFilledJTable();
+
+		
+		this.buildFilledJTable();
 
 	}
 	public TableData(ResourceRequirementCatalogue resreqcat) {

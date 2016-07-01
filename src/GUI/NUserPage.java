@@ -50,6 +50,7 @@ import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
 import ResourceManagement.Section.Resource.MaintainModEmpResCatalogue;
+import ResourceManagement.Section.Resource.MaintainingModule;
 import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.MakeModuleCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
@@ -131,7 +132,7 @@ public class NUserPage {
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
-
+	private int selected_module;
 	private JTextField search_modulename;
 	private JTextField search_financialname;
 	private JTextField search_informationname;
@@ -2351,6 +2352,7 @@ System.out.println("//////////////////");
 
 		btnViewMaintaning.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				System.out.println("-----");
 				int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
 				int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
@@ -2358,11 +2360,25 @@ System.out.println("//////////////////");
 					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
 							"Please Select a module!");
 				} else {
+					
 					String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
+					selected_module= Integer.parseInt(Table_click.trim());
 
 					System.out.println(Table_click);
-					System.out.println("-----");
+					System.out.println("---module id-- "+ selected_module);
 					System.out.println("Change JPanel");
+					MaintainingModuleCatalogue maintainmodulecat  = new MaintainingModuleCatalogue();
+					ArrayList<HashMap<String, String>> data= new ArrayList<HashMap<String, String>>();
+					ArrayList<MaintainingModule> allmaintainmodule;
+					allmaintainmodule=maintainmodulecat.getMaintainingModules(selected_module);
+					for (int i = 0; i < allmaintainmodule.size(); i++) {
+						data.add((allmaintainmodule.get(i).toHashMap()));
+					}
+					System.out.println("DATA");
+					System.out.println(data);
+					
+		        	maintaining_tabledata.update(data);
+		        	
 					int selected_index = resourcesTab.getSelectedIndex();
 					resourcesTab.remove(selected_index);
 					resourcesTab.insertTab("Maintaining", null, maintaining_panel, null, selected_index);
@@ -2535,12 +2551,14 @@ System.out.println("//////////////////");
 
 				ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
 				Field change_type = new Field("text", "change type", "", 20, "change type");
+				Field duration = new Field("text", "duration", "", 20, "duration");
 				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
 				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
 				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
 				Field information_check = new Field("checkBox", "information", information, 20, "information");
 
 				maintain_moduleFields.add(change_type);
+				maintain_moduleFields.add(duration);
 				maintain_moduleFields.add(financial_check);
 				maintain_moduleFields.add(physical_check);
 				maintain_moduleFields.add(information_check);
@@ -2565,19 +2583,100 @@ System.out.println("//////////////////");
 				Add_MaintainPage.pack();
 				Add_MaintainPage.setVisible(true);
 
-				final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(4);
-				final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(2);
+				final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
+				final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
+				final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(2);
+				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(4);
+
 
 		        submitmaintainmoduleBtn.addActionListener(new ActionListener() {
 		          @Override
 		          public void actionPerformed(ActionEvent e) {
 		            //INJA TODO Auto-generated method stub
-		            final ArrayList<String>vales = checkBoxpane_emp.getCheckedValues();
-		            System.out.println(vales);
-		            System.out.println("----------");
-		            final ArrayList<String>vales_phys = checkBoxpane_phys.getCheckedValues();
-		            System.out.println(vales_phys);
+		        		ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < maintain_Form.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) maintain_Form.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + "adasa");
+						}
+		        	  
+		        	MaintainingModuleCatalogue maintainmodulecat = new MaintainingModuleCatalogue();
+		        	long maintainmodpk = maintainmodulecat.addMaintainingModule(selected_module, inputs.get(0), Integer.parseInt(inputs.get(1)));
+		        	
+		        	ArrayList<HashMap<String, String>> data= new ArrayList<HashMap<String, String>>();
+					ArrayList<MaintainingModule> allmaintainmodule;
+					allmaintainmodule=maintainmodulecat.getMaintainingModules(selected_module);
+					for (int i = 0; i < allmaintainmodule.size(); i++) {
+						data.add((allmaintainmodule.get(i).toHashMap()));
+					}
+					System.out.println("DATA");
+					
+		        	maintaining_tabledata.update(data);
 
+		        	System.out.println("----------");
+		        	MaintainModEmpResCatalogue maintainmodempresCat = new MaintainModEmpResCatalogue();
+		        	
+		            final ArrayList<String> finanvales = checkBoxpane_financial.getCheckedValues();
+		            System.out.println(finanvales);
+		            final ArrayList<String> physicalvales = checkBoxpane_phys.getCheckedValues();
+		            System.out.println(physicalvales);
+		            final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+		            System.out.println(informationvales);
+		            final ArrayList<String> employeevales = checkBoxpane_emp.getCheckedValues();
+		            System.out.println(employeevales);
+					Pattern emp = Pattern.compile("empid=\\d+");
+					for (int i = 0; i < employeevales.size(); i++) {
+						String empids = null;
+						Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+						if (m_emp.find()) {
+							empids = m_emp.group();
+						}
+						System.out.println("empids: " + empids);
+						maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")),(int) maintainmodpk);
+					}
+					
+					Pattern res = Pattern.compile("rid=\\d+");
+					for (int i = 0; i < finanvales.size(); i++) {
+						String respids = null;
+						Matcher m_res = res.matcher(finanvales.get(i).toString());
+						if (m_res.find()) {
+							respids = m_res.group();
+						}
+						System.out.println("finan rid: " + respids);
+						maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),(int) maintainmodpk);
+
+					}
+					
+					for (int i = 0; i < physicalvales.size(); i++) {
+						String respids = null;
+						Matcher m_res = res.matcher(physicalvales.get(i).toString());
+						if (m_res.find()) {
+							respids = m_res.group();
+						}
+						System.out.println("phys rid: " + respids);
+						maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),(int) maintainmodpk);
+
+					}
+					
+					for (int i = 0; i < informationvales.size(); i++) {
+						String respids = null;
+						Matcher m_res = res.matcher(informationvales.get(i).toString());
+						if (m_res.find()) {
+							respids = m_res.group();
+						}
+						System.out.println("info rid: " + respids);
+						maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),(int) maintainmodpk);
+
+					}
+					 
+		            
+		            
+		            
+		            
+		            
+		            
 		          }
 		        });
 			}
@@ -2648,7 +2747,7 @@ System.out.println("//////////////////");
 								.addComponent(maintaining_btnDelete).addComponent(btnBacktoModule))
 						.addContainerGap()));
 
-		maintaining_tabledata = new TableData(new MaintainingModuleCatalogue());
+		maintaining_tabledata = new TableData(new MaintainingModuleCatalogue(),selected_module);
 		maintaining_scrollPane.setViewportView(maintaining_tabledata.getJdataTable());
 		maintaining_panel.setLayout(gl_maintaining_panel);
 

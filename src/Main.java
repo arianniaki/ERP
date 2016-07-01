@@ -18,21 +18,35 @@ import ResourceManagement.Section.Resource.*;
 
 public class Main {
 	public static void main(String[] args) throws ParseException {
-		System.out.println("This is the Resource Avail Report:");
-		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
-		physResCat.getReport().printRep();
-		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
-		ProjectCatalogue projCat = new ProjectCatalogue();
-		Project proj = projCat.getProject(1);
-		System.out.println("This is the Project Report:");
-		resReqCat.getReport(proj).printRep();
-		System.out.println("Yay! ");
-		ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue ();
-		System.out.println("This is the Project Resource Utilization Report:");
-		prucat.getCirculationReport(physResCat.getResource(1)).printRep();
-		System.out.println("This is the Available Employee Report:");
-		EmployeeCatalogue empcat = new EmployeeCatalogue();
-		empcat.getReport().printRep();
+
+//		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+//		physResCat.getReport().printRep();
+//		System.out.println("This is the Resource Avail Report:");
+//		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
+//		ProjectCatalogue projCat = new ProjectCatalogue();
+//		Project proj = projCat.getProject(1);
+//		System.out.println("This is the Project Report:");
+//		resReqCat.getReport(proj).printRep();
+//		System.out.println("Yay! ");
+//		ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue ();
+//		System.out.println("This is the Project Resource Utilization Report:");
+//		prucat.getCirculationReport(physResCat.getResource(1)).printRep();
+//		System.out.println("This is the Resource Avail Report:");
+//		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+//		physResCat.getReport().printRep();
+//		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
+//		ProjectCatalogue projCat = new ProjectCatalogue();
+//		Project proj = projCat.getProject(1);
+//		System.out.println("This is the Project Report:");
+//		resReqCat.getReport(proj).printRep();
+//		System.out.println("Yay! ");
+//		ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue ();
+//		System.out.println("This is the Project Resource Utilization Report:");
+//		prucat.getCirculationReport(physResCat.getResource(1)).printRep();
+//		System.out.println("This is the Available Employee Report:");
+//		EmployeeCatalogue empcat = new EmployeeCatalogue();
+//		empcat.getReport().printRep();
+
 //		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
 //		physResCat.getReport().printRep();
 //		System.out.println("This is the Resource Requirement Report:");
@@ -98,25 +112,26 @@ public class Main {
 //		System.out.println("**********************END*****************");
 
 		// test resources
-//		FinancialResourceCatalogue fCat = new FinancialResourceCatalogue();
+
+		FinancialResourceCatalogue fCat = new FinancialResourceCatalogue();
 //		fCat.addResource("finanTest", 1,1000,"model1","hello Test");
 //		fCat.getFinancialResource(3).editResource("changed name", 1, 10, "changed model", "changed");
 //		fCat.readAllResources();
-//		fCat.getResource(11);
-//		fCat.deleteResource(18);
-		
+//		fCat.getResource(13);
+//		fCat.deleteResource(13);
+//		
 //		InformationResourceCatalogue infCat = new InformationResourceCatalogue();
 //		infCat.addResource("infoTest",1,"2016-10-10","hello Test");
 //		infCat.getInformationResource(4).editResource("inf", 1, "2016-10-10", "changed desc");
 //		infCat.readAllResources();
 //		infCat.deleteResource(16);
-
+//
 //		ModuleCatalogue mCat = new ModuleCatalogue();
 //		mCat.addResource("moduleTest", 1, 10, "hello test");
 //		mCat.getModule(3).editResource("edited module", 1, 10, "helloooo");
 //		mCat.readAllResources();	
 //		mCat.deleteResource(14);
-
+//
 //		PhysicalResourceCatalogue physCat = new PhysicalResourceCatalogue();
 //		physCat.addResource("phys res test", 1, "model desc", "hello");
 //		physCat.readAllResources();
@@ -125,7 +140,7 @@ public class Main {
 
 		// test employee
 //		EmployeeCatalogue empCat = new EmployeeCatalogue();
-//		empCat.signUp(false, "negar Ghorbani", "developer", "negar", "123", false, false);
+//		empCat.signUp(false, "negar Ghorbani", "developer", "negar", "123", false);
 //		empCat.readAllEmployees();
 //		empCat.makeDecision(4, true);
 //		
@@ -150,15 +165,12 @@ public class Main {
 		
 		// test ProjectEmployee
 //		ProjectEmployeeCatalogue prempcat = new ProjectEmployeeCatalogue();
-//		prempcat.addProjectEmployee(1, 1);
-//		prempcat.addProjectEmployee(1, 2);
+//		prempcat.addProjectEmployee(1, 1,"2016-01-01","2016-01-02");
 //		ArrayList<ProjectEmployee> premps = prempcat.getProjectEmployeesByProject(1);
-//		System.out.println("%%%%%%%%%%%%%%");
 //		for (int i = 0; i < premps.size(); i++) {
 //			System.out.println(premps.get(i).getEmployee().getId());
 //		}
 //		prempcat.deleteProjectEmployee(1, 1);
-//		prempcat.deleteProjectEmployee(1, 2);
 		
 		// test subSystem:
 //		SubSystemCatalogue subCat = new SubSystemCatalogue();
@@ -184,10 +196,10 @@ public class Main {
 //		System.out.println("get:");
 //		System.out.println(resreqCat.getResourceRequirement(2));
 //		System.out.println("satisfy:");
-//		resreqCat.getResourceRequirement(3).satisfy("2016-12-12");
+//		resreqCat.getResourceRequirement(2).satisfy("2016-12-12");
 //		System.out.println("edit:");
-//		resreqCat.getResourceRequirement(3).edit("2016-08-08", "2016-09-09", false, "1111-11-11");
-//		resreqCat.deleteResourceRequirement(3);
+//		resreqCat.getResourceRequirement(2).edit("2016-08-08", "2016-09-09", false, "1111-11-11");
+//		resreqCat.deleteResourceRequirement(2);
 
 		
 		// test projectresourceutilization

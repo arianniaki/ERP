@@ -118,7 +118,7 @@ public class EmployeeCatalogue {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empname", "\'" + empname + "\'");
-		vars.put("sectionid", Integer.toString(sectionId));
+		vars.put("sid", Integer.toString(sectionId));
 		vars.put("post", "\'" + post + "\'");
 		vars.put("ismodir", Boolean.toString(ismodir));
 		vars.put("username", "\'" + username + "\'");

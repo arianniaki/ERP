@@ -31,7 +31,7 @@ public class Module extends Resource{
 	
 	public void submitToDB(HashMap<String, String> setVars) {
 		HashMap<String, String> condVars = new HashMap<String, String>();
-		condVars.put("rid", Integer.toString(super.getId()));
+		condVars.put("modrid", Integer.toString(super.getId()));
 		DB.update(condVars, setVars, tableName);
 	}
 	
