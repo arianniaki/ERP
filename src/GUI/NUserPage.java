@@ -1502,6 +1502,19 @@ System.out.println("//////////////////");
 							System.out.println(inputs.get(i) + " information");
 						}
 						System.out.println(info_datePicker.getJFormattedTextField().getText());
+						
+						int rowIndex = information_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = information_tabledata.getJdataTable().getSelectedColumn();
+						if (rowIndex == -1) {
+							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+									"Please Select a Resource!");
+						} else {
+
+							String Table_click = (information_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+									.toString()); // the
+							System.out.println(Table_click+" what have you clicked");
+						}
+						
 						// infocat.addResource((inputs.get(0)));
 						// // tu resource ham bayad insert she
 						// allinformation.clear();
@@ -1755,6 +1768,20 @@ System.out.println("//////////////////");
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
+						
+						int rowIndex = financial_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = financial_tabledata.getJdataTable().getSelectedColumn();
+						if (rowIndex == -1) {
+							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+									"Please Select a Resource!");
+						}
+						else {
+
+							String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+									.toString()); // the
+							System.out.println(Table_click + " this was clicked");
+						}
+						System.out.println();
 						FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 						System.out.println("all : ");
 						financat.readAllResources();
@@ -1767,6 +1794,13 @@ System.out.println("//////////////////");
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " financial edit");
 						}
+						
+						
+//						financat.getFinancialResource().editResource("changed name", 1, 10, "changed model", "changed");
+
+						
+						
+						
 						financial_tabledata.update(financat.readAllResources());
 
 					}
@@ -2122,6 +2156,19 @@ System.out.println("//////////////////");
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + "adasa");
 						}
+						
+
+						int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
+						if (rowIndex == -1) {
+							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+									"Please Select a Module!");
+						} else {
+
+							String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+									.toString()); // the
+							System.out.println(Table_click+" ino click");
+							}
 						// mcat.addResource((inputs.get(0)));
 						// // tu resource ham bayad insert she
 						// allmodules.clear();
