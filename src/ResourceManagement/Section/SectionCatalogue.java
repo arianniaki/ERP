@@ -32,7 +32,7 @@ public class SectionCatalogue {
 	
 	public Section getSection(int sid){
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("sectionid", Integer.toString(sid));
+		vars.put("sid", Integer.toString(sid));
 		ResultSet res = DB.select("section",vars,null);
 		Section sec = null;
 		try {
