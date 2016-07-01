@@ -44,9 +44,9 @@ public class SubSystemCatalogue {
 		return result;
 	}
 
-	public SubSystem getSubSystem(int sid){
+	public SubSystem getSubSystem(int subid){
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("sid", Integer.toString(sid));
+		vars.put("subid", Integer.toString(subid));
 		ResultSet res = DB.select("subsystem",vars,null);
 		ProjectCatalogue projCat = new ProjectCatalogue();
 		SectionCatalogue secCat = new SectionCatalogue();
@@ -54,9 +54,9 @@ public class SubSystemCatalogue {
 		try {
 			if (res.next()) {
 				Project proj = projCat.getProject(res.getInt("pid"));
-				Section sec = secCat.getSection(res.getInt("sectionid"));
+				Section sec = secCat.getSection(res.getInt("sid"));
 				subSystem = new SubSystem(res.getString("sname"), proj, sec);
-				subSystem.setId(sid);
+				subSystem.setId(subid);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -71,7 +71,7 @@ public class SubSystemCatalogue {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("sname", "\'"+name+"\'");
 		vars.put("pid", Integer.toString(pid));
-		vars.put("sectionid", Integer.toString(secid));
+		vars.put("sid", Integer.toString(secid));
 
 		long pk=DB.insert(vars, "subsystem");
 		System.out.println("inserted into subsystem table: " + pk);
@@ -80,7 +80,7 @@ public class SubSystemCatalogue {
 	
 	public void deleteSubSystem(int id) {
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("sid", Integer.toString(id));
+		vars.put("subid", Integer.toString(id));
 		DB.delete(vars, "subsystem");
 	}
 

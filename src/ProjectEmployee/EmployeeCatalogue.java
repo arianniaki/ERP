@@ -26,7 +26,7 @@ public class EmployeeCatalogue {
 
 			HashMap<String, String> setVars = new HashMap<String, String>();
 			setVars.put("is_confirmed", "true");
-			setVars.put("sectionid", Integer.toString(6));
+			setVars.put("sid", Integer.toString(6));
 			setVars.put("rid", Integer.toString(rid));
 			setVars.put("accessrightid", Integer.toString(1));
 			HashMap<String, String> condVars = new HashMap<String, String>();
@@ -116,7 +116,7 @@ public class EmployeeCatalogue {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empname", "\'" + empname + "\'");
-		vars.put("sectionid", Integer.toString(sectionId));
+		vars.put("sid", Integer.toString(sectionId));
 		vars.put("post", "\'" + post + "\'");
 		vars.put("ismodir", Boolean.toString(ismodir));
 		vars.put("username", "\'" + username + "\'");
@@ -142,7 +142,7 @@ public class EmployeeCatalogue {
 				emp.setId(res.getInt("empid"));
 				emp.setName(res.getString("empname"));
 				emp.setUsername(res.getString("username"));
-				emp.setSectionId(res.getInt("sectionid"));
+				emp.setSectionId(res.getInt("sid"));
 				emp.setPassword(res.getString("password"));
 				emp.setAccessRight(new AccessRight(res.getInt("accessrightid")));
 				emp.setResId(res.getInt("rid"));

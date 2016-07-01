@@ -4,11 +4,8 @@ import java.util.HashMap;
 
 import DataBase.DataBase;
 import ProjectEmployee.Project;
-import ProjectEmployee.ProjectCatalogue;
 import ResourceManagement.Section.Section;
-import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.Resource;
-import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 public class ProjectResourceUtilization {
 

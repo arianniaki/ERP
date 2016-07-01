@@ -11,7 +11,7 @@ import ResourceManagement.Section.Resource.Module;
 
 public class SubSystem {
 
-	int sid;
+	int subId;
 	String name;
 	Project project;
 	Section section;
@@ -20,10 +20,10 @@ public class SubSystem {
 	
 	
 	public void setId(int sid){
-		this.sid = sid; 
+		this.subId = sid; 
 	}
 	public int getId(){
-		return sid;
+		return subId;
 	}
 	public SubSystem(String name, Project proj, Section sec){
 		this.name = name;
@@ -44,14 +44,14 @@ public class SubSystem {
 		
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("sname", "\'" + name + "\'");
-		vars.put("sectionid", Integer.toString(secid));
+		vars.put("subid", Integer.toString(secid));
 		submitToDB(vars);
 
 	}
 	
 	public void submitToDB(HashMap<String, String> setVars) {
 		HashMap<String, String> condVars = new HashMap<String, String>();
-		condVars.put("sid", Integer.toString(this.sid));
+		condVars.put("subid", Integer.toString(this.subId));
 		DB.update(condVars, setVars, "subsystem");
 	}
 	
