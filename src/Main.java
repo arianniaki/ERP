@@ -18,6 +18,33 @@ import ResourceManagement.Section.Resource.*;
 
 public class Main {
 	public static void main(String[] args) throws ParseException {
+		
+		// test resources
+//		FinancialResourceCatalogue fCat = new FinancialResourceCatalogue();
+//		fCat.addResource("finanTest", 1,1000,"model1","hello Test");
+//		fCat.getFinancialResource(3).editResource("changed name", 1, 10, "changed model", "changed");
+//		fCat.readAllResources();
+//		fCat.getResource(11);
+//		fCat.deleteResource(18);
+		
+//		InformationResourceCatalogue infCat = new InformationResourceCatalogue();
+//		infCat.addResource("infoTest",1,"2016-10-10","hello Test");
+//		infCat.getInformationResource(4).editResource("inf", 1, "2016-10-10", "changed desc");
+//		infCat.readAllResources();
+//		infCat.deleteResource(16);
+
+//		ModuleCatalogue mCat = new ModuleCatalogue();
+//		mCat.addResource("moduleTest", 1, 10, "hello test");
+//		mCat.getModule(3).editResource("edited module", 1, 10, "helloooo");
+//		mCat.readAllResources();	
+//		mCat.deleteResource(14);
+
+//		PhysicalResourceCatalogue physCat = new PhysicalResourceCatalogue();
+//		physCat.addResource("phys res test", 1, "model desc", "hello");
+//		physCat.readAllResources();
+//		physCat.getPhysicalResource(3).editResource("physName changed", 1, "model changed", "hello changed");
+//		physCat.deleteResource(15);
+
 		// test employee
 //		EmployeeCatalogue empCat = new EmployeeCatalogue();
 //		empCat.signUp(false, "negar Ghorbani", "developer", "negar", "123", false, false);

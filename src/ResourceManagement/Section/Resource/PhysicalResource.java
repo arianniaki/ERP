@@ -12,10 +12,10 @@ public class PhysicalResource extends Resource{
 		tableName = "physres";
 	}
 	
-	public void editResource(String name, String modeldesc, String desc){
+	public void editResource(String name,int SectionId, String modeldesc, String desc){
 		this.modeldesc = modeldesc;
 		this.description = desc;
-		super.editResource(name);
+		super.editResource(name,SectionId);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("physname", "\'" + name + "\'");
 		vars.put("modeldesc", "\'" + modeldesc + "\'");

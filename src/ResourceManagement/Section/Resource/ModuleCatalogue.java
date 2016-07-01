@@ -14,8 +14,8 @@ public class ModuleCatalogue extends ResourceCatalogue{
 		tableName = "module";
 	}
 	
-	public long addResource(String name, int duration, String desc) {
-		long resid = super.addResource(name);
+	public long addResource(String name,int SectionId, int duration, String desc) {
+		long resid = super.addResource(name,SectionId);
 		System.out.println("resid in module cata: "+resid);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", resid+"");
@@ -33,7 +33,7 @@ public class ModuleCatalogue extends ResourceCatalogue{
 		Module mod = new Module();
 		try {
 			if(res.next()){
-				mod.getFromDB(modid);			
+				mod.getFromDB(modid);	
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

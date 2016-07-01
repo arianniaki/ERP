@@ -36,12 +36,11 @@ public class ResourceCatalogue {
 		res.getFromDB(rid);
 		return res;
 	}
-	public long addResource(String name) {
+	public long addResource(String name, int sectionId) {
 		HashMap<String, String> vars = new HashMap<String, String>();
-//		vars.put("rid", Integer.toString(rid));
 		vars.put("rname", "\'"+name+"\'");
+		vars.put("sid", Integer.toString(sectionId));
 		long pk=DB.insert(vars, "resource");
-		System.out.println(pk+" return //////");
 		return pk;
 	}
 
@@ -76,4 +75,6 @@ public class ResourceCatalogue {
 		}
 		return result;		
 	}
+	
+	
 }
