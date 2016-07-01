@@ -40,7 +40,7 @@ public class ProjectResourceUtilizationCatalogue {
 			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("pid")));
 			Section sc = scat.getSection(Integer.parseInt(result.get(i).get("sid")));
 			Resource rs = rcat.getResource(Integer.parseInt(result.get(i).get("rid")));
-			ProjectResourceUtilization pru = new ProjectResourceUtilization(pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"));
+			ProjectResourceUtilization pru = new ProjectResourceUtilization(Integer.parseInt(result.get(i).get("presutilid")),pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"));
 			ProjResUtil.add(pru);
 		}
 		return ProjResUtil;
@@ -64,7 +64,7 @@ public class ProjectResourceUtilizationCatalogue {
 				pr = pcat.getProject(res.getInt("pid"));
 				Section sc = scat.getSection(res.getInt("sid"));
 				Resource rs = rcat.getResource(res.getInt("rid"));
-				pru = new ProjectResourceUtilization(pr, sc, rs,res.getString("fromdate"), res.getString("todate"));
+				pru = new ProjectResourceUtilization(res.getInt("presutilid"),pr, sc, rs,res.getString("fromdate"), res.getString("todate"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -91,7 +91,7 @@ public class ProjectResourceUtilizationCatalogue {
 			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("pid")));
 			Section sc = scat.getSection(Integer.parseInt(result.get(i).get("sid")));
 			Resource rs = rcat.getResource(Integer.parseInt(result.get(i).get("rid")));
-			ProjectResourceUtilization pru = new ProjectResourceUtilization(pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"));
+			ProjectResourceUtilization pru = new ProjectResourceUtilization(Integer.parseInt(result.get(i).get("presutilid")),pr, sc, rs, result.get(i).get("fromdate"), result.get(i).get("todate"));
 			ProjResUtil.add(pru);
 		}
 		return ProjResUtil;

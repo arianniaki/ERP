@@ -18,41 +18,40 @@ public class ProjectResourceUtilization {
 	String from;
 	String to;
 	DataBase DB;
+	int pruId;
 	
 
-	public ProjectResourceUtilization(Project project, Section section, Resource resource, String from, String to){
+	public ProjectResourceUtilization(int pruid, Project project, Section section, Resource resource, String from, String to){
 		this.project = project;
 		this.section = section;
 		this.resource = resource;
 		this.from = from;
 		this.to = to;
+		this.pruId = pruid;
 		DB = new DataBase();
+	}
+	
+	public int getId(){
+		return pruId;
 	}
 	
 	
 	public void edit(String from, String to){
-		int rid = this.resource.getId();
-		int pid = this.project.getId();
-		int sid = this.section.getId();
 		
 		HashMap<String, String> setVars = new HashMap<String, String>();
 
 		setVars.put("fromdate", "\'"+from+"\'");
 		setVars.put("todate", "\'"+to+"\'");
-		submitToDB(setVars, rid, sid, pid, this.from, this.to);
+		submitToDB(setVars);
 		this.from = from;
 		this.to = to;
  
 
 	}
 	
-	public void submitToDB(HashMap<String, String> setVars, int rid, int sid, int pid, String from, String to) {
+	public void submitToDB(HashMap<String, String> setVars) {
 		HashMap<String, String> condVars = new HashMap<String, String>();
-		condVars.put("rid", Integer.toString(rid));
-		condVars.put("sid", Integer.toString(sid));
-		condVars.put("pid", Integer.toString(pid));
-		condVars.put("fromdate", "\'"+from+ "\'");
-		condVars.put("todate",  "\'"+to+ "\'");
+		condVars.put("presutilid", Integer.toString(this.pruId));
 
 		DB.update(condVars, setVars, "projectresourceutilization");
 	}
@@ -64,6 +63,7 @@ public class ProjectResourceUtilization {
 	
 	public HashMap<String,String> toHashMap(){
 		HashMap<String,String> resreq = new HashMap<String,String>();
+		resreq.put("presutilid", Integer.toString(this.pruId));
 		resreq.put("rid", Integer.toString(this.resource.getId()));
 		resreq.put("sid",Integer.toString(this.section.getId()));
 		resreq.put("pid",Integer.toString(this.project.getId()));

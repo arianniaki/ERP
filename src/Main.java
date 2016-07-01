@@ -18,57 +18,57 @@ import ResourceManagement.Section.Resource.*;
 
 public class Main {
 	public static void main(String[] args) throws ParseException {
-		System.out.println("**********************MAINTAIN TEST*****************");
-		MaintainingModuleCatalogue mmc = new MaintainingModuleCatalogue();
-		int maintainid=(int) mmc.addMaintainingModule(5, "adaptive", 10);
-		ArrayList<MaintainingModule> mmadule = mmc.getMaintainingModules(5);
-		System.out.println("HASHMAP BEFORE EDIT: "+mmadule.get(0).toHashMap());
-		mmadule.get(0).edit("preventive", 16);
-		System.out.println("HASHMAP AFTER EDIT: "+mmadule.get(0).toHashMap());
-		System.out.println("ID is "+mmadule.get(0).getId());
-		System.out.println("size before delete:"+mmadule.size());
-		mmc.deleteMaintainingModule(maintainid);
-		mmadule = mmc.getMaintainingModules(5);
-		System.out.println("size after delete:"+mmadule.size());
-		System.out.println("**********************END*****************");
-		System.out.println("**********************maintain mod emp res TEST*****************");
-		MaintainModEmpResCatalogue mmerc = new MaintainModEmpResCatalogue();
-		ArrayList<Employee> emps = mmerc.getEmployees(1);
-		System.out.println("################emp size :"+emps.size());
-		ArrayList<Resource> reses = mmerc.getResources(1);
-		System.out.println("################reses size :"+reses.size());
-		mmerc.addEmployee(3, 1);
-		emps = mmerc.getEmployees(1);
-		System.out.println("################emp size :"+emps.size());
-		mmerc.addResource(4, 1);
-		reses = mmerc.getResources(1);
-		System.out.println("################reses size :"+reses.size());
-		mmerc.deleteEmployee(3, 1);
-		emps = mmerc.getEmployees(1);
-		System.out.println("################emp size :"+emps.size());
-		mmerc.deleteResource(4, 1);
-		reses = mmerc.getResources(1);
-		System.out.println("################reses size :"+reses.size());
-		System.out.println("**********************END*****************");
-		System.out.println("**********************make module catalogue TEST*****************");
-		MakeModuleCatalogue mmca = new MakeModuleCatalogue();
-		emps = mmca.getEmployees(5);
-		System.out.println("################emp size :"+emps.size());
-		reses = mmca.getResources(5);
-		System.out.println("################reses size :"+reses.size());
-		mmca.addEmployee(3, 5);
-		emps = mmca.getEmployees(5);
-		System.out.println("################emp size :"+emps.size());
-		mmca.addResource(4, 5);
-		reses = mmca.getResources(5);
-		System.out.println("################reses size :"+reses.size());
-		mmca.deleteEmployee(3, 5);
-		emps = mmca.getEmployees(5);
-		System.out.println("################emp size :"+emps.size());
-		mmca.deleteResource(4, 5);
-		reses = mmca.getResources(5);
-		System.out.println("################reses size :"+reses.size());
-		System.out.println("**********************END*****************");
+//		System.out.println("**********************MAINTAIN TEST*****************");
+//		MaintainingModuleCatalogue mmc = new MaintainingModuleCatalogue();
+//		int maintainid=(int) mmc.addMaintainingModule(5, "adaptive", 10);
+//		ArrayList<MaintainingModule> mmadule = mmc.getMaintainingModules(5);
+//		System.out.println("HASHMAP BEFORE EDIT: "+mmadule.get(0).toHashMap());
+//		mmadule.get(0).edit("preventive", 16);
+//		System.out.println("HASHMAP AFTER EDIT: "+mmadule.get(0).toHashMap());
+//		System.out.println("ID is "+mmadule.get(0).getId());
+//		System.out.println("size before delete:"+mmadule.size());
+//		mmc.deleteMaintainingModule(maintainid);
+//		mmadule = mmc.getMaintainingModules(5);
+//		System.out.println("size after delete:"+mmadule.size());
+//		System.out.println("**********************END*****************");
+//		System.out.println("**********************maintain mod emp res TEST*****************");
+//		MaintainModEmpResCatalogue mmerc = new MaintainModEmpResCatalogue();
+//		ArrayList<Employee> emps = mmerc.getEmployees(1);
+//		System.out.println("################emp size :"+emps.size());
+//		ArrayList<Resource> reses = mmerc.getResources(1);
+//		System.out.println("################reses size :"+reses.size());
+//		mmerc.addEmployee(3, 1);
+//		emps = mmerc.getEmployees(1);
+//		System.out.println("################emp size :"+emps.size());
+//		mmerc.addResource(4, 1);
+//		reses = mmerc.getResources(1);
+//		System.out.println("################reses size :"+reses.size());
+//		mmerc.deleteEmployee(3, 1);
+//		emps = mmerc.getEmployees(1);
+//		System.out.println("################emp size :"+emps.size());
+//		mmerc.deleteResource(4, 1);
+//		reses = mmerc.getResources(1);
+//		System.out.println("################reses size :"+reses.size());
+//		System.out.println("**********************END*****************");
+//		System.out.println("**********************make module catalogue TEST*****************");
+//		MakeModuleCatalogue mmca = new MakeModuleCatalogue();
+//		emps = mmca.getEmployees(5);
+//		System.out.println("################emp size :"+emps.size());
+//		reses = mmca.getResources(5);
+//		System.out.println("################reses size :"+reses.size());
+//		mmca.addEmployee(3, 5);
+//		emps = mmca.getEmployees(5);
+//		System.out.println("################emp size :"+emps.size());
+//		mmca.addResource(4, 5);
+//		reses = mmca.getResources(5);
+//		System.out.println("################reses size :"+reses.size());
+//		mmca.deleteEmployee(3, 5);
+//		emps = mmca.getEmployees(5);
+//		System.out.println("################emp size :"+emps.size());
+//		mmca.deleteResource(4, 5);
+//		reses = mmca.getResources(5);
+//		System.out.println("################reses size :"+reses.size());
+//		System.out.println("**********************END*****************");
 
 		
 		// test resources
@@ -156,12 +156,12 @@ public class Main {
 //			System.out.println(resreqs.get(i).toHashMap());
 //		}
 //		System.out.println("get:");
-//		System.out.println(resreqCat.getResourceRequirement(1));
+//		System.out.println(resreqCat.getResourceRequirement(2));
 //		System.out.println("satisfy:");
-//		resreqCat.getResourceRequirement(1).satisfy("2016-12-12");
+//		resreqCat.getResourceRequirement(3).satisfy("2016-12-12");
 //		System.out.println("edit:");
-//		resreqCat.getResourceRequirement(1).edit("2016-08-08", "2016-09-09", false, "1111-11-11");
-//		resreqCat.deleteResourceRequirement(1);
+//		resreqCat.getResourceRequirement(3).edit("2016-08-08", "2016-09-09", false, "1111-11-11");
+//		resreqCat.deleteResourceRequirement(3);
 
 		
 		// test projectresourceutilization
@@ -171,14 +171,13 @@ public class Main {
 //		for (int i = 0; i < pru.size(); i++) {
 //			System.out.println(pru.get(i).toString());
 //		}
-//
 //		System.out.println("add:");
 //		projres.addProjectResourceUtilization(3,2,1,"2016-01-01","2016-01-01");
 //		System.out.println("get :");
-//		System.out.println(projres.getProjectResourceUtilization(1).toHashMap());
-//		projres.getProjectResourceUtilization(1).edit("2016-04-04", "2016-04-05");
+//		System.out.println(projres.getProjectResourceUtilization(2).toHashMap());
+//		projres.getProjectResourceUtilization(2).edit("2016-04-04", "2016-04-05");
 //		System.out.println("delete");
-//		projres.deleteProjectResourceUtilization(1);
+//		projres.deleteProjectResourceUtilization(2);
 		
 
 		//test sign up
