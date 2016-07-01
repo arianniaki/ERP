@@ -121,13 +121,16 @@ public class DataBase {
 			c.commit();
 			if (out > 0) {
 				System.out.println("Operation done successfully");
+				this.connectionClose();
 				return true;
 			} else {
+				this.connectionClose();
 				return false;
 			}
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
+			this.connectionClose();
 			return false;
 		}
 	}
