@@ -26,14 +26,14 @@ public class ModuleCatalogue extends ResourceCatalogue{
 		return DB.insert(vars, tableName);
 	}
 	
-	public Module getModule(int modid){
+	public Module getModule(int modrid){
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("modid", modid+"");
+		vars.put("modrid", modrid+"");
 		ResultSet res = DB.select(tableName, vars, null);
 		Module mod = new Module();
 		try {
 			if(res.next()){
-				mod.getFromDB(modid);			
+				mod.getFromDB(modrid);			
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

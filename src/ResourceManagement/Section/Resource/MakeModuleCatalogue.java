@@ -20,15 +20,15 @@ public class MakeModuleCatalogue {
 	String empTableName;
 	public MakeModuleCatalogue(){
 		DB = new DataBase();
-		resTableName = "moduleresource";
+		resTableName = "moduleresourceutilization";
 		empTableName = "moduleemployee";
 	}
 	
-	public ArrayList<Employee> getEmployees(int  modid){
+	public ArrayList<Employee> getEmployees(int modrid){
 		ArrayList<Employee> empRes = new ArrayList<Employee>();
 		Table table = new Table(empTableName);
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("modid", Integer.toString(modid));
+		vars.put("modrid", Integer.toString(modrid));
 		ArrayList<HashMap<String, String>> result = table.search(vars);
 		EmployeeCatalogue empcat = new EmployeeCatalogue();
 		for (int i = 0; i < result.size(); i++) {
@@ -39,11 +39,11 @@ public class MakeModuleCatalogue {
 		return empRes;
 	}
 	
-	public ArrayList<Resource> getResources(int  modid){
+	public ArrayList<Resource> getResources(int  modrid){
 		ArrayList<Resource> resRes = new ArrayList<Resource>();
 		Table table = new Table(resTableName);
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("modid", Integer.toString(modid));
+		vars.put("modrid", Integer.toString(modrid));
 		ArrayList<HashMap<String, String>> result = table.search(vars);
 		ResourceCatalogue rescat = new ResourceCatalogue();
 		for (int i = 0; i < result.size(); i++) {
@@ -53,33 +53,33 @@ public class MakeModuleCatalogue {
 		return resRes;
 	}
 	
-	public long addEmployee(int empid, int modid) {
+	public long addEmployee(int empid, int modrid) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", "\'"+empid+"\'");
-		vars.put("modid", "\'"+modid+"\'");	
+		vars.put("modrid", "\'"+modrid+"\'");	
 		long pk=DB.insert(vars, empTableName);
 		return pk;
 	}
 	
-	public long addResource(int resid, int modid) {
+	public long addResource(int resid, int modrid) {
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("resid", "\'"+resid+"\'");
-		vars.put("modid", "\'"+modid+"\'");	
+		vars.put("rid", "\'"+resid+"\'");
+		vars.put("modrid", "\'"+modrid+"\'");	
 		long pk=DB.insert(vars, resTableName);
 		return pk;
 	}
 	
-	public void deleteEmployee(int empid, int modid) {
+	public void deleteEmployee(int empid, int modrid) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", "\'"+empid+"\'");
-		vars.put("modid", "\'"+modid+"\'");	
+		vars.put("modrid", "\'"+modrid+"\'");	
 		DB.delete(vars, empTableName);
 	}
 	
-	public void deleteResource(int resid, int modid) {
+	public void deleteResource(int resid, int modrid) {
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("resid", "\'"+resid+"\'");
-		vars.put("modid", "\'"+modid+"\'");	
+		vars.put("rid", "\'"+resid+"\'");
+		vars.put("modrid", "\'"+modrid+"\'");	
 		DB.delete(vars, resTableName);
 	}
 	

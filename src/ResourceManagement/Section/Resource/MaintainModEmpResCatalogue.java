@@ -57,7 +57,7 @@ public class MaintainModEmpResCatalogue {
 	
 	public long addResource(int resid, int maintainid) {
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("resid", "\'"+resid+"\'");
+		vars.put("rid", "\'"+resid+"\'");
 		vars.put("maintainid", "\'"+maintainid+"\'");	
 		long pk=DB.insert(vars, resTableName);
 		return pk;
@@ -72,7 +72,7 @@ public class MaintainModEmpResCatalogue {
 	
 	public void deleteResource(int resid, int maintainid) {
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("resid", "\'"+resid+"\'");
+		vars.put("rid", "\'"+resid+"\'");
 		vars.put("maintainid", "\'"+maintainid+"\'");	
 		DB.delete(vars, resTableName);
 	}

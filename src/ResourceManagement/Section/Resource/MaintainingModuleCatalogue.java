@@ -20,19 +20,19 @@ public class MaintainingModuleCatalogue {
 		DB = new DataBase();
 	}
 	
-	public ArrayList<MaintainingModule> getMaintainingModules(int modid){
+	public ArrayList<MaintainingModule> getMaintainingModules(int modrid){
 	
 		ArrayList<MaintainingModule> mms = new ArrayList<MaintainingModule>();
 
 		Table table = new Table("maintainmodule");
 
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("modid", Integer.toString(modid));
+		vars.put("modrid", Integer.toString(modrid));
 				
 		ArrayList<HashMap<String, String>> result = table.search(vars);
 		for (int i = 0; i < result.size(); i++) {
 			ModuleCatalogue modcat = new ModuleCatalogue();
-			Module module = modcat.getModule(modid);
+			Module module = modcat.getModule(modrid);
 			MaintainingModule mm = new MaintainingModule(module, Integer.parseInt(result.get(i).get("maintainid")), result.get(i).get("changetype"), Integer.parseInt(result.get(i).get("duration")));
 
 			mms.add(mm);
@@ -40,9 +40,9 @@ public class MaintainingModuleCatalogue {
 		return mms;
 	}
 	
-	public long addMaintainingModule (int modid, String changeType, int duration){
+	public long addMaintainingModule (int modrid, String changeType, int duration){
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("modid", modid+"");
+		vars.put("modrid", modrid+"");
 		vars.put("changeType", "\'"+changeType+"\'");
 		vars.put("duration", duration+"");
 		

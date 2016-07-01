@@ -13,8 +13,8 @@ public class ModuleEmployee {
 	}
 	public HashMap<String,String> toHashMap(){
 		HashMap<String,String> resreq = new HashMap<String,String>();
-		resreq.put("empid", MaintainingModule.toString(this.employee.getId()));
-		resreq.put("modid", MaintainingModule.toString(this.module.getId()));
+		resreq.put("empid", Integer.toString(this.employee.getId()));
+		resreq.put("modrid", Integer.toString(this.module.getId()));
 		return resreq;
 	}
 	public Module getModule() {

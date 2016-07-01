@@ -12,7 +12,7 @@ public class ModuleResourceUtilization {
 	public HashMap<String,String> toHashMap(){
 		HashMap<String,String> resreq = new HashMap<String,String>();
 		resreq.put("rid", Integer.toString(this.resource.getId()));
-		resreq.put("modid", Integer.toString(this.module.getId()));
+		resreq.put("modrid", Integer.toString(this.module.getId()));
 		return resreq;
 	}
 

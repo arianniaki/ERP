@@ -37,13 +37,13 @@ public class Module extends Resource{
 		DB.update(condVars, setVars, tableName);
 	}
 	
-	public boolean getFromDB(int modid){
+	public boolean getFromDB(int modrid){
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("modid", Integer.toString(modid));
+		vars.put("modrid", Integer.toString(modrid));
 		ResultSet rs = DB.select("module", vars, null);
 		try {
 			if (rs.next()) {
-				setId(rs.getInt("modid"));
+				setId(rs.getInt("modrid"));
 				setName(rs.getString("modname"));
 				this.description = rs.getString("description");
 				this.duration = rs.getInt("duration");
