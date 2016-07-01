@@ -40,6 +40,7 @@ public class MaintainingModule {
 	
 	public HashMap<String,String> toHashMap(){
 		HashMap<String,String> mm = new HashMap<String,String>();
+		mm.put("modrid", Integer.toString(this.module.getId())+"");
 		mm.put("maintainid",Integer.toString(this.mmid));
 		mm.put("changetype", this.changeType);
 		mm.put("duration",Integer.toString(this.duration));
