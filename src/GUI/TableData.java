@@ -71,7 +71,7 @@ public class TableData {
 		}
 		if (type == "module") {
 			columns = new String[] { "Id", "Name","Duration","Description" };
-			dbnames = new String[] { "rid", "modname","duration","description" };
+			dbnames = new String[] { "modrid", "modname","duration","description" };
 		}
 		if(type=="all")
 		{
@@ -143,8 +143,8 @@ public class TableData {
 	}
 	public TableData(ResourceRequirementCatalogue resreqcat) {
 		data= new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "resreqid","rid", "sid", "pid","fromdate","todate" };
-		dbnames = new String[] { "resreqid","rid", "sid", "pid","fromdate","todate"};
+		columns = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate" };
+		dbnames = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate"};
 		ArrayList<ResourceRequirement> allresourcerequirements;
 		allresourcerequirements = resreqcat.getResourceRequirements();
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
@@ -161,6 +161,19 @@ public class TableData {
 			columns = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
 			dbnames = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
 		}
+		if(type=="cycle report")
+		{
+			columns = new String[] {"sid", "presutilid", "rid", "pname", "fromdate", "rname", "todate", "pid", "sname"};
+			dbnames = new String[] { "sid", "presutilid", "rid", "pname", "fromdate", "rname", "todate", "pid", "sname"};
+		}
+		if(type=="resavail report")
+		{
+			columns = new String[] {"sid", "count", "resource name"};
+			dbnames = new String[] { "sid", "count", "physname"};
+
+		}
+
+		
 		this.buildFilledJTable();
 
 	}
@@ -185,8 +198,26 @@ public class TableData {
 		}
 		return jdataTable;
 	}
-
 	public void update(ArrayList<HashMap<String, String>> inputData) {
+		// TODO Auto-generated method stub
+		data = inputData;
+
+		int rowcount = dataTableModel.getRowCount();
+		for (int j = rowcount - 1; j >= 0; j--) {
+			dataTableModel.removeRow(j);
+		}
+		for (int i = 0; i < data.size(); i++) {
+			Object[] objs = new Object[dbnames.length];
+			for (int j = 0; j < dbnames.length; j++) {
+				objs[j] = data.get(i).get(dbnames[j]);
+			}
+			dataTableModel.addRow(objs);
+		}
+
+	}
+	
+	
+	public void update(ArrayList<HashMap<String, String>> inputData	,String[] dbnames) {
 		// TODO Auto-generated method stub
 		data = inputData;
 

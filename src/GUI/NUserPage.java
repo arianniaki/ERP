@@ -121,7 +121,7 @@ public class NUserPage {
 	private TableData allresource_tabledata;
 	private TableData maintaining_tabledata;
 	private TableData resreq_tabledata;
-	private TableData cycle_tabledata;
+	private TableData circulation_tabledata;
 	private TableData resavail_tabledata;
 	private TableData subsystem_tabledata;
 	private TableData resourceutil_tabledata;
@@ -2235,8 +2235,7 @@ System.out.println("//////////////////");
 					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
 							"Please Select a module!");
 				} else {
-					String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // return
+					String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
 
 					System.out.println(Table_click);
 					System.out.println("-----");
@@ -3319,16 +3318,16 @@ System.out.println("//////////////////");
 		sl_reportPanel.putConstraint(SpringLayout.EAST, reportsTab, 827, SpringLayout.WEST, reportPanel);
 		reportPanel.add(reportsTab);
 
-		JPanel cyclePanel = new JPanel();
-		reportsTab.addTab("Cycle Report", null, cyclePanel, null);
+		JPanel circulationPanel = new JPanel();
+		reportsTab.addTab("Circulation Report", null, circulationPanel, null);
 
-		JScrollPane cycle_scrollPane = new JScrollPane();
+		JScrollPane circulation_scrollPane = new JScrollPane();
 
-		JButton cycle_btnGetReport = new JButton("Get Report");
-		cycle_btnGetReport.setIcon(new ImageIcon(
+		JButton circulation_btnGetReport = new JButton("Get Report");
+		circulation_btnGetReport.setIcon(new ImageIcon(
 				new ImageIcon("images/report.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
-		cycle_btnGetReport.addActionListener(new ActionListener() {
+		circulation_btnGetReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> resource_types = new ArrayList<String>();
 				final ArrayList<String> resources = new ArrayList<String>();
@@ -3337,29 +3336,29 @@ System.out.println("//////////////////");
 				resource_types.add("Physical");
 				resource_types.add("Employee");
 				resource_types.add("Module");
-				ArrayList<Field> cyclicReport_Fields = new ArrayList<Field>();
+				ArrayList<Field> circulationReport_Fields = new ArrayList<Field>();
 				Field res_type = new Field("comboBox", "resource types", resource_types, 30, "items");
 				Field res = new Field("comboBox", "resources", resources, 30, "items");
 
-				cyclicReport_Fields.add(res_type);
-				cyclicReport_Fields.add(res);
+				circulationReport_Fields.add(res_type);
+				circulationReport_Fields.add(res);
 
-				final Form cycliclreport_Form = new Form(cyclicReport_Fields, "Cyclic Report Form");
-				final PanelBuilder cylic_Panel = new PanelBuilder(cycliclreport_Form);
-				cylic_Panel.makeForm();
+				final Form circulationreport_Form = new Form(circulationReport_Fields, "Circulation Report Form");
+				final PanelBuilder circulation_Panel = new PanelBuilder(circulationreport_Form);
+				circulation_Panel.makeForm();
 
-				JFrame getReport_CycliclPage = new JFrame("Get Report Cyclic Resource Form");
+				JFrame getReport_CirculationPage = new JFrame("Get Report Circulation Resource Form");
 
-				getReport_CycliclPage.getContentPane().add(cycliclreport_Form.getJPanel(), BorderLayout.NORTH);
+				getReport_CirculationPage.getContentPane().add(circulationreport_Form.getJPanel(), BorderLayout.NORTH);
 
 				JButton submitgetReportBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submitgetReportBtn);
-				getReport_CycliclPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				getReport_CycliclPage.pack();
-				getReport_CycliclPage.setVisible(true);
-				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) cycliclreport_Form.getJPanel().getComponent(0);
-				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) cycliclreport_Form.getJPanel().getComponent(1);
+				getReport_CirculationPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				getReport_CirculationPage.pack();
+				getReport_CirculationPage.setVisible(true);
+				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) circulationreport_Form.getJPanel().getComponent(0);
+				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) circulationreport_Form.getJPanel().getComponent(1);
 
 				final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
 				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
@@ -3425,25 +3424,35 @@ System.out.println("//////////////////");
 						}
 						System.out.println("rid: " + rid);
 
+						ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue ();
+						PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+						System.out.println("This is the Project Resource Utilization Report:");
+						prucat.getCirculationReport(physResCat.getResource(Integer.parseInt(rid.replace("rid=","")))).printRep();
+						
+						
+						circulation_tabledata.update(prucat.getCirculationReport(physResCat.getResource(Integer.parseInt(rid.replace("rid=","")))).getResults());
+
+						
+						
 					}
 				});
 			}
 		});
-		GroupLayout gl_cyclePanel = new GroupLayout(cyclePanel);
-		gl_cyclePanel.setHorizontalGroup(gl_cyclePanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_cyclePanel.createSequentialGroup().addGap(20)
-						.addComponent(cycle_scrollPane, GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE).addGap(20))
-				.addGroup(Alignment.TRAILING, gl_cyclePanel.createSequentialGroup()
-						.addContainerGap(679, Short.MAX_VALUE).addComponent(cycle_btnGetReport)));
-		gl_cyclePanel
-				.setVerticalGroup(gl_cyclePanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_cyclePanel.createSequentialGroup().addComponent(cycle_btnGetReport).addGap(20)
-								.addComponent(cycle_scrollPane, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+		GroupLayout gl_circulationPanel = new GroupLayout(circulationPanel);
+		gl_circulationPanel.setHorizontalGroup(gl_circulationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_circulationPanel.createSequentialGroup().addGap(20)
+						.addComponent(circulation_scrollPane, GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE).addGap(20))
+				.addGroup(Alignment.TRAILING, gl_circulationPanel.createSequentialGroup()
+						.addContainerGap(679, Short.MAX_VALUE).addComponent(circulation_btnGetReport)));
+		gl_circulationPanel
+				.setVerticalGroup(gl_circulationPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_circulationPanel.createSequentialGroup().addComponent(circulation_btnGetReport).addGap(20)
+								.addComponent(circulation_scrollPane, GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
 								.addGap(20)));
 
-		cycle_tabledata = new TableData(new ArrayList<HashMap<String, String>>(),"cycle report");
-		cycle_scrollPane.setViewportView(cycle_tabledata.getJdataTable());
-		cyclePanel.setLayout(gl_cyclePanel);
+		circulation_tabledata = new TableData(new ArrayList<HashMap<String, String>>(),"cycle report");
+		circulation_scrollPane.setViewportView(circulation_tabledata.getJdataTable());
+		circulationPanel.setLayout(gl_circulationPanel);
 
 		JPanel resourcereqPanel = new JPanel();
 		reportsTab.addTab("Resource Requirement Report", null, resourcereqPanel, null);
@@ -3581,20 +3590,34 @@ System.out.println("//////////////////");
 						// finanResCat.getReport().printRep();
 						//
 						if (resourceRepCombo.getSelectedItem().toString().equals("Financial")) {
+							FinancialResourceCatalogue finanResCat = new FinancialResourceCatalogue();
+//							System.out.println(finanResCat.getReport().getResults());
+							resavail_tabledata.update(finanResCat.getReport().getResults(),new String[] { "sid", "count", "finanname"});
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Physical")) {
-							
-//							PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
-//							System.out.println("JHERE");
+							//HERE
+							PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
 //							System.out.println(physResCat.getReport().getResults());
-//							resavail_tabledata.update(physResCat.getReport().getResults());
+							resavail_tabledata.update(physResCat.getReport().getResults(),new String[] { "sid", "count", "physname"});
 							
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Information")) {
+							InformationResourceCatalogue infoResCat = new InformationResourceCatalogue();
+//							System.out.println(infoResCat.getReport().getResults());
+							resavail_tabledata.update(infoResCat.getReport().getResults(),new String[] { "sid", "count", "irname"});
+
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Employee")) {
+//							EmployeeCatalogue empResCat = new EmployeeCatalogue();
+//							System.out.println(empResCat.getReport().getResults());
+//							resavail_tabledata.update(empResCat.getReport().getResults());
+
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Module")) {
+							ModuleCatalogue modResCat = new ModuleCatalogue();
+//							System.out.println(modResCat.getReport().getResults());
+							resavail_tabledata.update(modResCat.getReport().getResults(),new String[] { "sid", "count", "modname"});
+
 						}
 
 					}
@@ -3615,7 +3638,7 @@ System.out.println("//////////////////");
 				.addGroup(gl_resourceavailPanel.createSequentialGroup().addComponent(resavail_btnGetReport).addGap(20)
 						.addComponent(resavail_scrollpane, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE).addGap(20)));
 
-		resavail_tabledata = new TableData(new ArrayList<HashMap<String, String>>(),"res avail");
+		resavail_tabledata = new TableData(new ArrayList<HashMap<String, String>>(),"resavail report");
 		resavail_scrollpane.setViewportView(resavail_tabledata.getJdataTable());
 		resourceavailPanel.setLayout(gl_resourceavailPanel);
 		// }

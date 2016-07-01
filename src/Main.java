@@ -18,7 +18,18 @@ import ResourceManagement.Section.Resource.*;
 
 public class Main {
 	public static void main(String[] args) throws ParseException {
-		
+		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+		physResCat.getReport().printRep();
+		System.out.println("This is the Resource Avail Report:");
+		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
+		ProjectCatalogue projCat = new ProjectCatalogue();
+		Project proj = projCat.getProject(1);
+		System.out.println("This is the Project Report:");
+		resReqCat.getReport(proj).printRep();
+		System.out.println("Yay! ");
+		ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue ();
+		System.out.println("This is the Project Resource Utilization Report:");
+		prucat.getCirculationReport(physResCat.getResource(1)).printRep();
 //		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
 //		physResCat.getReport().printRep();
 //		System.out.println("This is the Resource Requirement Report:");
