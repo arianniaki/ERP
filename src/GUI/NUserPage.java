@@ -113,7 +113,7 @@ public class NUserPage {
 	// private JTable human_table;
 	// private JTable maintaining_table;
 	// private JTable requirement_table;
-	private TableData resrequirement_table;
+	private TableData resrequirement_tabledata;
 	private TableData accessright_tabledata;
 	private TableData registered_tabledata;
 	private TableData project_tabledata;
@@ -1124,7 +1124,7 @@ public class NUserPage {
 						for (int i = 0; i < allresourcerequirements.size(); i++) {
 							data.add((allresourcerequirements.get(i).toHashMap()));
 						}
-						resrequirement_table.update(data);
+						resrequirement_tabledata.update(data);
 
 						// System.out.println(resreq_tableModel.getRowCount() +
 						// "");
@@ -1221,14 +1221,14 @@ public class NUserPage {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 
-						int rowIndex = resrequirement_table.getJdataTable().getSelectedRow();
-						int colIndex = resrequirement_table.getJdataTable().getSelectedColumn();
+						int rowIndex = resrequirement_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = resrequirement_tabledata.getJdataTable().getSelectedColumn();
 						if (rowIndex == -1) {
 							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
 									"Please Select a Resource!");
 						} else {
 
-							String Table_click = (resrequirement_table.getJdataTable().getModel()
+							String Table_click = (resrequirement_tabledata.getJdataTable().getModel()
 									.getValueAt(rowIndex, 0).toString()); // the
 							System.out.println(Table_click + " what have you clicked");
 
@@ -1255,7 +1255,7 @@ public class NUserPage {
 							for (int i = 0; i < allresourcerequirements.size(); i++) {
 								data.add((allresourcerequirements.get(i).toHashMap()));
 							}
-							resrequirement_table.update(data);
+							resrequirement_tabledata.update(data);
 						}
 					}
 				});
@@ -1311,14 +1311,14 @@ public class NUserPage {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 
-						int rowIndex = resrequirement_table.getJdataTable().getSelectedRow();
-						int colIndex = resrequirement_table.getJdataTable().getSelectedColumn();
+						int rowIndex = resrequirement_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = resrequirement_tabledata.getJdataTable().getSelectedColumn();
 						if (rowIndex == -1) {
 							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
 									"Please Select a Resource!");
 						} else {
 
-							String Table_click = (resrequirement_table.getJdataTable().getModel()
+							String Table_click = (resrequirement_tabledata.getJdataTable().getModel()
 									.getValueAt(rowIndex, 0).toString()); // the
 							System.out.println(Table_click + " what have you clicked");
 							System.out.println(satisfyfrom_datePicker.getJFormattedTextField().getText());
@@ -1334,7 +1334,7 @@ public class NUserPage {
 								data.add((allresourcerequirements.get(i).toHashMap()));
 							}
 
-							resrequirement_table.update(data);
+							resrequirement_tabledata.update(data);
 						}
 					}
 				});
@@ -1346,33 +1346,85 @@ public class NUserPage {
 
 		search_reqresourcename = new JTextField();
 		search_reqresourcename.setColumns(10);
+		
+		JButton requirement_btnDelete = new JButton("Delete");
+		requirement_btnDelete.setIcon(new ImageIcon(
+				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		requirement_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int rowIndex = resrequirement_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = resrequirement_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
+
+					String Table_click = (resrequirement_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					ResourceRequirementCatalogue resreq = new ResourceRequirementCatalogue();
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						resreq.deleteResourceRequirement(Integer.parseInt(Table_click));
+						ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+						ArrayList<ResourceRequirement> allresourcerequirements;
+						allresourcerequirements = resreqCat.getResourceRequirements();
+						for (int i = 0; i < allresourcerequirements.size(); i++) {
+							data.add((allresourcerequirements.get(i).toHashMap()));
+						}
+						resrequirement_tabledata.update(data);
+					}
+				}	
+			}
+		});
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
-		gl_requirementPanel.setHorizontalGroup(gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_requirementPanel.createSequentialGroup().addContainerGap(381, Short.MAX_VALUE)
-						.addComponent(searchreqBtn).addGap(128)
-						.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblResourceName_1).addContainerGap())
-				.addGroup(gl_requirementPanel.createSequentialGroup().addGap(40)
-						.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-						.addGap(40))
-				.addGroup(gl_requirementPanel.createSequentialGroup().addComponent(requirement_btnEdit)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(requirement_btnSatisfy)
-						.addPreferredGap(ComponentPlacement.RELATED, 635, Short.MAX_VALUE).addComponent(addreqBtn)));
-		gl_requirementPanel.setVerticalGroup(gl_requirementPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_requirementPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE).addComponent(searchreqBtn)
-								.addComponent(lblResourceName_1).addComponent(search_reqresourcename,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(40).addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
-						.addGap(40)
-						.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE).addComponent(addreqBtn)
-								.addComponent(requirement_btnEdit).addComponent(requirement_btnSatisfy))));
+		gl_requirementPanel.setHorizontalGroup(
+			gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addContainerGap(381, Short.MAX_VALUE)
+					.addComponent(searchreqBtn)
+					.addGap(128)
+					.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblResourceName_1)
+					.addContainerGap())
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addComponent(requirement_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(requirement_btnDelete)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(requirement_btnSatisfy)
+					.addPreferredGap(ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
+					.addComponent(addreqBtn))
+		);
+		gl_requirementPanel.setVerticalGroup(
+			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(searchreqBtn)
+						.addComponent(lblResourceName_1)
+						.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(40)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+					.addGap(40)
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addreqBtn)
+						.addComponent(requirement_btnEdit)
+						.addComponent(requirement_btnSatisfy)
+						.addComponent(requirement_btnDelete)))
+		);
 
-		resrequirement_table = new TableData(new ResourceRequirementCatalogue());
+		resrequirement_tabledata = new TableData(new ResourceRequirementCatalogue());
 
-		requirement_scrollPane.setViewportView(resrequirement_table.getJdataTable());
+		requirement_scrollPane.setViewportView(resrequirement_tabledata.getJdataTable());
 		requirementPanel.setLayout(gl_requirementPanel);
 		searchreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
