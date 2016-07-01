@@ -1244,10 +1244,11 @@ public class NUserPage {
 							if (statisfy_checkBoxpane.getCheckedValues().size() == 1)
 								satisfied = true;
 
-							if(satisfied==false)
+							if (satisfied == false)
 								satisfydate = "1111-1-1";
 
-							ResourceRequirement resreq = resreqCat.getResourceRequirement(Integer.parseInt(Table_click));
+							ResourceRequirement resreq = resreqCat
+									.getResourceRequirement(Integer.parseInt(Table_click));
 							resreq.edit(fromdate, todate, satisfied, satisfydate);
 							ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 							ArrayList<ResourceRequirement> allresourcerequirements;
@@ -1346,7 +1347,7 @@ public class NUserPage {
 
 		search_reqresourcename = new JTextField();
 		search_reqresourcename.setColumns(10);
-		
+
 		JButton requirement_btnDelete = new JButton("Delete");
 		requirement_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
@@ -1377,50 +1378,34 @@ public class NUserPage {
 						}
 						resrequirement_tabledata.update(data);
 					}
-				}	
+				}
 			}
 		});
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
-		gl_requirementPanel.setHorizontalGroup(
-			gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_requirementPanel.createSequentialGroup()
-					.addContainerGap(381, Short.MAX_VALUE)
-					.addComponent(searchreqBtn)
-					.addGap(128)
-					.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblResourceName_1)
-					.addContainerGap())
-				.addGroup(gl_requirementPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-				.addGroup(gl_requirementPanel.createSequentialGroup()
-					.addComponent(requirement_btnEdit)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(requirement_btnDelete)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(requirement_btnSatisfy)
-					.addPreferredGap(ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
-					.addComponent(addreqBtn))
-		);
-		gl_requirementPanel.setVerticalGroup(
-			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_requirementPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(searchreqBtn)
-						.addComponent(lblResourceName_1)
-						.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(40)
-					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
-					.addGap(40)
-					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(addreqBtn)
-						.addComponent(requirement_btnEdit)
-						.addComponent(requirement_btnSatisfy)
-						.addComponent(requirement_btnDelete)))
-		);
+		gl_requirementPanel.setHorizontalGroup(gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_requirementPanel.createSequentialGroup().addContainerGap(381, Short.MAX_VALUE)
+						.addComponent(searchreqBtn).addGap(128)
+						.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblResourceName_1).addContainerGap())
+				.addGroup(gl_requirementPanel.createSequentialGroup().addGap(40)
+						.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+						.addGap(40))
+				.addGroup(gl_requirementPanel.createSequentialGroup().addComponent(requirement_btnEdit)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(requirement_btnDelete)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(requirement_btnSatisfy)
+						.addPreferredGap(ComponentPlacement.RELATED, 635, Short.MAX_VALUE).addComponent(addreqBtn)));
+		gl_requirementPanel.setVerticalGroup(gl_requirementPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_requirementPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE).addComponent(searchreqBtn)
+								.addComponent(lblResourceName_1).addComponent(search_reqresourcename,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(40).addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+						.addGap(40)
+						.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE).addComponent(addreqBtn)
+								.addComponent(requirement_btnEdit).addComponent(requirement_btnSatisfy)
+								.addComponent(requirement_btnDelete))));
 
 		resrequirement_tabledata = new TableData(new ResourceRequirementCatalogue());
 
@@ -3748,29 +3733,44 @@ public class NUserPage {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						System.out.println(resourceCombo.getSelectedItem() + " this is resource combo");
-						System.out.println(resource_type.getSelectedItem() + " this is resource combo");
-						String rid = "";
-						Pattern p = Pattern.compile("rid=\\d+");
-						Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
-						if (m.find()) {
-							rid = m.group();
+						System.out.println(resource_type.getSelectedItem() + " this is resource type");
+
+						if (resource_type.getSelectedItem() == "Employee") {
+							String empid = "";
+							Pattern emp_p = Pattern.compile("empid=\\d+");
+							Matcher emp_m = emp_p.matcher((CharSequence) resourceCombo.getSelectedItem());
+							if (emp_m.find()) {
+								empid = emp_m.group();
+							}
+							System.out.println("empid: " + empid);
+							EmployeeCatalogue empcat = new EmployeeCatalogue();
+							ProjectEmployeeCatalogue projempcat = new ProjectEmployeeCatalogue();
+							projempcat.getCirculationReport(empcat.getEmployee(Integer.parseInt(empid.replace("empid=", "")))).getResults();
+							circulation_tabledata.update(projempcat
+									.getCirculationReport(empcat.getEmployee(Integer.parseInt(empid.replace("empid=", "")))).getResults());
+								System.out.println(".....mmmm");
+							System.out.println(projempcat.getCirculationReport(empcat.getEmployee(Integer.parseInt(empid.replace("empid=", "")))).getReport());
+						} else {
+							String rid = "";
+							Pattern p = Pattern.compile("rid=\\d+");
+							Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
+							if (m.find()) {
+								rid = m.group();
+							}
+							System.out.println("rid: " + rid);
+
+							ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue();
+							PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+							System.out.println("This is the Project Resource Utilization Report:");
+							prucat.getCirculationReport(
+									physResCat.getResource(Integer.parseInt(rid.replace("rid=", "")))).printRep();
+
+							circulation_tabledata.update(prucat
+									.getCirculationReport(
+											physResCat.getResource(Integer.parseInt(rid.replace("rid=", ""))))
+									.getResults());
 						}
-						System.out.println("rid: " + rid);
-
-						ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue();
-						PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
-						System.out.println("This is the Project Resource Utilization Report:");
-						prucat.getCirculationReport(physResCat.getResource(Integer.parseInt(rid.replace("rid=", ""))))
-								.printRep();
-
-						circulation_tabledata.update(prucat
-								.getCirculationReport(physResCat.getResource(Integer.parseInt(rid.replace("rid=", ""))))
-								.getResults());
 						// %%%
-						// EmployeeCatalogue empcat = new EmployeeCatalogue();
-						// ProjectEmployeeCatalogue projempcat = new
-						// ProjectEmployeeCatalogue();
-						//// projempcat.getCirculationReport(empcat.getEmployee(empid));
 
 					}
 				});
@@ -3954,7 +3954,7 @@ public class NUserPage {
 						if (resourceRepCombo.getSelectedItem().toString().equals("Employee")) {
 							EmployeeCatalogue empResCat = new EmployeeCatalogue();
 							System.out.println(empResCat.getReport().getResults());
-							resavail_tabledata.update(empResCat.getReport().getResults());
+							resavail_tabledata.update(empResCat.getReport().getResults(),	new String[] { "sid", "count", "empname" });
 
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Module")) {
