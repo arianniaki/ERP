@@ -54,6 +54,20 @@ public class EmployeeCatalogue {
 	}
 	
 
+	public ArrayList<HashMap<String, String>> getConfirmedEmployees() {
+
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("is_confirmed", "true");
+		Table table = new Table("employee");
+		ArrayList<HashMap<String, String>> result = table.search(vars);
+		for (int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i).toString());
+		}
+		return result;
+	}
+
+	
+	
 	public ArrayList<HashMap<String, String>> readAllEmployees() {
 		Table table = new Table("employee");
 		ArrayList<HashMap<String, String>> result = table.readAll();
