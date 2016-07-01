@@ -12,7 +12,7 @@ public class InformationResourceCatalogue extends ResourceCatalogue {
 	}
 
 	public long addResource(String name,int SectionId, String createDate, String desc) {
-		long resid = super.addResource(name, SectionId);
+		int resid = (int) super.addResource(name, SectionId);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", resid+"");
 		vars.put("irname", "\'" + name + "\'");

@@ -52,7 +52,7 @@ public class ResourceCatalogue {
 	
 	public Report getReport(){
 		Report rep = new Report();
-		Table table = new Table(tableName);
+		Table table = new Table(tableName+"section");
 		ArrayList<HashMap<String,String>> results = table.getReportTable();
 		rep.setResults(results);
 		for(int i=0; i<results.size(); i++){
