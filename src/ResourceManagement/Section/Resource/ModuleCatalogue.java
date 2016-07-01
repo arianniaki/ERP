@@ -18,7 +18,7 @@ public class ModuleCatalogue extends ResourceCatalogue{
 		long resid = super.addResource(name,SectionId);
 		System.out.println("resid in module cata: "+resid);
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("rid", resid+"");
+		vars.put("modrid", resid+"");
 		vars.put("modname", "\'" + name + "\'");
 		vars.put("duration",Integer.toString(duration));
 		vars.put("description", "\'" + desc + "\'");
