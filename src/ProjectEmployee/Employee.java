@@ -5,6 +5,8 @@ import java.util.HashMap;
 import AccessRight.AccessRight;
 import DataBase.DataBase;
 import GUI.NotificationPage;
+import ResourceManagement.Section.Resource.ResourceCatalogue;
+import ResourceManagement.Section.Resource.Resource;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,9 +36,12 @@ public class Employee {
 		this.sectionId = sectionId;
 		this.password = password;
 		this.post = post;
+		ResourceCatalogue resCat = new ResourceCatalogue();		
+		resCat.getResource(this.rid).editResource(name, sectionId);
+		
 		HashMap<String, String> setVars = new HashMap<String, String>();
 		setVars.put("empname", "\'"+name+"\'");
-		setVars.put("sectionid", Integer.toString(sectionId));
+		setVars.put("sid", Integer.toString(sectionId));
 		setVars.put("password", "\'"+password+"\'");
 		setVars.put("post", "\'"+post+"\'");
 		submitToDB(setVars);
@@ -46,6 +51,10 @@ public class Employee {
 	public void editEmployeeInformation(String name, String password){
 		this.name = name;
 		this.password = password;
+		
+		ResourceCatalogue resCat = new ResourceCatalogue();		
+		resCat.getResource(rid).editResource(name, this.sectionId);
+		
 		HashMap<String, String> setVars = new HashMap<String, String>();
 		setVars.put("empname", "\'"+name+"\'");
 		setVars.put("password", "\'"+password+"\'");
@@ -183,12 +192,13 @@ public class Employee {
 		ResultSet rs = DB.select("Employee", vars, null);
 		try {
 			if (rs.next()) {
+				this.rid = rs.getInt("rid");
 				this.id = rs.getInt("empid");
 				this.name = rs.getString("empname");
 				this.isManager = rs.getBoolean("ismodir");
 				this.password = rs.getString("password");
 				this.username = rs.getString("username");
-				this.sectionId = rs.getInt("sectionid");
+				this.sectionId = rs.getInt("sid");
 				this.post = rs.getString("post");
 				this.setAccessRight(new AccessRight(rs.getInt("accessrightid")));
 				this.is_confirmed = rs.getBoolean("is_confirmed");
