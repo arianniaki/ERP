@@ -41,6 +41,7 @@ import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
+import ProjectEmployee.ProjectEmployeeCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import RequirementUtilization.ProjectResourceUtilization;
 import RequirementUtilization.ProjectResourceUtilizationCatalogue;
@@ -3303,11 +3304,15 @@ System.out.println("//////////////////");
 						System.out.println(proj_manager.getName());
 						
 						//FIX HERE TO GET IS_COMPLETE
-						projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2), inputs.get(1),false);
+			            final ArrayList<String>vales_phys = checkBoxpane.getCheckedValues();
+			            boolean confirmed=false;
+			            if(vales_phys.size()==1)
+			            	confirmed=true;
+
+						projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2), inputs.get(1),confirmed);
 
 						allprojects = projcat.getProjects();
 						project_tabledata.update(projcat.getProjects());
-			            final ArrayList<String>vales_phys = checkBoxpane.getCheckedValues();
 			            System.out.println(vales_phys.toString());
 
 					}
@@ -3404,6 +3409,105 @@ System.out.println("//////////////////");
 
 		btnEditProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//EDITPROJECT
+				ArrayList<Field> projectFields = new ArrayList<Field>();
+				EmployeeCatalogue empcat = new EmployeeCatalogue();
+				ArrayList<HashMap<String, String>> employees_fromcatalouge = empcat.readAllEmployees();
+				ArrayList<String> employees = new ArrayList<String>();
+
+				projectFields.add(new Field("text", "project name", "", 20, "name"));
+				projectFields.add(new Field("text", "technology", "", 20, "tech"));
+				projectFields.add(new Field("text", "size", "", 20, "size"));
+
+				for (int i = 0; i < employees_fromcatalouge.size(); i++) {
+					employees.add("id:" + employees_fromcatalouge.get(i).get("empid").toString() + " "
+							+ employees_fromcatalouge.get(i).get("empname").toString());
+				}
+				System.out.println(employees + " 00");
+				projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
+				ArrayList<String> iscomplete = new ArrayList<String>();
+				iscomplete.add("is complete");
+				projectFields.add(new Field("singlecheckbox", "is complete", iscomplete, 10, "items"));
+				
+				
+				
+				final Form edit_projectForm = new Form(projectFields, "Project Form");
+				final PanelBuilder project_addPanel = new PanelBuilder(edit_projectForm);
+				project_addPanel.makeForm();
+				JFrame Edit_ProjectPage = new JFrame("Edit Project Form");
+				
+				Edit_ProjectPage.getContentPane().add(edit_projectForm.getJPanel(), BorderLayout.NORTH);
+
+				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) edit_projectForm.getJPanel().getComponent(3);
+				final JComboBox employees_comboBox = comboBoxpane.getComboBox();
+
+				final SingleCheckBoxJPanel checkBoxpane = (SingleCheckBoxJPanel) edit_projectForm.getJPanel().getComponent(4);
+				JButton submiteditprojectBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submiteditprojectBtn);
+				Edit_ProjectPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Edit_ProjectPage.pack();
+				Edit_ProjectPage.setVisible(true);
+
+				employees_comboBox.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(employees_comboBox.getSelectedItem() + " ino select kardi project");
+					}
+				});
+
+				submiteditprojectBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("-----");
+						int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
+						if (rowIndex == -1) {
+							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+									"Please Select a module!");
+						} else {
+
+							String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+									.toString()); // return
+
+							selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
+							System.out.println("-----");
+							
+							
+						ProjectCatalogue projcat = new ProjectCatalogue();
+						Project project = projcat.getProject(selected_project_forsubsystem);
+						System.out.println("all : ");
+						projcat.getProjects();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < edit_projectForm.getJPanel().getComponentCount()-1; i++) {
+							FieldPanel fpanel = (FieldPanel) edit_projectForm.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + " project");
+						}
+						int employeeID = Integer.parseInt((inputs.get(3).substring(0, 4).replace("id:", "")));
+						EmployeeCatalogue empcat = new EmployeeCatalogue();
+						Employee proj_manager = empcat.getEmployee(employeeID);
+						System.out.println(proj_manager.getName());
+			            final ArrayList<String>vales_phys = checkBoxpane.getCheckedValues();
+			            boolean confirmed=false;
+			            if(vales_phys.size()==1)
+			            	confirmed=true;
+			            	
+						//FIX HERE TO GET IS_COMPLETE
+						project.editProject(inputs.get(0).toString(),"",   inputs.get(1), proj_manager, inputs.get(2),confirmed);
+
+
+						allprojects = projcat.getProjects();
+						project_tabledata.update(projcat.getProjects());
+			            System.out.println(vales_phys.toString()+ " is this it");
+						}
+					}
+				});
+				
+				
 			}
 		});
 
@@ -3655,7 +3759,10 @@ System.out.println("//////////////////");
 						
 						
 						circulation_tabledata.update(prucat.getCirculationReport(physResCat.getResource(Integer.parseInt(rid.replace("rid=","")))).getResults());
-
+//%%%
+//						EmployeeCatalogue empcat = new EmployeeCatalogue();
+//						ProjectEmployeeCatalogue projempcat = new ProjectEmployeeCatalogue();
+////						projempcat.getCirculationReport(empcat.getEmployee(empid));
 						
 						
 					}
@@ -3832,9 +3939,9 @@ System.out.println("//////////////////");
 
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Employee")) {
-//							EmployeeCatalogue empResCat = new EmployeeCatalogue();
-//							System.out.println(empResCat.getReport().getResults());
-//							resavail_tabledata.update(empResCat.getReport().getResults());
+							EmployeeCatalogue empResCat = new EmployeeCatalogue();
+							System.out.println(empResCat.getReport().getResults());
+							resavail_tabledata.update(empResCat.getReport().getResults());
 
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Module")) {
