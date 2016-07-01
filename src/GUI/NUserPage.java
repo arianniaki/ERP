@@ -49,7 +49,9 @@ import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
+import ResourceManagement.Section.Resource.MaintainModEmpResCatalogue;
 import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
+import ResourceManagement.Section.Resource.MakeModuleCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
 import ResourceManagement.Section.Resource.PhysicalResourceCatalogue;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
@@ -2040,6 +2042,34 @@ System.out.println("//////////////////");
 		btnAddModule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
+				final ArrayList<String> employees = new ArrayList<String>();
+				final ArrayList<String> financials = new ArrayList<String>();
+				final ArrayList<String> physicals = new ArrayList<String>();
+				final ArrayList<String> information = new ArrayList<String>();
+
+				EmployeeCatalogue empcat = new EmployeeCatalogue();
+				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+				for (int i = 0; i < employe_readall.size(); i++) {
+					employees.add(employe_readall.get(i).toString());
+				}
+				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+				for (int i = 0; i < financial_readall.size(); i++) {
+					financials.add(financial_readall.get(i).toString());
+				}
+
+				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+				for (int i = 0; i < physical_readall.size(); i++) {
+					physicals.add(physical_readall.get(i).toString());
+				}
+
+				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+				for (int i = 0; i < information_readall.size(); i++) {
+					information.add(information_readall.get(i).toString());
+				}
+
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
 				moduleFields.add(new Field("text", "name", "", 10, "name"));
 				ArrayList<String> section_arraylist = new ArrayList<String>();
@@ -2050,15 +2080,32 @@ System.out.println("//////////////////");
 				}
 
 				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+				
+				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+				Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+				
+				
 				moduleFields.add(new Field("text", "duration", "", 20, "duration"));
 				moduleFields.add(new Field("text", "description", "", 20, "desc"));
 				moduleFields.add(sections);
-
+				moduleFields.add(financial_check);
+				moduleFields.add(physical_check);
+				moduleFields.add(information_check);
+				moduleFields.add(maintainers);
+						
+						
 				final Form moduleForm = new Form(moduleFields, "Module Form");
 				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
 				modulePanel.makeForm();
+				
+				
 				JFrame AddModulePage = new JFrame("Add Module Form");
 				AddModulePage.getContentPane().add(moduleForm.getJPanel(), BorderLayout.NORTH);
+				JScrollPane scroll = new JScrollPane(moduleForm.getJPanel());
+				AddModulePage.getContentPane().add(scroll);
 
 				JButton submitaddmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
@@ -2070,6 +2117,14 @@ System.out.println("//////////////////");
 
 				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
 
+				
+				final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(4);
+				final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(5);
+				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(6);
+				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(7);
+
+				
+				
 				
 				submitaddmoduleBtn.addActionListener(new ActionListener() {
 
@@ -2095,10 +2150,73 @@ System.out.println("//////////////////");
 							section = m.group();
 						}
 						System.out.println("sectionid: " + section);
+					
+			            System.out.println("----------");
+
 						
-						mcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sectionid=", "")), Integer.parseInt(inputs.get(1)), inputs.get(2));
+						//
+						long modrid= mcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sectionid=", "")), Integer.parseInt(inputs.get(1)), inputs.get(2));
 						// tu resource ham bayad insert she
 						module_tabledata.update(mcat.readAllResources());
+						
+						//
+			            System.out.println("----------");
+			        	MakeModuleCatalogue makemoduleCat = new MakeModuleCatalogue();
+
+			            final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
+			            System.out.println(finanvales);
+			            final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
+			            System.out.println(physicalvales);
+			            final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+			            System.out.println(informationvales);
+			            final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
+			            System.out.println(employeevales);
+						Pattern emp = Pattern.compile("empid=\\d+");
+						for (int i = 0; i < employeevales.size(); i++) {
+							String empids = null;
+							Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+							if (m_emp.find()) {
+								empids = m_emp.group();
+							}
+							System.out.println("empids: " + empids);
+				        	makemoduleCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), (int)modrid);
+
+						}
+						
+						Pattern res = Pattern.compile("rid=\\d+");
+						for (int i = 0; i < finanvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(finanvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("finan rid: " + respids);
+				        	makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int)modrid);
+
+						}
+						
+						for (int i = 0; i < physicalvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(physicalvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("phys rid: " + respids);
+				        	makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int)modrid);
+
+						}
+						
+						for (int i = 0; i < informationvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(informationvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("info rid: " + respids);
+				        	makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int)modrid);
+
+						}
+						
 					}
 				});
 

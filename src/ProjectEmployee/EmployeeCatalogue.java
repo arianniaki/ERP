@@ -8,11 +8,13 @@ import java.util.HashMap;
 import AccessRight.AccessRight;
 import DataBase.DataBase;
 import DataBase.Table;
+import Report.Report;
+import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 public class EmployeeCatalogue {
 	DataBase DB;
-
+	String tablename = "employee";
 	public EmployeeCatalogue() {
 		DB = new DataBase();
 	}
@@ -31,12 +33,12 @@ public class EmployeeCatalogue {
 			setVars.put("accessrightid", Integer.toString(1));
 			HashMap<String, String> condVars = new HashMap<String, String>();
 			condVars.put("empid", Integer.toString(empid));
-			DB.update(condVars, setVars, "EMPLOYEE");
+			DB.update(condVars, setVars, tablename);
 
 		} else {
 			HashMap<String, String> vars = new HashMap<String, String>();
 			vars.put("empid", Integer.toString(empid));
-			DB.delete(vars, "employee");
+			DB.delete(vars, tablename);
 		}
 	}
 
@@ -44,7 +46,7 @@ public class EmployeeCatalogue {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("is_confirmed", "false");
-		Table table = new Table("employee");
+		Table table = new Table(tablename);
 		ArrayList<HashMap<String, String>> result = table.search(vars);
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
@@ -58,7 +60,7 @@ public class EmployeeCatalogue {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("is_confirmed", "true");
-		Table table = new Table("employee");
+		Table table = new Table(tablename);
 		ArrayList<HashMap<String, String>> result = table.search(vars);
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
@@ -69,7 +71,7 @@ public class EmployeeCatalogue {
 	
 	
 	public ArrayList<HashMap<String, String>> readAllEmployees() {
-		Table table = new Table("employee");
+		Table table = new Table(tablename);
 		ArrayList<HashMap<String, String>> result = table.readAll();
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
@@ -83,7 +85,7 @@ public class EmployeeCatalogue {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", Integer.toString(id));
-		DB.delete(vars, "employee");
+		DB.delete(vars, tablename);
 		resCat.deleteResource(empCat.getEmployee(id).getResId());
 
 	}
@@ -100,7 +102,7 @@ public class EmployeeCatalogue {
 		vars.put("is_loggedin", Boolean.toString(is_loggedin));
 		vars.put("is_confirmed", Boolean.toString(false));
 
-		long pk = DB.insert(vars, "employee");
+		long pk = DB.insert(vars, tablename);
 		Employee employee = new Employee();
 		employee.getFromDB((int) pk);
 		return employee;
@@ -125,7 +127,7 @@ public class EmployeeCatalogue {
 		vars.put("is_confirmed", Boolean.toString(is_confirmed));
 		vars.put("rid", Integer.toString(rid));
 
-		long pk = DB.insert(vars, "employee");
+		long pk = DB.insert(vars, tablename);
 		Employee employee = new Employee();
 		employee.getFromDB((int) pk);
 		return employee;
@@ -136,7 +138,7 @@ public class EmployeeCatalogue {
 		Employee emp = new Employee();
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", Integer.toString(empid));
-		ResultSet res = DB.select("employee",vars,null);
+		ResultSet res = DB.select(tablename,vars,null);
 		try {
 			if (res.next()) {
 				emp.setId(res.getInt("empid"));
@@ -157,13 +159,29 @@ public class EmployeeCatalogue {
 	
 	public ArrayList<HashMap<String, String>> SearchEmployee(HashMap<String, String> searchvars){
 		
-		Table table = new Table("employee");
+		Table table = new Table(tablename);
 		ArrayList<HashMap<String, String>> result = table.search(searchvars);
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
 		}
 		return result;		
 	}
-
-
+	
+	public Report getReport(){
+		
+		Report rep = new Report();
+		ArrayList<HashMap<String,String>> results = readAllEmployees();
+		rep.setResults(results);
+		for(int i=0; i<results.size(); i++){
+			String line="";
+			SectionCatalogue secCat = new SectionCatalogue();
+			results.get(i).put("sname", ""+secCat.getSection(Integer.valueOf(results.get(i).get("sid"))).getName());
+			for(String key : results.get(i).keySet()){
+				line+= results.get(i).get(key).toString()+", ";
+			}
+			line = line.substring(0, line.length() - 2);
+			rep.addLine(line);
+		}
+		return rep;
+	}
 }

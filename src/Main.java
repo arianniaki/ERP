@@ -31,6 +31,22 @@ public class Main {
 //		ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue ();
 //		System.out.println("This is the Project Resource Utilization Report:");
 //		prucat.getCirculationReport(physResCat.getResource(1)).printRep();
+//		System.out.println("This is the Resource Avail Report:");
+//		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+//		physResCat.getReport().printRep();
+//		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
+//		ProjectCatalogue projCat = new ProjectCatalogue();
+//		Project proj = projCat.getProject(1);
+//		System.out.println("This is the Project Report:");
+//		resReqCat.getReport(proj).printRep();
+//		System.out.println("Yay! ");
+//		ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue ();
+//		System.out.println("This is the Project Resource Utilization Report:");
+//		prucat.getCirculationReport(physResCat.getResource(1)).printRep();
+//		System.out.println("This is the Available Employee Report:");
+//		EmployeeCatalogue empcat = new EmployeeCatalogue();
+//		empcat.getReport().printRep();
+
 //		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
 //		physResCat.getReport().printRep();
 //		System.out.println("This is the Resource Requirement Report:");
