@@ -36,7 +36,7 @@ public class ResourceCatalogue {
 		res.getFromDB(rid);
 		return res;
 	}
-	protected long addResource(String name, int sectionId) {
+	public long addResource(String name, int sectionId) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rname", "\'"+name+"\'");
 		vars.put("sid", Integer.toString(sectionId));
