@@ -120,7 +120,7 @@ public class ProjectResourceUtilizationCatalogue {
 		vars.put("presutilId", Integer.toString(presutilId));
 		DB.delete(vars, "projectresourceutilization");
 	}
-	public Report getReport(Resource res){
+	public Report getCirculationReport(Resource res){
 		Report rep = new Report();
 		Table table = new Table(tableName);
 		HashMap<String, String> vars = new HashMap<String, String>();

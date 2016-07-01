@@ -20,7 +20,7 @@ public class Main {
 	public static void main(String[] args) throws ParseException {
 		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
 		physResCat.getReport().printRep();
-		System.out.println("This is the Resource Requirement Report:");
+		System.out.println("This is the Resource Avail Report:");
 		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
 		ProjectCatalogue projCat = new ProjectCatalogue();
 		Project proj = projCat.getProject(1);
@@ -29,7 +29,7 @@ public class Main {
 		System.out.println("Yay! ");
 		ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue ();
 		System.out.println("This is the Project Resource Utilization Report:");
-		prucat.getReport(physResCat.getResource(1)).printRep();
+		prucat.getCirculationReport(physResCat.getResource(1)).printRep();
 //		System.out.println("**********************MAINTAIN TEST*****************");
 //		MaintainingModuleCatalogue mmc = new MaintainingModuleCatalogue();
 //		int maintainid=(int) mmc.addMaintainingModule(5, "adaptive", 10);

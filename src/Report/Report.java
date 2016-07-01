@@ -23,7 +23,7 @@ public class Report {
 		return results;
 	}
 	public void printRep(){
-		if(results == null)
+		if(results == null || results.size()==0)
 			System.out.println("There is no item!");
 		else{
 			for(String key : results.get(0).keySet())
