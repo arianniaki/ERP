@@ -58,24 +58,24 @@ public class TableData {
 	public TableData(ResourceCatalogue rescat, String type) {
 		data = rescat.readAllResources();
 		if (type == "physical") {
-			columns = new String[] { "Id", "Name" };
-			dbnames = new String[] { "rid", "physname" };
+			columns = new String[] { "Id", "Name", "Model", "Description"};
+			dbnames = new String[] { "rid", "physname","modeldesc","description" };
 		}
 		if (type == "information") {
-			columns = new String[] { "Id", "Name" };
-			dbnames = new String[] { "rid", "irname" };
+			columns = new String[] { "Id", "Name","Create Date","Description" };
+			dbnames = new String[] { "rid", "irname","createdate","description" };
 		}
 		if (type == "financial") {
-			columns = new String[] { "Id", "Name" };
-			dbnames = new String[] { "rid", "finanname" };
+			columns = new String[] { "Id", "Name","Value","Model","Description" };
+			dbnames = new String[] { "rid", "finanname","netvalue","modeldesc","description" };
 		}
 		if (type == "module") {
-			columns = new String[] { "Id", "Name" };
-			dbnames = new String[] { "rid", "modname" };
+			columns = new String[] { "Id", "Name","Duration","Description" };
+			dbnames = new String[] { "rid", "modname","duration","description" };
 		}
 		if(type=="all")
 		{
-			columns = new String[] { "Id", "Name", };
+			columns = new String[] { "Id", "Name" };
 			dbnames = new String[] { "rid", "rname" };
 		}
 
@@ -105,8 +105,8 @@ public class TableData {
 
 	public TableData(ProjectCatalogue projcat) {
 		data = projcat.getProjects();
-		columns = new String[] { "Id", "Name", "Project Manager","managername" };
-		dbnames = new String[] { "projid", "projname", "projectmanager","managername" };
+		columns = new String[] { "Id", "Name", "Project Manager","Manager Name","Size", "Technology" };
+		dbnames = new String[] { "projid", "projname", "projectmanager","managername","size","tech" };
 		this.buildFilledJTable();
 
 	}
