@@ -2761,25 +2761,85 @@ public class NUserPage {
 
 		human_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select an Employee!");
-				} else {
-
-					String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-					EmployeeCatalogue empcat = new EmployeeCatalogue();
-					// empcat.deleteEmployee(Integer.parseInt(Table_click));
-
-					empcat.readAllEmployees();
-					allemployees.clear();
-					allemployees = empcat.readAllEmployees();
-					human_tabledata.update(empcat.readAllEmployees());
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
 				}
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+				ArrayList<Field> human_moduleFields = new ArrayList<Field>();
+				human_moduleFields.add(new Field("text", "employee name", "", 20, "name"));
+				human_moduleFields.add(new Field("text", "username", "", 20, "username"));
+				human_moduleFields.add(new Field("text", "password", "", 20, "password"));
+				human_moduleFields.add(new Field("text", "post", "", 20, "post"));
+				human_moduleFields.add(sections);
+
+				final Form human_moduleForm = new Form(human_moduleFields, "Employee Edit Module Form");
+				final PanelBuilder human_modulePanel = new PanelBuilder(human_moduleForm);
+				human_modulePanel.makeForm();
+				JFrame Edit_EmployeePage = new JFrame("Edit Employee Form");
+				Edit_EmployeePage.getContentPane().add(human_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+				JButton submiteditemployeeBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submiteditemployeeBtn);
+				Edit_EmployeePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Edit_EmployeePage.pack();
+				Edit_EmployeePage.setVisible(true);
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) human_moduleForm.getJPanel().getComponent(4);
+
+				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+				submiteditemployeeBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
+						if (rowIndex == -1) {
+							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+									"Please Select an Employee!");
+						} else {
+							
+							EmployeeCatalogue empcat = new EmployeeCatalogue();
+							System.out.println("all : ");
+							empcat.readAllEmployees();
+							ArrayList<String> inputs = new ArrayList<String>();
+							for (int i = 0; i < human_moduleForm.getJPanel().getComponentCount(); i++) {
+								FieldPanel fpanel = (FieldPanel) human_moduleForm.getJPanel().getComponent(i);
+								inputs.add(fpanel.getValues().get(0));
+							}
+							for (int i = 0; i < inputs.size(); i++) {
+								System.out.println(inputs.get(i) + " human");
+							}
+
+							System.out.println(sections_combo.getSelectedItem() + " //////");
+							Pattern p = Pattern.compile("sid=\\d+");
+							String section = null;
+							Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+							if (m.find()) {
+								section = m.group();
+							}
+							System.out.println("sid: " + section);
+
+							
+							
+							String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+									.toString()); // the
+							System.out.println(Table_click + " this was clicked");
+							Employee employee = empcat.getEmployee(Integer.parseInt(Table_click));
+							employee.editHuman(inputs.get(0), Integer.parseInt(section.replace("sid=", "")), inputs.get(2), inputs.get(3));
+							
+							empcat.readAllEmployees();
+							allemployees.clear();
+							allemployees = empcat.readAllEmployees();
+							human_tabledata.update(empcat.readAllEmployees());
+						}
+					}
+				});
+
 			}
 		});
 
@@ -2853,59 +2913,136 @@ public class NUserPage {
 
 		search_humansection = new JTextField();
 		search_humansection.setColumns(10);
+		
+		JButton human_btnAdd = new JButton("Add Employee");
+		human_btnAdd.setIcon(new ImageIcon(
+				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		human_btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+				ArrayList<Field> human_moduleFields = new ArrayList<Field>();
+				human_moduleFields.add(new Field("text", "employee name", "", 20, "name"));
+				human_moduleFields.add(new Field("text", "username", "", 20, "username"));
+				human_moduleFields.add(new Field("text", "password", "", 20, "password"));
+				human_moduleFields.add(new Field("text", "post", "", 20, "post"));
+				human_moduleFields.add(sections);
+
+				final Form human_moduleForm = new Form(human_moduleFields, "Financial Edit Module Form");
+				final PanelBuilder human_modulePanel = new PanelBuilder(human_moduleForm);
+				human_modulePanel.makeForm();
+				JFrame Add_EmployeePage = new JFrame("Add Employee Form");
+				Add_EmployeePage.getContentPane().add(human_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitaddemployeeBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddemployeeBtn);
+				Add_EmployeePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Add_EmployeePage.pack();
+				Add_EmployeePage.setVisible(true);
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) human_moduleForm.getJPanel().getComponent(4);
+
+				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+				submitaddemployeeBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						EmployeeCatalogue empcat = new EmployeeCatalogue();
+						System.out.println("all : ");
+						empcat.readAllEmployees();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < human_moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) human_moduleForm.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + " human");
+						}
+
+						System.out.println(sections_combo.getSelectedItem() + " //////");
+						Pattern p = Pattern.compile("sid=\\d+");
+						String section = null;
+						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+						if (m.find()) {
+							section = m.group();
+						}
+						System.out.println("sid: " + section);
+
+
+						empcat.addEmployee(false, inputs.get(0), inputs.get(3), Integer.parseInt(section.replace("sid=", "")), inputs.get(1), inputs.get(2), false, false);
+						human_tabledata.update(empcat.readAllEmployees());
+
+					}
+				});
+				
+			}
+		});
 		GroupLayout gl_humanPanel = new GroupLayout(humanPanel);
-		gl_humanPanel
-				.setHorizontalGroup(
-						gl_humanPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_humanPanel.createSequentialGroup().addGap(30)
-										.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
-												Short.MAX_VALUE)
-										.addGap(30))
-								.addGroup(gl_humanPanel.createSequentialGroup()
-										.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 84,
-												GroupLayout.PREFERRED_SIZE)
-										.addContainerGap(631, Short.MAX_VALUE))
-								.addGroup(gl_humanPanel.createSequentialGroup().addComponent(search_humanbtnRefresh)
-										.addPreferredGap(ComponentPlacement.RELATED, 353, Short.MAX_VALUE)
-										.addComponent(human_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(search_humansection, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblSection)
-										.addGap(8)
-										.addGroup(gl_humanPanel.createParallelGroup(Alignment.TRAILING, false)
-												.addGroup(gl_humanPanel.createSequentialGroup()
-														.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(lblHumanName))
-												.addGroup(gl_humanPanel.createSequentialGroup()
-														.addComponent(search_humanpost, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.RELATED,
-																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-														.addComponent(lblPost)))
-										.addContainerGap()));
-		gl_humanPanel.setVerticalGroup(gl_humanPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_humanPanel
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(human_btnSearch).addComponent(lblHumanName).addComponent(search_humanbtnRefresh)
-						.addComponent(lblSection).addComponent(search_humansection, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(3)
-				.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblPost).addComponent(
-						search_humanpost, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE).addComponent(human_btnEdit)
-						.addComponent(human_btnDelete))
-				.addContainerGap()));
+		gl_humanPanel.setHorizontalGroup(
+			gl_humanPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_humanPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+				.addGroup(gl_humanPanel.createSequentialGroup()
+					.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 514, Short.MAX_VALUE)
+					.addComponent(human_btnAdd))
+				.addGroup(gl_humanPanel.createSequentialGroup()
+					.addComponent(search_humanbtnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
+					.addComponent(human_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_humansection, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblSection)
+					.addGap(8)
+					.addGroup(gl_humanPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_humanPanel.createSequentialGroup()
+							.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblHumanName))
+						.addGroup(gl_humanPanel.createSequentialGroup()
+							.addComponent(search_humanpost, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblPost)))
+					.addContainerGap())
+		);
+		gl_humanPanel.setVerticalGroup(
+			gl_humanPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_humanPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(human_btnSearch)
+						.addComponent(lblHumanName)
+						.addComponent(search_humanbtnRefresh)
+						.addComponent(lblSection)
+						.addComponent(search_humansection, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(3)
+					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblPost)
+						.addComponent(search_humanpost, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(human_btnEdit)
+						.addComponent(human_btnDelete)
+						.addComponent(human_btnAdd))
+					.addContainerGap())
+		);
 		human_scrollPane.setViewportView(human_tabledata.getJdataTable());
 		humanPanel.setLayout(gl_humanPanel);
 
