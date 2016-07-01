@@ -104,12 +104,12 @@ public class Main {
 //			System.out.println(resreqs.get(i).toHashMap());
 //		}
 //		System.out.println("get:");
-//		System.out.println(resreqCat.getResourceRequirement(1,1,1,"2016-04-04","2016-05-05").toHashMap());
+//		System.out.println(resreqCat.getResourceRequirement(1));
 //		System.out.println("satisfy:");
-//		resreqCat.getResourceRequirement(1,1,1,"2016-04-04","2016-05-05").satisfy("2016-12-12");
+//		resreqCat.getResourceRequirement(1).satisfy("2016-12-12");
 //		System.out.println("edit:");
-//		resreqCat.getResourceRequirement(1,1,1,"2016-04-04","2016-05-05").edit("2016-08-08", "2016-09-09", false, "1111-11-11");
-//		resreqCat.deleteResourceRequirement(1,1,1,"2016-08-08","2016-09-09");
+//		resreqCat.getResourceRequirement(1).edit("2016-08-08", "2016-09-09", false, "1111-11-11");
+//		resreqCat.deleteResourceRequirement(1);
 
 		
 		// test projectresourceutilization
@@ -123,10 +123,10 @@ public class Main {
 //		System.out.println("add:");
 //		projres.addProjectResourceUtilization(3,2,1,"2016-01-01","2016-01-01");
 //		System.out.println("get :");
-//		System.out.println(projres.getProjectResourceUtilization(3,2,1,"2016-01-01","2016-01-01").toHashMap());
-//		projres.getProjectResourceUtilization(3,2,1,"2016-01-01","2016-01-01").edit("2016-04-04", "2016-04-05");
+//		System.out.println(projres.getProjectResourceUtilization(1).toHashMap());
+//		projres.getProjectResourceUtilization(1).edit("2016-04-04", "2016-04-05");
 //		System.out.println("delete");
-//		projres.deleteProjectResourceUtilization(3, 2, 1,"2016-04-04","2016-04-05");
+//		projres.deleteProjectResourceUtilization(1);
 		
 
 		//test sign up

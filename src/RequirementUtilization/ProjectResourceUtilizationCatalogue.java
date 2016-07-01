@@ -47,18 +47,11 @@ public class ProjectResourceUtilizationCatalogue {
 	}
 	
 
-	public ProjectResourceUtilization getProjectResourceUtilization(int rid, int sid, int pid, String from, String to){
+	public ProjectResourceUtilization getProjectResourceUtilization(int presutilId){
 		
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("rid", Integer.toString(rid));
-		vars.put("sid", Integer.toString(sid));
-		vars.put("pid", Integer.toString(pid));
-		vars.put("fromdate", "\'"+from+"\'");
-		vars.put("todate", "\'"+to+"\'");
-
-
+		vars.put("presutilId", Integer.toString(presutilId));
 		ResultSet res = DB.select("ProjectResourceUtilization",vars,null);
-
 		
 		ProjectCatalogue pcat = new ProjectCatalogue();
 		SectionCatalogue scat = new SectionCatalogue();
@@ -122,14 +115,9 @@ public class ProjectResourceUtilizationCatalogue {
 	}
 	
 	
-	public void deleteProjectResourceUtilization(int rid, int sid, int pid, String from, String to) {
+	public void deleteProjectResourceUtilization(int presutilId) {
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("sid", Integer.toString(sid));
-		vars.put("rid", Integer.toString(rid));
-		vars.put("pid", Integer.toString(pid));
-		vars.put("fromdate", "\'"+from+"\'");
-		vars.put("todate", "\'"+to+"\'");
-
+		vars.put("presutilId", Integer.toString(presutilId));
 		DB.delete(vars, "projectresourceutilization");
 	}
 	public Report getReport(Resource res){
