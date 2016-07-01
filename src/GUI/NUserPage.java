@@ -1324,12 +1324,12 @@ System.out.println("//////////////////");
 				p.put("text.today", "Today");
 				p.put("text.month", "Month");
 				p.put("text.year", "Year");
-				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
-				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+				final JDatePanelImpl satisfyfrom_datePanel = new JDatePanelImpl(modelfor, p);
+				final JDatePickerImpl satisfyfrom_datePicker = new JDatePickerImpl(satisfyfrom_datePanel, new DateLabelFormatter());
 
 				JPanel date_panel = new JPanel(new FlowLayout());
 
-				date_panel.add(from_datePanel);
+				date_panel.add(satisfyfrom_datePanel);
 				Satisfy_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
 				// end date
 
@@ -1343,8 +1343,32 @@ System.out.println("//////////////////");
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						System.out.println(from_datePicker.getJFormattedTextField().getText());
+						
+						int rowIndex = resrequirement_table.getJdataTable().getSelectedRow();
+						int colIndex = resrequirement_table.getJdataTable().getSelectedColumn();
+						if (rowIndex == -1) {
+							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+									"Please Select a Resource!");
+						} else {
 
+							String Table_click = (resrequirement_table.getJdataTable().getModel().getValueAt(rowIndex, 0)
+									.toString()); // the
+							System.out.println(Table_click+" what have you clicked");
+						System.out.println(satisfyfrom_datePicker.getJFormattedTextField().getText());
+						ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+						String satisfydate = satisfyfrom_datePicker.getJFormattedTextField().getText();
+
+						resreqCat.getResourceRequirement(Integer.parseInt(Table_click)).satisfy(satisfydate);
+						
+						ArrayList<HashMap<String, String>> data= new ArrayList<HashMap<String, String>>();
+						ArrayList<ResourceRequirement> allresourcerequirements;
+						allresourcerequirements=resreqCat.getResourceRequirements();
+						for (int i = 0; i < allresourcerequirements.size(); i++) {
+							data.add((allresourcerequirements.get(i).toHashMap()));
+						}
+						
+						resrequirement_table.update(data);
+						}
 					}
 				});
 
@@ -3303,7 +3327,6 @@ System.out.println("//////////////////");
 						Employee proj_manager = empcat.getEmployee(employeeID);
 						System.out.println(proj_manager.getName());
 						
-						//FIX HERE TO GET IS_COMPLETE
 			            final ArrayList<String>vales_phys = checkBoxpane.getCheckedValues();
 			            boolean confirmed=false;
 			            if(vales_phys.size()==1)
@@ -3496,7 +3519,6 @@ System.out.println("//////////////////");
 			            if(vales_phys.size()==1)
 			            	confirmed=true;
 			            	
-						//FIX HERE TO GET IS_COMPLETE
 						project.editProject(inputs.get(0).toString(),"",   inputs.get(1), proj_manager, inputs.get(2),confirmed);
 
 
