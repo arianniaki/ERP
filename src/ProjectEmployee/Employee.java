@@ -36,7 +36,7 @@ public class Employee {
 		this.post = post;
 		HashMap<String, String> setVars = new HashMap<String, String>();
 		setVars.put("empname", "\'"+name+"\'");
-		setVars.put("sectionid", Integer.toString(sectionId));
+		setVars.put("sid", Integer.toString(sectionId));
 		setVars.put("password", "\'"+password+"\'");
 		setVars.put("post", "\'"+post+"\'");
 		submitToDB(setVars);
@@ -188,7 +188,7 @@ public class Employee {
 				this.isManager = rs.getBoolean("ismodir");
 				this.password = rs.getString("password");
 				this.username = rs.getString("username");
-				this.sectionId = rs.getInt("sectionid");
+				this.sectionId = rs.getInt("sid");
 				this.post = rs.getString("post");
 				this.setAccessRight(new AccessRight(rs.getInt("accessrightid")));
 				this.is_confirmed = rs.getBoolean("is_confirmed");

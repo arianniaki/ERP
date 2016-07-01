@@ -46,7 +46,20 @@ public class Table {
 
 	public ArrayList<HashMap<String,String>> search(HashMap<String, String> vars){
 		try {
-			rs = DB.select(tableName,vars,null);
+			HashMap<String,String> exactvars = new HashMap<String, String>();
+			HashMap<String,String> simvars = new HashMap<String, String>();
+			for(String key : vars.keySet()){
+				for(int i=0; i< columns.size(); i++){
+					if(columns.get(i).name.equals(key)){
+						if(columns.get(i).type.contains("char")){
+							simvars.put(key, vars.get(key));
+						}
+						else
+							exactvars.put(key, vars.get(key));
+					}
+				}
+			}
+			rs = DB.search(tableName,exactvars,simvars,null);
 			return getTable();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

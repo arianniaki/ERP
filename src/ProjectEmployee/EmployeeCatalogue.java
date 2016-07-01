@@ -28,7 +28,7 @@ public class EmployeeCatalogue {
 
 			HashMap<String, String> setVars = new HashMap<String, String>();
 			setVars.put("is_confirmed", "true");
-			setVars.put("sectionid", Integer.toString(6));
+			setVars.put("sid", Integer.toString(6));
 			setVars.put("rid", Integer.toString(rid));
 			setVars.put("accessrightid", Integer.toString(1));
 			HashMap<String, String> condVars = new HashMap<String, String>();

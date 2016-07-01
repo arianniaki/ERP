@@ -96,6 +96,50 @@ public class DataBase {
 		}
 	}
 
+	public ResultSet search(String tableName, HashMap<String, String> exactVars, HashMap<String,String> simVars, ArrayList<String> groupBy) {
+		try {
+			Class.forName("org.postgresql.Driver");
+			c = DriverManager.getConnection(
+					dbName, "postgres",
+					"123456m.");
+			c.setAutoCommit(false);
+//			System.out.println("select : Opened database successfully");
+			stmt = c.createStatement();
+			String sql = new String();
+			if(groupBy!=null){
+				sql = "SELECT "+groupBy.get(0)+", sid, count(*) FROM "+tableName;
+			}
+			else{
+				sql = "SELECT * FROM " + tableName;
+			}
+			if(exactVars!=null){
+				sql += " where ";
+				for (String key : exactVars.keySet()) {
+					sql += key + "=" + exactVars.get(key) + " AND ";
+				}
+				for (String key : simVars.keySet()) {
+					sql += key + "~" + simVars.get(key) + " AND ";
+				}
+				sql = sql.substring(0, sql.length() - 5);
+			}
+			if(groupBy!=null){
+				sql += " group by ";
+				for (int i=0; i<groupBy.size(); i++)
+					sql += groupBy.get(i) + ", ";
+				sql = sql.substring(0, sql.length() - 2);
+			}
+			sql+=";";
+			ResultSet rs = stmt.executeQuery(sql);
+			// stmt.close();
+			// c.close();
+			return rs;
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+			return null;
+		}
+	}
+
 	public boolean update(HashMap<String, String> condVars,
 			HashMap<String, String> setVars, String tableName) {
 		try {

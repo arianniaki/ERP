@@ -1852,7 +1852,12 @@ System.out.println("//////////////////");
 			public void actionPerformed(ActionEvent e) {
 				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
-				searchVars.put("finanname", "\'" + search_financialname.getText() + "\'");
+				if(search_financialname.getText()!=null && !search_financialname.getText().trim().equals(""))
+					searchVars.put("finanname", "\'" + search_financialname.getText() + "\'");
+				if(search_financialvalue.getText()!=null && !search_financialvalue.getText().trim().equals(""))
+					searchVars.put("netvalue", "\'" + search_financialvalue.getText() + "\'");
+				if(search_financialmodel.getText()!=null && !search_financialmodel.getText().trim().equals(""))
+					searchVars.put("modeldesc", "\'" + search_financialmodel.getText() + "\'");
 				financat.SearchResource(searchVars);
 
 				allfinance.clear();
@@ -2000,14 +2005,14 @@ System.out.println("//////////////////");
 							System.out.println(inputs.get(i) + " financial");
 						}
 						System.out.println(sections_combo.getSelectedItem()+" //////");
-						Pattern p = Pattern.compile("sectionid=\\d+");
+						Pattern p = Pattern.compile("sid=\\d+");
 						String section = null;
 						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
 						if (m.find()) {
 							section = m.group();
 						}
 						System.out.println("sectionid: " + section);
-						financat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sectionid=", "")),Integer.parseInt(inputs.get(2)) , inputs.get(1), inputs.get(3));
+						financat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sid=", "")),Integer.parseInt(inputs.get(2)) , inputs.get(1), inputs.get(3));
 						// tu resource ham bayad insert she
 						allfinance.clear();
 						allfinance = financat.readAllResources();
