@@ -18,6 +18,19 @@ import ResourceManagement.Section.Resource.*;
 
 public class Main {
 	public static void main(String[] args) throws ParseException {
+		
+//		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
+//		physResCat.getReport().printRep();
+//		System.out.println("This is the Resource Requirement Report:");
+//		ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
+//		ProjectCatalogue projCat = new ProjectCatalogue();
+//		Project proj = projCat.getProject(1);
+//		System.out.println("This is the Project Report:");
+//		resReqCat.getReport(proj).printRep();
+//		System.out.println("Yay! ");
+//		ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue ();
+//		System.out.println("This is the Project Resource Utilization Report:");
+//		prucat.getReport(physResCat.getResource(1)).printRep();
 //		System.out.println("**********************MAINTAIN TEST*****************");
 //		MaintainingModuleCatalogue mmc = new MaintainingModuleCatalogue();
 //		int maintainid=(int) mmc.addMaintainingModule(5, "adaptive", 10);
@@ -70,7 +83,6 @@ public class Main {
 //		System.out.println("################reses size :"+reses.size());
 //		System.out.println("**********************END*****************");
 
-		
 		// test resources
 //		FinancialResourceCatalogue fCat = new FinancialResourceCatalogue();
 //		fCat.addResource("finanTest", 1,1000,"model1","hello Test");
