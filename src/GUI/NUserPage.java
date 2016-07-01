@@ -1413,6 +1413,11 @@ public class NUserPage {
 		requirementPanel.setLayout(gl_requirementPanel);
 		searchreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+//				ResourceRequirementCatalogue resreqcat = new ResourceRequirementCatalogue();
+//				HashMap<String, String> searchVars = new HashMap<String, String>();
+//				searchVars.put("irname", "\'" + search_reqresourcename.getText() + "\'");
+//				information_tabledata.update(resreqcat.SearchResource(searchVars));
+
 			}
 		});
 
