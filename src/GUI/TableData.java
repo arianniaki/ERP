@@ -98,8 +98,8 @@ public class TableData {
 		}
 		if(type=="human")
 		{
-			columns = new String[] { "Id", "Name", };
-			dbnames = new String[] { "empid", "empname" };
+			columns = new String[] { "Id", "Name","Post","Accessright" ,"Section"};
+			dbnames = new String[] { "empid", "empname","post" ,"accessrightname","sid"};
 		}
 		this.buildFilledJTable();
 	}

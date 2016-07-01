@@ -165,6 +165,8 @@ public class EmployeeCatalogue {
 		ArrayList<HashMap<String, String>> result = table.search(searchvars);
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
+			AccessRight acc = new AccessRight(Integer.parseInt(result.get(i).get("accessrightid")));
+			result.get(i).put("accessrightname", acc.getName());
 		}
 		return result;		
 	}
