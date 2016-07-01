@@ -1,10 +1,14 @@
 package AccessRight;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import DataBase.DataBase;
 import DataBase.Table;
+import ProjectEmployee.Employee;
+import ProjectEmployee.Project;
 
 public class AccessRightCatalogue {
 
@@ -24,6 +28,6 @@ public class AccessRightCatalogue {
 		}
 		return result;
 	}
-	
+		
 
 }

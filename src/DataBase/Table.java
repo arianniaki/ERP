@@ -106,7 +106,10 @@ public class Table {
 					val.put(col.name, date.toString());
 				}else if (col.type.equals("character varying")){
 					val.put(col.name, rs.getString(col.name));
+				}else if (col.type.equals("boolean")){
+					val.put(col.name, Boolean.toString(rs.getBoolean(col.name)));
 				}
+
 			}
 			result.add(val);		
 		}
