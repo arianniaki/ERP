@@ -22,9 +22,9 @@ public class InformationResourceCatalogue extends ResourceCatalogue {
 		return DB.insert(vars, tableName);
 	}
 	
-	public InformationResource getInformationResource(int irid){
+	public InformationResource getInformationResource(int rid){
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("irid", irid+"");
+		vars.put("rid", rid+"");
 		ResultSet res = DB.select(tableName, vars, null);
 		InformationResource infores = new InformationResource();
 		try {

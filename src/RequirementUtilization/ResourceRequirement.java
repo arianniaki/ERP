@@ -23,6 +23,7 @@ public class ResourceRequirement{
 	Resource resource;
 	boolean isSatisfied;
 	String satisfyDate;
+	int resReqId;
 	DataBase DB;
 	
 	public ResourceRequirement(Project project, Section section, Resource resource, String from, String to,boolean isSatisfied, String satisfyDate){
