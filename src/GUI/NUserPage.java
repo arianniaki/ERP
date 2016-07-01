@@ -1461,6 +1461,9 @@ System.out.println("//////////////////");
 				JFrame Edit_InformationModulePage = new JFrame("Edit Information Module Form");
 				Edit_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
 
+			
+				
+				
 				JButton submiteditinformationmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submiteditinformationmoduleBtn);
@@ -1624,6 +1627,21 @@ System.out.println("//////////////////");
 				JFrame Add_InformationModulePage = new JFrame("Add Information Module Form");
 				Add_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
 
+				// adding date
+				UtilDateModel modelfor = new UtilDateModel();
+
+				Properties p = new Properties();
+				p.put("text.today", "Today");
+				p.put("text.month", "Month");
+				p.put("text.year", "Year");
+				final JDatePanelImpl info_datePanel = new JDatePanelImpl(modelfor, p);
+				final JDatePickerImpl info_datePicker = new JDatePickerImpl(info_datePanel, new DateLabelFormatter());
+
+				JPanel date_panel = new JPanel(new FlowLayout());
+
+				date_panel.add(info_datePanel);
+				Add_InformationModulePage.getContentPane().add(date_panel, BorderLayout.CENTER);
+				// end date
 				JButton submitaddinformationmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submitaddinformationmoduleBtn);
@@ -1659,9 +1677,10 @@ System.out.println("//////////////////");
 						}
 						System.out.println("sectionid: " + section);
 
+						String infodate = info_datePicker.getJFormattedTextField().getText();
+
 						
-						
-						infocat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sectionid=", "")), "2012-2-2", inputs.get(1));
+						infocat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sectionid=", "")), infodate, inputs.get(1));
 						// tu resource ham bayad insert she
 						information_tabledata.update(infocat.readAllResources());
 
