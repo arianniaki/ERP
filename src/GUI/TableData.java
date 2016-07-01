@@ -71,7 +71,7 @@ public class TableData {
 		}
 		if (type == "module") {
 			columns = new String[] { "Id", "Name","Duration","Description" };
-			dbnames = new String[] { "rid", "modname","duration","description" };
+			dbnames = new String[] { "modrid", "modname","duration","description" };
 		}
 		if(type=="all")
 		{

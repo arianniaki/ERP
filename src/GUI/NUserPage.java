@@ -2235,8 +2235,7 @@ System.out.println("//////////////////");
 					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
 							"Please Select a module!");
 				} else {
-					String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // return
+					String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0).toString()); // return
 
 					System.out.println(Table_click);
 					System.out.println("-----");
