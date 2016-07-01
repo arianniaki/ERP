@@ -482,6 +482,12 @@ public class NUserPage {
 				Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Add_SubsystemPage.pack();
 				Add_SubsystemPage.setVisible(true);
+				
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) subsystem_Form.getJPanel().getComponent(2);
+
+				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+				
 				submitaddsubsystemBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -493,11 +499,23 @@ public class NUserPage {
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " subsystem");
 						}
+						System.out.println(sections_combo.getSelectedItem()+" //////");
+						Pattern p = Pattern.compile("sectionid=\\d+");
+						String section = null;
+						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+						if (m.find()) {
+							section = m.group();
+						}
+						System.out.println("sectionid: " + section);
+
+						
 						
 						SubSystemCatalogue subsyscat = new SubSystemCatalogue();
-						subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem);
+						subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem, Integer.parseInt(section.replace("sectionid=", "")));
 						subsystem_tabledata.update(subsyscat.getSubSystems());
 						System.out.println("add shoood ");
+						
+						
 					}
 				});
 
@@ -1443,6 +1461,23 @@ System.out.println("//////////////////");
 				JFrame Edit_InformationModulePage = new JFrame("Edit Information Module Form");
 				Edit_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
 
+			
+				// adding date
+				UtilDateModel modelfor = new UtilDateModel();
+
+				Properties p = new Properties();
+				p.put("text.today", "Today");
+				p.put("text.month", "Month");
+				p.put("text.year", "Year");
+				final JDatePanelImpl info_datePanel = new JDatePanelImpl(modelfor, p);
+				final JDatePickerImpl info_datePicker = new JDatePickerImpl(info_datePanel, new DateLabelFormatter());
+
+				JPanel date_panel = new JPanel(new FlowLayout());
+
+				date_panel.add(info_datePanel);
+				Edit_InformationModulePage.getContentPane().add(date_panel, BorderLayout.CENTER);
+				// end date
+				
 				JButton submiteditinformationmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submiteditinformationmoduleBtn);
@@ -1466,7 +1501,20 @@ System.out.println("//////////////////");
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " information");
 						}
+						System.out.println(info_datePicker.getJFormattedTextField().getText());
+						
+						int rowIndex = information_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = information_tabledata.getJdataTable().getSelectedColumn();
+						if (rowIndex == -1) {
+							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+									"Please Select a Resource!");
+						} else {
 
+							String Table_click = (information_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+									.toString()); // the
+							System.out.println(Table_click+" what have you clicked");
+						}
+						
 						// infocat.addResource((inputs.get(0)));
 						// // tu resource ham bayad insert she
 						// allinformation.clear();
@@ -1606,12 +1654,30 @@ System.out.println("//////////////////");
 				JFrame Add_InformationModulePage = new JFrame("Add Information Module Form");
 				Add_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
 
+				// adding date
+				UtilDateModel modelfor = new UtilDateModel();
+
+				Properties p = new Properties();
+				p.put("text.today", "Today");
+				p.put("text.month", "Month");
+				p.put("text.year", "Year");
+				final JDatePanelImpl info_datePanel = new JDatePanelImpl(modelfor, p);
+				final JDatePickerImpl info_datePicker = new JDatePickerImpl(info_datePanel, new DateLabelFormatter());
+
+				JPanel date_panel = new JPanel(new FlowLayout());
+
+				date_panel.add(info_datePanel);
+				Add_InformationModulePage.getContentPane().add(date_panel, BorderLayout.CENTER);
+				// end date
 				JButton submitaddinformationmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
 				buttonPanel.add(submitaddinformationmoduleBtn);
 				Add_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Add_InformationModulePage.pack();
 				Add_InformationModulePage.setVisible(true);
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) information_moduleForm.getJPanel().getComponent(2);
+
+				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
 
 				submitaddinformationmoduleBtn.addActionListener(new ActionListener() {
 					@Override
@@ -1628,7 +1694,20 @@ System.out.println("//////////////////");
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " information");
 						}
-						infocat.addResource((inputs.get(0)));
+						
+						System.out.println(sections_combo.getSelectedItem()+" //////");
+						Pattern p = Pattern.compile("sectionid=\\d+");
+						String section = null;
+						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+						if (m.find()) {
+							section = m.group();
+						}
+						System.out.println("sectionid: " + section);
+
+						String infodate = info_datePicker.getJFormattedTextField().getText();
+
+						
+						infocat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sectionid=", "")), infodate, inputs.get(1));
 						// tu resource ham bayad insert she
 						information_tabledata.update(infocat.readAllResources());
 
@@ -1689,6 +1768,20 @@ System.out.println("//////////////////");
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
+						
+						int rowIndex = financial_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = financial_tabledata.getJdataTable().getSelectedColumn();
+						if (rowIndex == -1) {
+							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+									"Please Select a Resource!");
+						}
+						else {
+
+							String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+									.toString()); // the
+							System.out.println(Table_click + " this was clicked");
+						}
+						System.out.println();
 						FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 						System.out.println("all : ");
 						financat.readAllResources();
@@ -1701,6 +1794,13 @@ System.out.println("//////////////////");
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " financial edit");
 						}
+						
+						
+//						financat.getFinancialResource().editResource("changed name", 1, 10, "changed model", "changed");
+
+						
+						
+						
 						financial_tabledata.update(financat.readAllResources());
 
 					}
@@ -1860,10 +1960,10 @@ System.out.println("//////////////////");
 
 				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
 				financial_moduleFields.add(new Field("text", "financename", "", 20, "name"));
-				financial_moduleFields.add(sections);
 				financial_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
 				financial_moduleFields.add(new Field("text", "net value", "", 20, "value"));
 				financial_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+				financial_moduleFields.add(sections);
 
 				final Form financial_moduleForm = new Form(financial_moduleFields, "Information Module Form");
 				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
@@ -1877,6 +1977,11 @@ System.out.println("//////////////////");
 				Add_FinancialModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Add_FinancialModulePage.pack();
 				Add_FinancialModulePage.setVisible(true);
+				
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) financial_moduleForm.getJPanel().getComponent(4);
+
+				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
 				submitaddfinancialmoduleBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -1892,7 +1997,15 @@ System.out.println("//////////////////");
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " financial");
 						}
-						financat.addResource((inputs.get(0)));
+						System.out.println(sections_combo.getSelectedItem()+" //////");
+						Pattern p = Pattern.compile("sectionid=\\d+");
+						String section = null;
+						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+						if (m.find()) {
+							section = m.group();
+						}
+						System.out.println("sectionid: " + section);
+						financat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sectionid=", "")),Integer.parseInt(inputs.get(2)) , inputs.get(1), inputs.get(3));
 						// tu resource ham bayad insert she
 						allfinance.clear();
 						allfinance = financat.readAllResources();
@@ -1937,8 +2050,9 @@ System.out.println("//////////////////");
 				}
 
 				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-				moduleFields.add(sections);
 				moduleFields.add(new Field("text", "duration", "", 20, "duration"));
+				moduleFields.add(new Field("text", "description", "", 20, "desc"));
+				moduleFields.add(sections);
 
 				final Form moduleForm = new Form(moduleFields, "Module Form");
 				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
@@ -1952,7 +2066,11 @@ System.out.println("//////////////////");
 				AddModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				AddModulePage.pack();
 				AddModulePage.setVisible(true);
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) moduleForm.getJPanel().getComponent(3);
 
+				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+				
 				submitaddmoduleBtn.addActionListener(new ActionListener() {
 
 					@Override
@@ -1969,7 +2087,16 @@ System.out.println("//////////////////");
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + "adasa");
 						}
-						mcat.addResource((inputs.get(0)));
+						System.out.println(sections_combo.getSelectedItem()+" //////");
+						Pattern p = Pattern.compile("sectionid=\\d+");
+						String section = null;
+						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+						if (m.find()) {
+							section = m.group();
+						}
+						System.out.println("sectionid: " + section);
+						
+						mcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sectionid=", "")), Integer.parseInt(inputs.get(1)), inputs.get(2));
 						// tu resource ham bayad insert she
 						module_tabledata.update(mcat.readAllResources());
 					}
@@ -2029,6 +2156,19 @@ System.out.println("//////////////////");
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + "adasa");
 						}
+						
+
+						int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
+						int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
+						if (rowIndex == -1) {
+							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+									"Please Select a Module!");
+						} else {
+
+							String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+									.toString()); // the
+							System.out.println(Table_click+" ino click");
+							}
 						// mcat.addResource((inputs.get(0)));
 						// // tu resource ham bayad insert she
 						// allmodules.clear();
@@ -2573,6 +2713,7 @@ System.out.println("//////////////////");
 				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
 				physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
 				physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+				physical_moduleFields.add(new Field("text", "description", "", 20, "description"));
 
 				physical_moduleFields.add(sections);
 				final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
@@ -2587,6 +2728,11 @@ System.out.println("//////////////////");
 				Add_PhysicalModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Add_PhysicalModulePage.pack();
 				Add_PhysicalModulePage.setVisible(true);
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) physical_moduleForm.getJPanel().getComponent(3);
+
+				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+				
 				submitaddphysicalmoduleBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -2602,7 +2748,17 @@ System.out.println("//////////////////");
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " physical");
 						}
-						physcat.addResource((inputs.get(0)));
+						
+						System.out.println(sections_combo.getSelectedItem()+" //////");
+						Pattern p = Pattern.compile("sectionid=\\d+");
+						String section = null;
+						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+						if (m.find()) {
+							section = m.group();
+						}
+						System.out.println("sectionid: " + section);
+						
+						physcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sectionid=", "")), inputs.get(1), inputs.get(1));
 
 						physical_tabledata.update(physcat.readAllResources());
 
@@ -2924,7 +3080,7 @@ System.out.println("//////////////////");
 						EmployeeCatalogue empcat = new EmployeeCatalogue();
 						Employee proj_manager = empcat.getEmployee(employeeID);
 						System.out.println(proj_manager.getName());
-						projcat.addProject(inputs.get(0).toString(), proj_manager);
+						projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2), inputs.get(1));
 
 						allprojects = projcat.getProjects();
 						project_tabledata.update(projcat.getProjects());
@@ -2968,7 +3124,7 @@ System.out.println("//////////////////");
 					System.out.println("-----");
 					System.out.println("Change JPanel");
 					SubSystemCatalogue subsyscat = new SubSystemCatalogue();
-					subsystem_tabledata.update(subsyscat.getSubSystemsbyProject(selected_project_forsubsystem));
+					subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
 
 					int selected_index = tabbedPane.getSelectedIndex();
 					tabbedPane.remove(selected_index);

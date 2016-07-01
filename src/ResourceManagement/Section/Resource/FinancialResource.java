@@ -12,11 +12,11 @@ public class FinancialResource extends Resource{
 		tableName = "finanres";
 	}
 	
-	public void editResource(String name, int netValue, String modeldesc, String desc){
+	public void editResource(String name, int SectionId, int netValue, String modeldesc, String desc){
 		this.netValue = netValue;
 		this.modeldesc = modeldesc;
 		this.description = desc;
-		super.editResource(name);
+		super.editResource(name,SectionId);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("finanname", "\'" + name + "\'");
 		vars.put("netvalue", Integer.toString(netValue));

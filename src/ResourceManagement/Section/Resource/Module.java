@@ -13,20 +13,18 @@ public class Module extends Resource{
 	public Module() {
 		super();
 		tableName = "module";
-
 	}
 	
 	
 	
-	public void editResource(String name, int duration, String desc){
+	public void editResource(String name,int SectionId, int duration, String desc){
 		this.duration = duration;
 		this.description = desc;
-		super.editResource(name);
+		super.editResource(name,SectionId);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("modname", "\'" + name + "\'");
 		vars.put("duration",Integer.toString(duration));
 		vars.put("description", "\'" + desc + "\'");
-
 		submitToDB(vars);
 	}
 

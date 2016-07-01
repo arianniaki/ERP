@@ -22,7 +22,7 @@ public class EmployeeCatalogue {
 		if (decision) {
 			ResourceCatalogue resCat = new ResourceCatalogue();
 			String empname = getEmployee(empid).getName();
-			int rid = (int) resCat.addResource(empname);
+			int rid = (int) resCat.addResource(empname,6);
 
 			HashMap<String, String> setVars = new HashMap<String, String>();
 			setVars.put("is_confirmed", "true");
@@ -54,6 +54,20 @@ public class EmployeeCatalogue {
 	}
 	
 
+	public ArrayList<HashMap<String, String>> getConfirmedEmployees() {
+
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("is_confirmed", "true");
+		Table table = new Table("employee");
+		ArrayList<HashMap<String, String>> result = table.search(vars);
+		for (int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i).toString());
+		}
+		return result;
+	}
+
+	
+	
 	public ArrayList<HashMap<String, String>> readAllEmployees() {
 		Table table = new Table("employee");
 		ArrayList<HashMap<String, String>> result = table.readAll();
@@ -64,9 +78,14 @@ public class EmployeeCatalogue {
 	}
 
 	public void deleteEmployee(int id) {
+		ResourceCatalogue resCat = new ResourceCatalogue();
+		EmployeeCatalogue empCat = new EmployeeCatalogue();
+
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", Integer.toString(id));
 		DB.delete(vars, "employee");
+		resCat.deleteResource(empCat.getEmployee(id).getResId());
+
 	}
 
 	public Employee signUp(boolean ismodir, String empname, String post, String username,
@@ -92,6 +111,9 @@ public class EmployeeCatalogue {
 	public Employee addEmployee(boolean ismodir, String empname, String post, int sectionId, String username,
 			String password, boolean is_loggedin, boolean is_confirmed) {
 
+		ResourceCatalogue resCat = new ResourceCatalogue();
+		int rid = (int) resCat.addResource(empname,sectionId);
+
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empname", "\'" + empname + "\'");
 		vars.put("sectionid", Integer.toString(sectionId));
@@ -101,6 +123,7 @@ public class EmployeeCatalogue {
 		vars.put("password", "\'" + password + "\'");
 		vars.put("is_loggedin", Boolean.toString(is_loggedin));
 		vars.put("is_confirmed", Boolean.toString(is_confirmed));
+		vars.put("rid", Integer.toString(rid));
 
 		long pk = DB.insert(vars, "employee");
 		Employee employee = new Employee();

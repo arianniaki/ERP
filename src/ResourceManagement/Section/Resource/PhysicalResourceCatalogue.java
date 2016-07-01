@@ -1,5 +1,7 @@
 package ResourceManagement.Section.Resource;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PhysicalResourceCatalogue extends ResourceCatalogue {
@@ -9,8 +11,8 @@ public class PhysicalResourceCatalogue extends ResourceCatalogue {
 		tableName = "physres";
 	}
 
-	public long addResource(String name, String modeldesc, String desc) {
-		long resid = super.addResource(name);
+	public long addResource(String name,int SectionId, String modeldesc, String desc) {
+		long resid = super.addResource(name, SectionId);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", resid+"");
 		vars.put("physname", "\'" + name + "\'");
@@ -20,6 +22,25 @@ public class PhysicalResourceCatalogue extends ResourceCatalogue {
 		return DB.insert(vars, tableName);
 	}
 	
+	public PhysicalResource getPhysicalResource(int rid){
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("rid", rid+"");
+		ResultSet res = DB.select(tableName, vars, null);
+		PhysicalResource physres = new PhysicalResource();
+		try {
+			if(res.next()){
+				physres.setId(res.getInt("rid"));
+				physres.setName(res.getString("physname"));
+				physres.description = res.getString("description");
+				physres.modeldesc = res.getString("modeldesc");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return physres;
+	}
+
 	
 
 }

@@ -43,14 +43,10 @@ public class ResourceRequirementCatalogue{
 		return resReqs;
 	}
 	
-	public ResourceRequirement getResourceRequirement(int rid, int sid, int pid, String from, String to){
+	public ResourceRequirement getResourceRequirement(int resreqId){
 		
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("rid", Integer.toString(rid));
-		vars.put("sid", Integer.toString(sid));
-		vars.put("pid", Integer.toString(pid));
-		vars.put("fromdate", "\'"+from+"\'");
-		vars.put("todate", "\'"+to+"\'");
+		vars.put("resreqId", Integer.toString(resreqId));
 
 		ResultSet res = DB.select("resourcerequirement",vars,null);
 
@@ -90,14 +86,9 @@ public class ResourceRequirementCatalogue{
 		return pk;
 	}
 	
-	public void deleteResourceRequirement(int rid, int sid, int pid, String from, String to) {
+	public void deleteResourceRequirement(int resreqId) {
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("sid", Integer.toString(sid));
-		vars.put("rid", Integer.toString(rid));
-		vars.put("pid", Integer.toString(pid));
-		vars.put("fromdate", "\'"+from+"\'");
-		vars.put("todate", "\'"+to+"\'");
-
+		vars.put("resreqid", Integer.toString(resreqId));
 		DB.delete(vars, "resourcerequirement");
 	}
 	

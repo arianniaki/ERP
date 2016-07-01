@@ -69,6 +69,34 @@ public class Main {
 		reses = mmca.getResources(5);
 		System.out.println("################reses size :"+reses.size());
 		System.out.println("**********************END*****************");
+
+		
+		// test resources
+//		FinancialResourceCatalogue fCat = new FinancialResourceCatalogue();
+//		fCat.addResource("finanTest", 1,1000,"model1","hello Test");
+//		fCat.getFinancialResource(3).editResource("changed name", 1, 10, "changed model", "changed");
+//		fCat.readAllResources();
+//		fCat.getResource(11);
+//		fCat.deleteResource(18);
+		
+//		InformationResourceCatalogue infCat = new InformationResourceCatalogue();
+//		infCat.addResource("infoTest",1,"2016-10-10","hello Test");
+//		infCat.getInformationResource(4).editResource("inf", 1, "2016-10-10", "changed desc");
+//		infCat.readAllResources();
+//		infCat.deleteResource(16);
+
+//		ModuleCatalogue mCat = new ModuleCatalogue();
+//		mCat.addResource("moduleTest", 1, 10, "hello test");
+//		mCat.getModule(3).editResource("edited module", 1, 10, "helloooo");
+//		mCat.readAllResources();	
+//		mCat.deleteResource(14);
+
+//		PhysicalResourceCatalogue physCat = new PhysicalResourceCatalogue();
+//		physCat.addResource("phys res test", 1, "model desc", "hello");
+//		physCat.readAllResources();
+//		physCat.getPhysicalResource(3).editResource("physName changed", 1, "model changed", "hello changed");
+//		physCat.deleteResource(15);
+
 		// test employee
 //		EmployeeCatalogue empCat = new EmployeeCatalogue();
 //		empCat.signUp(false, "negar Ghorbani", "developer", "negar", "123", false, false);
@@ -128,12 +156,12 @@ public class Main {
 //			System.out.println(resreqs.get(i).toHashMap());
 //		}
 //		System.out.println("get:");
-//		System.out.println(resreqCat.getResourceRequirement(1,1,1,"2016-04-04","2016-05-05").toHashMap());
+//		System.out.println(resreqCat.getResourceRequirement(1));
 //		System.out.println("satisfy:");
-//		resreqCat.getResourceRequirement(1,1,1,"2016-04-04","2016-05-05").satisfy("2016-12-12");
+//		resreqCat.getResourceRequirement(1).satisfy("2016-12-12");
 //		System.out.println("edit:");
-//		resreqCat.getResourceRequirement(1,1,1,"2016-04-04","2016-05-05").edit("2016-08-08", "2016-09-09", false, "1111-11-11");
-//		resreqCat.deleteResourceRequirement(1,1,1,"2016-08-08","2016-09-09");
+//		resreqCat.getResourceRequirement(1).edit("2016-08-08", "2016-09-09", false, "1111-11-11");
+//		resreqCat.deleteResourceRequirement(1);
 
 		
 		// test projectresourceutilization
@@ -147,10 +175,10 @@ public class Main {
 //		System.out.println("add:");
 //		projres.addProjectResourceUtilization(3,2,1,"2016-01-01","2016-01-01");
 //		System.out.println("get :");
-//		System.out.println(projres.getProjectResourceUtilization(3,2,1,"2016-01-01","2016-01-01").toHashMap());
-//		projres.getProjectResourceUtilization(3,2,1,"2016-01-01","2016-01-01").edit("2016-04-04", "2016-04-05");
+//		System.out.println(projres.getProjectResourceUtilization(1).toHashMap());
+//		projres.getProjectResourceUtilization(1).edit("2016-04-04", "2016-04-05");
 //		System.out.println("delete");
-//		projres.deleteProjectResourceUtilization(3, 2, 1,"2016-04-04","2016-04-05");
+//		projres.deleteProjectResourceUtilization(1);
 		
 
 		//test sign up

@@ -12,6 +12,7 @@ public class Resource{
 	DataBase DB;
 	String tableName;
 	String description;
+	int sectionId;
 	
 	public Resource(){
 		DB = new DataBase();
@@ -42,6 +43,7 @@ public class Resource{
 			if (rs.next()) {
 				this.id = rs.getInt("rid");
 				this.name = rs.getString("rname");
+				this.sectionId = rs.getInt("sid");
 			}
 			rs.close();
 			DB.connectionClose();
@@ -53,18 +55,20 @@ public class Resource{
 		}
 	}
 	
-	public void editResource(String name){
+	protected void editResource(String name, int sid){
 		this.name = name;
+		this.sectionId = sid;
 		HashMap<String, String> setVars = new HashMap<String, String>();
 		setVars.put("rname", "\'"+name+"\'");
-		submitToDB(setVars);
+		setVars.put("sid", Integer.toString(sid));
+		resourceSubmitToDB(setVars);
 	}
 
 
-	public void submitToDB(HashMap<String, String> setVars) {
+	public void resourceSubmitToDB(HashMap<String, String> setVars) {
 		HashMap<String, String> condVars = new HashMap<String, String>();
-		condVars.put("id", Integer.toString(this.id));
-		DB.update(condVars, setVars, tableName);
+		condVars.put("rid", Integer.toString(this.id));
+		DB.update(condVars, setVars, "resource");
 
 	}
 

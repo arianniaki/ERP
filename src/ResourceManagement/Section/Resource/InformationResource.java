@@ -13,10 +13,10 @@ public class InformationResource extends Resource{
 		tableName = "infores";
 	}
 	
-	public void editResource(String name, String createDate, String desc){
+	public void editResource(String name,int SectionId, String createDate, String desc){
 		this.createDate = createDate;
 		this.description = desc;
-		super.editResource(name);
+		super.editResource(name,SectionId);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("irname", "\'" + name + "\'");
 		vars.put("createdate", "\'" + createDate + "\'");
