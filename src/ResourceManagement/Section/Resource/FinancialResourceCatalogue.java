@@ -23,9 +23,9 @@ public class FinancialResourceCatalogue extends ResourceCatalogue {
 		return DB.insert(vars, tableName);
 	}
 	
-	public FinancialResource getFinancialResource(int finanId){
+	public FinancialResource getFinancialResource(int rid){
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("finanid", finanId+"");
+		vars.put("rid", rid+"");
 		ResultSet res = DB.select(tableName, vars, null);
 		FinancialResource finanres = new FinancialResource();
 		try {

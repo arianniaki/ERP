@@ -22,9 +22,9 @@ public class PhysicalResourceCatalogue extends ResourceCatalogue {
 		return DB.insert(vars, tableName);
 	}
 	
-	public PhysicalResource getPhysicalResource(int physId){
+	public PhysicalResource getPhysicalResource(int rid){
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("physid", physId+"");
+		vars.put("rid", rid+"");
 		ResultSet res = DB.select(tableName, vars, null);
 		PhysicalResource physres = new PhysicalResource();
 		try {
