@@ -9,6 +9,7 @@ import AccessRight.AccessRight;
 import DataBase.DataBase;
 import DataBase.Table;
 import Report.Report;
+import ResourceManagement.Section.Section;
 import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
 
@@ -57,13 +58,17 @@ public class EmployeeCatalogue {
 	
 
 	public ArrayList<HashMap<String, String>> getConfirmedEmployees() {
-
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("is_confirmed", "true");
 		Table table = new Table(tablename);
 		ArrayList<HashMap<String, String>> result = table.search(vars);
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
+			AccessRight acc = new AccessRight(Integer.parseInt(result.get(i).get("accessrightid")));
+			result.get(i).put("accessrightname", acc.getName());
+			SectionCatalogue secCat = new SectionCatalogue();
+			Section sec = secCat.getSection(Integer.parseInt(result.get(i).get("sid")));
+			result.get(i).put("sectionname", sec.getName());
 		}
 		return result;
 	}
@@ -112,7 +117,7 @@ public class EmployeeCatalogue {
 	}
 
 
-	public Employee addEmployee(boolean ismodir, String empname, String post, int sectionId, String username,
+	public Employee addEmployee(String empname, String post, int sectionId, String username,
 			String password, boolean is_loggedin, boolean is_confirmed) {
 
 		ResourceCatalogue resCat = new ResourceCatalogue();
@@ -122,7 +127,6 @@ public class EmployeeCatalogue {
 		vars.put("empname", "\'" + empname + "\'");
 		vars.put("sid", Integer.toString(sectionId));
 		vars.put("post", "\'" + post + "\'");
-		vars.put("ismodir", Boolean.toString(ismodir));
 		vars.put("username", "\'" + username + "\'");
 		vars.put("password", "\'" + password + "\'");
 		vars.put("is_loggedin", Boolean.toString(is_loggedin));
@@ -132,6 +136,7 @@ public class EmployeeCatalogue {
 		long pk = DB.insert(vars, tablename);
 		Employee employee = new Employee();
 		employee.getFromDB((int) pk);
+		employee.setDefaultAccessRight();
 		return employee;
 		
 	}

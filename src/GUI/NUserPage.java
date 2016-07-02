@@ -3117,7 +3117,7 @@ public class NUserPage {
 						System.out.println("sid: " + section);
 
 
-						empcat.addEmployee(false, inputs.get(0), inputs.get(3), Integer.parseInt(section.replace("sid=", "")), inputs.get(1), inputs.get(2), false, false);
+						empcat.addEmployee(inputs.get(0), inputs.get(3), Integer.parseInt(section.replace("sid=", "")), inputs.get(1), inputs.get(2), false, false);
 						human_tabledata.update(empcat.readAllEmployees());
 
 					}

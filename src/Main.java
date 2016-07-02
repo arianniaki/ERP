@@ -189,6 +189,10 @@ public class Main {
 		//test resourcerequirement:
 //		ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
 //		resreqCat.addResourceRequirement(1, 1, 1, "2016-01-01", "2016-09-09");
+//		resreqCat.addResourceRequirement(1, 2, 1, "2016-01-01", "2016-09-09");
+//		HashMap<String,String> vars = new HashMap<String,String>();
+//		vars.put("sid", 1+"");
+//		resreqCat.Search(vars);
 //		ArrayList<ResourceRequirement> resreqs = resreqCat.getResourceRequirements();
 //		for (int i = 0; i < resreqs.size(); i++) {
 //			System.out.println(resreqs.get(i).toHashMap());
