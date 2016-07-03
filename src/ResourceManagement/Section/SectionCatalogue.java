@@ -45,7 +45,6 @@ public class SectionCatalogue {
 			e.printStackTrace();
 		}
 		return sec;
-
 	}
 	
 	public long addSection(String name) {

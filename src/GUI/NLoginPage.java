@@ -179,7 +179,7 @@ public class NLoginPage {
 						}
 						EmployeeCatalogue empcat = new EmployeeCatalogue();
 						//++section e default mikhaim ke badan avaz she
-						Employee added_emp= empcat.addEmployee( false, inputs.get(2)+""+inputs.get(3), "Default post", 1, inputs.get(1), inputs.get(4), false, false);
+						Employee added_emp= empcat.addEmployee(inputs.get(2)+""+inputs.get(3), "Default post", 1, inputs.get(1), inputs.get(4), false, false);
 						added_emp.setDefaultAccessRight();
 						System.out.println("Employee added");
 						NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification", "You have been successfully signed up!");

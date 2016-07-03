@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import AccessRight.AccessRight;
 import DataBase.DataBase;
 import DataBase.Table;
 import ProjectEmployee.Project;
@@ -30,7 +31,6 @@ public class ResourceRequirementCatalogue{
 		Table table = new Table(tableName);
 		ArrayList<HashMap<String, String>> result = table.readAll();
 		for (int i = 0; i < result.size(); i++) {
-//			System.out.println(result.get(i).toString());
 			ProjectCatalogue pcat = new ProjectCatalogue();
 			SectionCatalogue scat = new SectionCatalogue();
 			ResourceCatalogue rcat = new ResourceCatalogue();
@@ -47,10 +47,7 @@ public class ResourceRequirementCatalogue{
 		
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("resreqId", Integer.toString(resreqId));
-
 		ResultSet res = DB.select("resourcerequirement",vars,null);
-
-		
 		ProjectCatalogue pcat = new ProjectCatalogue();
 		SectionCatalogue scat = new SectionCatalogue();
 		ResourceCatalogue rcat = new ResourceCatalogue();
@@ -116,5 +113,16 @@ public class ResourceRequirementCatalogue{
 		}
 		return rep;
 	}
+	
+	public ArrayList<HashMap<String, String>> Search(HashMap<String, String> searchvars){
+		
+		Table table = new Table("resourcerequirement");
+		ArrayList<HashMap<String, String>> result = table.search(searchvars);
+		for (int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i).toString());
+		}
+		return result;		
+	}
+
 
 }

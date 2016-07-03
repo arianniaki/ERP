@@ -45,7 +45,7 @@ public class Project {
 		isComplete = isComp;
 		HashMap<String, String> setVars = new HashMap<String, String>();
 		setVars.put("projname", "\'"+name+"\'");
-		setVars.put("projmanager", Integer.toString(manager.getId()));
+		setVars.put("projectmanager", Integer.toString(manager.getId()));
 		setVars.put("size", "\'"+size+"\'");
 		setVars.put("tech", "\'"+tech+"\'");
 		setVars.put("is_complete", "\'"+Boolean.toString(isComp)+"\'");

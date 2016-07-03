@@ -98,8 +98,8 @@ public class TableData {
 		}
 		if(type=="human")
 		{
-			columns = new String[] { "Id", "Name", };
-			dbnames = new String[] { "empid", "empname" };
+			columns = new String[] { "Id", "Name","Post","Accessright" ,"Section"};
+			dbnames = new String[] { "empid", "empname","post" ,"accessrightname","sid"};
 		}
 		this.buildFilledJTable();
 	}
@@ -152,8 +152,8 @@ public class TableData {
 	}
 	public TableData(ResourceRequirementCatalogue resreqcat) {
 		data= new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate","projectName","sectionName","resourceName","is_satisfied" };
-		dbnames = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate","projectName","sectionName","resourceName","is_satisfied"};
+		columns = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate","projectName","sectionName","resourceName","is_satisfied","satisfydate" };
+		dbnames = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate","projectName","sectionName","resourceName","is_satisfied","satisfydate"};
 		ArrayList<ResourceRequirement> allresourcerequirements;
 		allresourcerequirements = resreqcat.getResourceRequirements();
 		for (int i = 0; i < allresourcerequirements.size(); i++) {

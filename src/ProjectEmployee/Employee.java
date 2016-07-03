@@ -17,7 +17,6 @@ public class Employee {
 	private int id;
 	private String name;
 	private int sectionId;
-	private boolean isManager;
 	private String username;
 	private String password;
 	public boolean loggedin;
@@ -153,14 +152,6 @@ public class Employee {
 		return this.password;
 	}
 
-	public void promoteManager() {
-		this.isManager = true;
-	}
-
-	public void demoteManager() {
-		this.isManager = false;
-	}
-
 	public void setDefaultAccessRight(){
 		setAccessRight(new AccessRight(1));
 		HashMap<String, String> setVars = new HashMap<String, String>();
@@ -195,7 +186,6 @@ public class Employee {
 				this.rid = rs.getInt("rid");
 				this.id = rs.getInt("empid");
 				this.name = rs.getString("empname");
-				this.isManager = rs.getBoolean("ismodir");
 				this.password = rs.getString("password");
 				this.username = rs.getString("username");
 				this.sectionId = rs.getInt("sid");
