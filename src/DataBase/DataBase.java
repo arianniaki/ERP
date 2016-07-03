@@ -1,5 +1,7 @@
 package DataBase;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class DataBase {
 	static Connection c = null;
@@ -14,7 +17,47 @@ public class DataBase {
 	static String dbName = "jdbc:postgresql://localhost:5432/erp";
 	static String user = "postgres";
 	static String pass = "123456m.";
-	
+	static String port = "5432";
+	public DataBase(){
+		File file = new File("userInfo.txt");
+		try {
+			Scanner scn = new Scanner(file);
+			user = scn.nextLine();
+			pass = scn.nextLine();
+			this.setPort(scn.nextLine());
+			scn.close();
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+	public static String getPort() {
+		return port;
+	}
+
+	public static void setPort(String port) {
+		DataBase.port = port;
+		dbName = "jdbc:postgresql://localhost:"+port+"/erp";
+	}
+
+	public static String getPass() {
+		return pass;
+	}
+
+	public static void setPass(String pass) {
+		DataBase.pass = pass;
+	}
+
+	public static String getUser() {
+		return user;
+	}
+
+	public static void setUser(String user) {
+		DataBase.user = user;
+	}
+
+
 
 	public long insert(HashMap<String, String> vars, String tableName) {
 		long pk=0;
