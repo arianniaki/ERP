@@ -61,10 +61,11 @@ public class Setup {
 		Statement statement = null;
 		connection = DriverManager.getConnection(url+port+"/"+database, username, password);
 		statement = connection.createStatement();
-		File file = new File("sampledata.input");
+		File file = new File("sampledata.txt");
 		Scanner sc = new Scanner(file);
 		while(sc.hasNextLine()){
 			String stm = sc.nextLine();
+			System.out.println("LINE "+ stm +" "+sc.hasNextLine());
 			System.out.println(statement.executeUpdate(stm));
 		}
 		sc.close();
