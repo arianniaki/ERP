@@ -134,11 +134,15 @@ public class EmployeeCatalogue {
 		vars.put("rid", Integer.toString(rid));
 
 		long pk = DB.insert(vars, tablename);
-		Employee employee = new Employee();
-		employee.getFromDB((int) pk);
-		employee.setDefaultAccessRight();
-		return employee;
-		
+		if(pk==-1)
+			return null;
+		else{
+			Employee employee = new Employee();
+			employee.getFromDB((int) pk);
+			employee.setDefaultAccessRight();
+			return employee;
+				
+		}
 	}
 
 	public Employee getEmployee(int empid) {

@@ -178,11 +178,16 @@ public class NLoginPage {
 							System.out.println(inputs.get(i) + "adasa");
 						}
 						EmployeeCatalogue empcat = new EmployeeCatalogue();
-						//++section e default mikhaim ke badan avaz she
+						// ++section e default mikhaim ke badan avaz she
 						Employee added_emp= empcat.addEmployee(inputs.get(2)+""+inputs.get(3), "Default post", 1, inputs.get(1), inputs.get(4), false, false);
-						added_emp.setDefaultAccessRight();
-						System.out.println("Employee added");
-						NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification", "You have been successfully signed up!");
+						if (added_emp == null) {
+							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+									"Username is already taken!");
+						} else {
+							System.out.println("Employee added");
+							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+									"You have been successfully signed up!");
+						}
 					}
 				});
 			}

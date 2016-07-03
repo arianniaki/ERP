@@ -91,7 +91,7 @@ public class DataBase {
 
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+			return -1;
 		}
 		System.out.println("Records created successfully");
 		return pk;
@@ -134,7 +134,6 @@ public class DataBase {
 			return rs;
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
 			return null;
 		}
 	}
@@ -178,7 +177,6 @@ public class DataBase {
 			return rs;
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
 			return null;
 		}
 	}
@@ -216,7 +214,6 @@ public class DataBase {
 			}
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
 			this.connectionClose();
 			return false;
 		}
@@ -238,7 +235,6 @@ public class DataBase {
 
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
 			return null;
 		}
 
@@ -269,7 +265,6 @@ public class DataBase {
 
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
 		}
 		System.out.println("Operation done successfully");
 		return false;
