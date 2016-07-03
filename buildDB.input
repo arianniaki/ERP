@@ -1,0 +1,30 @@
+create table project(ProjID serial, ProjName character varying(50), projectmanager INT, size character varying(20), tech character varying(50) ,primary key(Projid), is_complete boolean);
+create table subsystem(subid serial, Sname character varying(50),sid INT, pid int ,primary key(subid), foreign key (pid) references project(projid) on update cascade on delete cascade);
+create table resource(RID serial, Rname character varying(50),sid int,primary key (RID));
+create table infores(RID INT,IRname character varying(50), CreateDate Date, description character varying(100),primary key (RID), foreign key (RID) references Resource(RID) on update cascade on delete cascade);
+create table physres(RID INT,physname character varying(50), modeldesc character varying(20),description char varying(100),primary key (RID), foreign key (RID) references Resource(RID) on update cascade on delete cascade);
+create table finanres(RID INT, finanname character varying(50), netvalue int, modeldesc character varying(20), description character varying(100) ,primary key (RID), foreign key (RID) references Resource(RID) on update cascade on delete cascade);
+create table module(modRID INT,Modname character varying(50),duration int ,description char varying(100) ,primary key (modRID), foreign key (modRID) references Resource(RID) on update cascade on delete cascade);
+create table employee (rid int, EMPID serial, EMPname character varying(50),primary key (empid), post character varying(20), username character varying(20), password character varying(20), is_loggedin boolean,  foreign key (rid) references resource(rid) on update cascade on delete cascade, sid INT, accessrightid INT, is_confirmed boolean); 
+create table moduleEmployee (ModrID int,  EMPID INt,primary key (modrid,empid),foreign key (modrid) references Module(modRID) on update cascade on delete cascade, foreign key (empid) references employee(empid) on update cascade on delete cascade); 
+create table moduleResourceUtilization (ModrID int,  rid int ,primary key (modrid,rid),foreign key (modrid) references Module(modRID) on update cascade on delete cascade, foreign key (rid) references Resource(rid) on update cascade on delete cascade); 
+create table section (sid serial, sectionname character varying(50),primary key (sid)); 
+alter table subsystem add constraint forkey foreign key (sid) references section (sid) on update cascade on delete cascade;
+alter table employee add constraint forkey foreign key (sid) references section (sid) on update cascade on delete cascade;
+alter table project add constraint forkey foreign key (projectmanager) references employee (empid) on update cascade on delete cascade;
+create table accessright (accessrightid serial, accessrightname character varying(50),primary key (accessrightid)); 
+Alter table resource add constraint fkey foreign key (sid) references section(sid) on update cascade on delete cascade;
+CREATE TABLE resourcerequirement(resreqid serial ,rid integer NOT NULL,sid integer NOT NULL,pid integer NOT NULL,fromdate date,todate date,is_satisfied boolean,satisfydate Date ,primary key (resreqid), foreign key (rid) references resource(rid) on update cascade on delete cascade, foreign key (sid) references section(sid) on update cascade on delete cascade, foreign key (pid) references project(projid) on update cascade on delete cascade); 
+ALTER TABLE employee ADD constraint accessrightid foreign key (accessrightid) references accessright(accessrightid) on update cascade on delete cascade;
+create table projectresourceutilization (presutilid serial, rid INT, sid INT, pid INT,fromDate Date ,toDate Date,primary key (presutilid), foreign key (rid) references resource(rid) on update cascade on delete cascade , foreign key (sid) references section(sid) on update cascade on delete cascade, foreign key (pid) references project(projid) on update cascade on delete cascade );
+alter table employee add constraint usernameunique UNIQUE (username);
+create table projectEmployee (projid int,  EMPID Int, fromdate DATE, todate DATE, primary key (projid,empid),foreign key (projid) references Project(projid) on update cascade on delete cascade, foreign key (empid) references employee(empid) on update cascade on delete cascade);
+Create table maintainmodule(maintainid serial, modrid int,duration int, changetype char varying(50), primary key (maintainid) ,foreign key(modrid) references Module(modRID) on update cascade on delete cascade);
+Create table maintainmodemp(maintainid int, empid int, primary key(maintainid,empid) ,foreign key(maintainid) references maintainmodule(maintainid) on update cascade on delete cascade, foreign key(empid) references employee(empid) on update cascade on delete cascade);
+Create table maintainmodres(maintainid int, rid int, primary key(maintainid,rid) ,foreign key(maintainid) references maintainmodule(maintainid) on update cascade on delete cascade, foreign key (rid) references resource(rid) on update cascade on delete cascade);
+create view physressection as (select * from physres natural join resource);
+create view finanressection as (select * from finanres natural join resource);
+create view inforessection as (select * from infores natural join resource);
+create view modulesection as (select * from module natural join resource);
+
+
