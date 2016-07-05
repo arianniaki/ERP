@@ -135,6 +135,7 @@ public class NUserPage {
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
 	private int selected_module;
+	private int selected_maintaining_module;
 	private JTextField search_modulename;
 	private JTextField search_financialname;
 	private JTextField search_informationname;
@@ -2651,7 +2652,7 @@ public class NUserPage {
 //
 					int selected_index = resourcesTab.getSelectedIndex();
 					resourcesTab.remove(selected_index);
-					resourcesTab.insertTab("Module Detaul", null, moduledetailpanel, null, selected_index);
+					resourcesTab.insertTab("Module Detail", null, moduledetailpanel, null, selected_index);
 					resourcesTab.setSelectedComponent(moduledetailpanel);
 				}
 			}
@@ -2731,6 +2732,182 @@ public class NUserPage {
 		JScrollPane maintaining_scrollPane = new JScrollPane();
 
 		JButton maintaining_btnEdit = new JButton("Edit");
+		maintaining_btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				final ArrayList<String> employees = new ArrayList<String>();
+				final ArrayList<String> financials = new ArrayList<String>();
+				final ArrayList<String> physicals = new ArrayList<String>();
+				final ArrayList<String> information = new ArrayList<String>();
+
+				EmployeeCatalogue empcat = new EmployeeCatalogue();
+				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+				for (int i = 0; i < employe_readall.size(); i++) {
+					employees.add(employe_readall.get(i).toString());
+				}
+				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+				for (int i = 0; i < financial_readall.size(); i++) {
+					financials.add(financial_readall.get(i).toString());
+				}
+
+				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+				for (int i = 0; i < physical_readall.size(); i++) {
+					physicals.add(physical_readall.get(i).toString());
+				}
+
+				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+				for (int i = 0; i < information_readall.size(); i++) {
+					information.add(information_readall.get(i).toString());
+				}
+
+				ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
+				Field change_type = new Field("text", "change type", "", 20, "change type");
+				Field duration = new Field("text", "duration", "", 20, "duration");
+				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+				Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+				maintain_moduleFields.add(change_type);
+				maintain_moduleFields.add(duration);
+				maintain_moduleFields.add(financial_check);
+				maintain_moduleFields.add(physical_check);
+				maintain_moduleFields.add(information_check);
+				maintain_moduleFields.add(maintainers);
+
+				final Form maintain_Form = new Form(maintain_moduleFields, "Maintain Module Form");
+				final PanelBuilder maintain_Panel = new PanelBuilder(maintain_Form);
+				maintain_Panel.makeForm();
+
+				JFrame Edit_MaintainPage = new JFrame("Edit Maintain Module Form");
+
+				JScrollPane scroll = new JScrollPane(maintain_Form.getJPanel());
+				Edit_MaintainPage.getContentPane().add(scroll);
+
+				// Add_MaintainPage.getContentPane().add(scroll,
+				// BorderLayout.NORTH);
+
+				JButton submiteditmaintainmoduleBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submiteditmaintainmoduleBtn);
+				Edit_MaintainPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Edit_MaintainPage.pack();
+				Edit_MaintainPage.setVisible(true);
+
+				final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
+				final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
+				final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel()
+						.getComponent(2);
+				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel()
+						.getComponent(4);
+
+				submiteditmaintainmoduleBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// INJA TODO Auto-generated method stub
+						int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
+						
+						String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+								.toString()); // return
+						selected_maintaining_module = Integer.parseInt(Table_click.trim());
+
+						System.out.println(Table_click);
+						System.out.println("---maintian module id-- " + selected_module);
+
+						
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < maintain_Form.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) maintain_Form.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + "adasa");
+						}
+
+						MaintainingModuleCatalogue maintainmodulecat = new MaintainingModuleCatalogue();
+//						MaintainingModule maintainmod = maintainmodulecat.ge(selected_maintaining_module);
+						
+//						long maintainmodpk = maintainmodulecat.addMaintainingModule(selected_module, inputs.get(0),
+//								Integer.parseInt(inputs.get(1)));
+
+						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+						ArrayList<MaintainingModule> allmaintainmodule;
+						allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
+						for (int i = 0; i < allmaintainmodule.size(); i++) {
+							data.add((allmaintainmodule.get(i).toHashMap()));
+						}
+						System.out.println("DATA");
+
+						maintaining_tabledata.update(data);
+
+						System.out.println("----------");
+						MaintainModEmpResCatalogue maintainmodempresCat = new MaintainModEmpResCatalogue();
+
+						final ArrayList<String> finanvales = checkBoxpane_financial.getCheckedValues();
+						System.out.println(finanvales);
+						final ArrayList<String> physicalvales = checkBoxpane_phys.getCheckedValues();
+						System.out.println(physicalvales);
+						final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+						System.out.println(informationvales);
+						final ArrayList<String> employeevales = checkBoxpane_emp.getCheckedValues();
+						System.out.println(employeevales);
+						Pattern emp = Pattern.compile("empid=\\d+");
+						for (int i = 0; i < employeevales.size(); i++) {
+							String empids = null;
+							Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+							if (m_emp.find()) {
+								empids = m_emp.group();
+							}
+							System.out.println("empids: " + empids);
+							maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")),
+								selected_maintaining_module);
+						}
+
+						Pattern res = Pattern.compile("rid=\\d+");
+						for (int i = 0; i < finanvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(finanvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("finan rid: " + respids);
+							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
+									 selected_maintaining_module);
+
+						}
+
+						for (int i = 0; i < physicalvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(physicalvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("phys rid: " + respids);
+							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
+									selected_maintaining_module);
+
+						}
+
+						for (int i = 0; i < informationvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(informationvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("info rid: " + respids);
+							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
+									selected_maintaining_module);
+
+						}
+
+					}
+				});
+				
+			}
+		});
 		maintaining_btnEdit.setIcon(new ImageIcon(
 				new ImageIcon("images/edit.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
