@@ -135,6 +135,7 @@ public class NUserPage {
 	private int selected_accessright_forassignment;
 	private int selected_module;
 	private int selected_maintaining_module;
+
 	private JTextField search_modulename;
 	private JTextField search_financialname;
 	private JTextField search_informationname;
@@ -868,6 +869,33 @@ public class NUserPage {
 		JButton presutil_btnDelete = new JButton("Delete");
 		presutil_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				int rowIndex = resourceutil_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = resourceutil_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource Utilization!");
+				} else {
+
+					String Table_click = (resourceutil_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						ProjectResourceUtilizationCatalogue projrescat = new ProjectResourceUtilizationCatalogue();
+						projrescat.deleteProjectResourceUtilization(Integer.parseInt(Table_click));
+
+						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+						ArrayList<ProjectResourceUtilization> allpresutil;
+						allpresutil = projrescat.getProjectResourceUtilizations();
+						for (int i = 0; i < allpresutil.size(); i++) {
+							data.add((allpresutil.get(i).toHashMap()));
+						}
+						resourceutil_tabledata.update(data);
+						
+				}
+			}
 			}
 		});
 		presutil_btnDelete.setIcon(new ImageIcon(
