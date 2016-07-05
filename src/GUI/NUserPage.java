@@ -375,9 +375,18 @@ public class NUserPage {
 				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 
-				searchVars.put("accessrightname", "\'" + search_accessrightname.getText() + "\'");
+				System.out.println(search_accessrightname.getText()+" sssssssssssssssss");
+				if(search_accessrightname.getText().equals("default"))
+					searchVars.put("accessrightid", "\'" + 1 + "\'");
 
+				if(search_accessrightname.getText().equals("super"))
+					searchVars.put("accessrightid", "\'" + 3 + "\'");
 
+				if(search_accessrightname.getText().equals("intermediate"))
+					searchVars.put("accessrightid", "\'" + 2 + "\'");
+				System.out.println("ASDSADASDA");
+				System.out.println(searchVars);
+				
 				if (empcat.SearchEmployee(searchVars).isEmpty()) {
 					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
 				} else {
