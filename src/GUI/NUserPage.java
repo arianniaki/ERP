@@ -13,8 +13,11 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.Character.Subset;
@@ -82,6 +85,10 @@ import org.jdatepicker.impl.UtilDateModel;
 import javax.swing.ListModel;
 import javax.swing.JTable;
 import javax.swing.JPasswordField;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+
+import java.awt.Button;
 
 public class NUserPage {
 
@@ -202,25 +209,12 @@ public class NUserPage {
 		userpageFrame.setResizable(false);
 
 		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(6, 6, 858, 551);
+		tabbedPane.setBounds(6, 0, 858, 557);
 		userpageFrame.getContentPane().add(tabbedPane);
 
 		JPanel editPanel = new JPanel();
 		editPanel.setBackground(tab_color);
 		tabbedPane.addTab("Edit Info", null, editPanel, null);
-
-		JButton btnLogout = new JButton("Logout");
-		btnLogout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (AuthenticatedEmployee.getInstance().getEmployee().logout()) {
-					System.out.println("logged out");
-					userpageFrame.dispose();
-					NLoginPage loginWindow = new NLoginPage();
-					loginWindow.getloginpageFrame().setVisible(true);
-
-				}
-			}
-		});
 
 		JLabel lblName = new JLabel("First and Last Name");
 
@@ -258,29 +252,41 @@ public class NUserPage {
 		});
 
 		GroupLayout gl_editPanel = new GroupLayout(editPanel);
-		gl_editPanel.setHorizontalGroup(gl_editPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_editPanel
-				.createSequentialGroup().addContainerGap(538, Short.MAX_VALUE)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.TRAILING, false).addComponent(passwordField)
-						.addComponent(editname_textField).addComponent(passwordField_re, Alignment.LEADING))
-				.addGap(40)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING).addComponent(lblRepassword)
-						.addComponent(password).addComponent(lblName).addComponent(btnLogout)))
-				.addGroup(gl_editPanel.createSequentialGroup().addComponent(btnEditInformation).addContainerGap(735,
-						Short.MAX_VALUE)));
-		gl_editPanel.setVerticalGroup(gl_editPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_editPanel
-				.createSequentialGroup().addContainerGap().addComponent(btnLogout).addGap(59)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+		gl_editPanel.setHorizontalGroup(
+			gl_editPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_editPanel.createSequentialGroup()
+					.addContainerGap(538, Short.MAX_VALUE)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(passwordField)
+						.addComponent(editname_textField)
+						.addComponent(passwordField_re, Alignment.LEADING))
+					.addGap(40)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblRepassword)
+						.addComponent(password)
+						.addComponent(lblName)))
+				.addGroup(gl_editPanel.createSequentialGroup()
+					.addComponent(btnEditInformation)
+					.addContainerGap(735, Short.MAX_VALUE))
+		);
+		gl_editPanel.setVerticalGroup(
+			gl_editPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_editPanel.createSequentialGroup()
+					.addGap(94)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblName))
-				.addGap(26)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE).addComponent(password)
+					.addGap(26)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(password)
 						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-				.addGap(31)
-				.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblRepassword).addComponent(
-						passwordField_re, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.RELATED, 260, Short.MAX_VALUE).addComponent(btnEditInformation)));
+					.addGap(31)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblRepassword)
+						.addComponent(passwordField_re, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+					.addComponent(btnEditInformation))
+		);
 		editPanel.setLayout(gl_editPanel);
 
 		JPanel accessrightPanel = new JPanel();
@@ -4959,6 +4965,44 @@ public class NUserPage {
 
 		registered_scrollPane.setViewportView(registered_tabledata.getJdataTable());
 		RegisteredUserspanel.setLayout(gl_RegisteredUserspanel);
+		
+		JMenuBar menuBar = new JMenuBar();
+		ImageIcon logout_icon = new ImageIcon(new ImageIcon("images/exit.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+		ImageIcon about_icon = new ImageIcon(new ImageIcon("images/info.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+
+		JMenu file = new JMenu("File");
+		file.setMnemonic(KeyEvent.VK_F);
+		JMenuItem logout_eMenuItem = new JMenuItem("Logout", logout_icon);
+		JMenuItem about_eMenuItem = new JMenuItem("About", about_icon);
+
+		logout_eMenuItem.setMnemonic(KeyEvent.VK_E);
+		logout_eMenuItem.setToolTipText("Exit application");
+		about_eMenuItem.setToolTipText("About");
+		logout_eMenuItem.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent event) {
+		    	System.out.println("logged out");
+				userpageFrame.dispose();
+				AuthenticatedEmployee.getInstance().logoutEmployee();
+				NLoginPage loginWindow = new NLoginPage();
+				loginWindow.getloginpageFrame().setVisible(true);
+		    }
+		});
+		about_eMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				AboutPage about = new AboutPage();
+				JFrame About = about.getaboutpageFrame();
+				About.setVisible(true);
+			}
+		});
+		file.add(logout_eMenuItem);
+		file.add(about_eMenuItem);
+		menuBar.add(file);
+
+
+		userpageFrame.setJMenuBar(menuBar);
 		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("default")) {
 			addreqBtn.setEnabled(false);
 			btnAddInformation.setEnabled(false);
