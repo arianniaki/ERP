@@ -173,6 +173,8 @@ public class NUserPage {
 	private MakeModuleCatalogue makemodulecat;
 	private ProjectResourceUtilizationCatalogue presutilcat;
 	private MaintainModEmpResCatalogue maintainmodempresCat;
+	private JTextField search_reqprojectname;
+	private JTextField search_reqsectionname;
 	/**
 	 * Launch the application.
 	 */
@@ -653,6 +655,17 @@ public class NUserPage {
 		search_subsystemname.setColumns(10);
 
 		JButton subsystem_btnSearch = new JButton("Search");
+		subsystem_btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+//				HashMap<String, String> searchVars = new HashMap<String, String>();
+//				searchVars.put("sname", "\'" + search_subsystemname.getText() + "\'");
+//				if (subsyscat.SearchResource(searchVars).isEmpty()) {
+//					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+//				} else {
+//					information_tabledata.update(infocat.SearchResource(searchVars));
+//				}
+			}
+		});
 		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
 		gl_subsystemPanel.setHorizontalGroup(gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_subsystemPanel.createSequentialGroup().addComponent(subsystem_btnEdit)
@@ -1520,31 +1533,73 @@ public class NUserPage {
 				}
 			}
 		});
+		
+		JLabel lblProjectName_1 = DefaultComponentFactory.getInstance().createLabel("Project Name");
+		
+		search_reqprojectname = new JTextField();
+		search_reqprojectname.setColumns(10);
+		
+		JLabel lblSectionName = DefaultComponentFactory.getInstance().createLabel("Section Name");
+		
+		search_reqsectionname = new JTextField();
+		search_reqsectionname.setColumns(10);
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
-		gl_requirementPanel.setHorizontalGroup(gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_requirementPanel.createSequentialGroup().addContainerGap(381, Short.MAX_VALUE)
-						.addComponent(searchreqBtn).addGap(128)
-						.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblResourceName_1).addContainerGap())
-				.addGroup(gl_requirementPanel.createSequentialGroup().addGap(40)
-						.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-						.addGap(40))
-				.addGroup(gl_requirementPanel.createSequentialGroup().addComponent(requirement_btnEdit)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(requirement_btnDelete)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(requirement_btnSatisfy)
-						.addPreferredGap(ComponentPlacement.RELATED, 635, Short.MAX_VALUE).addComponent(addreqBtn)));
-		gl_requirementPanel.setVerticalGroup(gl_requirementPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_requirementPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE).addComponent(searchreqBtn)
-								.addComponent(lblResourceName_1).addComponent(search_reqresourcename,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(40).addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
-						.addGap(40)
-						.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE).addComponent(addreqBtn)
-								.addComponent(requirement_btnEdit).addComponent(requirement_btnSatisfy)
-								.addComponent(requirement_btnDelete))));
+		gl_requirementPanel.setHorizontalGroup(
+			gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addComponent(requirement_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(requirement_btnDelete)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(requirement_btnSatisfy)
+					.addPreferredGap(ComponentPlacement.RELATED, 580, Short.MAX_VALUE)
+					.addComponent(addreqBtn))
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addContainerGap(371, Short.MAX_VALUE)
+					.addComponent(searchreqBtn)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_reqsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblSectionName)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(Alignment.TRAILING, gl_requirementPanel.createSequentialGroup()
+							.addComponent(search_reqprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblProjectName_1))
+						.addGroup(Alignment.TRAILING, gl_requirementPanel.createSequentialGroup()
+							.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblResourceName_1)))
+					.addContainerGap())
+		);
+		gl_requirementPanel.setVerticalGroup(
+			gl_requirementPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_requirementPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(searchreqBtn)
+						.addComponent(lblResourceName_1)
+						.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSectionName)
+						.addComponent(search_reqsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblProjectName_1)
+						.addComponent(search_reqprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+					.addGap(40)
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addreqBtn)
+						.addComponent(requirement_btnEdit)
+						.addComponent(requirement_btnSatisfy)
+						.addComponent(requirement_btnDelete)))
+		);
 
 		resrequirement_tabledata = new TableData(resreqcat);
 
