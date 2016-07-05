@@ -2324,83 +2324,180 @@ public class NUserPage {
 
 		module_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
+						final ArrayList<String> employees = new ArrayList<String>();
+						final ArrayList<String> financials = new ArrayList<String>();
+						final ArrayList<String> physicals = new ArrayList<String>();
+						final ArrayList<String> information = new ArrayList<String>();
 
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				ArrayList<Field> moduleFields = new ArrayList<Field>();
-				moduleFields.add(new Field("text", "name", "", 10, "name"));
-				moduleFields.add(sections);
-				moduleFields.add(new Field("text", "duration", "", 20, "duration"));
-
-				final Form moduleForm = new Form(moduleFields, "Module Form");
-				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
-				modulePanel.makeForm();
-				JFrame AddModulePage = new JFrame("Edit Module Form");
-				AddModulePage.getContentPane().add(moduleForm.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaddmoduleBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddmoduleBtn);
-				AddModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				AddModulePage.pack();
-				AddModulePage.setVisible(true);
-
-				submitaddmoduleBtn.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						ModuleCatalogue mcat = new ModuleCatalogue();
-						System.out.println("all : ");
-						mcat.readAllResources();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < moduleForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) moduleForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
+						EmployeeCatalogue empcat = new EmployeeCatalogue();
+						ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+						for (int i = 0; i < employe_readall.size(); i++) {
+							employees.add(employe_readall.get(i).toString());
 						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + "adasa");
+						FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+						ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+						for (int i = 0; i < financial_readall.size(); i++) {
+							financials.add(financial_readall.get(i).toString());
 						}
 
-						int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
-						int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
-						if (rowIndex == -1) {
-							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-									"Please Select a Module!");
-						} else {
-
-							String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-									.toString()); // the
-							System.out.println(Table_click + " ino click");
+						PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+						ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+						for (int i = 0; i < physical_readall.size(); i++) {
+							physicals.add(physical_readall.get(i).toString());
 						}
-						// mcat.addResource((inputs.get(0)));
-						// // tu resource ham bayad insert she
-						// allmodules.clear();
-						// allmodules = mcat.readAllResources();
-						// System.out.println(module_tableModel.getRowCount() +
-						// " ---");
-						// int rowcount = module_tableModel.getRowCount();
-						// for (int j = rowcount - 1; j >= 0; j--) {
-						// System.out.println(j);
-						// module_tableModel.removeRow(j);
-						// }
-						// System.out.println(module_tableModel.getRowCount() +
-						// " ---");
-						// for (int i = 0; i < allmodules.size(); i++) {
-						// Object[] objs = { allmodules.get(i).get("rid"),
-						// allmodules.get(i).get("modname") };
-						// module_tableModel.addRow(objs);
-						// }
+
+						InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+						ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+						for (int i = 0; i < information_readall.size(); i++) {
+							information.add(information_readall.get(i).toString());
+						}
+
+						ArrayList<Field> moduleFields = new ArrayList<Field>();
+						moduleFields.add(new Field("text", "name", "", 10, "name"));
+						ArrayList<String> section_arraylist = new ArrayList<String>();
+						SectionCatalogue seccat = new SectionCatalogue();
+						ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+						for (int i = 0; i < section_hashmap.size(); i++) {
+							section_arraylist.add(section_hashmap.get(i).toString());
+						}
+
+						Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+						Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+						Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+						Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+						Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+						moduleFields.add(new Field("text", "duration", "", 20, "duration"));
+						moduleFields.add(new Field("text", "description", "", 20, "desc"));
+						moduleFields.add(sections);
+						moduleFields.add(financial_check);
+						moduleFields.add(physical_check);
+						moduleFields.add(information_check);
+						moduleFields.add(maintainers);
+
+						final Form moduleForm = new Form(moduleFields, "Module Form");
+						final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
+						modulePanel.makeForm();
+
+						JFrame EditModulePage = new JFrame("Edit Module Form");
+						EditModulePage.getContentPane().add(moduleForm.getJPanel(), BorderLayout.NORTH);
+						JScrollPane scroll = new JScrollPane(moduleForm.getJPanel());
+						EditModulePage.getContentPane().add(scroll);
+
+						JButton submitaddmoduleBtn = new JButton("Submit");
+						JPanel buttonPanel = new JPanel();
+						buttonPanel.add(submitaddmoduleBtn);
+						EditModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+						EditModulePage.pack();
+						EditModulePage.setVisible(true);
+						ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) moduleForm.getJPanel().getComponent(3);
+
+						final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+						final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(4);
+						final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(5);
+						final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(6);
+						final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(7);
+
+						submitaddmoduleBtn.addActionListener(new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								// TODO Auto-generated method stub
+								ModuleCatalogue mcat = new ModuleCatalogue();
+								System.out.println("all : ");
+								mcat.readAllResources();
+								ArrayList<String> inputs = new ArrayList<String>();
+								for (int i = 0; i < moduleForm.getJPanel().getComponentCount(); i++) {
+									FieldPanel fpanel = (FieldPanel) moduleForm.getJPanel().getComponent(i);
+									inputs.add(fpanel.getValues().get(0));
+								}
+								for (int i = 0; i < inputs.size(); i++) {
+									System.out.println(inputs.get(i) + "adasa");
+								}
+								System.out.println(sections_combo.getSelectedItem() + " //////");
+								Pattern p = Pattern.compile("sid=\\d+");
+								String section = null;
+								Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+								if (m.find()) {
+									section = m.group();
+								}
+								System.out.println("sid: " + section);
+
+								System.out.println("----------");
+
+								//
+								
+								mcat.getModule(selected_module).editResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")));
+//								addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
+//										Integer.parseInt(inputs.get(1)), inputs.get(2));
+								// tu resource ham bayad insert she
+								module_tabledata.update(mcat.readAllResources());
+
+								//
+								System.out.println("----------");
+								MakeModuleCatalogue makemoduleCat = new MakeModuleCatalogue();
+
+								final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
+								System.out.println(finanvales);
+								final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
+								System.out.println(physicalvales);
+								final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+								System.out.println(informationvales);
+								final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
+								System.out.println(employeevales);
+								Pattern emp = Pattern.compile("empid=\\d+");
+								for (int i = 0; i < employeevales.size(); i++) {
+									String empids = null;
+									Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+									if (m_emp.find()) {
+										empids = m_emp.group();
+									}
+									System.out.println("empids: " + empids);
+									makemoduleCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_module);
+
+								}
+
+								Pattern res = Pattern.compile("rid=\\d+");
+								for (int i = 0; i < finanvales.size(); i++) {
+									String respids = null;
+									Matcher m_res = res.matcher(finanvales.get(i).toString());
+									if (m_res.find()) {
+										respids = m_res.group();
+									}
+									System.out.println("finan rid: " + respids);
+									makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+
+								}
+
+								for (int i = 0; i < physicalvales.size(); i++) {
+									String respids = null;
+									Matcher m_res = res.matcher(physicalvales.get(i).toString());
+									if (m_res.find()) {
+										respids = m_res.group();
+									}
+									System.out.println("phys rid: " + respids);
+									makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+
+								}
+
+								for (int i = 0; i < informationvales.size(); i++) {
+									String respids = null;
+									Matcher m_res = res.matcher(informationvales.get(i).toString());
+									if (m_res.find()) {
+										respids = m_res.group();
+									}
+									System.out.println("info rid: " + respids);
+									makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+
+								}
+
+							}
+						});
+
 					}
-				});
 
-			}
 		});
 
 		JButton module_btnDelete = new JButton("Delete");
