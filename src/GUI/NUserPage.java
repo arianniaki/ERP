@@ -3520,31 +3520,68 @@ public class NUserPage {
 
 		addprojectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Field> projectFields = new ArrayList<Field>();
+				
+				final ArrayList<String> employees = new ArrayList<String>();
+				final ArrayList<String> financials = new ArrayList<String>();
+				final ArrayList<String> physicals = new ArrayList<String>();
+				final ArrayList<String> information = new ArrayList<String>();
+
 				EmployeeCatalogue empcat = new EmployeeCatalogue();
-				ArrayList<HashMap<String, String>> employees_fromcatalouge = empcat.readAllEmployees();
-				ArrayList<String> employees = new ArrayList<String>();
+				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+				for (int i = 0; i < employe_readall.size(); i++) {
+					employees.add(employe_readall.get(i).toString());
+				}
+				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+				for (int i = 0; i < financial_readall.size(); i++) {
+					financials.add(financial_readall.get(i).toString());
+				}
+
+				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+				for (int i = 0; i < physical_readall.size(); i++) {
+					physicals.add(physical_readall.get(i).toString());
+				}
+
+				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+				for (int i = 0; i < information_readall.size(); i++) {
+					information.add(information_readall.get(i).toString());
+				}
+				
+				ArrayList<Field> projectFields = new ArrayList<Field>();
 
 				projectFields.add(new Field("text", "project name", "", 20, "name"));
 				projectFields.add(new Field("text", "technology", "", 20, "tech"));
 				projectFields.add(new Field("text", "size", "", 20, "size"));
 
-				for (int i = 0; i < employees_fromcatalouge.size(); i++) {
-					employees.add("id:" + employees_fromcatalouge.get(i).get("empid").toString() + " "
-							+ employees_fromcatalouge.get(i).get("empname").toString());
-				}
-				System.out.println(employees + " 00");
 				projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
 				ArrayList<String> iscomplete = new ArrayList<String>();
 				iscomplete.add("is complete");
 				projectFields.add(new Field("singlecheckbox", "is complete", iscomplete, 10, "items"));
 
+				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+				Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+				projectFields.add(financial_check);
+				projectFields.add(physical_check);
+				projectFields.add(information_check);
+				projectFields.add(maintainers);
+
+				
 				final Form projectForm = new Form(projectFields, "Project Form");
 				final PanelBuilder project_addPanel = new PanelBuilder(projectForm);
 				project_addPanel.makeForm();
 				JFrame Add_ProjectPage = new JFrame("Add Project Form");
 				Add_ProjectPage.getContentPane().add(projectForm.getJPanel(), BorderLayout.NORTH);
+				JScrollPane scroll = new JScrollPane(projectForm.getJPanel());
+				Add_ProjectPage.getContentPane().add(scroll);
 
+				
+				
+				
 				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) projectForm.getJPanel().getComponent(3);
 				final JComboBox employees_comboBox = comboBoxpane.getComboBox();
 
@@ -3557,6 +3594,12 @@ public class NUserPage {
 				Add_ProjectPage.pack();
 				Add_ProjectPage.setVisible(true);
 
+				final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) projectForm.getJPanel().getComponent(5);
+				final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) projectForm.getJPanel().getComponent(6);
+				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) projectForm.getJPanel().getComponent(7);
+				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) projectForm.getJPanel().getComponent(8);
+
+				
 				employees_comboBox.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -3579,7 +3622,18 @@ public class NUserPage {
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " project");
 						}
-						int employeeID = Integer.parseInt((inputs.get(3).substring(0, 4).replace("id:", "")));
+						
+						employees_comboBox.getSelectedItem();
+						String empid = "";
+						Pattern emp_p = Pattern.compile("empid=\\d+");
+						Matcher emp_m = emp_p.matcher((CharSequence)employees_comboBox.getSelectedItem());
+						if (emp_m.find()) {
+							empid = emp_m.group();
+						}
+						System.out.println("empid: " + empid);
+						int employeeID= Integer.parseInt(empid.replace("empid=", ""));
+						
+						
 						EmployeeCatalogue empcat = new EmployeeCatalogue();
 						Employee proj_manager = empcat.getEmployee(employeeID);
 						System.out.println(proj_manager.getName());
@@ -3589,12 +3643,72 @@ public class NUserPage {
 						if (vales_phys.size() == 1)
 							confirmed = true;
 
-						projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2), inputs.get(1),
-								confirmed);
+						long projid = projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2), inputs.get(1),confirmed);
+
+						project_tabledata.update(projcat.getProjects());
 
 						allprojects = projcat.getProjects();
 						project_tabledata.update(projcat.getProjects());
 						System.out.println(vales_phys.toString());
+						
+						System.out.println("----------");
+						ProjectEmployeeCatalogue projempcat = new ProjectEmployeeCatalogue();
+						ProjectResourceUtilizationCatalogue projrescat = new ProjectResourceUtilizationCatalogue();
+
+						
+						final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
+						System.out.println(finanvales);
+						final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
+						System.out.println(physicalvales);
+						final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+						System.out.println(informationvales);
+						final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
+						System.out.println(employeevales);
+						Pattern emp = Pattern.compile("empid=\\d+");
+						for (int i = 0; i < employeevales.size(); i++) {
+							String empids = null;
+							Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+							if (m_emp.find()) {
+								empids = m_emp.group();
+							}
+							System.out.println("empids: " + empids);
+							projempcat.addProjectEmployee((int)projid, Integer.parseInt(empids.replace("empid=", "")), "1111-11-1", "1111-11-1");
+
+						}
+
+						Pattern res = Pattern.compile("rid=\\d+");
+						for (int i = 0; i < finanvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(finanvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("finan rid: " + respids);
+							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1, (int)projid, "1111-11-1", "1111-11-1");
+
+						}
+
+						for (int i = 0; i < physicalvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(physicalvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("phys rid: " + respids);
+							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1, (int)projid, "1111-11-1", "1111-11-1");
+
+						}
+
+						for (int i = 0; i < informationvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(informationvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("info rid: " + respids);
+							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1, (int)projid, "1111-11-1", "1111-11-1");
+						}
+
 
 					}
 				});
