@@ -53,11 +53,6 @@ public class Project {
 
 	}
 	
-	public String toString(){
-		String str="name: "+this.name;
-		return str;
-	}
-
 	public String getName() {
 		// TODO Auto-generated method stub
 		return this.name;

@@ -85,7 +85,7 @@ public class TableData {
 	}
 
 	public TableData(EmployeeCatalogue empcat, String type) {
-		data = empcat.readAllEmployees();
+		data = empcat.getConfirmedEmployees();
 		if (type == "assign") {
 			columns = new String[] { "Id", "Username", "AccessRight", "Access Right" };
 			dbnames = new String[] { "empid", "empname", "accessrightid" ,"accessrightname"};
