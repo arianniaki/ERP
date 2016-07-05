@@ -4890,38 +4890,67 @@ public class NUserPage {
 		JButton employee_btnSearch = new JButton("Search");
 		employee_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				HashMap<String, String> searchVars = new HashMap<String, String>();
+				searchVars.put("empname", "\'" + search_regemployeename.getText() + "\'");
+				if (empcat.SearchEmployee(searchVars).isEmpty()) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+				} else {
+					registered_tabledata.update(empcat.SearchEmployee(searchVars));
+				}
+			}
+		});
+		
+		JButton employee_btnRefresh = new JButton("Refresh");
+		employee_btnRefresh.setIcon(new ImageIcon(
+				new ImageIcon("images/refresh.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+			
+			
+		employee_btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				registered_tabledata.update(empcat.getRegistrations());
 			}
 		});
 		GroupLayout gl_RegisteredUserspanel = new GroupLayout(RegisteredUserspanel);
-		gl_RegisteredUserspanel
-				.setHorizontalGroup(
-						gl_RegisteredUserspanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_RegisteredUserspanel.createSequentialGroup().addGap(40)
-										.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
-												Short.MAX_VALUE)
-										.addGap(40))
-								.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
-										.addContainerGap(722, Short.MAX_VALUE).addComponent(btnDeny)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnConfirm)
-										.addContainerGap())
-								.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
-										.addContainerGap(500, Short.MAX_VALUE).addComponent(employee_btnSearch)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(search_regemployeename, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblEmployeeName)
-										.addContainerGap()));
-		gl_RegisteredUserspanel.setVerticalGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_RegisteredUserspanel.createSequentialGroup().addGap(14)
-						.addGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblEmployeeName)
-								.addComponent(search_regemployeename, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(employee_btnSearch))
-						.addGap(40).addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
-						.addGap(40).addGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnConfirm).addComponent(btnDeny))
-						.addContainerGap()));
+		gl_RegisteredUserspanel.setHorizontalGroup(
+			gl_RegisteredUserspanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
+					.addContainerGap(722, Short.MAX_VALUE)
+					.addComponent(btnDeny)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnConfirm)
+					.addContainerGap())
+				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
+					.addComponent(employee_btnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 383, Short.MAX_VALUE)
+					.addComponent(employee_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_regemployeename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblEmployeeName)
+					.addContainerGap())
+		);
+		gl_RegisteredUserspanel.setVerticalGroup(
+			gl_RegisteredUserspanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_RegisteredUserspanel.createSequentialGroup()
+					.addGap(14)
+					.addGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblEmployeeName)
+						.addComponent(search_regemployeename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(employee_btnSearch)
+						.addComponent(employee_btnRefresh))
+					.addGap(40)
+					.addComponent(registered_scrollPane, GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+					.addGap(40)
+					.addGroup(gl_RegisteredUserspanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnConfirm)
+						.addComponent(btnDeny))
+					.addContainerGap())
+		);
 
 		registered_tabledata = new TableData(empcat, "registered");
 
