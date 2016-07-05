@@ -202,7 +202,7 @@ public class NUserPage {
 	 */
 	private void initialize() {
 		userpageFrame = new JFrame("User Page");
-		userpageFrame.setBounds(100, 100, 870, 585);
+		userpageFrame.setBounds(100, 100, 870, 600);
 		userpageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		userpageFrame.getContentPane().setLayout(null);
 		userpageFrame.getContentPane().setBackground(userpage_color);
