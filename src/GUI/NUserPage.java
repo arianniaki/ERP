@@ -510,7 +510,7 @@ public class NUserPage {
 						SubSystemCatalogue subsyscat = new SubSystemCatalogue();
 						subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem,
 								Integer.parseInt(section.replace("sid=", "")));
-						subsystem_tabledata.update(subsyscat.getSubSystems());
+						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
 						System.out.println("add shoood ");
 
 					}
@@ -569,7 +569,7 @@ public class NUserPage {
 						SubSystemCatalogue subsyscat = new SubSystemCatalogue();
 						// subsyscat.addSubSystem(inputs.get(0),
 						// selected_project_forsubsystem);
-						subsystem_tabledata.update(subsyscat.getSubSystems());
+						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
 						System.out.println("add shoood ");
 					}
 				});
@@ -598,7 +598,7 @@ public class NUserPage {
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
 						subsyscat.deleteSubSystem(Integer.parseInt(Table_click));
-						subsystem_tabledata.update(subsyscat.getSubSystems());
+						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
 					}
 				}
 			}
@@ -845,7 +845,7 @@ public class NUserPage {
 
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<ProjectResourceUtilization> allpresutil;
-						allpresutil = presreqCat.getProjectResourceUtilizations();
+						allpresutil = presreqCat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
 						for (int i = 0; i < allpresutil.size(); i++) {
 							data.add((allpresutil.get(i).toHashMap()));
 						}
@@ -888,7 +888,7 @@ public class NUserPage {
 
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<ProjectResourceUtilization> allpresutil;
-						allpresutil = projrescat.getProjectResourceUtilizations();
+						allpresutil = projrescat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
 						for (int i = 0; i < allpresutil.size(); i++) {
 							data.add((allpresutil.get(i).toHashMap()));
 						}
