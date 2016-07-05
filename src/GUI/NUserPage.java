@@ -388,33 +388,53 @@ public class NUserPage {
 
 			}
 		});
+		
+		JButton accessright_btnRefresh = new JButton("Refresh");
+		accessright_btnRefresh.setIcon(new ImageIcon(
+				new ImageIcon("images/refresh.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		accessright_btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EmployeeCatalogue empcat = new EmployeeCatalogue();
+				accessright_tabledata.update(empcat.getConfirmedEmployees());
+
+			}
+		});
 
 		GroupLayout gl_accessrightPanel = new GroupLayout(accessrightPanel);
-		gl_accessrightPanel
-				.setHorizontalGroup(
-						gl_accessrightPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_accessrightPanel.createSequentialGroup().addGap(40)
-										.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
-												Short.MAX_VALUE)
-										.addGap(40))
-								.addGroup(gl_accessrightPanel.createSequentialGroup()
-										.addContainerGap(669, Short.MAX_VALUE).addComponent(btnAssignAccessright))
-								.addGroup(gl_accessrightPanel.createSequentialGroup()
-										.addContainerGap(483, Short.MAX_VALUE).addComponent(accessright_btnSearch)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(search_accessrightname, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblAccessrightName)
-										.addContainerGap()));
-		gl_accessrightPanel.setVerticalGroup(gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_accessrightPanel.createSequentialGroup().addGap(14)
-						.addGroup(gl_accessrightPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblAccessrightName)
-								.addComponent(search_accessrightname, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(accessright_btnSearch))
-						.addGap(40).addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
-						.addGap(40).addComponent(btnAssignAccessright)));
+		gl_accessrightPanel.setHorizontalGroup(
+			gl_accessrightPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addContainerGap(669, Short.MAX_VALUE)
+					.addComponent(btnAssignAccessright))
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addComponent(accessright_btnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 366, Short.MAX_VALUE)
+					.addComponent(accessright_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_accessrightname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblAccessrightName)
+					.addContainerGap())
+		);
+		gl_accessrightPanel.setVerticalGroup(
+			gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_accessrightPanel.createSequentialGroup()
+					.addGap(14)
+					.addGroup(gl_accessrightPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblAccessrightName)
+						.addComponent(search_accessrightname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(accessright_btnSearch)
+						.addComponent(accessright_btnRefresh))
+					.addGap(40)
+					.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+					.addGap(40)
+					.addComponent(btnAssignAccessright))
+		);
 
 		accessright_scrollPane.setViewportView(accessright_tabledata.getJdataTable());
 		accessrightPanel.setLayout(gl_accessrightPanel);
