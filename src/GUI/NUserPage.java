@@ -131,7 +131,6 @@ public class NUserPage {
 	private TableData resourceutil_tabledata;
 	private TableData moduledetail_tabledata;
 
-
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
 	private int selected_module;
@@ -338,7 +337,7 @@ public class NUserPage {
 							System.out.println(Table_click);
 							EmployeeCatalogue empcat = new EmployeeCatalogue();
 							Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
-							System.out.println(emp_access.getName()+" WHAT  "+selected_accessright_forassignment);
+							System.out.println(emp_access.getName() + " WHAT  " + selected_accessright_forassignment);
 							emp_access.setAccessRight(selected_accessright_forassignment);
 							System.out.println("ACCESS RIGHT O DADAM");
 							accessright_tabledata.update(empcat.readAllEmployees());
@@ -374,48 +373,47 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
+
+				searchVars.put("accessrightname", "\'" + search_accessrightname.getText() + "\'");
+
+
+				if (empcat.SearchEmployee(searchVars).isEmpty()) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+				} else {
+					accessright_tabledata.update(empcat.SearchEmployee(searchVars));
+				}
+
 				
-				if (search_accessrightname.getText() != null && !search_accessrightname.getText().trim().equals(""))
-					searchVars.put("accessrightname", "\'" + search_accessrightname.getText() + "\'");
-				
-				
-				accessright_tabledata.update(empcat.SearchEmployee(searchVars));
-				
+
 			}
 		});
 
 		GroupLayout gl_accessrightPanel = new GroupLayout(accessrightPanel);
-		gl_accessrightPanel.setHorizontalGroup(
-			gl_accessrightPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_accessrightPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-				.addGroup(gl_accessrightPanel.createSequentialGroup()
-					.addContainerGap(669, Short.MAX_VALUE)
-					.addComponent(btnAssignAccessright))
-				.addGroup(gl_accessrightPanel.createSequentialGroup()
-					.addContainerGap(483, Short.MAX_VALUE)
-					.addComponent(accessright_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_accessrightname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblAccessrightName)
-					.addContainerGap())
-		);
-		gl_accessrightPanel.setVerticalGroup(
-			gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_accessrightPanel.createSequentialGroup()
-					.addGap(14)
-					.addGroup(gl_accessrightPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblAccessrightName)
-						.addComponent(search_accessrightname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(accessright_btnSearch))
-					.addGap(40)
-					.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
-					.addGap(40)
-					.addComponent(btnAssignAccessright))
-		);
+		gl_accessrightPanel
+				.setHorizontalGroup(
+						gl_accessrightPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_accessrightPanel.createSequentialGroup().addGap(40)
+										.addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
+												Short.MAX_VALUE)
+										.addGap(40))
+								.addGroup(gl_accessrightPanel.createSequentialGroup()
+										.addContainerGap(669, Short.MAX_VALUE).addComponent(btnAssignAccessright))
+								.addGroup(gl_accessrightPanel.createSequentialGroup()
+										.addContainerGap(483, Short.MAX_VALUE).addComponent(accessright_btnSearch)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(search_accessrightname, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblAccessrightName)
+										.addContainerGap()));
+		gl_accessrightPanel.setVerticalGroup(gl_accessrightPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_accessrightPanel.createSequentialGroup().addGap(14)
+						.addGroup(gl_accessrightPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblAccessrightName)
+								.addComponent(search_accessrightname, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(accessright_btnSearch))
+						.addGap(40).addComponent(accessright_scrollPane, GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+						.addGap(40).addComponent(btnAssignAccessright)));
 
 		accessright_scrollPane.setViewportView(accessright_tabledata.getJdataTable());
 		accessrightPanel.setLayout(gl_accessrightPanel);
@@ -1436,10 +1434,13 @@ public class NUserPage {
 		requirementPanel.setLayout(gl_requirementPanel);
 		searchreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				ResourceRequirementCatalogue resreqcat = new ResourceRequirementCatalogue();
-//				HashMap<String, String> searchVars = new HashMap<String, String>();
-//				searchVars.put("irname", "\'" + search_reqresourcename.getText() + "\'");
-//				information_tabledata.update(resreqcat.SearchResource(searchVars));
+				// ResourceRequirementCatalogue resreqcat = new
+				// ResourceRequirementCatalogue();
+				// HashMap<String, String> searchVars = new HashMap<String,
+				// String>();
+				// searchVars.put("irname", "\'" +
+				// search_reqresourcename.getText() + "\'");
+				// information_tabledata.update(resreqcat.SearchResource(searchVars));
 
 			}
 		});
@@ -1617,8 +1618,11 @@ public class NUserPage {
 				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 				searchVars.put("irname", "\'" + search_informationname.getText() + "\'");
-
-				information_tabledata.update(infocat.SearchResource(searchVars));
+				if (infocat.SearchResource(searchVars).isEmpty()) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+				} else {
+					information_tabledata.update(infocat.SearchResource(searchVars));
+				}
 
 			}
 		});
@@ -1897,10 +1901,12 @@ public class NUserPage {
 					searchVars.put("netvalue", "\'" + search_financialvalue.getText() + "\'");
 				if (search_financialmodel.getText() != null && !search_financialmodel.getText().trim().equals(""))
 					searchVars.put("modeldesc", "\'" + search_financialmodel.getText() + "\'");
-				financat.SearchResource(searchVars);
 
-				allfinance.clear();
-				financial_tabledata.update(financat.SearchResource(searchVars));
+				if (financat.SearchResource(searchVars).isEmpty()) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+				} else {
+					financial_tabledata.update(financat.SearchResource(searchVars));
+				}
 
 			}
 		});
@@ -2067,38 +2073,34 @@ public class NUserPage {
 		final JPanel modulePanel = new JPanel();
 		resourcesTab.addTab("Module", null, modulePanel, null);
 
-
 		// get module list
 		ModuleCatalogue mcat = new ModuleCatalogue();
 		System.out.println("all : ");
 		allmodules = mcat.readAllResources();
-		
+
 		final JPanel moduledetailpanel = new JPanel();
 		resourcesTab.addTab("Module Detail", null, moduledetailpanel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
 
-		
-//		moduledetail_tabledata = new TableData(new Modu);
+		// moduledetail_tabledata = new TableData(new Modu);
 
 		JScrollPane module_detail_scrollPane = new JScrollPane();
-		
+
 		JButton moduledetail_btnEdit = new JButton("Edit");
 		moduledetail_btnEdit.setIcon(new ImageIcon(
 				new ImageIcon("images/edit.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
-		
 		JButton moduledetail_btnDelete = new JButton("Delete");
 		moduledetail_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
-		
 		JButton moduledetail_btnBack = new JButton("Back");
 		moduledetail_btnBack.setIcon(new ImageIcon(
 				new ImageIcon("images/back.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
 		moduledetail_btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					System.out.println("change tab to module");
+				System.out.println("change tab to module");
 				System.out.println("Change JPanel");
 				int selected_index = resourcesTab.getSelectedIndex();
 				resourcesTab.remove(selected_index);
@@ -2108,32 +2110,29 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_moduledetailpanel = new GroupLayout(moduledetailpanel);
-		gl_moduledetailpanel.setHorizontalGroup(
-			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_moduledetailpanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_moduledetailpanel.createSequentialGroup()
-					.addComponent(moduledetail_btnEdit)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(moduledetail_btnDelete)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(moduledetail_btnBack)
-					.addContainerGap(550, Short.MAX_VALUE))
-		);
-		gl_moduledetailpanel.setVerticalGroup(
-			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_moduledetailpanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(moduledetail_btnEdit)
-						.addComponent(moduledetail_btnDelete)
-						.addComponent(moduledetail_btnBack))
-					.addContainerGap())
-		);
+		gl_moduledetailpanel
+				.setHorizontalGroup(
+						gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_moduledetailpanel.createSequentialGroup().addGap(30)
+										.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
+												Short.MAX_VALUE)
+										.addGap(30))
+								.addGroup(gl_moduledetailpanel.createSequentialGroup()
+										.addComponent(moduledetail_btnEdit).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(moduledetail_btnDelete)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(moduledetail_btnBack)
+										.addContainerGap(550, Short.MAX_VALUE)));
+		gl_moduledetailpanel
+				.setVerticalGroup(
+						gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_moduledetailpanel.createSequentialGroup().addGap(30)
+										.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 398,
+												Short.MAX_VALUE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
+												.addComponent(moduledetail_btnEdit).addComponent(moduledetail_btnDelete)
+												.addComponent(moduledetail_btnBack))
+										.addContainerGap()));
 		moduledetailpanel.setLayout(gl_moduledetailpanel);
 
 		// end module list
@@ -2325,179 +2324,181 @@ public class NUserPage {
 
 		module_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-						final ArrayList<String> employees = new ArrayList<String>();
-						final ArrayList<String> financials = new ArrayList<String>();
-						final ArrayList<String> physicals = new ArrayList<String>();
-						final ArrayList<String> information = new ArrayList<String>();
+				final ArrayList<String> employees = new ArrayList<String>();
+				final ArrayList<String> financials = new ArrayList<String>();
+				final ArrayList<String> physicals = new ArrayList<String>();
+				final ArrayList<String> information = new ArrayList<String>();
 
-						EmployeeCatalogue empcat = new EmployeeCatalogue();
-						ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
-						for (int i = 0; i < employe_readall.size(); i++) {
-							employees.add(employe_readall.get(i).toString());
+				EmployeeCatalogue empcat = new EmployeeCatalogue();
+				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+				for (int i = 0; i < employe_readall.size(); i++) {
+					employees.add(employe_readall.get(i).toString());
+				}
+				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
+				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+				for (int i = 0; i < financial_readall.size(); i++) {
+					financials.add(financial_readall.get(i).toString());
+				}
+
+				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
+				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+				for (int i = 0; i < physical_readall.size(); i++) {
+					physicals.add(physical_readall.get(i).toString());
+				}
+
+				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
+				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+				for (int i = 0; i < information_readall.size(); i++) {
+					information.add(information_readall.get(i).toString());
+				}
+
+				ArrayList<Field> moduleFields = new ArrayList<Field>();
+				moduleFields.add(new Field("text", "name", "", 10, "name"));
+				ArrayList<String> section_arraylist = new ArrayList<String>();
+				SectionCatalogue seccat = new SectionCatalogue();
+				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+				for (int i = 0; i < section_hashmap.size(); i++) {
+					section_arraylist.add(section_hashmap.get(i).toString());
+				}
+
+				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+				Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+				moduleFields.add(new Field("text", "duration", "", 20, "duration"));
+				moduleFields.add(new Field("text", "description", "", 20, "desc"));
+				moduleFields.add(sections);
+				moduleFields.add(financial_check);
+				moduleFields.add(physical_check);
+				moduleFields.add(information_check);
+				moduleFields.add(maintainers);
+
+				final Form moduleForm = new Form(moduleFields, "Module Form");
+				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
+				modulePanel.makeForm();
+
+				JFrame EditModulePage = new JFrame("Edit Module Form");
+				EditModulePage.getContentPane().add(moduleForm.getJPanel(), BorderLayout.NORTH);
+				JScrollPane scroll = new JScrollPane(moduleForm.getJPanel());
+				EditModulePage.getContentPane().add(scroll);
+
+				JButton submitaddmoduleBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddmoduleBtn);
+				EditModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				EditModulePage.pack();
+				EditModulePage.setVisible(true);
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) moduleForm.getJPanel().getComponent(3);
+
+				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+				final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(4);
+				final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(5);
+				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(6);
+				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(7);
+
+				submitaddmoduleBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						ModuleCatalogue mcat = new ModuleCatalogue();
+						System.out.println("all : ");
+						mcat.readAllResources();
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < moduleForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) moduleForm.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
 						}
-						FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
-						ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
-						for (int i = 0; i < financial_readall.size(); i++) {
-							financials.add(financial_readall.get(i).toString());
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + "adasa");
 						}
-
-						PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
-						ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
-						for (int i = 0; i < physical_readall.size(); i++) {
-							physicals.add(physical_readall.get(i).toString());
+						System.out.println(sections_combo.getSelectedItem() + " //////");
+						Pattern p = Pattern.compile("sid=\\d+");
+						String section = null;
+						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+						if (m.find()) {
+							section = m.group();
 						}
+						System.out.println("sid: " + section);
 
-						InformationResourceCatalogue infocat = new InformationResourceCatalogue();
-						ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
-						for (int i = 0; i < information_readall.size(); i++) {
-							information.add(information_readall.get(i).toString());
-						}
+						System.out.println("----------");
 
-						ArrayList<Field> moduleFields = new ArrayList<Field>();
-						moduleFields.add(new Field("text", "name", "", 10, "name"));
-						ArrayList<String> section_arraylist = new ArrayList<String>();
-						SectionCatalogue seccat = new SectionCatalogue();
-						ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-						for (int i = 0; i < section_hashmap.size(); i++) {
-							section_arraylist.add(section_hashmap.get(i).toString());
-						}
+						//
 
-						Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+						mcat.getModule(selected_module).editResource(inputs.get(0),
+								Integer.parseInt(section.replace("sid=", "")));
+						// addResource(inputs.get(0),
+						// Integer.parseInt(section.replace("sid=", "")),
+						// Integer.parseInt(inputs.get(1)), inputs.get(2));
+						// tu resource ham bayad insert she
+						module_tabledata.update(mcat.readAllResources());
 
-						Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
-						Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
-						Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
-						Field information_check = new Field("checkBox", "information", information, 20, "information");
+						//
+						System.out.println("----------");
+						MakeModuleCatalogue makemoduleCat = new MakeModuleCatalogue();
 
-						moduleFields.add(new Field("text", "duration", "", 20, "duration"));
-						moduleFields.add(new Field("text", "description", "", 20, "desc"));
-						moduleFields.add(sections);
-						moduleFields.add(financial_check);
-						moduleFields.add(physical_check);
-						moduleFields.add(information_check);
-						moduleFields.add(maintainers);
-
-						final Form moduleForm = new Form(moduleFields, "Module Form");
-						final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
-						modulePanel.makeForm();
-
-						JFrame EditModulePage = new JFrame("Edit Module Form");
-						EditModulePage.getContentPane().add(moduleForm.getJPanel(), BorderLayout.NORTH);
-						JScrollPane scroll = new JScrollPane(moduleForm.getJPanel());
-						EditModulePage.getContentPane().add(scroll);
-
-						JButton submitaddmoduleBtn = new JButton("Submit");
-						JPanel buttonPanel = new JPanel();
-						buttonPanel.add(submitaddmoduleBtn);
-						EditModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-						EditModulePage.pack();
-						EditModulePage.setVisible(true);
-						ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) moduleForm.getJPanel().getComponent(3);
-
-						final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
-
-						final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(4);
-						final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(5);
-						final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(6);
-						final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(7);
-
-						submitaddmoduleBtn.addActionListener(new ActionListener() {
-
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								// TODO Auto-generated method stub
-								ModuleCatalogue mcat = new ModuleCatalogue();
-								System.out.println("all : ");
-								mcat.readAllResources();
-								ArrayList<String> inputs = new ArrayList<String>();
-								for (int i = 0; i < moduleForm.getJPanel().getComponentCount(); i++) {
-									FieldPanel fpanel = (FieldPanel) moduleForm.getJPanel().getComponent(i);
-									inputs.add(fpanel.getValues().get(0));
-								}
-								for (int i = 0; i < inputs.size(); i++) {
-									System.out.println(inputs.get(i) + "adasa");
-								}
-								System.out.println(sections_combo.getSelectedItem() + " //////");
-								Pattern p = Pattern.compile("sid=\\d+");
-								String section = null;
-								Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
-								if (m.find()) {
-									section = m.group();
-								}
-								System.out.println("sid: " + section);
-
-								System.out.println("----------");
-
-								//
-								
-								mcat.getModule(selected_module).editResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")));
-//								addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
-//										Integer.parseInt(inputs.get(1)), inputs.get(2));
-								// tu resource ham bayad insert she
-								module_tabledata.update(mcat.readAllResources());
-
-								//
-								System.out.println("----------");
-								MakeModuleCatalogue makemoduleCat = new MakeModuleCatalogue();
-
-								final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
-								System.out.println(finanvales);
-								final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
-								System.out.println(physicalvales);
-								final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
-								System.out.println(informationvales);
-								final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
-								System.out.println(employeevales);
-								Pattern emp = Pattern.compile("empid=\\d+");
-								for (int i = 0; i < employeevales.size(); i++) {
-									String empids = null;
-									Matcher m_emp = emp.matcher(employeevales.get(i).toString());
-									if (m_emp.find()) {
-										empids = m_emp.group();
-									}
-									System.out.println("empids: " + empids);
-									makemoduleCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_module);
-
-								}
-
-								Pattern res = Pattern.compile("rid=\\d+");
-								for (int i = 0; i < finanvales.size(); i++) {
-									String respids = null;
-									Matcher m_res = res.matcher(finanvales.get(i).toString());
-									if (m_res.find()) {
-										respids = m_res.group();
-									}
-									System.out.println("finan rid: " + respids);
-									makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
-
-								}
-
-								for (int i = 0; i < physicalvales.size(); i++) {
-									String respids = null;
-									Matcher m_res = res.matcher(physicalvales.get(i).toString());
-									if (m_res.find()) {
-										respids = m_res.group();
-									}
-									System.out.println("phys rid: " + respids);
-									makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
-
-								}
-
-								for (int i = 0; i < informationvales.size(); i++) {
-									String respids = null;
-									Matcher m_res = res.matcher(informationvales.get(i).toString());
-									if (m_res.find()) {
-										respids = m_res.group();
-									}
-									System.out.println("info rid: " + respids);
-									makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
-
-								}
-
+						final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
+						System.out.println(finanvales);
+						final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
+						System.out.println(physicalvales);
+						final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+						System.out.println(informationvales);
+						final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
+						System.out.println(employeevales);
+						Pattern emp = Pattern.compile("empid=\\d+");
+						for (int i = 0; i < employeevales.size(); i++) {
+							String empids = null;
+							Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+							if (m_emp.find()) {
+								empids = m_emp.group();
 							}
-						});
+							System.out.println("empids: " + empids);
+							makemoduleCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_module);
+
+						}
+
+						Pattern res = Pattern.compile("rid=\\d+");
+						for (int i = 0; i < finanvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(finanvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("finan rid: " + respids);
+							makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+
+						}
+
+						for (int i = 0; i < physicalvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(physicalvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("phys rid: " + respids);
+							makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+
+						}
+
+						for (int i = 0; i < informationvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(informationvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("info rid: " + respids);
+							makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+
+						}
 
 					}
+				});
+
+			}
 
 		});
 
@@ -2578,18 +2579,20 @@ public class NUserPage {
 		JButton module_btnSearch = new JButton("Search");
 		module_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
+
 				ModuleCatalogue mcat = new ModuleCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
-				
+
 				if (search_modulename.getText() != null && !search_modulename.getText().trim().equals(""))
 					searchVars.put("modname", "\'" + search_modulename.getText() + "\'");
 				if (search_moduleduration.getText() != null && !search_moduleduration.getText().trim().equals(""))
 					searchVars.put("duration", "\'" + search_moduleduration.getText() + "\'");
-				
 
-				module_tabledata.update(mcat.SearchResource(searchVars));
+				if (mcat.SearchResource(searchVars).isEmpty()) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+				} else {
+					module_tabledata.update(mcat.SearchResource(searchVars));
+				}
 			}
 
 		});
@@ -2616,7 +2619,7 @@ public class NUserPage {
 
 		search_moduleduration = new JTextField();
 		search_moduleduration.setColumns(10);
-		
+
 		JButton btnViewDetails = new JButton("View Details");
 		btnViewDetails.setIcon(new ImageIcon(
 				new ImageIcon("images/view.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
@@ -2638,18 +2641,21 @@ public class NUserPage {
 					System.out.println(Table_click);
 					System.out.println("---module id-- " + selected_module);
 					System.out.println("Change JPanel");
-//					MaintainingModuleCatalogue maintainmodulecat = new MaintainingModuleCatalogue();
-//					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-//					ArrayList<MaintainingModule> allmaintainmodule;
-//					allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
-//					for (int i = 0; i < allmaintainmodule.size(); i++) {
-//						data.add((allmaintainmodule.get(i).toHashMap()));
-//					}
-//					System.out.println("DATA");
-//					System.out.println(data);
-//
-//					maintaining_tabledata.update(data);
-//
+					// MaintainingModuleCatalogue maintainmodulecat = new
+					// MaintainingModuleCatalogue();
+					// ArrayList<HashMap<String, String>> data = new
+					// ArrayList<HashMap<String, String>>();
+					// ArrayList<MaintainingModule> allmaintainmodule;
+					// allmaintainmodule =
+					// maintainmodulecat.getMaintainingModules(selected_module);
+					// for (int i = 0; i < allmaintainmodule.size(); i++) {
+					// data.add((allmaintainmodule.get(i).toHashMap()));
+					// }
+					// System.out.println("DATA");
+					// System.out.println(data);
+					//
+					// maintaining_tabledata.update(data);
+					//
 					int selected_index = resourcesTab.getSelectedIndex();
 					resourcesTab.remove(selected_index);
 					resourcesTab.insertTab("Module Detail", null, moduledetailpanel, null, selected_index);
@@ -2658,61 +2664,54 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_modulePanel_1 = new GroupLayout(modulePanel);
-		gl_modulePanel_1.setHorizontalGroup(
-			gl_modulePanel_1.createParallelGroup(Alignment.TRAILING)
+		gl_modulePanel_1.setHorizontalGroup(gl_modulePanel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_modulePanel_1.createSequentialGroup().addGap(30)
+						.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE).addGap(30))
+				.addGroup(
+						gl_modulePanel_1.createSequentialGroup()
+								.addComponent(module_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(module_btnDelete, GroupLayout.PREFERRED_SIZE, 83,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 359, Short.MAX_VALUE)
+								.addComponent(btnViewDetails).addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(btnViewMaintaning).addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(btnAddModule))
 				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addGap(30)
-					.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addComponent(module_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(module_btnDelete, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 359, Short.MAX_VALUE)
-					.addComponent(btnViewDetails)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnViewMaintaning)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnAddModule))
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
-						.addComponent(search_moduleduration, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGroup(Alignment.TRAILING, gl_modulePanel_1.createSequentialGroup()
-							.addComponent(search_modulebtnRefresh)
-							.addPreferredGap(ComponentPlacement.RELATED, 416, Short.MAX_VALUE)
-							.addComponent(module_btnSearch)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblModuleName, Alignment.TRAILING)
-						.addComponent(lblDuration, Alignment.TRAILING))
-					.addContainerGap())
-		);
-		gl_modulePanel_1.setVerticalGroup(
-			gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_modulePanel_1.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblModuleName)
-						.addComponent(search_modulebtnRefresh)
-						.addComponent(module_btnSearch))
-					.addGap(3)
-					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblDuration)
-						.addComponent(search_moduleduration, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(module_btnEdit)
-						.addComponent(module_btnDelete)
-						.addComponent(btnAddModule)
-						.addComponent(btnViewMaintaning)
-						.addComponent(btnViewDetails))
-					.addContainerGap())
-		);
+						.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+								.addComponent(search_moduleduration, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(Alignment.TRAILING,
+										gl_modulePanel_1.createSequentialGroup().addComponent(search_modulebtnRefresh)
+												.addPreferredGap(ComponentPlacement.RELATED, 416, Short.MAX_VALUE)
+												.addComponent(module_btnSearch)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblModuleName, Alignment.TRAILING)
+								.addComponent(lblDuration, Alignment.TRAILING))
+						.addContainerGap()));
+		gl_modulePanel_1.setVerticalGroup(gl_modulePanel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_modulePanel_1.createSequentialGroup().addContainerGap()
+						.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_modulename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblModuleName).addComponent(search_modulebtnRefresh)
+								.addComponent(module_btnSearch))
+						.addGap(3)
+						.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE).addComponent(lblDuration)
+								.addComponent(search_moduleduration, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(module_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_modulePanel_1.createParallelGroup(Alignment.BASELINE).addComponent(module_btnEdit)
+								.addComponent(module_btnDelete).addComponent(btnAddModule)
+								.addComponent(btnViewMaintaning).addComponent(btnViewDetails))
+						.addContainerGap()));
 
 		module_tabledata = new TableData(new ModuleCatalogue(), "module");
 		module_scrollPane.setViewportView(module_tabledata.getJdataTable());
@@ -2809,7 +2808,7 @@ public class NUserPage {
 					public void actionPerformed(ActionEvent e) {
 						// INJA TODO Auto-generated method stub
 						int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
-						
+
 						String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 								.toString()); // return
 						selected_maintaining_module = Integer.parseInt(Table_click.trim());
@@ -2817,7 +2816,6 @@ public class NUserPage {
 						System.out.println(Table_click);
 						System.out.println("---maintian module id-- " + selected_module);
 
-						
 						ArrayList<String> inputs = new ArrayList<String>();
 						for (int i = 0; i < maintain_Form.getJPanel().getComponentCount(); i++) {
 							FieldPanel fpanel = (FieldPanel) maintain_Form.getJPanel().getComponent(i);
@@ -2828,10 +2826,13 @@ public class NUserPage {
 						}
 
 						MaintainingModuleCatalogue maintainmodulecat = new MaintainingModuleCatalogue();
-//						MaintainingModule maintainmod = maintainmodulecat.ge(selected_maintaining_module);
-						
-//						long maintainmodpk = maintainmodulecat.addMaintainingModule(selected_module, inputs.get(0),
-//								Integer.parseInt(inputs.get(1)));
+						// MaintainingModule maintainmod =
+						// maintainmodulecat.ge(selected_maintaining_module);
+
+						// long maintainmodpk =
+						// maintainmodulecat.addMaintainingModule(selected_module,
+						// inputs.get(0),
+						// Integer.parseInt(inputs.get(1)));
 
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<MaintainingModule> allmaintainmodule;
@@ -2863,7 +2864,7 @@ public class NUserPage {
 							}
 							System.out.println("empids: " + empids);
 							maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")),
-								selected_maintaining_module);
+									selected_maintaining_module);
 						}
 
 						Pattern res = Pattern.compile("rid=\\d+");
@@ -2875,7 +2876,7 @@ public class NUserPage {
 							}
 							System.out.println("finan rid: " + respids);
 							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-									 selected_maintaining_module);
+									selected_maintaining_module);
 
 						}
 
@@ -2905,7 +2906,7 @@ public class NUserPage {
 
 					}
 				});
-				
+
 			}
 		});
 		maintaining_btnEdit.setIcon(new ImageIcon(
@@ -2922,7 +2923,7 @@ public class NUserPage {
 						"Are you sure you want to Delete this item?");
 				if (myDialog.getAnswer()) {
 					int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
-					
+
 					String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // return
 					selected_maintaining_module = Integer.parseInt(Table_click.trim());
@@ -2938,9 +2939,9 @@ public class NUserPage {
 					for (int i = 0; i < allmaintainmodule.size(); i++) {
 						data.add((allmaintainmodule.get(i).toHashMap()));
 					}
-					System.out.println("DATA "+data);
+					System.out.println("DATA " + data);
 					maintaining_tabledata.update(data);
-					
+
 				}
 			}
 		});
@@ -3232,7 +3233,7 @@ public class NUserPage {
 							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
 									"Please Select an Employee!");
 						} else {
-							
+
 							EmployeeCatalogue empcat = new EmployeeCatalogue();
 							System.out.println("all : ");
 							empcat.readAllEmployees();
@@ -3254,14 +3255,13 @@ public class NUserPage {
 							}
 							System.out.println("sid: " + section);
 
-							
-							
 							String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 									.toString()); // the
 							System.out.println(Table_click + " this was clicked");
 							Employee employee = empcat.getEmployee(Integer.parseInt(Table_click));
-							employee.editHuman(inputs.get(0), Integer.parseInt(section.replace("sid=", "")), inputs.get(2), inputs.get(3));
-							
+							employee.editHuman(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
+									inputs.get(2), inputs.get(3));
+
 							empcat.readAllEmployees();
 							allemployees.clear();
 							allemployees = empcat.readAllEmployees();
@@ -3311,13 +3311,18 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
-				
+
 				if (search_humanname.getText() != null && !search_humanname.getText().trim().equals(""))
 					searchVars.put("empname", "\'" + search_humanname.getText() + "\'");
 				if (search_humanpost.getText() != null && !search_humanpost.getText().trim().equals(""))
 					searchVars.put("post", "\'" + search_humanpost.getText() + "\'");
-				
-				human_tabledata.update(empcat.SearchEmployee(searchVars));
+
+				if (empcat.SearchEmployee(searchVars).isEmpty()) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+				} else {
+					human_tabledata.update(empcat.SearchEmployee(searchVars));
+				}
+
 			}
 		});
 
@@ -3345,14 +3350,14 @@ public class NUserPage {
 
 		search_humansection = new JTextField();
 		search_humansection.setColumns(10);
-		
+
 		JButton human_btnAdd = new JButton("Add Employee");
 		human_btnAdd.setIcon(new ImageIcon(
 				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
 		human_btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				ArrayList<String> section_arraylist = new ArrayList<String>();
 				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
@@ -3409,72 +3414,70 @@ public class NUserPage {
 						}
 						System.out.println("sid: " + section);
 
-
-						empcat.addEmployee(inputs.get(0), inputs.get(3), Integer.parseInt(section.replace("sid=", "")), inputs.get(1), inputs.get(2), false, false);
+						empcat.addEmployee(inputs.get(0), inputs.get(3), Integer.parseInt(section.replace("sid=", "")),
+								inputs.get(1), inputs.get(2), false, false);
 						human_tabledata.update(empcat.readAllEmployees());
 
 					}
 				});
-				
+
 			}
 		});
 		GroupLayout gl_humanPanel = new GroupLayout(humanPanel);
-		gl_humanPanel.setHorizontalGroup(
-			gl_humanPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 514, Short.MAX_VALUE)
-					.addComponent(human_btnAdd))
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addComponent(search_humanbtnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
-					.addComponent(human_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_humansection, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblSection)
-					.addGap(8)
-					.addGroup(gl_humanPanel.createParallelGroup(Alignment.TRAILING, false)
-						.addGroup(gl_humanPanel.createSequentialGroup()
-							.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblHumanName))
-						.addGroup(gl_humanPanel.createSequentialGroup()
-							.addComponent(search_humanpost, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblPost)))
-					.addContainerGap())
-		);
-		gl_humanPanel.setVerticalGroup(
-			gl_humanPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_humanPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(human_btnSearch)
-						.addComponent(lblHumanName)
-						.addComponent(search_humanbtnRefresh)
-						.addComponent(lblSection)
-						.addComponent(search_humansection, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(3)
-					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblPost)
-						.addComponent(search_humanpost, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(human_btnEdit)
-						.addComponent(human_btnDelete)
-						.addComponent(human_btnAdd))
-					.addContainerGap())
-		);
+		gl_humanPanel
+				.setHorizontalGroup(
+						gl_humanPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(
+										gl_humanPanel.createSequentialGroup().addGap(30)
+												.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
+														Short.MAX_VALUE)
+												.addGap(30))
+								.addGroup(gl_humanPanel.createSequentialGroup()
+										.addComponent(human_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(human_btnDelete, GroupLayout.PREFERRED_SIZE, 84,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, 514, Short.MAX_VALUE)
+										.addComponent(human_btnAdd))
+								.addGroup(gl_humanPanel.createSequentialGroup().addComponent(search_humanbtnRefresh)
+										.addPreferredGap(ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
+										.addComponent(human_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(search_humansection, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblSection)
+										.addGap(8)
+										.addGroup(gl_humanPanel.createParallelGroup(Alignment.TRAILING, false)
+												.addGroup(gl_humanPanel.createSequentialGroup()
+														.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(lblHumanName))
+												.addGroup(gl_humanPanel.createSequentialGroup()
+														.addComponent(search_humanpost, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+														.addPreferredGap(ComponentPlacement.RELATED,
+																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+														.addComponent(lblPost)))
+										.addContainerGap()));
+		gl_humanPanel.setVerticalGroup(gl_humanPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_humanPanel
+				.createSequentialGroup().addContainerGap()
+				.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(search_humanname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(human_btnSearch).addComponent(lblHumanName).addComponent(search_humanbtnRefresh)
+						.addComponent(lblSection).addComponent(search_humansection, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(3)
+				.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblPost).addComponent(
+						search_humanpost, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+						GroupLayout.PREFERRED_SIZE))
+				.addPreferredGap(ComponentPlacement.UNRELATED)
+				.addComponent(human_scrollPane, GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addGroup(gl_humanPanel.createParallelGroup(Alignment.BASELINE).addComponent(human_btnEdit)
+						.addComponent(human_btnDelete).addComponent(human_btnAdd))
+				.addContainerGap()));
 		human_scrollPane.setViewportView(human_tabledata.getJdataTable());
 		humanPanel.setLayout(gl_humanPanel);
 
@@ -3674,19 +3677,24 @@ public class NUserPage {
 		JButton physical_btnSearch = new JButton("Search");
 		physical_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
-				
+
 				if (search_physicalname.getText() != null && !search_physicalname.getText().trim().equals(""))
 					searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
 				if (search_physicalmodel.getText() != null && !search_physicalmodel.getText().trim().equals(""))
 					searchVars.put("modeldesc", "\'" + search_physicalmodel.getText() + "\'");
-				
-				
 				searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
 
-				physical_tabledata.update(physcat.SearchResource(searchVars));
+				if (physcat.SearchResource(searchVars).isEmpty()) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+				} else {
+					physical_tabledata.update(physcat.SearchResource(searchVars));
+				}
+
+				
+
 
 			}
 		});
@@ -3813,7 +3821,7 @@ public class NUserPage {
 
 		addprojectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				final ArrayList<String> employees = new ArrayList<String>();
 				final ArrayList<String> financials = new ArrayList<String>();
 				final ArrayList<String> physicals = new ArrayList<String>();
@@ -3841,7 +3849,7 @@ public class NUserPage {
 				for (int i = 0; i < information_readall.size(); i++) {
 					information.add(information_readall.get(i).toString());
 				}
-				
+
 				ArrayList<Field> projectFields = new ArrayList<Field>();
 
 				projectFields.add(new Field("text", "project name", "", 20, "name"));
@@ -3863,7 +3871,6 @@ public class NUserPage {
 				projectFields.add(information_check);
 				projectFields.add(maintainers);
 
-				
 				final Form projectForm = new Form(projectFields, "Project Form");
 				final PanelBuilder project_addPanel = new PanelBuilder(projectForm);
 				project_addPanel.makeForm();
@@ -3872,9 +3879,6 @@ public class NUserPage {
 				JScrollPane scroll = new JScrollPane(projectForm.getJPanel());
 				Add_ProjectPage.getContentPane().add(scroll);
 
-				
-				
-				
 				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) projectForm.getJPanel().getComponent(3);
 				final JComboBox employees_comboBox = comboBoxpane.getComboBox();
 
@@ -3889,10 +3893,10 @@ public class NUserPage {
 
 				final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) projectForm.getJPanel().getComponent(5);
 				final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) projectForm.getJPanel().getComponent(6);
-				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) projectForm.getJPanel().getComponent(7);
+				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) projectForm.getJPanel()
+						.getComponent(7);
 				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) projectForm.getJPanel().getComponent(8);
 
-				
 				employees_comboBox.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -3915,18 +3919,17 @@ public class NUserPage {
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + " project");
 						}
-						
+
 						employees_comboBox.getSelectedItem();
 						String empid = "";
 						Pattern emp_p = Pattern.compile("empid=\\d+");
-						Matcher emp_m = emp_p.matcher((CharSequence)employees_comboBox.getSelectedItem());
+						Matcher emp_m = emp_p.matcher((CharSequence) employees_comboBox.getSelectedItem());
 						if (emp_m.find()) {
 							empid = emp_m.group();
 						}
 						System.out.println("empid: " + empid);
-						int employeeID= Integer.parseInt(empid.replace("empid=", ""));
-						
-						
+						int employeeID = Integer.parseInt(empid.replace("empid=", ""));
+
 						EmployeeCatalogue empcat = new EmployeeCatalogue();
 						Employee proj_manager = empcat.getEmployee(employeeID);
 						System.out.println(proj_manager.getName());
@@ -3936,19 +3939,19 @@ public class NUserPage {
 						if (vales_phys.size() == 1)
 							confirmed = true;
 
-						long projid = projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2), inputs.get(1),confirmed);
+						long projid = projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2),
+								inputs.get(1), confirmed);
 
 						project_tabledata.update(projcat.getProjects());
 
 						allprojects = projcat.getProjects();
 						project_tabledata.update(projcat.getProjects());
 						System.out.println(vales_phys.toString());
-						
+
 						System.out.println("----------");
 						ProjectEmployeeCatalogue projempcat = new ProjectEmployeeCatalogue();
 						ProjectResourceUtilizationCatalogue projrescat = new ProjectResourceUtilizationCatalogue();
 
-						
 						final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
 						System.out.println(finanvales);
 						final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
@@ -3965,7 +3968,8 @@ public class NUserPage {
 								empids = m_emp.group();
 							}
 							System.out.println("empids: " + empids);
-							projempcat.addProjectEmployee((int)projid, Integer.parseInt(empids.replace("empid=", "")), "1111-11-1", "1111-11-1");
+							projempcat.addProjectEmployee((int) projid, Integer.parseInt(empids.replace("empid=", "")),
+									"1111-11-1", "1111-11-1");
 
 						}
 
@@ -3977,7 +3981,8 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("finan rid: " + respids);
-							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1, (int)projid, "1111-11-1", "1111-11-1");
+							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+									(int) projid, "1111-11-1", "1111-11-1");
 
 						}
 
@@ -3988,7 +3993,8 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("phys rid: " + respids);
-							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1, (int)projid, "1111-11-1", "1111-11-1");
+							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+									(int) projid, "1111-11-1", "1111-11-1");
 
 						}
 
@@ -3999,9 +4005,9 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("info rid: " + respids);
-							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1, (int)projid, "1111-11-1", "1111-11-1");
+							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+									(int) projid, "1111-11-1", "1111-11-1");
 						}
-
 
 					}
 				});
@@ -4013,7 +4019,7 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				ProjectCatalogue projcat = new ProjectCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
-				
+
 				if (search_projectname.getText() != null && !search_projectname.getText().trim().equals(""))
 					searchVars.put("projname", "\'" + search_projectname.getText() + "\'");
 				if (search_projectsize.getText() != null && !search_projectsize.getText().trim().equals(""))
@@ -4021,7 +4027,14 @@ public class NUserPage {
 				if (search_projecttech.getText() != null && !search_projecttech.getText().trim().equals(""))
 					searchVars.put("tech", "\'" + search_projecttech.getText() + "\'");
 				project_tabledata.update(projcat.Search(searchVars));
-				
+
+
+				if (projcat.Search(searchVars).isEmpty()) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+				} else {
+					project_tabledata.update(projcat.Search(searchVars));
+				}
+
 			}
 		});
 
@@ -4248,7 +4261,7 @@ public class NUserPage {
 
 		search_projectsize = new JTextField();
 		search_projectsize.setColumns(10);
-		
+
 		JButton project_btnRefresh = new JButton("Refresh");
 		project_btnRefresh.setIcon(new ImageIcon(
 				new ImageIcon("images/refresh.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
@@ -4261,77 +4274,72 @@ public class NUserPage {
 			}
 		});
 		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
-		gl_projectPanel.setHorizontalGroup(
-			gl_projectPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnEditProject)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnDeleteProject)
-					.addPreferredGap(ComponentPlacement.RELATED, 450, Short.MAX_VALUE)
-					.addComponent(btnViewResources)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(viewsubsys_Btn)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(addprojectBtn))
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(project_btnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
-					.addComponent(project_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_projectPanel.createParallelGroup(Alignment.TRAILING, false)
-						.addGroup(gl_projectPanel.createSequentialGroup()
-							.addComponent(search_projecttech, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblTechnology))
-						.addGroup(gl_projectPanel.createSequentialGroup()
-							.addComponent(search_projectsize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblSize)))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_projectPanel.createSequentialGroup()
-							.addComponent(search_projectmanager, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblProjectManager))
-						.addGroup(gl_projectPanel.createSequentialGroup()
-							.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblProjectName)))
-					.addContainerGap())
-		);
-		gl_projectPanel.setVerticalGroup(
-			gl_projectPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectPanel.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblProjectName)
-						.addComponent(project_btnSearch)
-						.addComponent(lblTechnology)
-						.addComponent(search_projecttech, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(project_btnRefresh))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(search_projectmanager, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblProjectManager)
-						.addComponent(lblSize)
-						.addComponent(search_projectsize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(40)
-					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
-					.addGap(40)
-					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(addprojectBtn)
-						.addComponent(viewsubsys_Btn)
-						.addComponent(btnViewResources)
-						.addComponent(btnEditProject)
-						.addComponent(btnDeleteProject)))
-		);
+		gl_projectPanel
+				.setHorizontalGroup(gl_projectPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_projectPanel.createSequentialGroup().addGap(40)
+								.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+								.addGap(40))
+						.addGroup(
+								gl_projectPanel.createSequentialGroup().addContainerGap().addComponent(btnEditProject)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnDeleteProject)
+										.addPreferredGap(ComponentPlacement.RELATED, 450,
+												Short.MAX_VALUE)
+										.addComponent(btnViewResources).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(viewsubsys_Btn).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(addprojectBtn))
+						.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap()
+								.addComponent(project_btnRefresh)
+								.addPreferredGap(ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
+								.addComponent(project_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(gl_projectPanel.createParallelGroup(Alignment.TRAILING, false)
+										.addGroup(gl_projectPanel.createSequentialGroup()
+												.addComponent(search_projecttech, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(lblTechnology))
+										.addGroup(gl_projectPanel.createSequentialGroup()
+												.addComponent(search_projectsize,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+														Short.MAX_VALUE)
+												.addComponent(lblSize)))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_projectPanel.createSequentialGroup()
+												.addComponent(search_projectmanager, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+														Short.MAX_VALUE)
+												.addComponent(lblProjectManager))
+										.addGroup(gl_projectPanel.createSequentialGroup()
+												.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(lblProjectName)))
+								.addContainerGap()));
+		gl_projectPanel.setVerticalGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap()
+						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblProjectName).addComponent(project_btnSearch)
+								.addComponent(lblTechnology)
+								.addComponent(search_projecttech, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(project_btnRefresh))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(search_projectmanager, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblProjectManager).addComponent(lblSize).addComponent(search_projectsize,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(40).addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+						.addGap(40)
+						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE).addComponent(addprojectBtn)
+								.addComponent(viewsubsys_Btn).addComponent(btnViewResources)
+								.addComponent(btnEditProject).addComponent(btnDeleteProject))));
 		project_tabledata = new TableData(new ProjectCatalogue());
 
 		project_tabledata.getJdataTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -4465,11 +4473,19 @@ public class NUserPage {
 							System.out.println("empid: " + empid);
 							EmployeeCatalogue empcat = new EmployeeCatalogue();
 							ProjectEmployeeCatalogue projempcat = new ProjectEmployeeCatalogue();
-							projempcat.getCirculationReport(empcat.getEmployee(Integer.parseInt(empid.replace("empid=", "")))).getResults();
+							projempcat
+									.getCirculationReport(
+											empcat.getEmployee(Integer.parseInt(empid.replace("empid=", ""))))
+									.getResults();
 							circulation_tabledata.update(projempcat
-									.getCirculationReport(empcat.getEmployee(Integer.parseInt(empid.replace("empid=", "")))).getResults());
-								System.out.println(".....mmmm");
-							System.out.println(projempcat.getCirculationReport(empcat.getEmployee(Integer.parseInt(empid.replace("empid=", "")))).getReport());
+									.getCirculationReport(
+											empcat.getEmployee(Integer.parseInt(empid.replace("empid=", ""))))
+									.getResults());
+							System.out.println(".....mmmm");
+							System.out.println(projempcat
+									.getCirculationReport(
+											empcat.getEmployee(Integer.parseInt(empid.replace("empid=", ""))))
+									.getReport());
 						} else {
 							String rid = "";
 							Pattern p = Pattern.compile("rid=\\d+");
@@ -4674,7 +4690,8 @@ public class NUserPage {
 						if (resourceRepCombo.getSelectedItem().toString().equals("Employee")) {
 							EmployeeCatalogue empResCat = new EmployeeCatalogue();
 							System.out.println(empResCat.getReport().getResults());
-							resavail_tabledata.update(empResCat.getReport().getResults(),	new String[] { "sid", "count", "empname" });
+							resavail_tabledata.update(empResCat.getReport().getResults(),
+									new String[] { "sid", "count", "empname" });
 
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Module")) {
