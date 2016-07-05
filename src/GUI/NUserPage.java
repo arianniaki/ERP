@@ -2921,7 +2921,26 @@ public class NUserPage {
 				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 						"Are you sure you want to Delete this item?");
 				if (myDialog.getAnswer()) {
-					System.out.println("DLETE");
+					int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
+					
+					String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // return
+					selected_maintaining_module = Integer.parseInt(Table_click.trim());
+
+					System.out.println(Table_click);
+					System.out.println("---maintian module id-- " + selected_module);
+
+					MaintainingModuleCatalogue maintainmodcat = new MaintainingModuleCatalogue();
+					maintainmodcat.deleteMaintainingModule(selected_maintaining_module);
+					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+					ArrayList<MaintainingModule> allmaintainmodule;
+					allmaintainmodule = maintainmodcat.getMaintainingModules(selected_module);
+					for (int i = 0; i < allmaintainmodule.size(); i++) {
+						data.add((allmaintainmodule.get(i).toHashMap()));
+					}
+					System.out.println("DATA "+data);
+					maintaining_tabledata.update(data);
+					
 				}
 			}
 		});
