@@ -175,6 +175,11 @@ public class TableData {
 			columns = new String[] {"sid", "presutilid", "rid", "pname", "fromdate", "rname", "todate", "pid", "sname"};
 			dbnames = new String[] { "sid", "presutilid", "rid", "pname", "fromdate", "rname", "todate", "pid", "sname"};
 		}
+		if(type=="employee cycle report")
+		{
+			columns = new String[] {"sid", "empname", "rid", "pname", "fromdate", "rname", "todate", "pid", "sname"};
+			dbnames = new String[] {"sid", "empname", "rid", "pname", "fromdate", "rname", "todate", "pid", "sname"};
+		}
 		if(type=="resavail report")
 		{
 			columns = new String[] {"sid", "count", "resource name"};

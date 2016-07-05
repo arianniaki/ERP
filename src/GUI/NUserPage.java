@@ -133,6 +133,8 @@ public class NUserPage {
 	private TableData maintaining_tabledata;
 	private TableData resreq_tabledata;
 	private TableData circulation_tabledata;
+	private TableData employeecirculation_tabledata;
+
 	private TableData resavail_tabledata;
 	private TableData subsystem_tabledata;
 	private TableData resourceutil_tabledata;
@@ -4494,6 +4496,115 @@ public class NUserPage {
 		sl_reportPanel.putConstraint(SpringLayout.SOUTH, reportsTab, 495, SpringLayout.NORTH, reportPanel);
 		sl_reportPanel.putConstraint(SpringLayout.EAST, reportsTab, 827, SpringLayout.WEST, reportPanel);
 		reportPanel.add(reportsTab);
+		
+		JPanel employeecirculationPanel = new JPanel();
+		reportsTab.addTab("Employee Circulation Report", null, employeecirculationPanel, null);
+
+
+		
+		
+		JScrollPane employeecirculation_scrollPane = new JScrollPane();
+		
+		JButton employeecirculation_btnGetReport = new JButton("Get Report");
+		employeecirculation_btnGetReport.setIcon(new ImageIcon(
+				new ImageIcon("images/report.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		employeecirculation_btnGetReport.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				final ArrayList<String> resources = new ArrayList<String>();
+				ArrayList<Field> circulationReport_Fields = new ArrayList<Field>();
+				Field res = new Field("comboBox", "resources", resources, 30, "items");
+
+				circulationReport_Fields.add(res);
+
+				final Form circulationreport_Form = new Form(circulationReport_Fields, "Employee Circulation Report Form");
+				final PanelBuilder circulation_Panel = new PanelBuilder(circulationreport_Form);
+				circulation_Panel.makeForm();
+
+				JFrame getReport_CirculationPage = new JFrame("Get Report Employee Circulation Resource Form");
+
+				getReport_CirculationPage.getContentPane().add(circulationreport_Form.getJPanel(), BorderLayout.NORTH);
+
+				JButton submitgetReportBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitgetReportBtn);
+				getReport_CirculationPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				getReport_CirculationPage.pack();
+				getReport_CirculationPage.setVisible(true);
+				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) circulationreport_Form.getJPanel()
+						.getComponent(0);
+				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) circulationreport_Form.getJPanel().getComponent(0);
+
+				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
+							resourceCombo.removeAllItems();
+							EmployeeCatalogue empcat = new EmployeeCatalogue();
+							ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
+							for (int i = 0; i < employee_resource.size(); i++) {
+								resourceCombo.addItem(employee_resource.get(i).toString());
+							}
+				submitgetReportBtn.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(resourceCombo.getSelectedItem() + " this is resource combo");
+
+							String empid = "";
+							Pattern emp_p = Pattern.compile("empid=\\d+");
+							Matcher emp_m = emp_p.matcher((CharSequence) resourceCombo.getSelectedItem());
+							if (emp_m.find()) {
+								empid = emp_m.group();
+							}
+							System.out.println("empid: " + empid);
+							EmployeeCatalogue empcat = new EmployeeCatalogue();
+							ProjectEmployeeCatalogue projempcat = new ProjectEmployeeCatalogue();
+							projempcat
+									.getCirculationReport(
+											empcat.getEmployee(Integer.parseInt(empid.replace("empid=", ""))))
+									.getResults();
+							employeecirculation_tabledata.update(projempcat
+									.getCirculationReport(
+											empcat.getEmployee(Integer.parseInt(empid.replace("empid=", ""))))
+									.getResults());
+							System.out.println(".....mmmm");
+							System.out.println(projempcat
+									.getCirculationReport(
+											empcat.getEmployee(Integer.parseInt(empid.replace("empid=", ""))))
+									.getReport());
+
+						}
+						// %%%
+
+				});		
+			}
+		});
+		GroupLayout gl_employeecirculationPanel = new GroupLayout(employeecirculationPanel);
+		gl_employeecirculationPanel.setHorizontalGroup(
+			gl_employeecirculationPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_employeecirculationPanel.createSequentialGroup()
+					.addGap(20)
+					.addComponent(employeecirculation_scrollPane, GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+					.addGap(20))
+				.addGroup(gl_employeecirculationPanel.createSequentialGroup()
+					.addContainerGap(723, Short.MAX_VALUE)
+					.addComponent(employeecirculation_btnGetReport))
+		);
+		gl_employeecirculationPanel.setVerticalGroup(
+			gl_employeecirculationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_employeecirculationPanel.createSequentialGroup()
+					.addComponent(employeecirculation_btnGetReport)
+					.addGap(20)
+					.addComponent(employeecirculation_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+					.addGap(20))
+		);
+		
+		employeecirculation_tabledata = new TableData(new ArrayList<HashMap<String, String>>(), "employee cycle report");
+		employeecirculation_scrollPane.setViewportView(employeecirculation_tabledata.getJdataTable());
+
+		employeecirculationPanel.setLayout(gl_employeecirculationPanel);
 
 		JPanel circulationPanel = new JPanel();
 		reportsTab.addTab("Circulation Report", null, circulationPanel, null);
@@ -4511,7 +4622,6 @@ public class NUserPage {
 				resource_types.add("Information");
 				resource_types.add("Financial");
 				resource_types.add("Physical");
-				resource_types.add("Employee");
 				resource_types.add("Module");
 				ArrayList<Field> circulationReport_Fields = new ArrayList<Field>();
 				Field res_type = new Field("comboBox", "resource types", resource_types, 30, "items");
@@ -4570,14 +4680,6 @@ public class NUserPage {
 							}
 
 						}
-						if (resource_type.getSelectedItem().toString().equals("Employee")) {
-							resourceCombo.removeAllItems();
-							EmployeeCatalogue empcat = new EmployeeCatalogue();
-							ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
-							for (int i = 0; i < employee_resource.size(); i++) {
-								resourceCombo.addItem(employee_resource.get(i).toString());
-							}
-						}
 						if (resource_type.getSelectedItem().toString().equals("Module")) {
 							resourceCombo.removeAllItems();
 							ModuleCatalogue modcat = new ModuleCatalogue();
@@ -4595,30 +4697,6 @@ public class NUserPage {
 						System.out.println(resourceCombo.getSelectedItem() + " this is resource combo");
 						System.out.println(resource_type.getSelectedItem() + " this is resource type");
 
-						if (resource_type.getSelectedItem() == "Employee") {
-							String empid = "";
-							Pattern emp_p = Pattern.compile("empid=\\d+");
-							Matcher emp_m = emp_p.matcher((CharSequence) resourceCombo.getSelectedItem());
-							if (emp_m.find()) {
-								empid = emp_m.group();
-							}
-							System.out.println("empid: " + empid);
-							EmployeeCatalogue empcat = new EmployeeCatalogue();
-							ProjectEmployeeCatalogue projempcat = new ProjectEmployeeCatalogue();
-							projempcat
-									.getCirculationReport(
-											empcat.getEmployee(Integer.parseInt(empid.replace("empid=", ""))))
-									.getResults();
-							circulation_tabledata.update(projempcat
-									.getCirculationReport(
-											empcat.getEmployee(Integer.parseInt(empid.replace("empid=", ""))))
-									.getResults());
-							System.out.println(".....mmmm");
-							System.out.println(projempcat
-									.getCirculationReport(
-											empcat.getEmployee(Integer.parseInt(empid.replace("empid=", ""))))
-									.getReport());
-						} else {
 							String rid = "";
 							Pattern p = Pattern.compile("rid=\\d+");
 							Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
@@ -4637,8 +4715,6 @@ public class NUserPage {
 									.getCirculationReport(
 											physResCat.getResource(Integer.parseInt(rid.replace("rid=", ""))))
 									.getResults());
-						}
-						// %%%
 
 					}
 				});
