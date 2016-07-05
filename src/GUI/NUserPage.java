@@ -135,7 +135,8 @@ public class NUserPage {
 	private int selected_accessright_forassignment;
 	private int selected_module;
 	private int selected_maintaining_module;
-
+	private int selected_resource_util;
+	
 	private JTextField search_modulename;
 	private JTextField search_financialname;
 	private JTextField search_informationname;
@@ -892,6 +893,76 @@ public class NUserPage {
 
 		presutil_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				int rowIndex = resourceutil_tabledata.getJdataTable().getSelectedRow();
+
+				String Table_click = (resourceutil_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+						.toString()); // return
+				selected_resource_util = Integer.parseInt(Table_click.trim());
+
+				System.out.println(Table_click);
+				System.out.println("---resource util id-- " + selected_resource_util);
+
+
+				JFrame Edit_ResUtilPage = new JFrame("Edit Resource Utilization Form");
+
+				// adding date
+				UtilDateModel modelfor = new UtilDateModel();
+				UtilDateModel modelto = new UtilDateModel();
+
+				Properties p = new Properties();
+				p.put("text.today", "Today");
+				p.put("text.month", "Month");
+				p.put("text.year", "Year");
+				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+				JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
+				JLabel from = new JLabel("From");
+				JLabel to = new JLabel("To");
+				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+				final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
+
+				JPanel date_panel = new JPanel(new FlowLayout());
+				date_panel.add(from);
+
+				date_panel.add(from_datePanel);
+				date_panel.add(to);
+				date_panel.add(to_datePanel);
+				Edit_ResUtilPage.getContentPane().add(date_panel, BorderLayout.CENTER);
+				// end date
+
+				JButton submiteditresutilBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submiteditresutilBtn);
+				Edit_ResUtilPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				Edit_ResUtilPage.pack();
+				Edit_ResUtilPage.setVisible(true);
+
+				submiteditresutilBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+
+						ProjectResourceUtilizationCatalogue presreqCat = new ProjectResourceUtilizationCatalogue();
+
+						String fromdate = from_datePicker.getJFormattedTextField().getText();
+						String todate = to_datePicker.getJFormattedTextField().getText();
+
+
+						ProjectResourceUtilization projresutil = presreqCat.getProjectResourceUtilization(selected_resource_util);
+						projresutil.edit(fromdate, todate);
+						
+
+						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+						ArrayList<ProjectResourceUtilization> allpresutil;
+						allpresutil = presreqCat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
+						for (int i = 0; i < allpresutil.size(); i++) {
+							data.add((allpresutil.get(i).toHashMap()));
+						}
+						resourceutil_tabledata.update(data);
+
+					}
+				});
 			}
 		});
 
