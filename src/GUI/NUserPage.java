@@ -105,21 +105,8 @@ public class NUserPage {
 	private ArrayList<HashMap<String, String>> allprojects;
 	private ArrayList<HashMap<String, String>> allemployees;
 	private ArrayList<HashMap<String, String>> allsubsystems;
-	// private ArrayList<ResourceRequirement> allresourcerequirements;
 	private ArrayList<HashMap<String, String>> allregisteredusers;
 
-	// private JTable finan_table;
-	// private JTable information_table;
-	// private JTable module_table;
-	// private JTable physical_table;
-	// private JTable allresource_table;
-	// private JTable project_table;
-	// private JTable subsystem_table;
-	// private JTable accessright_table;
-	// private JTable registered_table;
-	// private JTable human_table;
-	// private JTable maintaining_table;
-	// private JTable requirement_table;
 	private TableData resrequirement_tabledata;
 	private TableData accessright_tabledata;
 	private TableData registered_tabledata;
@@ -152,10 +139,7 @@ public class NUserPage {
 	private JTextField search_humanname;
 	private JTextField search_physicalname;
 	private JTextField search_projectname;
-	// private JTable resavail_table;
-	// private JTable resreq_table;
-	// private JTable cycle_table;
-	// private JTable resourceutil_table;
+
 	private JTextField search_maintainingname;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_re;
@@ -173,7 +157,22 @@ public class NUserPage {
 	private JTextField search_resourcename;
 	private JTextField search_reqresourcename;
 	private JTextField search_regemployeename;
-
+	
+	private EmployeeCatalogue empcat;
+	private SectionCatalogue seccat;
+	private ProjectCatalogue projcat;
+	private ProjectEmployeeCatalogue projempcat;
+	private SubSystemCatalogue subsyscat;
+	private ResourceRequirementCatalogue resreqcat;
+	private FinancialResourceCatalogue financat;
+	private InformationResourceCatalogue infocat;
+	private MaintainingModuleCatalogue maintainmodulecat;
+	private PhysicalResourceCatalogue physcat;
+	private ResourceCatalogue rcat;
+	private ModuleCatalogue modcat;
+	private MakeModuleCatalogue makemodulecat;
+	private ProjectResourceUtilizationCatalogue presutilcat;
+	private MaintainModEmpResCatalogue maintainmodempresCat;
 	/**
 	 * Launch the application.
 	 */
@@ -196,6 +195,20 @@ public class NUserPage {
 	 * @param loggedin_user
 	 */
 	public NUserPage() {
+		empcat= new EmployeeCatalogue();
+		seccat= new SectionCatalogue();
+		projcat= new ProjectCatalogue();
+		subsyscat= new SubSystemCatalogue();
+		financat = new FinancialResourceCatalogue();
+		infocat = new InformationResourceCatalogue();
+		physcat = new PhysicalResourceCatalogue();
+		rcat= new ResourceCatalogue();
+		makemodulecat = new MakeModuleCatalogue();
+		presutilcat = new ProjectResourceUtilizationCatalogue();
+		resreqcat= new ResourceRequirementCatalogue();
+		modcat = new ModuleCatalogue();
+		maintainmodulecat= new MaintainingModuleCatalogue();
+		projempcat = new ProjectEmployeeCatalogue();
 		initialize();
 	}
 
@@ -301,7 +314,7 @@ public class NUserPage {
 
 		// get employee list
 
-		accessright_tabledata = new TableData(new EmployeeCatalogue(), "assign");
+		accessright_tabledata = new TableData(empcat, "assign");
 
 		JButton btnAssignAccessright = new JButton("Assign AccessRight");
 		btnAssignAccessright.addActionListener(new ActionListener() {
@@ -345,7 +358,6 @@ public class NUserPage {
 							String Table_click = (accessright_tabledata.getJdataTable().getModel()
 									.getValueAt(rowIndex, 0).toString());
 							System.out.println(Table_click);
-							EmployeeCatalogue empcat = new EmployeeCatalogue();
 							Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
 							System.out.println(emp_access.getName() + " WHAT  " + selected_accessright_forassignment);
 							emp_access.setAccessRight(selected_accessright_forassignment);
@@ -381,7 +393,6 @@ public class NUserPage {
 		JButton accessright_btnSearch = new JButton("Search");
 		accessright_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 
 				System.out.println(search_accessrightname.getText()+" sssssssssssssssss");
@@ -413,7 +424,6 @@ public class NUserPage {
 
 		accessright_btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				accessright_tabledata.update(empcat.getConfirmedEmployees());
 
 			}
@@ -493,7 +503,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -545,7 +554,6 @@ public class NUserPage {
 						}
 						System.out.println("sid: " + section);
 
-						SubSystemCatalogue subsyscat = new SubSystemCatalogue();
 						subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem,
 								Integer.parseInt(section.replace("sid=", "")));
 						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
@@ -565,7 +573,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -604,7 +611,6 @@ public class NUserPage {
 							System.out.println(inputs.get(i) + " subsystem");
 						}
 
-						SubSystemCatalogue subsyscat = new SubSystemCatalogue();
 						// subsyscat.addSubSystem(inputs.get(0),
 						// selected_project_forsubsystem);
 						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
@@ -631,7 +637,6 @@ public class NUserPage {
 					String Table_click = (subsystem_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // the
 					System.out.println(Table_click + " this was clicked");
-					SubSystemCatalogue subsyscat = new SubSystemCatalogue();
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
@@ -674,7 +679,7 @@ public class NUserPage {
 								.addComponent(addsubsystemBtn).addComponent(subsystem_btnEdit)
 								.addComponent(subsystem_btnDelete).addComponent(btnBacktoProject))));
 
-		subsystem_tabledata = new TableData(new SubSystemCatalogue());
+		subsystem_tabledata = new TableData(subsyscat);
 		subsystem_scrollPane.setViewportView(subsystem_tabledata.getJdataTable());
 		subsystemPanel.setLayout(gl_subsystemPanel);
 
@@ -707,7 +712,6 @@ public class NUserPage {
 		btnAddResourceUtilization.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -801,7 +805,6 @@ public class NUserPage {
 						// TODO Auto-generated method stub
 						if (resource_type.getSelectedItem().toString().equals("Financial")) {
 							resourceCombo.removeAllItems();
-							FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 							ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
 							for (int i = 0; i < financial_resource.size(); i++) {
 								resourceCombo.addItem(financial_resource.get(i).toString());
@@ -809,7 +812,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Physical")) {
 							resourceCombo.removeAllItems();
-							PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 							ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
 							for (int i = 0; i < physical_resource.size(); i++) {
 								resourceCombo.addItem(physical_resource.get(i).toString());
@@ -818,7 +820,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Information")) {
 							resourceCombo.removeAllItems();
-							InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 							ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
 							for (int i = 0; i < information_resource.size(); i++) {
 								resourceCombo.addItem(information_resource.get(i).toString());
@@ -827,7 +828,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Employee")) {
 							resourceCombo.removeAllItems();
-							EmployeeCatalogue empcat = new EmployeeCatalogue();
 							ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 							for (int i = 0; i < employee_resource.size(); i++) {
 								resourceCombo.addItem(employee_resource.get(i).toString());
@@ -835,7 +835,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Module")) {
 							resourceCombo.removeAllItems();
-							ModuleCatalogue modcat = new ModuleCatalogue();
 							ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
 							for (int i = 0; i < module_resource.size(); i++) {
 								resourceCombo.addItem(module_resource.get(i).toString());
@@ -851,7 +850,6 @@ public class NUserPage {
 						for (int i = 0; i < resutil_Form.getJPanel().getComponentCount(); i++) {
 							// System.out.println(fpanel.selected_Choice);
 						}
-						ProjectResourceUtilizationCatalogue presreqCat = new ProjectResourceUtilizationCatalogue();
 						System.out.println("all : ");
 						ArrayList<String> inputs = new ArrayList<String>();
 						for (int i = 0; i < resutil_Form.getJPanel().getComponentCount(); i++) {
@@ -877,13 +875,13 @@ public class NUserPage {
 						System.out.println("--------------");
 						System.out.println(rid + " " + sid + " " + fromdate + " " + todate);
 
-						presreqCat.addProjectResourceUtilization(Integer.parseInt(rid.replace("rid=", "")),
+						presutilcat.addProjectResourceUtilization(Integer.parseInt(rid.replace("rid=", "")),
 								Integer.parseInt(sid.replace("sid=", "")), selected_project_forsubsystem, fromdate,
 								todate);
 
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<ProjectResourceUtilization> allpresutil;
-						allpresutil = presreqCat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
+						allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
 						for (int i = 0; i < allpresutil.size(); i++) {
 							data.add((allpresutil.get(i).toHashMap()));
 						}
@@ -951,19 +949,18 @@ public class NUserPage {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 
-						ProjectResourceUtilizationCatalogue presreqCat = new ProjectResourceUtilizationCatalogue();
 
 						String fromdate = from_datePicker.getJFormattedTextField().getText();
 						String todate = to_datePicker.getJFormattedTextField().getText();
 
 
-						ProjectResourceUtilization projresutil = presreqCat.getProjectResourceUtilization(selected_resource_util);
+						ProjectResourceUtilization projresutil = presutilcat.getProjectResourceUtilization(selected_resource_util);
 						projresutil.edit(fromdate, todate);
 						
 
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<ProjectResourceUtilization> allpresutil;
-						allpresutil = presreqCat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
+						allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
 						for (int i = 0; i < allpresutil.size(); i++) {
 							data.add((allpresutil.get(i).toHashMap()));
 						}
@@ -991,12 +988,11 @@ public class NUserPage {
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
-						ProjectResourceUtilizationCatalogue projrescat = new ProjectResourceUtilizationCatalogue();
-						projrescat.deleteProjectResourceUtilization(Integer.parseInt(Table_click));
+						presutilcat.deleteProjectResourceUtilization(Integer.parseInt(Table_click));
 
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<ProjectResourceUtilization> allpresutil;
-						allpresutil = projrescat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
+						allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
 						for (int i = 0; i < allpresutil.size(); i++) {
 							data.add((allpresutil.get(i).toHashMap()));
 						}
@@ -1050,7 +1046,7 @@ public class NUserPage {
 								.addComponent(utilbtnBacktoProject).addComponent(btnAddResourceUtilization)
 								.addComponent(presutil_btnEdit).addComponent(presutil_btnDelete))));
 
-		resourceutil_tabledata = new TableData(new ProjectResourceUtilizationCatalogue());
+		resourceutil_tabledata = new TableData(presutilcat);
 		resourceutil_scrollPane.setViewportView(resourceutil_tabledata.getJdataTable());
 		resourceutilpanel.setLayout(gl_resourceutilpanel);
 		//
@@ -1067,12 +1063,10 @@ public class NUserPage {
 				ArrayList<String> section_arraylist = new ArrayList<String>();
 				ArrayList<String> project_arraylist = new ArrayList<String>();
 
-				ProjectCatalogue projcat = new ProjectCatalogue();
 				ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
 				for (int i = 0; i < project_hashmap.size(); i++) {
 					project_arraylist.add(project_hashmap.get(i).toString());
 				}
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -1172,7 +1166,6 @@ public class NUserPage {
 						// TODO Auto-generated method stub
 						if (resource_type.getSelectedItem().toString().equals("Financial")) {
 							resourceCombo.removeAllItems();
-							FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 							ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
 							for (int i = 0; i < financial_resource.size(); i++) {
 								resourceCombo.addItem(financial_resource.get(i).toString());
@@ -1180,7 +1173,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Physical")) {
 							resourceCombo.removeAllItems();
-							PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 							ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
 							for (int i = 0; i < physical_resource.size(); i++) {
 								resourceCombo.addItem(physical_resource.get(i).toString());
@@ -1189,7 +1181,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Information")) {
 							resourceCombo.removeAllItems();
-							InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 							ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
 							for (int i = 0; i < information_resource.size(); i++) {
 								resourceCombo.addItem(information_resource.get(i).toString());
@@ -1198,7 +1189,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Employee")) {
 							resourceCombo.removeAllItems();
-							EmployeeCatalogue empcat = new EmployeeCatalogue();
 							ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 							for (int i = 0; i < employee_resource.size(); i++) {
 								resourceCombo.addItem(employee_resource.get(i).toString());
@@ -1206,7 +1196,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Module")) {
 							resourceCombo.removeAllItems();
-							ModuleCatalogue modcat = new ModuleCatalogue();
 							ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
 							for (int i = 0; i < module_resource.size(); i++) {
 								resourceCombo.addItem(module_resource.get(i).toString());
@@ -1221,9 +1210,8 @@ public class NUserPage {
 						for (int i = 0; i < requirement_Form.getJPanel().getComponentCount(); i++) {
 							// System.out.println(fpanel.selected_Choice);
 						}
-						ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
 						System.out.println("all : ");
-						resreqCat.getResourceRequirements();
+						resreqcat.getResourceRequirements();
 						ArrayList<String> inputs = new ArrayList<String>();
 						for (int i = 0; i < requirement_Form.getJPanel().getComponentCount(); i++) {
 							FieldPanel fpanel = (FieldPanel) requirement_Form.getJPanel().getComponent(i);
@@ -1269,13 +1257,13 @@ public class NUserPage {
 						System.out
 								.println(empid + " " + rid + " " + sid + " " + projid + " " + fromdate + " " + todate);
 
-						resreqCat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")),
+						resreqcat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")),
 								Integer.parseInt(sid.replace("sid=", "")),
 								Integer.parseInt(projid.replace("projid=", "")), fromdate, todate);
 
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<ResourceRequirement> allresourcerequirements;
-						allresourcerequirements = resreqCat.getResourceRequirements();
+						allresourcerequirements = resreqcat.getResourceRequirements();
 						for (int i = 0; i < allresourcerequirements.size(); i++) {
 							data.add((allresourcerequirements.get(i).toHashMap()));
 						}
@@ -1393,7 +1381,6 @@ public class NUserPage {
 							String todate = to_datePicker.getJFormattedTextField().getText();
 							System.out.println(satisfydate + " " + fromdate + " " + todate);
 
-							ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
 
 							boolean satisfied = false;
 							if (statisfy_checkBoxpane.getCheckedValues().size() == 1)
@@ -1402,12 +1389,12 @@ public class NUserPage {
 							if (satisfied == false)
 								satisfydate = "1111-1-1";
 
-							ResourceRequirement resreq = resreqCat
+							ResourceRequirement resreq = resreqcat
 									.getResourceRequirement(Integer.parseInt(Table_click));
 							resreq.edit(fromdate, todate, satisfied, satisfydate);
 							ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 							ArrayList<ResourceRequirement> allresourcerequirements;
-							allresourcerequirements = resreqCat.getResourceRequirements();
+							allresourcerequirements = resreqcat.getResourceRequirements();
 							for (int i = 0; i < allresourcerequirements.size(); i++) {
 								data.add((allresourcerequirements.get(i).toHashMap()));
 							}
@@ -1478,14 +1465,13 @@ public class NUserPage {
 									.getValueAt(rowIndex, 0).toString()); // the
 							System.out.println(Table_click + " what have you clicked");
 							System.out.println(satisfyfrom_datePicker.getJFormattedTextField().getText());
-							ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
 							String satisfydate = satisfyfrom_datePicker.getJFormattedTextField().getText();
 
-							resreqCat.getResourceRequirement(Integer.parseInt(Table_click)).satisfy(satisfydate);
+							resreqcat.getResourceRequirement(Integer.parseInt(Table_click)).satisfy(satisfydate);
 
 							ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 							ArrayList<ResourceRequirement> allresourcerequirements;
-							allresourcerequirements = resreqCat.getResourceRequirements();
+							allresourcerequirements = resreqcat.getResourceRequirements();
 							for (int i = 0; i < allresourcerequirements.size(); i++) {
 								data.add((allresourcerequirements.get(i).toHashMap()));
 							}
@@ -1519,15 +1505,13 @@ public class NUserPage {
 					String Table_click = (resrequirement_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // the
 					System.out.println(Table_click + " this was clicked");
-					ResourceRequirementCatalogue resreq = new ResourceRequirementCatalogue();
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
-						resreq.deleteResourceRequirement(Integer.parseInt(Table_click));
-						ResourceRequirementCatalogue resreqCat = new ResourceRequirementCatalogue();
+						resreqcat.deleteResourceRequirement(Integer.parseInt(Table_click));
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<ResourceRequirement> allresourcerequirements;
-						allresourcerequirements = resreqCat.getResourceRequirements();
+						allresourcerequirements = resreqcat.getResourceRequirements();
 						for (int i = 0; i < allresourcerequirements.size(); i++) {
 							data.add((allresourcerequirements.get(i).toHashMap()));
 						}
@@ -1562,7 +1546,7 @@ public class NUserPage {
 								.addComponent(requirement_btnEdit).addComponent(requirement_btnSatisfy)
 								.addComponent(requirement_btnDelete))));
 
-		resrequirement_tabledata = new TableData(new ResourceRequirementCatalogue());
+		resrequirement_tabledata = new TableData(resreqcat);
 
 		requirement_scrollPane.setViewportView(resrequirement_tabledata.getJdataTable());
 		requirementPanel.setLayout(gl_requirementPanel);
@@ -1595,11 +1579,10 @@ public class NUserPage {
 		//
 		// get human list
 
-		EmployeeCatalogue employeecat = new EmployeeCatalogue();
 		System.out.println("all : ");
-		allemployees = employeecat.readAllEmployees();
+		allemployees = empcat.readAllEmployees();
 
-		human_tabledata = new TableData(new EmployeeCatalogue(), "human");
+		human_tabledata = new TableData(empcat, "human");
 
 		JPanel informationPanel = new JPanel();
 		resourcesTab.addTab("Information", null, informationPanel, null);
@@ -1610,7 +1593,7 @@ public class NUserPage {
 
 		JScrollPane information_scrollPane = new JScrollPane();
 
-		information_tabledata = new TableData(new InformationResourceCatalogue(), "information");
+		information_tabledata = new TableData(infocat, "information");
 
 		information_scrollPane.setViewportView(information_tabledata.getJdataTable());
 
@@ -1621,7 +1604,6 @@ public class NUserPage {
 		information_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -1669,7 +1651,6 @@ public class NUserPage {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 
-						InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 						System.out.println("all : ");
 						infocat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
@@ -1732,7 +1713,6 @@ public class NUserPage {
 					String Table_click = (information_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // the
 					System.out.println(Table_click + " this was clicked");
-					InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
@@ -1749,7 +1729,6 @@ public class NUserPage {
 		JButton information_btnSearch = new JButton("Search");
 		information_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 				searchVars.put("irname", "\'" + search_informationname.getText() + "\'");
 				if (infocat.SearchResource(searchVars).isEmpty()) {
@@ -1769,7 +1748,6 @@ public class NUserPage {
 
 		search_informationbtnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				information_tabledata.update(infocat.readAllResources());
 			}
 
@@ -1817,7 +1795,6 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -1866,7 +1843,6 @@ public class NUserPage {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 						System.out.println("all : ");
 						infocat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
@@ -1901,7 +1877,6 @@ public class NUserPage {
 
 		// get financial list
 
-		FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 		System.out.println("all : ");
 		allfinance = financat.readAllResources();
 
@@ -1920,7 +1895,6 @@ public class NUserPage {
 		financial_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -1964,7 +1938,6 @@ public class NUserPage {
 							System.out.println(Table_click + " this was clicked");
 						}
 						System.out.println();
-						FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 						System.out.println("all : ");
 						financat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
@@ -1989,7 +1962,7 @@ public class NUserPage {
 		});
 
 		JScrollPane financial_table_scrollPane = new JScrollPane();
-		financial_tabledata = new TableData(new FinancialResourceCatalogue(), "financial");
+		financial_tabledata = new TableData(financat, "financial");
 
 		financial_table_scrollPane.setViewportView(financial_tabledata.getJdataTable());
 
@@ -2010,7 +1983,6 @@ public class NUserPage {
 					String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // the
 					System.out.println(Table_click + " this was clicked");
-					FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
@@ -2027,7 +1999,6 @@ public class NUserPage {
 		JButton financial_btnSearch = new JButton("Search");
 		financial_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 				if (search_financialname.getText() != null && !search_financialname.getText().trim().equals(""))
 					searchVars.put("finanname", "\'" + search_financialname.getText() + "\'");
@@ -2055,7 +2026,6 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				allfinance.clear();
-				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				allfinance = financat.readAllResources();
 				financial_tabledata.update(financat.readAllResources());
 			}
@@ -2137,7 +2107,6 @@ public class NUserPage {
 				// TODO Auto-generated method stub
 
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -2174,7 +2143,6 @@ public class NUserPage {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 						System.out.println("all : ");
 						financat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
@@ -2208,9 +2176,8 @@ public class NUserPage {
 		resourcesTab.addTab("Module", null, modulePanel, null);
 
 		// get module list
-		ModuleCatalogue mcat = new ModuleCatalogue();
 		System.out.println("all : ");
-		allmodules = mcat.readAllResources();
+		allmodules = modcat.readAllResources();
 
 		final JPanel moduledetailpanel = new JPanel();
 		resourcesTab.addTab("Module Detail", null, moduledetailpanel, null);
@@ -2282,24 +2249,20 @@ public class NUserPage {
 				final ArrayList<String> physicals = new ArrayList<String>();
 				final ArrayList<String> information = new ArrayList<String>();
 
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 				for (int i = 0; i < employe_readall.size(); i++) {
 					employees.add(employe_readall.get(i).toString());
 				}
-				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 				for (int i = 0; i < financial_readall.size(); i++) {
 					financials.add(financial_readall.get(i).toString());
 				}
 
-				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 				for (int i = 0; i < physical_readall.size(); i++) {
 					physicals.add(physical_readall.get(i).toString());
 				}
 
-				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 				for (int i = 0; i < information_readall.size(); i++) {
 					information.add(information_readall.get(i).toString());
@@ -2308,7 +2271,6 @@ public class NUserPage {
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
 				moduleFields.add(new Field("text", "name", "", 10, "name"));
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -2358,9 +2320,8 @@ public class NUserPage {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						ModuleCatalogue mcat = new ModuleCatalogue();
 						System.out.println("all : ");
-						mcat.readAllResources();
+						modcat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
 						for (int i = 0; i < moduleForm.getJPanel().getComponentCount(); i++) {
 							FieldPanel fpanel = (FieldPanel) moduleForm.getJPanel().getComponent(i);
@@ -2381,14 +2342,13 @@ public class NUserPage {
 						System.out.println("----------");
 
 						//
-						long modrid = mcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
+						long modrid = modcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
 								Integer.parseInt(inputs.get(1)), inputs.get(2));
 						// tu resource ham bayad insert she
-						module_tabledata.update(mcat.readAllResources());
+						module_tabledata.update(modcat.readAllResources());
 
 						//
 						System.out.println("----------");
-						MakeModuleCatalogue makemoduleCat = new MakeModuleCatalogue();
 
 						final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
 						System.out.println(finanvales);
@@ -2406,7 +2366,7 @@ public class NUserPage {
 								empids = m_emp.group();
 							}
 							System.out.println("empids: " + empids);
-							makemoduleCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), (int) modrid);
+							makemodulecat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), (int) modrid);
 
 						}
 
@@ -2418,7 +2378,7 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("finan rid: " + respids);
-							makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
+							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
 
 						}
 
@@ -2429,7 +2389,7 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("phys rid: " + respids);
-							makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
+							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
 
 						}
 
@@ -2440,7 +2400,7 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("info rid: " + respids);
-							makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
+							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
 
 						}
 
@@ -2463,24 +2423,20 @@ public class NUserPage {
 				final ArrayList<String> physicals = new ArrayList<String>();
 				final ArrayList<String> information = new ArrayList<String>();
 
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 				for (int i = 0; i < employe_readall.size(); i++) {
 					employees.add(employe_readall.get(i).toString());
 				}
-				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 				for (int i = 0; i < financial_readall.size(); i++) {
 					financials.add(financial_readall.get(i).toString());
 				}
 
-				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 				for (int i = 0; i < physical_readall.size(); i++) {
 					physicals.add(physical_readall.get(i).toString());
 				}
 
-				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 				for (int i = 0; i < information_readall.size(); i++) {
 					information.add(information_readall.get(i).toString());
@@ -2489,7 +2445,6 @@ public class NUserPage {
 				ArrayList<Field> moduleFields = new ArrayList<Field>();
 				moduleFields.add(new Field("text", "name", "", 10, "name"));
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -2539,9 +2494,8 @@ public class NUserPage {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						ModuleCatalogue mcat = new ModuleCatalogue();
 						System.out.println("all : ");
-						mcat.readAllResources();
+						modcat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
 						for (int i = 0; i < moduleForm.getJPanel().getComponentCount(); i++) {
 							FieldPanel fpanel = (FieldPanel) moduleForm.getJPanel().getComponent(i);
@@ -2563,17 +2517,16 @@ public class NUserPage {
 
 						//
 
-						mcat.getModule(selected_module).editResource(inputs.get(0),
+						modcat.getModule(selected_module).editResource(inputs.get(0),
 								Integer.parseInt(section.replace("sid=", "")));
 						// addResource(inputs.get(0),
 						// Integer.parseInt(section.replace("sid=", "")),
 						// Integer.parseInt(inputs.get(1)), inputs.get(2));
 						// tu resource ham bayad insert she
-						module_tabledata.update(mcat.readAllResources());
+						module_tabledata.update(modcat.readAllResources());
 
 						//
 						System.out.println("----------");
-						MakeModuleCatalogue makemoduleCat = new MakeModuleCatalogue();
 
 						final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
 						System.out.println(finanvales);
@@ -2591,7 +2544,7 @@ public class NUserPage {
 								empids = m_emp.group();
 							}
 							System.out.println("empids: " + empids);
-							makemoduleCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_module);
+							makemodulecat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_module);
 
 						}
 
@@ -2603,7 +2556,7 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("finan rid: " + respids);
-							makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
 
 						}
 
@@ -2614,7 +2567,7 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("phys rid: " + respids);
-							makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
 
 						}
 
@@ -2625,7 +2578,7 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("info rid: " + respids);
-							makemoduleCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
 
 						}
 
@@ -2653,7 +2606,6 @@ public class NUserPage {
 					String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // the
 					System.out.println(Table_click + " this was clicked");
-					ModuleCatalogue modcat = new ModuleCatalogue();
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
@@ -2687,7 +2639,7 @@ public class NUserPage {
 					System.out.println(Table_click);
 					System.out.println("---module id-- " + selected_module);
 					System.out.println("Change JPanel");
-					MaintainingModuleCatalogue maintainmodulecat = new MaintainingModuleCatalogue();
+
 					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 					ArrayList<MaintainingModule> allmaintainmodule;
 					allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
@@ -2714,7 +2666,6 @@ public class NUserPage {
 		module_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				ModuleCatalogue mcat = new ModuleCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 
 				if (search_modulename.getText() != null && !search_modulename.getText().trim().equals(""))
@@ -2722,10 +2673,10 @@ public class NUserPage {
 				if (search_moduleduration.getText() != null && !search_moduleduration.getText().trim().equals(""))
 					searchVars.put("duration", "\'" + search_moduleduration.getText() + "\'");
 
-				if (mcat.SearchResource(searchVars).isEmpty()) {
+				if (modcat.SearchResource(searchVars).isEmpty()) {
 					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
 				} else {
-					module_tabledata.update(mcat.SearchResource(searchVars));
+					module_tabledata.update(modcat.SearchResource(searchVars));
 				}
 			}
 
@@ -2741,7 +2692,6 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				allmodules.clear();
-				ModuleCatalogue modcat = new ModuleCatalogue();
 				allmodules = modcat.readAllResources();
 
 				module_tabledata.update(modcat.readAllResources());
@@ -2847,13 +2797,12 @@ public class NUserPage {
 								.addComponent(btnViewMaintaning).addComponent(btnViewDetails))
 						.addContainerGap()));
 
-		module_tabledata = new TableData(new ModuleCatalogue(), "module");
+		module_tabledata = new TableData(modcat, "module");
 		module_scrollPane.setViewportView(module_tabledata.getJdataTable());
 		modulePanel.setLayout(gl_modulePanel_1);
 
 		// get phys res list
 
-		PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 		System.out.println("all : ");
 		allphysicals = physcat.readAllResources();
 
@@ -2873,24 +2822,20 @@ public class NUserPage {
 				final ArrayList<String> physicals = new ArrayList<String>();
 				final ArrayList<String> information = new ArrayList<String>();
 
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 				for (int i = 0; i < employe_readall.size(); i++) {
 					employees.add(employe_readall.get(i).toString());
 				}
-				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 				for (int i = 0; i < financial_readall.size(); i++) {
 					financials.add(financial_readall.get(i).toString());
 				}
 
-				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 				for (int i = 0; i < physical_readall.size(); i++) {
 					physicals.add(physical_readall.get(i).toString());
 				}
 
-				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 				for (int i = 0; i < information_readall.size(); i++) {
 					information.add(information_readall.get(i).toString());
@@ -2959,7 +2904,6 @@ public class NUserPage {
 							System.out.println(inputs.get(i) + "adasa");
 						}
 
-						MaintainingModuleCatalogue maintainmodulecat = new MaintainingModuleCatalogue();
 						// MaintainingModule maintainmod =
 						// maintainmodulecat.ge(selected_maintaining_module);
 
@@ -2979,7 +2923,6 @@ public class NUserPage {
 						maintaining_tabledata.update(data);
 
 						System.out.println("----------");
-						MaintainModEmpResCatalogue maintainmodempresCat = new MaintainModEmpResCatalogue();
 
 						final ArrayList<String> finanvales = checkBoxpane_financial.getCheckedValues();
 						System.out.println(finanvales);
@@ -3065,11 +3008,10 @@ public class NUserPage {
 					System.out.println(Table_click);
 					System.out.println("---maintian module id-- " + selected_module);
 
-					MaintainingModuleCatalogue maintainmodcat = new MaintainingModuleCatalogue();
-					maintainmodcat.deleteMaintainingModule(selected_maintaining_module);
+					maintainmodulecat.deleteMaintainingModule(selected_maintaining_module);
 					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 					ArrayList<MaintainingModule> allmaintainmodule;
-					allmaintainmodule = maintainmodcat.getMaintainingModules(selected_module);
+					allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
 					for (int i = 0; i < allmaintainmodule.size(); i++) {
 						data.add((allmaintainmodule.get(i).toHashMap()));
 					}
@@ -3091,24 +3033,20 @@ public class NUserPage {
 				final ArrayList<String> physicals = new ArrayList<String>();
 				final ArrayList<String> information = new ArrayList<String>();
 
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 				for (int i = 0; i < employe_readall.size(); i++) {
 					employees.add(employe_readall.get(i).toString());
 				}
-				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 				for (int i = 0; i < financial_readall.size(); i++) {
 					financials.add(financial_readall.get(i).toString());
 				}
 
-				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 				for (int i = 0; i < physical_readall.size(); i++) {
 					physicals.add(physical_readall.get(i).toString());
 				}
 
-				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 				for (int i = 0; i < information_readall.size(); i++) {
 					information.add(information_readall.get(i).toString());
@@ -3168,7 +3106,6 @@ public class NUserPage {
 							System.out.println(inputs.get(i) + "adasa");
 						}
 
-						MaintainingModuleCatalogue maintainmodulecat = new MaintainingModuleCatalogue();
 						long maintainmodpk = maintainmodulecat.addMaintainingModule(selected_module, inputs.get(0),
 								Integer.parseInt(inputs.get(1)));
 
@@ -3183,7 +3120,6 @@ public class NUserPage {
 						maintaining_tabledata.update(data);
 
 						System.out.println("----------");
-						MaintainModEmpResCatalogue maintainmodempresCat = new MaintainModEmpResCatalogue();
 
 						final ArrayList<String> finanvales = checkBoxpane_financial.getCheckedValues();
 						System.out.println(finanvales);
@@ -3312,7 +3248,7 @@ public class NUserPage {
 								.addComponent(maintaining_btnDelete).addComponent(btnBacktoModule))
 						.addContainerGap()));
 
-		maintaining_tabledata = new TableData(new MaintainingModuleCatalogue(), selected_module);
+		maintaining_tabledata = new TableData(maintainmodulecat, selected_module);
 		maintaining_scrollPane.setViewportView(maintaining_tabledata.getJdataTable());
 		maintaining_panel.setLayout(gl_maintaining_panel);
 
@@ -3327,7 +3263,6 @@ public class NUserPage {
 		human_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -3368,7 +3303,6 @@ public class NUserPage {
 									"Please Select an Employee!");
 						} else {
 
-							EmployeeCatalogue empcat = new EmployeeCatalogue();
 							System.out.println("all : ");
 							empcat.readAllEmployees();
 							ArrayList<String> inputs = new ArrayList<String>();
@@ -3425,13 +3359,12 @@ public class NUserPage {
 					String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // return
 					System.out.println(Table_click);
-					EmployeeCatalogue empcat_delete = new EmployeeCatalogue();
-					empcat_delete.deleteEmployee(Integer.parseInt(Table_click));
+					empcat.deleteEmployee(Integer.parseInt(Table_click));
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
-						allemployees = empcat_delete.readAllEmployees();
-						human_tabledata.update(empcat_delete.readAllEmployees());
+						allemployees = empcat.readAllEmployees();
+						human_tabledata.update(empcat.readAllEmployees());
 					}
 				}
 			}
@@ -3443,7 +3376,6 @@ public class NUserPage {
 		JButton human_btnSearch = new JButton("Search");
 		human_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 
 				if (search_humanname.getText() != null && !search_humanname.getText().trim().equals(""))
@@ -3469,7 +3401,6 @@ public class NUserPage {
 		search_humanbtnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				allemployees.clear();
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				human_tabledata.update(empcat.readAllEmployees());
 
 			}
@@ -3493,7 +3424,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -3527,7 +3457,6 @@ public class NUserPage {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						EmployeeCatalogue empcat = new EmployeeCatalogue();
 						System.out.println("all : ");
 						empcat.readAllEmployees();
 						ArrayList<String> inputs = new ArrayList<String>();
@@ -3627,7 +3556,6 @@ public class NUserPage {
 		btnAddPhysicalResource.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> section_arraylist = new ArrayList<String>();
-				SectionCatalogue seccat = new SectionCatalogue();
 				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 				for (int i = 0; i < section_hashmap.size(); i++) {
 					section_arraylist.add(section_hashmap.get(i).toString());
@@ -3661,7 +3589,6 @@ public class NUserPage {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 						System.out.println("all : ");
 						physcat.readAllResources();
 						ArrayList<String> inputs = new ArrayList<String>();
@@ -3713,7 +3640,6 @@ public class NUserPage {
 					System.out.println(Table_click + " this was clicked");
 
 					ArrayList<String> section_arraylist = new ArrayList<String>();
-					SectionCatalogue seccat = new SectionCatalogue();
 					ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 					for (int i = 0; i < section_hashmap.size(); i++) {
 						section_arraylist.add(section_hashmap.get(i).toString());
@@ -3743,7 +3669,6 @@ public class NUserPage {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub
-							PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 							System.out.println("all : ");
 							physcat.readAllResources();
 							ArrayList<String> inputs = new ArrayList<String>();
@@ -3794,7 +3719,6 @@ public class NUserPage {
 					String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // the
 					System.out.println(Table_click + " this was clicked");
-					PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
@@ -3812,7 +3736,6 @@ public class NUserPage {
 		physical_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 
 				if (search_physicalname.getText() != null && !search_physicalname.getText().trim().equals(""))
@@ -3844,7 +3767,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				allphysicals.clear();
-				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				allphysicals = physcat.readAllResources();
 
 				physical_tabledata.update(physcat.readAllResources());
@@ -3908,7 +3830,7 @@ public class NUserPage {
 								.addComponent(physical_btnDelete))
 						.addContainerGap()));
 
-		physical_tabledata = new TableData(new PhysicalResourceCatalogue(), "physical");
+		physical_tabledata = new TableData(physcat, "physical");
 		physical_scrollPane.setViewportView(physical_tabledata.getJdataTable());
 		physicalPanel.setLayout(gl_physicalPanel);
 
@@ -3916,7 +3838,6 @@ public class NUserPage {
 		resourcesTab.addTab("All", null, allPanel, null);
 
 		// get all res list
-		final ResourceCatalogue rcat = new ResourceCatalogue();
 
 		JScrollPane allres_scrollPane = new JScrollPane();
 
@@ -3940,7 +3861,7 @@ public class NUserPage {
 						.addGap(30).addComponent(allres_scrollPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
 						.addGap(30)));
 
-		allresource_tabledata = new TableData(new ResourceCatalogue(), "all");
+		allresource_tabledata = new TableData(rcat, "all");
 		allres_scrollPane.setViewportView(allresource_tabledata.getJdataTable());
 		allPanel.setLayout(gl_allPanel);
 
@@ -3961,24 +3882,20 @@ public class NUserPage {
 				final ArrayList<String> physicals = new ArrayList<String>();
 				final ArrayList<String> information = new ArrayList<String>();
 
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 				for (int i = 0; i < employe_readall.size(); i++) {
 					employees.add(employe_readall.get(i).toString());
 				}
-				FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 				for (int i = 0; i < financial_readall.size(); i++) {
 					financials.add(financial_readall.get(i).toString());
 				}
 
-				PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 				for (int i = 0; i < physical_readall.size(); i++) {
 					physicals.add(physical_readall.get(i).toString());
 				}
 
-				InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 				for (int i = 0; i < information_readall.size(); i++) {
 					information.add(information_readall.get(i).toString());
@@ -4042,7 +3959,6 @@ public class NUserPage {
 				submitaddprojectBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						ProjectCatalogue projcat = new ProjectCatalogue();
 						System.out.println("all : ");
 						projcat.getProjects();
 						ArrayList<String> inputs = new ArrayList<String>();
@@ -4064,7 +3980,6 @@ public class NUserPage {
 						System.out.println("empid: " + empid);
 						int employeeID = Integer.parseInt(empid.replace("empid=", ""));
 
-						EmployeeCatalogue empcat = new EmployeeCatalogue();
 						Employee proj_manager = empcat.getEmployee(employeeID);
 						System.out.println(proj_manager.getName());
 
@@ -4083,8 +3998,6 @@ public class NUserPage {
 						System.out.println(vales_phys.toString());
 
 						System.out.println("----------");
-						ProjectEmployeeCatalogue projempcat = new ProjectEmployeeCatalogue();
-						ProjectResourceUtilizationCatalogue projrescat = new ProjectResourceUtilizationCatalogue();
 
 						final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
 						System.out.println(finanvales);
@@ -4115,7 +4028,7 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("finan rid: " + respids);
-							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+							presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
 									(int) projid, "1111-11-1", "1111-11-1");
 
 						}
@@ -4127,7 +4040,7 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("phys rid: " + respids);
-							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+							presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
 									(int) projid, "1111-11-1", "1111-11-1");
 
 						}
@@ -4139,7 +4052,7 @@ public class NUserPage {
 								respids = m_res.group();
 							}
 							System.out.println("info rid: " + respids);
-							projrescat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+							presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
 									(int) projid, "1111-11-1", "1111-11-1");
 						}
 
@@ -4151,7 +4064,6 @@ public class NUserPage {
 		JButton project_btnSearch = new JButton("Search");
 		project_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ProjectCatalogue projcat = new ProjectCatalogue();
 				HashMap<String, String> searchVars = new HashMap<String, String>();
 
 				if (search_projectname.getText() != null && !search_projectname.getText().trim().equals(""))
@@ -4195,7 +4107,6 @@ public class NUserPage {
 					selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
 					System.out.println("-----");
 					System.out.println("Change JPanel");
-					SubSystemCatalogue subsyscat = new SubSystemCatalogue();
 					subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
 
 					int selected_index = tabbedPane.getSelectedIndex();
@@ -4232,7 +4143,6 @@ public class NUserPage {
 					selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
 					System.out.println("-----");
 					System.out.println("Change JPanel");
-					ProjectResourceUtilizationCatalogue presutilcat = new ProjectResourceUtilizationCatalogue();
 					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 					ArrayList<ProjectResourceUtilization> projresutil = presutilcat
 							.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
@@ -4256,7 +4166,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				// EDITPROJECT
 				ArrayList<Field> projectFields = new ArrayList<Field>();
-				EmployeeCatalogue empcat = new EmployeeCatalogue();
 				ArrayList<HashMap<String, String>> employees_fromcatalouge = empcat.readAllEmployees();
 				ArrayList<String> employees = new ArrayList<String>();
 
@@ -4318,7 +4227,6 @@ public class NUserPage {
 							selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
 							System.out.println("-----");
 
-							ProjectCatalogue projcat = new ProjectCatalogue();
 							Project project = projcat.getProject(selected_project_forsubsystem);
 							System.out.println("all : ");
 							projcat.getProjects();
@@ -4331,7 +4239,6 @@ public class NUserPage {
 								System.out.println(inputs.get(i) + " project");
 							}
 							int employeeID = Integer.parseInt((inputs.get(3).substring(0, 4).replace("id:", "")));
-							EmployeeCatalogue empcat = new EmployeeCatalogue();
 							Employee proj_manager = empcat.getEmployee(employeeID);
 							System.out.println(proj_manager.getName());
 							final ArrayList<String> vales_phys = checkBoxpane.getCheckedValues();
@@ -4369,7 +4276,6 @@ public class NUserPage {
 
 					String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // return
-					ProjectCatalogue projcat = new ProjectCatalogue();
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
@@ -4402,7 +4308,6 @@ public class NUserPage {
 
 		project_btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ProjectCatalogue projcat = new ProjectCatalogue();
 				project_tabledata.update(projcat.getProjects());
 
 			}
@@ -4474,7 +4379,7 @@ public class NUserPage {
 						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE).addComponent(addprojectBtn)
 								.addComponent(viewsubsys_Btn).addComponent(btnViewResources)
 								.addComponent(btnEditProject).addComponent(btnDeleteProject))));
-		project_tabledata = new TableData(new ProjectCatalogue());
+		project_tabledata = new TableData(projcat);
 
 		project_tabledata.getJdataTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -4541,7 +4446,6 @@ public class NUserPage {
 
 				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
 							resourceCombo.removeAllItems();
-							EmployeeCatalogue empcat = new EmployeeCatalogue();
 							ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 							for (int i = 0; i < employee_resource.size(); i++) {
 								resourceCombo.addItem(employee_resource.get(i).toString());
@@ -4559,8 +4463,6 @@ public class NUserPage {
 								empid = emp_m.group();
 							}
 							System.out.println("empid: " + empid);
-							EmployeeCatalogue empcat = new EmployeeCatalogue();
-							ProjectEmployeeCatalogue projempcat = new ProjectEmployeeCatalogue();
 							projempcat
 									.getCirculationReport(
 											empcat.getEmployee(Integer.parseInt(empid.replace("empid=", ""))))
@@ -4656,7 +4558,6 @@ public class NUserPage {
 						// TODO Auto-generated method stub
 						if (resource_type.getSelectedItem().toString().equals("Financial")) {
 							resourceCombo.removeAllItems();
-							FinancialResourceCatalogue financat = new FinancialResourceCatalogue();
 							ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
 							for (int i = 0; i < financial_resource.size(); i++) {
 								resourceCombo.addItem(financial_resource.get(i).toString());
@@ -4664,7 +4565,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Physical")) {
 							resourceCombo.removeAllItems();
-							PhysicalResourceCatalogue physcat = new PhysicalResourceCatalogue();
 							ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
 							for (int i = 0; i < physical_resource.size(); i++) {
 								resourceCombo.addItem(physical_resource.get(i).toString());
@@ -4673,7 +4573,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Information")) {
 							resourceCombo.removeAllItems();
-							InformationResourceCatalogue infocat = new InformationResourceCatalogue();
 							ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
 							for (int i = 0; i < information_resource.size(); i++) {
 								resourceCombo.addItem(information_resource.get(i).toString());
@@ -4682,7 +4581,6 @@ public class NUserPage {
 						}
 						if (resource_type.getSelectedItem().toString().equals("Module")) {
 							resourceCombo.removeAllItems();
-							ModuleCatalogue modcat = new ModuleCatalogue();
 							ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
 							for (int i = 0; i < module_resource.size(); i++) {
 								resourceCombo.addItem(module_resource.get(i).toString());
@@ -4705,15 +4603,13 @@ public class NUserPage {
 							}
 							System.out.println("rid: " + rid);
 
-							ProjectResourceUtilizationCatalogue prucat = new ProjectResourceUtilizationCatalogue();
-							PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
 							System.out.println("This is the Project Resource Utilization Report:");
-							prucat.getCirculationReport(
-									physResCat.getResource(Integer.parseInt(rid.replace("rid=", "")))).printRep();
+							presutilcat.getCirculationReport(
+									physcat.getResource(Integer.parseInt(rid.replace("rid=", "")))).printRep();
 
-							circulation_tabledata.update(prucat
+							circulation_tabledata.update(presutilcat
 									.getCirculationReport(
-											physResCat.getResource(Integer.parseInt(rid.replace("rid=", ""))))
+											physcat.getResource(Integer.parseInt(rid.replace("rid=", ""))))
 									.getResults());
 
 					}
@@ -4753,7 +4649,6 @@ public class NUserPage {
 
 				ArrayList<String> project_arraylist = new ArrayList<String>();
 
-				ProjectCatalogue projcat = new ProjectCatalogue();
 				ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
 				for (int i = 0; i < project_hashmap.size(); i++) {
 					project_arraylist.add(project_hashmap.get(i).toString());
@@ -4790,16 +4685,14 @@ public class NUserPage {
 						}
 						System.out.println(projectCombo.getSelectedItem() + " ino select");
 
-						ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
-						ProjectCatalogue projCat = new ProjectCatalogue();
 						Pattern p = Pattern.compile("projid=\\d+");
 						Matcher m = p.matcher(projectCombo.getSelectedItem().toString());
 						if (m.find()) {
 							System.out.println(m.group().replace("projid=", ""));
 							int projid = Integer.parseInt(m.group().replace("projid=", ""));
-							Project proj = projCat.getProject(projid);
-							resReqCat.getReport(proj).getResults();
-							resreq_tabledata.update(resReqCat.getReport(proj).getResults());
+							Project proj = projcat.getProject(projid);
+							resreqcat.getReport(proj).getResults();
+							resreq_tabledata.update(resreqcat.getReport(proj).getResults());
 
 						}
 
@@ -4875,37 +4768,32 @@ public class NUserPage {
 						// finanResCat.getReport().printRep();
 						//
 						if (resourceRepCombo.getSelectedItem().toString().equals("Financial")) {
-							FinancialResourceCatalogue finanResCat = new FinancialResourceCatalogue();
 							// System.out.println(finanResCat.getReport().getResults());
-							resavail_tabledata.update(finanResCat.getReport().getResults(),
+							resavail_tabledata.update(financat.getReport().getResults(),
 									new String[] { "sid", "count", "finanname" });
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Physical")) {
 							// HERE
-							PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
 							// System.out.println(physResCat.getReport().getResults());
-							resavail_tabledata.update(physResCat.getReport().getResults(),
+							resavail_tabledata.update(physcat.getReport().getResults(),
 									new String[] { "sid", "count", "physname" });
 
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Information")) {
-							InformationResourceCatalogue infoResCat = new InformationResourceCatalogue();
 							// System.out.println(infoResCat.getReport().getResults());
-							resavail_tabledata.update(infoResCat.getReport().getResults(),
+							resavail_tabledata.update(infocat.getReport().getResults(),
 									new String[] { "sid", "count", "irname" });
 
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Employee")) {
-							EmployeeCatalogue empResCat = new EmployeeCatalogue();
-							System.out.println(empResCat.getReport().getResults());
-							resavail_tabledata.update(empResCat.getReport().getResults(),
+							System.out.println(empcat.getReport().getResults());
+							resavail_tabledata.update(empcat.getReport().getResults(),
 									new String[] { "sid", "count", "empname" });
 
 						}
 						if (resourceRepCombo.getSelectedItem().toString().equals("Module")) {
-							ModuleCatalogue modResCat = new ModuleCatalogue();
 							// System.out.println(modResCat.getReport().getResults());
-							resavail_tabledata.update(modResCat.getReport().getResults(),
+							resavail_tabledata.update(modcat.getReport().getResults(),
 									new String[] { "sid", "count", "modname" });
 
 						}
@@ -4960,9 +4848,8 @@ public class NUserPage {
 					String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString());
 					System.out.println(Table_click);
-					EmployeeCatalogue regempcat = new EmployeeCatalogue();
-					regempcat.makeDecision(Integer.parseInt(Table_click), true);
-					registered_tabledata.update(regempcat.getRegistrations());
+					empcat.makeDecision(Integer.parseInt(Table_click), true);
+					registered_tabledata.update(empcat.getRegistrations());
 				}
 			}
 		});
@@ -4988,9 +4875,8 @@ public class NUserPage {
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Deny this user?");
 					if (myDialog.getAnswer()) {
-						EmployeeCatalogue regempcat = new EmployeeCatalogue();
-						regempcat.makeDecision(Integer.parseInt(Table_click), false);
-						registered_tabledata.update(regempcat.getRegistrations());
+						empcat.makeDecision(Integer.parseInt(Table_click), false);
+						registered_tabledata.update(empcat.getRegistrations());
 					}
 				}
 			}
@@ -5037,7 +4923,7 @@ public class NUserPage {
 								.addComponent(btnConfirm).addComponent(btnDeny))
 						.addContainerGap()));
 
-		registered_tabledata = new TableData(new EmployeeCatalogue(), "registered");
+		registered_tabledata = new TableData(empcat, "registered");
 
 		registered_scrollPane.setViewportView(registered_tabledata.getJdataTable());
 		RegisteredUserspanel.setLayout(gl_RegisteredUserspanel);
