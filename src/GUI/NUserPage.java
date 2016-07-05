@@ -682,12 +682,10 @@ public class NUserPage {
 				resource_types.add("Employee");
 				resource_types.add("Module");
 				ArrayList<Field> resutil_Fields = new ArrayList<Field>();
-				Field reqname = new Field("text", "req name       ", "", 10, "name");
 				Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
 				Field req_res = new Field("comboBox", "resources", resources, 20, "items");
 				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 
-				resutil_Fields.add(reqname);
 				resutil_Fields.add(req_res_type);
 				resutil_Fields.add(req_res);
 				resutil_Fields.add(sections);
@@ -729,9 +727,9 @@ public class NUserPage {
 				Add_ResUtilPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				Add_ResUtilPage.pack();
 				Add_ResUtilPage.setVisible(true);
-				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(1);
-				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(2);
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(3);
+				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(0);
+				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(1);
+				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(2);
 
 				final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
 				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
