@@ -1053,11 +1053,6 @@ public class NUserPage {
 		JScrollPane module_detail_scrollPane = new JScrollPane();
 		module_detail_scrollPane.setViewportView(moduledetail_tabledata.getJdataTable());
 
-		
-		JButton moduledetail_btnEdit = new JButton("Edit");
-		moduledetail_btnEdit.setIcon(new ImageIcon(
-				new ImageIcon("images/edit.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
-
 		JButton moduledetail_btnDelete = new JButton("Delete");
 		moduledetail_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
@@ -1084,6 +1079,170 @@ public class NUserPage {
 		JScrollPane module_detailemployee_scrollPane = new JScrollPane();
 		moduledetailemployee_tabledata = new TableData(makemodulecat, "Employee");
 		module_detailemployee_scrollPane.setViewportView(moduledetailemployee_tabledata.getJdataTable());
+		
+		JButton btnAddModuleUtilization = new JButton("Add Module Utilization");
+		btnAddModuleUtilization.setIcon(new ImageIcon(
+				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		btnAddModuleUtilization.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final ArrayList<String> employees = new ArrayList<String>();
+				final ArrayList<String> financials = new ArrayList<String>();
+				final ArrayList<String> physicals = new ArrayList<String>();
+				final ArrayList<String> information = new ArrayList<String>();
+
+				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+				for (int i = 0; i < employe_readall.size(); i++) {
+					employees.add(employe_readall.get(i).toString());
+				}
+				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+				for (int i = 0; i < financial_readall.size(); i++) {
+					financials.add(financial_readall.get(i).toString());
+				}
+
+				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+				for (int i = 0; i < physical_readall.size(); i++) {
+					physicals.add(physical_readall.get(i).toString());
+				}
+
+				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+				for (int i = 0; i < information_readall.size(); i++) {
+					information.add(information_readall.get(i).toString());
+				}
+
+				ArrayList<Field> moduleutilFields = new ArrayList<Field>();
+
+				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+				Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+				moduleutilFields.add(financial_check);
+				moduleutilFields.add(physical_check);
+				moduleutilFields.add(information_check);
+				moduleutilFields.add(maintainers);
+
+				final Form moduleutilForm = new Form(moduleutilFields, "Module Form");
+				final PanelBuilder moduleutilPanel = new PanelBuilder(moduleutilForm);
+				moduleutilPanel.makeForm();
+
+				JFrame AddModuleUtilizationPage = new JFrame("Add Module Utilization Form");
+				AddModuleUtilizationPage.getContentPane().add(moduleutilForm.getJPanel(), BorderLayout.NORTH);
+				JScrollPane scroll = new JScrollPane(moduleutilForm.getJPanel());
+				AddModuleUtilizationPage.getContentPane().add(scroll);
+
+				JButton submitaddmoduleutilBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddmoduleutilBtn);
+				AddModuleUtilizationPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				AddModuleUtilizationPage.pack();
+				AddModuleUtilizationPage.setVisible(true);
+
+
+				final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(0);
+				final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(1);
+				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(2);
+				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(3);
+
+				submitaddmoduleutilBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println("all : ");
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < moduleutilForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) moduleutilForm.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + "adasa");
+						}
+
+						//
+						System.out.println("----------");
+
+						final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
+						System.out.println(finanvales);
+						final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
+						System.out.println(physicalvales);
+						final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+						System.out.println(informationvales);
+						final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
+						System.out.println(employeevales);
+						Pattern emp = Pattern.compile("empid=\\d+");
+						for (int i = 0; i < employeevales.size(); i++) {
+							String empids = null;
+							Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+							if (m_emp.find()) {
+								empids = m_emp.group();
+							}
+							System.out.println("empids: " + empids);
+							makemodulecat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_module);
+
+						}
+
+						Pattern res = Pattern.compile("rid=\\d+");
+						for (int i = 0; i < finanvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(finanvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("finan rid: " + respids);
+							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+
+						}
+
+						for (int i = 0; i < physicalvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(physicalvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("phys rid: " + respids);
+							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+
+						}
+
+						for (int i = 0; i < informationvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(informationvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("info rid: " + respids);
+							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+
+						}
+						
+						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+						ArrayList<Employee> allemp;
+						allemp = makemodulecat.getEmployees(selected_module);
+						for (int i = 0; i < allemp.size(); i++) {
+							HashMap<String,String> emps = new HashMap<String,String>();
+							emps.put("empid", allemp.get(i).getId()+"");
+							emps.put("empname", allemp.get(i).getName());
+							data.add(emps);
+						}
+						ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+						ArrayList<Resource> allres;
+						allres = makemodulecat.getResources(selected_module);
+						for (int i = 0; i < allres.size(); i++) {
+							HashMap<String,String> ress = new HashMap<String,String>();
+							ress.put("rid", allres.get(i).getId()+"");
+							ress.put("rname", allres.get(i).getName());
+							resdata.add(ress);
+						}
+						
+						moduledetail_tabledata.update(resdata);
+						moduledetailemployee_tabledata.update(data);
+						
+
+					}
+				});
+			}
+		});
 
 
 
@@ -1091,12 +1250,13 @@ public class NUserPage {
 		gl_moduledetailpanel.setHorizontalGroup(
 			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
-					.addComponent(moduledetail_btnEdit)
-					.addGap(30)
+					.addContainerGap()
 					.addComponent(moduledetail_btnDelete)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(moduledetail_btnBack)
-					.addContainerGap(635, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED, 572, Short.MAX_VALUE)
+					.addComponent(btnAddModuleUtilization)
+					.addContainerGap())
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
 					.addGap(30)
 					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
@@ -1108,14 +1268,14 @@ public class NUserPage {
 			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
 					.addGap(20)
-					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
 					.addGap(30)
-					.addComponent(module_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+					.addComponent(module_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
 					.addGap(30)
 					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(moduledetail_btnEdit)
 						.addComponent(moduledetail_btnDelete)
-						.addComponent(moduledetail_btnBack))
+						.addComponent(moduledetail_btnBack)
+						.addComponent(btnAddModuleUtilization))
 					.addContainerGap())
 		);
 		moduledetailpanel.setLayout(gl_moduledetailpanel);
