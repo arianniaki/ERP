@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
@@ -15,6 +16,8 @@ import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.Resource.MaintainingModule;
 import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
+import ResourceManagement.Section.Resource.MakeModuleCatalogue;
+import ResourceManagement.Section.Resource.Resource;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 public class TableData {
@@ -114,16 +117,16 @@ public class TableData {
 	
 	public TableData(SubSystemCatalogue subsyscat) {
 		data = subsyscat.getSubSystems();
-		columns = new String[] { "Subsystem Id","Project Id", "Name","Sectionid"};
-		dbnames = new String[] { "subid","pid", "sname","sid"};
+		columns = new String[] { "Subsystem Id","Project Id", "Name","Sectionid","Sectionname"};
+		dbnames = new String[] { "subid","pid", "sname","sid","sectionname"};
 		this.buildFilledJTable();
 
 	}
 	public TableData(ProjectResourceUtilizationCatalogue presutilcat) {
 		
 		data= new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "presutilid","rid", "sid", "pid","fromdate","todate" };
-		dbnames = new String[] { "presutilid","rid", "sid", "pid","fromdate","todate"};
+		columns = new String[] { "presutilid","rid","resourceName", "sid", "sectionName","pid","projectName","fromdate","todate" };
+		dbnames = new String[] { "presutilid","rid","resourceName", "sid", "sectionName","pid","projectName","fromdate","todate" };
 		ArrayList<ProjectResourceUtilization> allpresutil;
 		allpresutil = presutilcat.getProjectResourceUtilizations();
 		for (int i = 0; i < allpresutil.size(); i++) {
@@ -145,11 +148,8 @@ public class TableData {
 			data.add((allmaintainmod.get(i).toHashMap()));
 		}
 		this.buildFilledJTable();
-
-		
-		this.buildFilledJTable();
-
 	}
+	
 	public TableData(ResourceRequirementCatalogue resreqcat) {
 		data= new ArrayList<HashMap<String, String>>();
 		columns = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate","projectName","sectionName","resourceName","is_satisfied","satisfydate" };
@@ -191,6 +191,43 @@ public class TableData {
 		this.buildFilledJTable();
 
 	}
+	public TableData(MakeModuleCatalogue makemodulecat, String type,int modrid) {
+		// TODO Auto-generated constructor stub
+		System.out.println("tpyei n ---------"+ type);
+		data = new ArrayList<HashMap<String, String>>();
+		if(type.equals("Employee")){
+			ArrayList<Employee> allemp;
+			allemp = makemodulecat.getEmployees(modrid);
+			for (int i = 0; i < allemp.size(); i++) {
+				HashMap<String,String> emps = new HashMap<String,String>();
+				emps.put("empname", allemp.get(i).getName());
+				data.add(emps);
+			}
+			columns = new String[] { "Employee Name"};
+			dbnames = new String[] { "empname"};	
+			
+			this.buildFilledJTable();
+
+		}
+		if(type.equals("Resource"))
+		{
+			ArrayList<Resource> allres;
+			allres = makemodulecat.getResources(modrid);
+			System.out.println(allres+" NEGAAARRR");
+			for (int i = 0; i < allres.size(); i++) {
+				HashMap<String,String> res = new HashMap<String,String>();
+				res.put("rname", allres.get(i).getName());
+				data.add(res);
+			}
+			System.out.println("WHAT HAS HAPPEND + "+data);
+			columns = new String[] { "Resource Name"};
+			dbnames = new String[] { "rname"};
+			
+			this.buildFilledJTable();
+
+		}
+	}
+
 	public JTable buildFilledJTable() {
 
 		dataTableModel = new DefaultTableModel(columns, 0) {
