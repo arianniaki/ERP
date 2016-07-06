@@ -193,26 +193,39 @@ public class TableData {
 	}
 	public TableData(MakeModuleCatalogue makemodulecat, String type,int modrid) {
 		// TODO Auto-generated constructor stub
+		System.out.println("tpyei n ---------"+ type);
+		data = new ArrayList<HashMap<String, String>>();
 		if(type.equals("Employee")){
 			ArrayList<Employee> allemp;
 			allemp = makemodulecat.getEmployees(modrid);
-//			for (int i = 0; i < allemp.size(); i++) {
-//				data.add((allemp.get(i)));
-//			}
-			columns = new String[] { "Subsystem Id","Project Id", "Name","Sectionid","Sectionname"};
-			dbnames = new String[] { "subid","pid", "sname","sid","sectionname"};	
+			for (int i = 0; i < allemp.size(); i++) {
+				HashMap<String,String> emps = new HashMap<String,String>();
+				emps.put("empname", allemp.get(i).getName());
+				data.add(emps);
+			}
+			columns = new String[] { "Employee Name"};
+			dbnames = new String[] { "empname"};	
+			
+			this.buildFilledJTable();
+
 		}
-		else
+		if(type.equals("Resource"))
 		{
 			ArrayList<Resource> allres;
 			allres = makemodulecat.getResources(modrid);
-//			for (int i = 0; i < allres.size(); i++) {
-//				data.add((allres.get(i)));
-//			}
-			columns = new String[] { "Subsystem Id","Project Id", "Name","Sectionid","Sectionname"};
-			dbnames = new String[] { "subid","pid", "sname","sid","sectionname"};
-		}
+			System.out.println(allres+" NEGAAARRR");
+			for (int i = 0; i < allres.size(); i++) {
+				HashMap<String,String> res = new HashMap<String,String>();
+				res.put("rname", allres.get(i).getName());
+				data.add(res);
+			}
+			System.out.println("WHAT HAS HAPPEND + "+data);
+			columns = new String[] { "Resource Name"};
+			dbnames = new String[] { "rname"};
+			
+			this.buildFilledJTable();
 
+		}
 	}
 
 	public JTable buildFilledJTable() {

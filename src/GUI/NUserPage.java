@@ -60,6 +60,7 @@ import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.MakeModuleCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
 import ResourceManagement.Section.Resource.PhysicalResourceCatalogue;
+import ResourceManagement.Section.Resource.Resource;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 import com.jgoodies.forms.layout.FormSpecs;
@@ -1041,10 +1042,11 @@ public class NUserPage {
 		resourcesTab.addTab("Module Detail", null, moduledetailpanel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
 
-		 moduledetail_tabledata = new TableData(new MakeModuleCatalogue(),"Resource",selected_module);
-
+		moduledetail_tabledata = new TableData(new MakeModuleCatalogue(),"Resource",selected_module);
 		JScrollPane module_detail_scrollPane = new JScrollPane();
+		module_detail_scrollPane.setViewportView(moduledetail_tabledata.getJdataTable());
 
+		
 		JButton moduledetail_btnEdit = new JButton("Edit");
 		moduledetail_btnEdit.setIcon(new ImageIcon(
 				new ImageIcon("images/edit.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
@@ -1070,35 +1072,39 @@ public class NUserPage {
 		});
 		
 		
+		
+		
 		JScrollPane module_detailemployee_scrollPane = new JScrollPane();
 		moduledetailemployee_tabledata = new TableData(makemodulecat, "Employee",selected_module);
+		module_detailemployee_scrollPane.setViewportView(moduledetailemployee_tabledata.getJdataTable());
+
+
 
 		GroupLayout gl_moduledetailpanel = new GroupLayout(moduledetailpanel);
 		gl_moduledetailpanel.setHorizontalGroup(
 			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
-					.addGap(30)
-					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-					.addGap(30))
-				.addGroup(gl_moduledetailpanel.createSequentialGroup()
 					.addComponent(moduledetail_btnEdit)
+					.addGap(30)
+					.addComponent(moduledetail_btnDelete)
 					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(moduledetail_btnBack)
+					.addContainerGap(635, Short.MAX_VALUE))
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addGap(30)
 					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(module_detailemployee_scrollPane, GroupLayout.PREFERRED_SIZE, 240, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_moduledetailpanel.createSequentialGroup()
-							.addComponent(moduledetail_btnDelete)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(moduledetail_btnBack)))
-					.addContainerGap(514, Short.MAX_VALUE))
+						.addComponent(module_detailemployee_scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+						.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
+					.addGap(30))
 		);
 		gl_moduledetailpanel.setVerticalGroup(
 			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addGap(20)
+					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
 					.addGap(30)
-					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
-					.addGap(18)
-					.addComponent(module_detailemployee_scrollPane, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
-					.addGap(60)
+					.addComponent(module_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+					.addGap(30)
 					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(moduledetail_btnEdit)
 						.addComponent(moduledetail_btnDelete)
@@ -1411,21 +1417,34 @@ public class NUserPage {
 					System.out.println(Table_click);
 					System.out.println("---module id-- " + selected_module);
 					System.out.println("Change JPanel");
-					// MaintainingModuleCatalogue maintainmodulecat = new
-					// MaintainingModuleCatalogue();
-					// ArrayList<HashMap<String, String>> data = new
-					// ArrayList<HashMap<String, String>>();
-					// ArrayList<MaintainingModule> allmaintainmodule;
-					// allmaintainmodule =
-					// maintainmodulecat.getMaintainingModules(selected_module);
-					// for (int i = 0; i < allmaintainmodule.size(); i++) {
-					// data.add((allmaintainmodule.get(i).toHashMap()));
-					// }
-					// System.out.println("DATA");
-					// System.out.println(data);
-					//
-					// maintaining_tabledata.update(data);
-					//
+
+					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+					ArrayList<Employee> allemp;
+					allemp = makemodulecat.getEmployees(selected_module);
+					for (int i = 0; i < allemp.size(); i++) {
+						HashMap<String,String> emps = new HashMap<String,String>();
+						emps.put("empname", allemp.get(i).getName());
+						data.add(emps);
+					}
+					System.out.println("motie was here ");
+					System.out.println(data);
+
+					
+					ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+					ArrayList<Resource> allres;
+					allres = makemodulecat.getResources(selected_module);
+					for (int i = 0; i < allres.size(); i++) {
+						HashMap<String,String> ress = new HashMap<String,String>();
+						ress.put("rname", allres.get(i).getName());
+						resdata.add(ress);
+					}
+					System.out.println("res here ");
+					System.out.println(resdata);
+					
+					
+					moduledetail_tabledata.update(resdata);
+					moduledetailemployee_tabledata.update(data);
+					
 					int selected_index = resourcesTab.getSelectedIndex();
 					resourcesTab.remove(selected_index);
 					resourcesTab.insertTab("Module Detail", null, moduledetailpanel, null, selected_index);
