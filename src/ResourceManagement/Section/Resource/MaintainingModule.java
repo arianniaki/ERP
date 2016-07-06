@@ -17,7 +17,7 @@ public class MaintainingModule {
 		this.module = module;
 		this.changeType = changeType;
 		this.duration = duration;
-		DB = new DataBase();
+		DB = DB.getInstance();
 	}
 	
 	public void edit(String changeType, int duration){
@@ -46,6 +46,15 @@ public class MaintainingModule {
 		mm.put("changetype", this.changeType);
 		mm.put("duration",Integer.toString(this.duration));
 		return mm;
+	}
+	public void edit(String changeType,Integer duration){
+		this.changeType = changeType;
+		this.duration = duration;
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("changetype", "\'"+changeType+"\'");
+		setVars.put("duration", Integer.toString(duration));
+		submitToDB(setVars);
+
 	}
 
 }

@@ -45,6 +45,7 @@ import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.ProjectEmployeeCatalogue;
+import ProjectEmployee.SubSystem.SubSystem;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import RequirementUtilization.ProjectResourceUtilization;
 import RequirementUtilization.ProjectResourceUtilizationCatalogue;
@@ -59,6 +60,7 @@ import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.MakeModuleCatalogue;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
 import ResourceManagement.Section.Resource.PhysicalResourceCatalogue;
+import ResourceManagement.Section.Resource.Resource;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 import com.jgoodies.forms.layout.FormSpecs;
@@ -126,6 +128,7 @@ public class NUserPage {
 	private TableData subsystem_tabledata;
 	private TableData resourceutil_tabledata;
 	private TableData moduledetail_tabledata;
+	private  TableData moduledetailemployee_tabledata;
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
@@ -322,66 +325,7 @@ public class NUserPage {
 		btnAssignAccessright.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> accessrights_types = new ArrayList<String>();
-				accessrights_types.add("Default");
-				accessrights_types.add("Intermediate");
-				accessrights_types.add("Super");
-				ArrayList<Field> acessright_assignFields = new ArrayList<Field>();
-				Field access_right = new Field("comboBox", "accessrights", accessrights_types, 20, "items");
-
-				acessright_assignFields.add(access_right);
-
-				Form accessright_Form = new Form(acessright_assignFields, "AccessRight Form");
-				final PanelBuilder accessright_assignPanel = new PanelBuilder(accessright_Form);
-				accessright_assignPanel.makeForm();
-
-				JFrame Assign_AccessRightPage = new JFrame("Assign Access Right Form");
-				Assign_AccessRightPage.getContentPane().add(accessright_Form.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaccessrightassignmentBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaccessrightassignmentBtn);
-
-				Assign_AccessRightPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Assign_AccessRightPage.pack();
-				Assign_AccessRightPage.setVisible(true);
-				submitaccessrightassignmentBtn.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						System.out.println("-----");
-						int rowIndex = accessright_tabledata.getJdataTable().getSelectedRow();
-						int colIndex = accessright_tabledata.getJdataTable().getSelectedColumn();
-						if (rowIndex == -1) {
-							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-									"Please Select a User!");
-						} else {
-
-							String Table_click = (accessright_tabledata.getJdataTable().getModel()
-									.getValueAt(rowIndex, 0).toString());
-							System.out.println(Table_click);
-							Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
-							System.out.println(emp_access.getName() + " WHAT  " + selected_accessright_forassignment);
-							emp_access.setAccessRight(selected_accessright_forassignment);
-							System.out.println("ACCESS RIGHT O DADAM");
-							accessright_tabledata.update(empcat.readAllEmployees());
-						}
-					}
-				});
-
-				ComboBoxJPanel comboBoxpanel_accessright = (ComboBoxJPanel) accessright_Form.getJPanel()
-						.getComponent(0);
-				final JComboBox accessright_type = comboBoxpanel_accessright.getComboBox();
-
-				accessright_type.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println(accessright_type.getSelectedItem() + " ino select kardi access right "
-								+ accessright_type.getSelectedIndex());
-						selected_accessright_forassignment = accessright_type.getSelectedIndex() + 1;
-					}
-				});
+				assignAccessRight();
 			}
 		});
 
@@ -395,28 +339,7 @@ public class NUserPage {
 		JButton accessright_btnSearch = new JButton("Search");
 		accessright_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				HashMap<String, String> searchVars = new HashMap<String, String>();
-
-				System.out.println(search_accessrightname.getText()+" sssssssssssssssss");
-				if(search_accessrightname.getText().equals("default"))
-					searchVars.put("accessrightid", "\'" + 1 + "\'");
-
-				if(search_accessrightname.getText().equals("super"))
-					searchVars.put("accessrightid", "\'" + 3 + "\'");
-
-				if(search_accessrightname.getText().equals("intermediate"))
-					searchVars.put("accessrightid", "\'" + 2 + "\'");
-				System.out.println("ASDSADASDA");
-				System.out.println(searchVars);
-				
-				if (empcat.SearchEmployee(searchVars).isEmpty()) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-				} else {
-					accessright_tabledata.update(empcat.SearchEmployee(searchVars));
-				}
-
-				
-
+				searchAccessRight();
 			}
 		});
 		
@@ -427,7 +350,6 @@ public class NUserPage {
 		accessright_btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				accessright_tabledata.update(empcat.getConfirmedEmployees());
-
 			}
 		});
 
@@ -503,67 +425,7 @@ public class NUserPage {
 		addsubsystemBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
-				Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				subsystem_addFields.add(subsystem_name);
-				subsystem_addFields.add(subsystem_desc);
-				subsystem_addFields.add(sections);
-
-				final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
-				final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
-				subsystemAdd_Panel.makeForm();
-
-				JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
-				Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaddsubsystemBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddsubsystemBtn);
-				Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_SubsystemPage.pack();
-				Add_SubsystemPage.setVisible(true);
-
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) subsystem_Form.getJPanel().getComponent(2);
-
-				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
-
-				submitaddsubsystemBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " subsystem");
-						}
-						System.out.println(sections_combo.getSelectedItem() + " //////");
-						Pattern p = Pattern.compile("sid=\\d+");
-						String section = null;
-						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
-						if (m.find()) {
-							section = m.group();
-						}
-						System.out.println("sid: " + section);
-
-						subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem,
-								Integer.parseInt(section.replace("sid=", "")));
-						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
-						System.out.println("add shoood ");
-
-					}
-				});
-
+				addSubsystem();
 			}
 		});
 
@@ -573,53 +435,7 @@ public class NUserPage {
 
 		subsystem_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
-				Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				subsystem_addFields.add(subsystem_name);
-				subsystem_addFields.add(subsystem_desc);
-				subsystem_addFields.add(sections);
-
-				final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
-				final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
-				subsystemAdd_Panel.makeForm();
-
-				JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
-				Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaddsubsystemBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddsubsystemBtn);
-				Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_SubsystemPage.pack();
-				Add_SubsystemPage.setVisible(true);
-				submitaddsubsystemBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " subsystem");
-						}
-
-						// subsyscat.addSubSystem(inputs.get(0),
-						// selected_project_forsubsystem);
-						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
-						System.out.println("add shoood ");
-					}
-				});
-
+				editSubsystem();
 			}
 		});
 
@@ -629,23 +445,7 @@ public class NUserPage {
 
 		subsystem_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rowIndex = subsystem_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = subsystem_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Resource!");
-				} else {
-
-					String Table_click = (subsystem_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						subsyscat.deleteSubSystem(Integer.parseInt(Table_click));
-						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
-					}
-				}
+				deleteSubsystem();
 			}
 		});
 
@@ -657,40 +457,69 @@ public class NUserPage {
 		JButton subsystem_btnSearch = new JButton("Search");
 		subsystem_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				HashMap<String, String> searchVars = new HashMap<String, String>();
-//				searchVars.put("sname", "\'" + search_subsystemname.getText() + "\'");
-//				if (subsyscat.SearchResource(searchVars).isEmpty()) {
-//					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-//				} else {
-//					information_tabledata.update(infocat.SearchResource(searchVars));
-//				}
+				HashMap<String, String> searchVars = new HashMap<String, String>();
+				searchVars.put("sname", "\'" + search_subsystemname.getText() + "\'");
+				if (subsyscat.searchSubsystem(searchVars).isEmpty()) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+				} else {
+					subsystem_tabledata.update(subsyscat.searchSubsystem(searchVars));
+				}
+			}
+		});
+		
+		JButton subsystem_btnRefresh = new JButton("Refresh");
+		subsystem_btnRefresh.setIcon(new ImageIcon(
+				new ImageIcon("images/refresh.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		subsystem_btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
+
 			}
 		});
 		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
-		gl_subsystemPanel.setHorizontalGroup(gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addComponent(subsystem_btnEdit)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(subsystem_btnDelete)
-						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnBacktoProject)
-						.addPreferredGap(ComponentPlacement.RELATED, 551, Short.MAX_VALUE)
-						.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
-						.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE).addGap(40))
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addContainerGap(492, Short.MAX_VALUE)
-						.addComponent(subsystem_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(search_subsystemname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblSubsystemName).addContainerGap()));
-		gl_subsystemPanel.setVerticalGroup(gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(12)
-						.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblSubsystemName).addComponent(subsystem_btnSearch)
-								.addComponent(search_subsystemname, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(40).addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
-						.addGap(40)
-						.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(addsubsystemBtn).addComponent(subsystem_btnEdit)
-								.addComponent(subsystem_btnDelete).addComponent(btnBacktoProject))));
+		gl_subsystemPanel.setHorizontalGroup(
+			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addComponent(subsystem_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(subsystem_btnDelete)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnBacktoProject)
+					.addPreferredGap(ComponentPlacement.RELATED, 551, Short.MAX_VALUE)
+					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addComponent(subsystem_btnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 375, Short.MAX_VALUE)
+					.addComponent(subsystem_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_subsystemname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblSubsystemName)
+					.addContainerGap())
+		);
+		gl_subsystemPanel.setVerticalGroup(
+			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addGap(12)
+					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblSubsystemName)
+						.addComponent(subsystem_btnSearch)
+						.addComponent(search_subsystemname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(subsystem_btnRefresh))
+					.addGap(40)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+					.addGap(40)
+					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addsubsystemBtn)
+						.addComponent(subsystem_btnEdit)
+						.addComponent(subsystem_btnDelete)
+						.addComponent(btnBacktoProject)))
+		);
 
 		subsystem_tabledata = new TableData(subsyscat);
 		subsystem_scrollPane.setViewportView(subsystem_tabledata.getJdataTable());
@@ -719,191 +548,12 @@ public class NUserPage {
 		});
 
 		JButton btnAddResourceUtilization = new JButton("Add Resource Utilization");
-		btnAddResourceUtilization.setIcon(new ImageIcon(
-				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+		btnAddResourceUtilization.setIcon(new ImageIcon(new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
 		btnAddResourceUtilization.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				ArrayList<String> resource_types = new ArrayList<String>();
-				final ArrayList<String> resources = new ArrayList<String>();
-				resource_types.add("Information");
-				resource_types.add("Financial");
-				resource_types.add("Physical");
-				resource_types.add("Employee");
-				resource_types.add("Module");
-				ArrayList<Field> resutil_Fields = new ArrayList<Field>();
-				Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
-				Field req_res = new Field("comboBox", "resources", resources, 20, "items");
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				resutil_Fields.add(req_res_type);
-				resutil_Fields.add(req_res);
-				resutil_Fields.add(sections);
-
-				final Form resutil_Form = new Form(resutil_Fields, "Resource Utilization Form");
-				final PanelBuilder requirement_Panel = new PanelBuilder(resutil_Form);
-				requirement_Panel.makeForm();
-
-				JFrame Add_ResUtilPage = new JFrame("Add Resource Utilization Form");
-				Add_ResUtilPage.getContentPane().add(resutil_Form.getJPanel(), BorderLayout.NORTH);
-
-				// adding date
-				UtilDateModel modelfor = new UtilDateModel();
-				UtilDateModel modelto = new UtilDateModel();
-
-				Properties p = new Properties();
-				p.put("text.today", "Today");
-				p.put("text.month", "Month");
-				p.put("text.year", "Year");
-				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
-				JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
-				JLabel from = new JLabel("From");
-				JLabel to = new JLabel("To");
-				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
-				final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
-
-				JPanel date_panel = new JPanel(new FlowLayout());
-				date_panel.add(from);
-
-				date_panel.add(from_datePanel);
-				date_panel.add(to);
-				date_panel.add(to_datePanel);
-				Add_ResUtilPage.getContentPane().add(date_panel, BorderLayout.CENTER);
-				// end date
-
-				JButton submitaddresutilBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddresutilBtn);
-				Add_ResUtilPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_ResUtilPage.pack();
-				Add_ResUtilPage.setVisible(true);
-				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(0);
-				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(1);
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(2);
-
-				final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
-				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
-				final JComboBox sectionCombo = comboBoxpane_sections.getComboBox();
-
-				resourceCombo.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						// System.out.println(resourceCombo.getSelectedItem() +
-						// " ino select kardi az resource");
-						// System.out.println(sectionCombo.getSelectedItem() + "
-						// ino select kardi section");
-						// System.out.println(projectCombo.getSelectedItem() + "
-						// ino select kardi proje");
-						// System.out.println(from_datePicker.getJFormattedTextField().getText()
-						// + " from date");
-						// System.out.println(to_datePicker.getJFormattedTextField().getText()
-						// + " to date");
-						//
-						System.out.println(from_datePicker.getJFormattedTextField().getText() + " from date");
-						System.out.println(to_datePicker.getJFormattedTextField().getText() + " to date");
-
-					}
-				});
-
-				resource_type.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						if (resource_type.getSelectedItem().toString().equals("Financial")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
-							for (int i = 0; i < financial_resource.size(); i++) {
-								resourceCombo.addItem(financial_resource.get(i).toString());
-							}
-						}
-						if (resource_type.getSelectedItem().toString().equals("Physical")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
-							for (int i = 0; i < physical_resource.size(); i++) {
-								resourceCombo.addItem(physical_resource.get(i).toString());
-							}
-
-						}
-						if (resource_type.getSelectedItem().toString().equals("Information")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
-							for (int i = 0; i < information_resource.size(); i++) {
-								resourceCombo.addItem(information_resource.get(i).toString());
-							}
-
-						}
-						if (resource_type.getSelectedItem().toString().equals("Employee")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
-							for (int i = 0; i < employee_resource.size(); i++) {
-								resourceCombo.addItem(employee_resource.get(i).toString());
-							}
-						}
-						if (resource_type.getSelectedItem().toString().equals("Module")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
-							for (int i = 0; i < module_resource.size(); i++) {
-								resourceCombo.addItem(module_resource.get(i).toString());
-							}
-						}
-					}
-				});
-				submitaddresutilBtn.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						for (int i = 0; i < resutil_Form.getJPanel().getComponentCount(); i++) {
-							// System.out.println(fpanel.selected_Choice);
-						}
-						System.out.println("all : ");
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < resutil_Form.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) resutil_Form.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						String rid = "";
-						Pattern p = Pattern.compile("rid=\\d+");
-						Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
-						if (m.find()) {
-							rid = m.group();
-						}
-						String sid = "";
-						Pattern p1 = Pattern.compile("sid=\\d+");
-						Matcher m1 = p1.matcher((CharSequence) sectionCombo.getSelectedItem());
-						if (m1.find()) {
-							sid = m1.group();
-						}
-
-						String fromdate = from_datePicker.getJFormattedTextField().getText();
-						String todate = to_datePicker.getJFormattedTextField().getText();
-
-						System.out.println("--------------");
-						System.out.println(rid + " " + sid + " " + fromdate + " " + todate);
-
-						presutilcat.addProjectResourceUtilization(Integer.parseInt(rid.replace("rid=", "")),
-								Integer.parseInt(sid.replace("sid=", "")), selected_project_forsubsystem, fromdate,
-								todate);
-
-						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-						ArrayList<ProjectResourceUtilization> allpresutil;
-						allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
-						for (int i = 0; i < allpresutil.size(); i++) {
-							data.add((allpresutil.get(i).toHashMap()));
-						}
-						resourceutil_tabledata.update(data);
-
-					}
-				});
+				addResourceUtilization();
 			}
-
 		});
 
 		JButton presutil_btnEdit = new JButton("Edit");
@@ -913,106 +563,14 @@ public class NUserPage {
 		presutil_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				int rowIndex = resourceutil_tabledata.getJdataTable().getSelectedRow();
-
-				String Table_click = (resourceutil_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-						.toString()); // return
-				selected_resource_util = Integer.parseInt(Table_click.trim());
-
-				System.out.println(Table_click);
-				System.out.println("---resource util id-- " + selected_resource_util);
-
-
-				JFrame Edit_ResUtilPage = new JFrame("Edit Resource Utilization Form");
-
-				// adding date
-				UtilDateModel modelfor = new UtilDateModel();
-				UtilDateModel modelto = new UtilDateModel();
-
-				Properties p = new Properties();
-				p.put("text.today", "Today");
-				p.put("text.month", "Month");
-				p.put("text.year", "Year");
-				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
-				JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
-				JLabel from = new JLabel("From");
-				JLabel to = new JLabel("To");
-				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
-				final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
-
-				JPanel date_panel = new JPanel(new FlowLayout());
-				date_panel.add(from);
-
-				date_panel.add(from_datePanel);
-				date_panel.add(to);
-				date_panel.add(to_datePanel);
-				Edit_ResUtilPage.getContentPane().add(date_panel, BorderLayout.CENTER);
-				// end date
-
-				JButton submiteditresutilBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submiteditresutilBtn);
-				Edit_ResUtilPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Edit_ResUtilPage.pack();
-				Edit_ResUtilPage.setVisible(true);
-
-				submiteditresutilBtn.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-
-
-						String fromdate = from_datePicker.getJFormattedTextField().getText();
-						String todate = to_datePicker.getJFormattedTextField().getText();
-
-
-						ProjectResourceUtilization projresutil = presutilcat.getProjectResourceUtilization(selected_resource_util);
-						projresutil.edit(fromdate, todate);
-						
-
-						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-						ArrayList<ProjectResourceUtilization> allpresutil;
-						allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
-						for (int i = 0; i < allpresutil.size(); i++) {
-							data.add((allpresutil.get(i).toHashMap()));
-						}
-						resourceutil_tabledata.update(data);
-
-					}
-				});
+				editResourceUtilization();
 			}
 		});
 
 		JButton presutil_btnDelete = new JButton("Delete");
 		presutil_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				int rowIndex = resourceutil_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = resourceutil_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Resource Utilization!");
-				} else {
-
-					String Table_click = (resourceutil_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						presutilcat.deleteProjectResourceUtilization(Integer.parseInt(Table_click));
-
-						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-						ArrayList<ProjectResourceUtilization> allpresutil;
-						allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
-						for (int i = 0; i < allpresutil.size(); i++) {
-							data.add((allpresutil.get(i).toHashMap()));
-						}
-						resourceutil_tabledata.update(data);
-						
-				}
-			}
+				deleteResourceUtilization();
 			}
 		});
 		presutil_btnDelete.setIcon(new ImageIcon(
@@ -1073,235 +631,7 @@ public class NUserPage {
 
 		addreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<String> project_arraylist = new ArrayList<String>();
-
-				ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
-				for (int i = 0; i < project_hashmap.size(); i++) {
-					project_arraylist.add(project_hashmap.get(i).toString());
-				}
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				ArrayList<String> resource_types = new ArrayList<String>();
-				final ArrayList<String> resources = new ArrayList<String>();
-				resource_types.add("Information");
-				resource_types.add("Financial");
-				resource_types.add("Physical");
-				resource_types.add("Employee");
-				resource_types.add("Module");
-				ArrayList<Field> requirement_moduleFields = new ArrayList<Field>();
-				Field reqname = new Field("text", "req name       ", "", 10, "name");
-				Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
-				Field req_res = new Field("comboBox", "resources", resources, 20, "items");
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-				Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
-
-				requirement_moduleFields.add(reqname);
-				requirement_moduleFields.add(req_res_type);
-				requirement_moduleFields.add(req_res);
-				requirement_moduleFields.add(sections);
-				requirement_moduleFields.add(projects);
-
-				final Form requirement_Form = new Form(requirement_moduleFields, "Requirement Form");
-				final PanelBuilder requirement_Panel = new PanelBuilder(requirement_Form);
-				requirement_Panel.makeForm();
-
-				JFrame Add_RequirementPage = new JFrame("Add Requirement Module Form");
-				Add_RequirementPage.getContentPane().add(requirement_Form.getJPanel(), BorderLayout.NORTH);
-
-				// adding date
-				UtilDateModel modelfor = new UtilDateModel();
-				UtilDateModel modelto = new UtilDateModel();
-
-				Properties p = new Properties();
-				p.put("text.today", "Today");
-				p.put("text.month", "Month");
-				p.put("text.year", "Year");
-				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
-				JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
-				JLabel from = new JLabel("From");
-				JLabel to = new JLabel("To");
-				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
-				final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
-
-				JPanel date_panel = new JPanel(new FlowLayout());
-				date_panel.add(from);
-
-				date_panel.add(from_datePanel);
-				date_panel.add(to);
-				date_panel.add(to_datePanel);
-				Add_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
-				// end date
-
-				JButton submitaddrequeirementBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddrequeirementBtn);
-				Add_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_RequirementPage.pack();
-				Add_RequirementPage.setVisible(true);
-				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(1);
-				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(2);
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(3);
-				ComboBoxJPanel comboBoxpane_projects = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(4);
-
-				final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
-				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
-				final JComboBox sectionCombo = comboBoxpane_sections.getComboBox();
-				final JComboBox projectCombo = comboBoxpane_projects.getComboBox();
-
-				resourceCombo.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						// System.out.println(resourceCombo.getSelectedItem() +
-						// " ino select kardi az resource");
-						// System.out.println(sectionCombo.getSelectedItem() + "
-						// ino select kardi section");
-						// System.out.println(projectCombo.getSelectedItem() + "
-						// ino select kardi proje");
-						// System.out.println(from_datePicker.getJFormattedTextField().getText()
-						// + " from date");
-						// System.out.println(to_datePicker.getJFormattedTextField().getText()
-						// + " to date");
-						//
-						System.out.println(from_datePicker.getJFormattedTextField().getText() + " from date");
-						System.out.println(to_datePicker.getJFormattedTextField().getText() + " to date");
-
-					}
-				});
-
-				resource_type.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						if (resource_type.getSelectedItem().toString().equals("Financial")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
-							for (int i = 0; i < financial_resource.size(); i++) {
-								resourceCombo.addItem(financial_resource.get(i).toString());
-							}
-						}
-						if (resource_type.getSelectedItem().toString().equals("Physical")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
-							for (int i = 0; i < physical_resource.size(); i++) {
-								resourceCombo.addItem(physical_resource.get(i).toString());
-							}
-
-						}
-						if (resource_type.getSelectedItem().toString().equals("Information")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
-							for (int i = 0; i < information_resource.size(); i++) {
-								resourceCombo.addItem(information_resource.get(i).toString());
-							}
-
-						}
-						if (resource_type.getSelectedItem().toString().equals("Employee")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
-							for (int i = 0; i < employee_resource.size(); i++) {
-								resourceCombo.addItem(employee_resource.get(i).toString());
-							}
-						}
-						if (resource_type.getSelectedItem().toString().equals("Module")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
-							for (int i = 0; i < module_resource.size(); i++) {
-								resourceCombo.addItem(module_resource.get(i).toString());
-							}
-						}
-					}
-				});
-				submitaddrequeirementBtn.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						for (int i = 0; i < requirement_Form.getJPanel().getComponentCount(); i++) {
-							// System.out.println(fpanel.selected_Choice);
-						}
-						System.out.println("all : ");
-						resreqcat.getResourceRequirements();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < requirement_Form.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) requirement_Form.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						// for (int i = 0; i < inputs.size(); i++) {
-						// System.out.println(inputs.get(i) + "adasa");
-						// }
-						String empid = "";
-						String rid = "";
-						if (resource_type.getSelectedItem().toString().equals("Employee")) {
-							Pattern p = Pattern.compile("empid=\\d+");
-							Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
-							if (m.find()) {
-								empid = m.group();
-							}
-						} else {
-							Pattern p = Pattern.compile("rid=\\d+");
-							Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
-							if (m.find()) {
-								rid = m.group();
-							}
-						}
-
-						String sid = "";
-						Pattern p1 = Pattern.compile("sid=\\d+");
-						Matcher m1 = p1.matcher((CharSequence) sectionCombo.getSelectedItem());
-						if (m1.find()) {
-							sid = m1.group();
-						}
-
-						String projid = "";
-						Pattern p2 = Pattern.compile("projid=\\d+");
-						Matcher m2 = p2.matcher((CharSequence) projectCombo.getSelectedItem());
-						if (m2.find()) {
-							projid = m2.group();
-						}
-
-						String fromdate = from_datePicker.getJFormattedTextField().getText();
-						String todate = to_datePicker.getJFormattedTextField().getText();
-
-						System.out.println("--------------");
-						System.out
-								.println(empid + " " + rid + " " + sid + " " + projid + " " + fromdate + " " + todate);
-
-						resreqcat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")),
-								Integer.parseInt(sid.replace("sid=", "")),
-								Integer.parseInt(projid.replace("projid=", "")), fromdate, todate);
-
-						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-						ArrayList<ResourceRequirement> allresourcerequirements;
-						allresourcerequirements = resreqcat.getResourceRequirements();
-						for (int i = 0; i < allresourcerequirements.size(); i++) {
-							data.add((allresourcerequirements.get(i).toHashMap()));
-						}
-						resrequirement_tabledata.update(data);
-
-						// System.out.println(resreq_tableModel.getRowCount() +
-						// "");
-						// for (int i = 0; i < allresourcerequirements.size();
-						// i++) {
-						// Object[] objs = {
-						// allresourcerequirements.get(i).toHashMap().get("rid"),
-						// allresourcerequirements.get(i).getResource().getName(),
-						// allresourcerequirements.get(i).toHashMap().get("sid"),
-						// allresourcerequirements.get(i).getSection().getName(),
-						// allresourcerequirements.get(i).toHashMap().get("pid"),
-						// allresourcerequirements.get(i).getProject().getName(),
-						// allresourcerequirements.get(i).toHashMap().get("fromdate"),
-						// allresourcerequirements.get(i).toHashMap().get("todate")
-						// };
-						// resreq_tableModel.addRow(objs);
-						// }
-
-					}
-				});
-
+				addRequirement();
 			}
 		});
 
@@ -1312,110 +642,7 @@ public class NUserPage {
 		JButton requirement_btnEdit = new JButton("Edit");
 		requirement_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Field> requirement_editFields = new ArrayList<Field>();
-				ArrayList<String> issatisfied = new ArrayList<String>();
-				issatisfied.add("satisfied");
-
-				requirement_editFields.add(new Field("singlecheckbox", "is satisfied", issatisfied, 10, "items"));
-
-				System.out.println("//////////////////");
-				final Form editrequirement_Form = new Form(requirement_editFields, "Edit Requirement Form");
-				final PanelBuilder editrequirement_Panel = new PanelBuilder(editrequirement_Form);
-				editrequirement_Panel.makeForm();
-
-				JFrame Edit_RequirementPage = new JFrame("Edit Requirement Module Form");
-				Edit_RequirementPage.getContentPane().add(editrequirement_Form.getJPanel(), BorderLayout.NORTH);
-
-				UtilDateModel modelsatisfydate = new UtilDateModel();
-				Properties p = new Properties();
-				p.put("text.today", "Today");
-				p.put("text.month", "Month");
-				p.put("text.year", "Year");
-				final JDatePanelImpl satisfy_datePanel = new JDatePanelImpl(modelsatisfydate, p);
-				JLabel satisfylbl = new JLabel("Satisfy Date");
-
-				final JDatePickerImpl satisfy_datePicker = new JDatePickerImpl(satisfy_datePanel,
-						new DateLabelFormatter());
-
-				// adding date
-				UtilDateModel modelfor = new UtilDateModel();
-				UtilDateModel modelto = new UtilDateModel();
-
-				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
-				JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
-				JLabel from = new JLabel("From");
-				JLabel to = new JLabel("To");
-				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
-				final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
-
-				JPanel date_panel = new JPanel(new FlowLayout());
-				date_panel.add(satisfylbl);
-				date_panel.add(satisfy_datePanel);
-				date_panel.add(from);
-				date_panel.add(from_datePanel);
-				date_panel.add(to);
-				date_panel.add(to_datePanel);
-				Edit_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
-				// end date
-
-				JButton submiteditrequeirementBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submiteditrequeirementBtn);
-				Edit_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Edit_RequirementPage.pack();
-				Edit_RequirementPage.setVisible(true);
-				final SingleCheckBoxJPanel statisfy_checkBoxpane = (SingleCheckBoxJPanel) editrequirement_Form
-						.getJPanel().getComponent(0);
-
-				// CheckBoxJPanel checkBoxpane = (CheckBoxJPanel)
-				// editrequirement_Form.getJPanel().getComponent(1);
-				// final ArrayList<String>vales =
-				// checkBoxpane.getCheckedValues();
-
-				submiteditrequeirementBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-
-						int rowIndex = resrequirement_tabledata.getJdataTable().getSelectedRow();
-						int colIndex = resrequirement_tabledata.getJdataTable().getSelectedColumn();
-						if (rowIndex == -1) {
-							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-									"Please Select a Resource!");
-						} else {
-
-							String Table_click = (resrequirement_tabledata.getJdataTable().getModel()
-									.getValueAt(rowIndex, 0).toString()); // the
-							System.out.println(Table_click + " what have you clicked");
-
-							String satisfydate = satisfy_datePicker.getJFormattedTextField().getText();
-
-							String fromdate = from_datePicker.getJFormattedTextField().getText();
-							String todate = to_datePicker.getJFormattedTextField().getText();
-							System.out.println(satisfydate + " " + fromdate + " " + todate);
-
-
-							boolean satisfied = false;
-							if (statisfy_checkBoxpane.getCheckedValues().size() == 1)
-								satisfied = true;
-
-							if (satisfied == false)
-								satisfydate = "1111-1-1";
-
-							ResourceRequirement resreq = resreqcat
-									.getResourceRequirement(Integer.parseInt(Table_click));
-							resreq.edit(fromdate, todate, satisfied, satisfydate);
-							ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-							ArrayList<ResourceRequirement> allresourcerequirements;
-							allresourcerequirements = resreqcat.getResourceRequirements();
-							for (int i = 0; i < allresourcerequirements.size(); i++) {
-								data.add((allresourcerequirements.get(i).toHashMap()));
-							}
-							resrequirement_tabledata.update(data);
-						}
-					}
-				});
-
+				editRequirement();
 			}
 		});
 		requirement_btnEdit.setIcon(new ImageIcon(
@@ -1428,72 +655,7 @@ public class NUserPage {
 		requirement_btnSatisfy.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
-				ArrayList<Field> satisfy = new ArrayList<Field>();
-				Field reqname = new Field("text", "req name       ", "", 10, "name");
-				final Form satisfy_requirement_Form = new Form(satisfy, "Satisfy Requirement");
-				final PanelBuilder satisfy_requirement_Panel = new PanelBuilder(satisfy_requirement_Form);
-				satisfy_requirement_Panel.makeForm();
-
-				JFrame Satisfy_RequirementPage = new JFrame("Satisfy Requirement Form");
-				Satisfy_RequirementPage.getContentPane().add(satisfy_requirement_Form.getJPanel(), BorderLayout.NORTH);
-
-				// adding date
-				UtilDateModel modelfor = new UtilDateModel();
-
-				Properties p = new Properties();
-				p.put("text.today", "Today");
-				p.put("text.month", "Month");
-				p.put("text.year", "Year");
-				final JDatePanelImpl satisfyfrom_datePanel = new JDatePanelImpl(modelfor, p);
-				final JDatePickerImpl satisfyfrom_datePicker = new JDatePickerImpl(satisfyfrom_datePanel,
-						new DateLabelFormatter());
-
-				JPanel date_panel = new JPanel(new FlowLayout());
-
-				date_panel.add(satisfyfrom_datePanel);
-				Satisfy_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
-				// end date
-
-				JButton submitsatisfyBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitsatisfyBtn);
-				Satisfy_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Satisfy_RequirementPage.pack();
-				Satisfy_RequirementPage.setVisible(true);
-				submitsatisfyBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-
-						int rowIndex = resrequirement_tabledata.getJdataTable().getSelectedRow();
-						int colIndex = resrequirement_tabledata.getJdataTable().getSelectedColumn();
-						if (rowIndex == -1) {
-							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-									"Please Select a Resource!");
-						} else {
-
-							String Table_click = (resrequirement_tabledata.getJdataTable().getModel()
-									.getValueAt(rowIndex, 0).toString()); // the
-							System.out.println(Table_click + " what have you clicked");
-							System.out.println(satisfyfrom_datePicker.getJFormattedTextField().getText());
-							String satisfydate = satisfyfrom_datePicker.getJFormattedTextField().getText();
-
-							resreqcat.getResourceRequirement(Integer.parseInt(Table_click)).satisfy(satisfydate);
-
-							ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-							ArrayList<ResourceRequirement> allresourcerequirements;
-							allresourcerequirements = resreqcat.getResourceRequirements();
-							for (int i = 0; i < allresourcerequirements.size(); i++) {
-								data.add((allresourcerequirements.get(i).toHashMap()));
-							}
-
-							resrequirement_tabledata.update(data);
-						}
-					}
-				});
-
+				satisfyRequirement();
 			}
 		});
 
@@ -1508,29 +670,7 @@ public class NUserPage {
 
 		requirement_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rowIndex = resrequirement_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = resrequirement_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Resource!");
-				} else {
-
-					String Table_click = (resrequirement_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						resreqcat.deleteResourceRequirement(Integer.parseInt(Table_click));
-						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-						ArrayList<ResourceRequirement> allresourcerequirements;
-						allresourcerequirements = resreqcat.getResourceRequirements();
-						for (int i = 0; i < allresourcerequirements.size(); i++) {
-							data.add((allresourcerequirements.get(i).toHashMap()));
-						}
-						resrequirement_tabledata.update(data);
-					}
-				}
+				deleteRequirement();
 			}
 		});
 		
@@ -1658,97 +798,7 @@ public class NUserPage {
 
 		information_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				// System.out.println(information_tableModel.getDataVector().elementAt(information_table.getSelectedRow()).toString().contains("1"));
-				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
-				information_moduleFields.add(new Field("text", "information name", "", 20, "name"));
-				information_moduleFields.add(new Field("text", "description", "", 20, "desc"));
-
-				information_moduleFields.add(sections);
-				final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
-				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
-				information_modulePanel.makeForm();
-				JFrame Edit_InformationModulePage = new JFrame("Edit Information Module Form");
-				Edit_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
-
-				// adding date
-				UtilDateModel modelfor = new UtilDateModel();
-
-				Properties p = new Properties();
-				p.put("text.today", "Today");
-				p.put("text.month", "Month");
-				p.put("text.year", "Year");
-				final JDatePanelImpl info_datePanel = new JDatePanelImpl(modelfor, p);
-				final JDatePickerImpl info_datePicker = new JDatePickerImpl(info_datePanel, new DateLabelFormatter());
-
-				JPanel date_panel = new JPanel(new FlowLayout());
-
-				date_panel.add(info_datePanel);
-				Edit_InformationModulePage.getContentPane().add(date_panel, BorderLayout.CENTER);
-				// end date
-
-				JButton submiteditinformationmoduleBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submiteditinformationmoduleBtn);
-				Edit_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Edit_InformationModulePage.pack();
-				Edit_InformationModulePage.setVisible(true);
-
-				submiteditinformationmoduleBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-
-						System.out.println("all : ");
-						infocat.readAllResources();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < information_moduleForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) information_moduleForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " information");
-						}
-						System.out.println(info_datePicker.getJFormattedTextField().getText());
-
-						int rowIndex = information_tabledata.getJdataTable().getSelectedRow();
-						int colIndex = information_tabledata.getJdataTable().getSelectedColumn();
-						if (rowIndex == -1) {
-							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-									"Please Select a Resource!");
-						} else {
-
-							String Table_click = (information_tabledata.getJdataTable().getModel()
-									.getValueAt(rowIndex, 0).toString()); // the
-							System.out.println(Table_click + " what have you clicked");
-						}
-
-						// infocat.addResource((inputs.get(0)));
-						// // tu resource ham bayad insert she
-						// allinformation.clear();
-						// allinformation = infocat.readAllResources();
-						// System.out.println(information_tableModel.getRowCount()
-						// + " ---");
-						// int rowcount = information_tableModel.getRowCount();
-						// for (int j = rowcount - 1; j >= 0; j--) {
-						// information_tableModel.removeRow(j);
-						// }
-						// System.out.println(information_tableModel.getRowCount()
-						// + " ---");
-						// for (int i = 0; i < allinformation.size(); i++) {
-						// Object[] objs = { allinformation.get(i).get("rid"),
-						// allinformation.get(i).get("irname") };
-						// information_tableModel.addRow(objs);
-						// }
-					}
-				});
+				editInformationResource();
 			}
 		});
 
@@ -1758,24 +808,10 @@ public class NUserPage {
 
 		information_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rowIndex = information_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = information_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Resource!");
-				} else {
-
-					String Table_click = (information_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						infocat.deleteResource(Integer.parseInt(Table_click));
-						information_tabledata.update(infocat.readAllResources());
-					}
-				}
+				deleteInformationResource();
 			}
+
+			
 		});
 
 		search_informationname = new JTextField();
@@ -1784,14 +820,7 @@ public class NUserPage {
 		JButton information_btnSearch = new JButton("Search");
 		information_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				HashMap<String, String> searchVars = new HashMap<String, String>();
-				searchVars.put("irname", "\'" + search_informationname.getText() + "\'");
-				if (infocat.SearchResource(searchVars).isEmpty()) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-				} else {
-					information_tabledata.update(infocat.SearchResource(searchVars));
-				}
-
+				searchInformationResource();
 			}
 		});
 
@@ -1849,84 +878,7 @@ public class NUserPage {
 		btnAddInformation.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				ArrayList<Field> information_moduleFields = new ArrayList<Field>();
-				information_moduleFields.add(new Field("text", "information name", "", 20, "name"));
-				information_moduleFields.add(new Field("text", "description", "", 20, "desc"));
-
-				information_moduleFields.add(sections);
-				final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
-				final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
-				information_modulePanel.makeForm();
-				JFrame Add_InformationModulePage = new JFrame("Add Information Module Form");
-				Add_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
-
-				// adding date
-				UtilDateModel modelfor = new UtilDateModel();
-
-				Properties p = new Properties();
-				p.put("text.today", "Today");
-				p.put("text.month", "Month");
-				p.put("text.year", "Year");
-				final JDatePanelImpl info_datePanel = new JDatePanelImpl(modelfor, p);
-				final JDatePickerImpl info_datePicker = new JDatePickerImpl(info_datePanel, new DateLabelFormatter());
-
-				JPanel date_panel = new JPanel(new FlowLayout());
-
-				date_panel.add(info_datePanel);
-				Add_InformationModulePage.getContentPane().add(date_panel, BorderLayout.CENTER);
-				// end date
-				JButton submitaddinformationmoduleBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddinformationmoduleBtn);
-				Add_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_InformationModulePage.pack();
-				Add_InformationModulePage.setVisible(true);
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) information_moduleForm.getJPanel()
-						.getComponent(2);
-
-				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
-
-				submitaddinformationmoduleBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println("all : ");
-						infocat.readAllResources();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < information_moduleForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) information_moduleForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " information");
-						}
-
-						System.out.println(sections_combo.getSelectedItem() + " //////");
-						Pattern p = Pattern.compile("sid=\\d+");
-						String section = null;
-						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
-						if (m.find()) {
-							section = m.group();
-						}
-						System.out.println("sid: " + section);
-
-						String infodate = info_datePicker.getJFormattedTextField().getText();
-
-						infocat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")), infodate,
-								inputs.get(1));
-						// tu resource ham bayad insert she
-						information_tabledata.update(infocat.readAllResources());
-
-					}
-				});
+				addInformationResource();
 			}
 		});
 
@@ -1949,71 +901,11 @@ public class NUserPage {
 
 		financial_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
-				financial_moduleFields.add(new Field("text", "financial name", "", 20, "name"));
-				financial_moduleFields.add(sections);
-				financial_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
-				financial_moduleFields.add(new Field("text", "net value", "", 20, "value"));
-				financial_moduleFields.add(new Field("text", "description", "", 20, "desc"));
-
-				final Form financial_moduleForm = new Form(financial_moduleFields, "Financial Edit Module Form");
-				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
-				financial_modulePanel.makeForm();
-				JFrame Add_InformationModulePage = new JFrame("Edit Information Module Form");
-				Add_InformationModulePage.getContentPane().add(financial_moduleForm.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaddfinancialBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddfinancialBtn);
-				Add_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_InformationModulePage.pack();
-				Add_InformationModulePage.setVisible(true);
-
-				submitaddfinancialBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-
-						int rowIndex = financial_tabledata.getJdataTable().getSelectedRow();
-						int colIndex = financial_tabledata.getJdataTable().getSelectedColumn();
-						if (rowIndex == -1) {
-							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-									"Please Select a Resource!");
-						} else {
-
-							String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-									.toString()); // the
-							System.out.println(Table_click + " this was clicked");
-						}
-						System.out.println();
-						System.out.println("all : ");
-						financat.readAllResources();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < financial_moduleForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) financial_moduleForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " financial edit");
-						}
-
-						// financat.getFinancialResource().editResource("changed
-						// name", 1, 10, "changed model", "changed");
-
-						financial_tabledata.update(financat.readAllResources());
-
-					}
-				});
+				editFinancialResource();
 
 			}
+
+		
 		});
 
 		JScrollPane financial_table_scrollPane = new JScrollPane();
@@ -2027,25 +919,10 @@ public class NUserPage {
 
 		financial_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				int rowIndex = financial_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = financial_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Resource!");
-				} else {
-
-					String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						financat.deleteResource(Integer.parseInt(Table_click));
-						financial_tabledata.update(financat.readAllResources());
-					}
-				}
+				deleteFinancialResource();
 			}
+
+			
 		});
 
 		search_financialname = new JTextField();
@@ -2054,21 +931,10 @@ public class NUserPage {
 		JButton financial_btnSearch = new JButton("Search");
 		financial_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				HashMap<String, String> searchVars = new HashMap<String, String>();
-				if (search_financialname.getText() != null && !search_financialname.getText().trim().equals(""))
-					searchVars.put("finanname", "\'" + search_financialname.getText() + "\'");
-				if (search_financialvalue.getText() != null && !search_financialvalue.getText().trim().equals(""))
-					searchVars.put("netvalue", "\'" + search_financialvalue.getText() + "\'");
-				if (search_financialmodel.getText() != null && !search_financialmodel.getText().trim().equals(""))
-					searchVars.put("modeldesc", "\'" + search_financialmodel.getText() + "\'");
-
-				if (financat.SearchResource(searchVars).isEmpty()) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-				} else {
-					financial_tabledata.update(financat.SearchResource(searchVars));
-				}
+				searchFinancialResource();
 
 			}
+			
 		});
 
 		JLabel lblFinancialName = DefaultComponentFactory.getInstance().createLabel("Financial Name");
@@ -2159,72 +1025,10 @@ public class NUserPage {
 		btnAddFinancial.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
-				financial_moduleFields.add(new Field("text", "financename", "", 20, "name"));
-				financial_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
-				financial_moduleFields.add(new Field("text", "net value", "", 20, "value"));
-				financial_moduleFields.add(new Field("text", "description", "", 20, "desc"));
-				financial_moduleFields.add(sections);
-
-				final Form financial_moduleForm = new Form(financial_moduleFields, "Information Module Form");
-				final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
-				financial_modulePanel.makeForm();
-				JFrame Add_FinancialModulePage = new JFrame("Add Financial Module Form");
-				Add_FinancialModulePage.getContentPane().add(financial_moduleForm.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaddfinancialmoduleBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddfinancialmoduleBtn);
-				Add_FinancialModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_FinancialModulePage.pack();
-				Add_FinancialModulePage.setVisible(true);
-
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) financial_moduleForm.getJPanel()
-						.getComponent(4);
-
-				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
-
-				submitaddfinancialmoduleBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println("all : ");
-						financat.readAllResources();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < financial_moduleForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) financial_moduleForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " financial");
-						}
-						System.out.println(sections_combo.getSelectedItem() + " //////");
-						Pattern p = Pattern.compile("sid=\\d+");
-						String section = null;
-						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
-						if (m.find()) {
-							section = m.group();
-						}
-						System.out.println("sid: " + section);
-						financat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sid=", "")),
-								Integer.parseInt(inputs.get(2)), inputs.get(1), inputs.get(3));
-						// tu resource ham bayad insert she
-						allfinance.clear();
-						allfinance = financat.readAllResources();
-						financial_tabledata.update(financat.readAllResources());
-					}
-				});
+				addFinancialResource();
 			}
+
+			
 		});
 
 		final JPanel modulePanel = new JPanel();
@@ -2238,10 +1042,11 @@ public class NUserPage {
 		resourcesTab.addTab("Module Detail", null, moduledetailpanel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
 
-		// moduledetail_tabledata = new TableData(new Modu);
-
+		moduledetail_tabledata = new TableData(new MakeModuleCatalogue(),"Resource",selected_module);
 		JScrollPane module_detail_scrollPane = new JScrollPane();
+		module_detail_scrollPane.setViewportView(moduledetail_tabledata.getJdataTable());
 
+		
 		JButton moduledetail_btnEdit = new JButton("Edit");
 		moduledetail_btnEdit.setIcon(new ImageIcon(
 				new ImageIcon("images/edit.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
@@ -2265,30 +1070,47 @@ public class NUserPage {
 
 			}
 		});
+		
+		
+		
+		
+		JScrollPane module_detailemployee_scrollPane = new JScrollPane();
+		moduledetailemployee_tabledata = new TableData(makemodulecat, "Employee",selected_module);
+		module_detailemployee_scrollPane.setViewportView(moduledetailemployee_tabledata.getJdataTable());
+
+
+
 		GroupLayout gl_moduledetailpanel = new GroupLayout(moduledetailpanel);
-		gl_moduledetailpanel
-				.setHorizontalGroup(
-						gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_moduledetailpanel.createSequentialGroup().addGap(30)
-										.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
-												Short.MAX_VALUE)
-										.addGap(30))
-								.addGroup(gl_moduledetailpanel.createSequentialGroup()
-										.addComponent(moduledetail_btnEdit).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(moduledetail_btnDelete)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(moduledetail_btnBack)
-										.addContainerGap(550, Short.MAX_VALUE)));
-		gl_moduledetailpanel
-				.setVerticalGroup(
-						gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_moduledetailpanel.createSequentialGroup().addGap(30)
-										.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 398,
-												Short.MAX_VALUE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(moduledetail_btnEdit).addComponent(moduledetail_btnDelete)
-												.addComponent(moduledetail_btnBack))
-										.addContainerGap()));
+		gl_moduledetailpanel.setHorizontalGroup(
+			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addComponent(moduledetail_btnEdit)
+					.addGap(30)
+					.addComponent(moduledetail_btnDelete)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(moduledetail_btnBack)
+					.addContainerGap(635, Short.MAX_VALUE))
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addGap(30)
+					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(module_detailemployee_scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+						.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
+					.addGap(30))
+		);
+		gl_moduledetailpanel.setVerticalGroup(
+			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addGap(20)
+					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+					.addGap(30)
+					.addComponent(module_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+					.addGap(30)
+					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(moduledetail_btnEdit)
+						.addComponent(moduledetail_btnDelete)
+						.addComponent(moduledetail_btnBack))
+					.addContainerGap())
+		);
 		moduledetailpanel.setLayout(gl_moduledetailpanel);
 
 		// end module list
@@ -2298,171 +1120,10 @@ public class NUserPage {
 
 		btnAddModule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				final ArrayList<String> employees = new ArrayList<String>();
-				final ArrayList<String> financials = new ArrayList<String>();
-				final ArrayList<String> physicals = new ArrayList<String>();
-				final ArrayList<String> information = new ArrayList<String>();
-
-				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
-				for (int i = 0; i < employe_readall.size(); i++) {
-					employees.add(employe_readall.get(i).toString());
-				}
-				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
-				for (int i = 0; i < financial_readall.size(); i++) {
-					financials.add(financial_readall.get(i).toString());
-				}
-
-				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
-				for (int i = 0; i < physical_readall.size(); i++) {
-					physicals.add(physical_readall.get(i).toString());
-				}
-
-				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
-				for (int i = 0; i < information_readall.size(); i++) {
-					information.add(information_readall.get(i).toString());
-				}
-
-				ArrayList<Field> moduleFields = new ArrayList<Field>();
-				moduleFields.add(new Field("text", "name", "", 10, "name"));
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
-				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
-				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
-				Field information_check = new Field("checkBox", "information", information, 20, "information");
-
-				moduleFields.add(new Field("text", "duration", "", 20, "duration"));
-				moduleFields.add(new Field("text", "description", "", 20, "desc"));
-				moduleFields.add(sections);
-				moduleFields.add(financial_check);
-				moduleFields.add(physical_check);
-				moduleFields.add(information_check);
-				moduleFields.add(maintainers);
-
-				final Form moduleForm = new Form(moduleFields, "Module Form");
-				final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
-				modulePanel.makeForm();
-
-				JFrame AddModulePage = new JFrame("Add Module Form");
-				AddModulePage.getContentPane().add(moduleForm.getJPanel(), BorderLayout.NORTH);
-				JScrollPane scroll = new JScrollPane(moduleForm.getJPanel());
-				AddModulePage.getContentPane().add(scroll);
-
-				JButton submitaddmoduleBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddmoduleBtn);
-				AddModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				AddModulePage.pack();
-				AddModulePage.setVisible(true);
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) moduleForm.getJPanel().getComponent(3);
-
-				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
-
-				final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(4);
-				final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(5);
-				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(6);
-				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(7);
-
-				submitaddmoduleBtn.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println("all : ");
-						modcat.readAllResources();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < moduleForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) moduleForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + "adasa");
-						}
-						System.out.println(sections_combo.getSelectedItem() + " //////");
-						Pattern p = Pattern.compile("sid=\\d+");
-						String section = null;
-						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
-						if (m.find()) {
-							section = m.group();
-						}
-						System.out.println("sid: " + section);
-
-						System.out.println("----------");
-
-						//
-						long modrid = modcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
-								Integer.parseInt(inputs.get(1)), inputs.get(2));
-						// tu resource ham bayad insert she
-						module_tabledata.update(modcat.readAllResources());
-
-						//
-						System.out.println("----------");
-
-						final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
-						System.out.println(finanvales);
-						final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
-						System.out.println(physicalvales);
-						final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
-						System.out.println(informationvales);
-						final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
-						System.out.println(employeevales);
-						Pattern emp = Pattern.compile("empid=\\d+");
-						for (int i = 0; i < employeevales.size(); i++) {
-							String empids = null;
-							Matcher m_emp = emp.matcher(employeevales.get(i).toString());
-							if (m_emp.find()) {
-								empids = m_emp.group();
-							}
-							System.out.println("empids: " + empids);
-							makemodulecat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), (int) modrid);
-
-						}
-
-						Pattern res = Pattern.compile("rid=\\d+");
-						for (int i = 0; i < finanvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(finanvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("finan rid: " + respids);
-							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
-
-						}
-
-						for (int i = 0; i < physicalvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(physicalvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("phys rid: " + respids);
-							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
-
-						}
-
-						for (int i = 0; i < informationvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(informationvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("info rid: " + respids);
-							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
-
-						}
-
-					}
-				});
-
+				addModule();
 			}
+
+			
 		});
 
 		JScrollPane module_scrollPane = new JScrollPane();
@@ -2473,6 +1134,11 @@ public class NUserPage {
 
 		module_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				editModule();
+
+			}
+
+			private void editModule() {
 				final ArrayList<String> employees = new ArrayList<String>();
 				final ArrayList<String> financials = new ArrayList<String>();
 				final ArrayList<String> physicals = new ArrayList<String>();
@@ -2529,9 +1195,9 @@ public class NUserPage {
 				JScrollPane scroll = new JScrollPane(moduleForm.getJPanel());
 				EditModulePage.getContentPane().add(scroll);
 
-				JButton submitaddmoduleBtn = new JButton("Submit");
+				JButton submiteditmoduleBtn = new JButton("Submit");
 				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddmoduleBtn);
+				buttonPanel.add(submiteditmoduleBtn);
 				EditModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				EditModulePage.pack();
 				EditModulePage.setVisible(true);
@@ -2544,7 +1210,7 @@ public class NUserPage {
 				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(6);
 				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(7);
 
-				submitaddmoduleBtn.addActionListener(new ActionListener() {
+				submiteditmoduleBtn.addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -2639,7 +1305,6 @@ public class NUserPage {
 
 					}
 				});
-
 			}
 
 		});
@@ -2650,25 +1315,9 @@ public class NUserPage {
 
 		module_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Module!");
-				} else {
-
-					String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						modcat.deleteResource(Integer.parseInt(Table_click));
-						module_tabledata.update(modcat.readAllResources());
-					}
-				}
+				deleteModule();
 			}
+			
 		});
 		final JPanel maintaining_panel = new JPanel();
 
@@ -2720,19 +1369,7 @@ public class NUserPage {
 		JButton module_btnSearch = new JButton("Search");
 		module_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				HashMap<String, String> searchVars = new HashMap<String, String>();
-
-				if (search_modulename.getText() != null && !search_modulename.getText().trim().equals(""))
-					searchVars.put("modname", "\'" + search_modulename.getText() + "\'");
-				if (search_moduleduration.getText() != null && !search_moduleduration.getText().trim().equals(""))
-					searchVars.put("duration", "\'" + search_moduleduration.getText() + "\'");
-
-				if (modcat.SearchResource(searchVars).isEmpty()) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-				} else {
-					module_tabledata.update(modcat.SearchResource(searchVars));
-				}
+				searchModule();
 			}
 
 		});
@@ -2780,21 +1417,36 @@ public class NUserPage {
 					System.out.println(Table_click);
 					System.out.println("---module id-- " + selected_module);
 					System.out.println("Change JPanel");
-					// MaintainingModuleCatalogue maintainmodulecat = new
-					// MaintainingModuleCatalogue();
-					// ArrayList<HashMap<String, String>> data = new
-					// ArrayList<HashMap<String, String>>();
-					// ArrayList<MaintainingModule> allmaintainmodule;
-					// allmaintainmodule =
-					// maintainmodulecat.getMaintainingModules(selected_module);
-					// for (int i = 0; i < allmaintainmodule.size(); i++) {
-					// data.add((allmaintainmodule.get(i).toHashMap()));
-					// }
-					// System.out.println("DATA");
-					// System.out.println(data);
-					//
-					// maintaining_tabledata.update(data);
-					//
+
+					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+					ArrayList<Employee> allemp;
+					allemp = makemodulecat.getEmployees(selected_module);
+					for (int i = 0; i < allemp.size(); i++) {
+						HashMap<String,String> emps = new HashMap<String,String>();
+						emps.put("empid", allemp.get(i).getId()+"");
+						emps.put("empname", allemp.get(i).getName());
+						data.add(emps);
+					}
+					System.out.println("motie was here ");
+					System.out.println(data);
+
+					
+					ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+					ArrayList<Resource> allres;
+					allres = makemodulecat.getResources(selected_module);
+					for (int i = 0; i < allres.size(); i++) {
+						HashMap<String,String> ress = new HashMap<String,String>();
+						ress.put("rid", allres.get(i).getId()+"");
+						ress.put("rname", allres.get(i).getName());
+						resdata.add(ress);
+					}
+					System.out.println("res here ");
+					System.out.println(resdata);
+					
+					
+					moduledetail_tabledata.update(resdata);
+					moduledetailemployee_tabledata.update(data);
+					
 					int selected_index = resourcesTab.getSelectedIndex();
 					resourcesTab.remove(selected_index);
 					resourcesTab.insertTab("Module Detail", null, moduledetailpanel, null, selected_index);
@@ -2872,173 +1524,7 @@ public class NUserPage {
 		maintaining_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				final ArrayList<String> employees = new ArrayList<String>();
-				final ArrayList<String> financials = new ArrayList<String>();
-				final ArrayList<String> physicals = new ArrayList<String>();
-				final ArrayList<String> information = new ArrayList<String>();
-
-				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
-				for (int i = 0; i < employe_readall.size(); i++) {
-					employees.add(employe_readall.get(i).toString());
-				}
-				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
-				for (int i = 0; i < financial_readall.size(); i++) {
-					financials.add(financial_readall.get(i).toString());
-				}
-
-				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
-				for (int i = 0; i < physical_readall.size(); i++) {
-					physicals.add(physical_readall.get(i).toString());
-				}
-
-				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
-				for (int i = 0; i < information_readall.size(); i++) {
-					information.add(information_readall.get(i).toString());
-				}
-
-				ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
-				Field change_type = new Field("text", "change type", "", 20, "change type");
-				Field duration = new Field("text", "duration", "", 20, "duration");
-				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
-				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
-				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
-				Field information_check = new Field("checkBox", "information", information, 20, "information");
-
-				maintain_moduleFields.add(change_type);
-				maintain_moduleFields.add(duration);
-				maintain_moduleFields.add(financial_check);
-				maintain_moduleFields.add(physical_check);
-				maintain_moduleFields.add(information_check);
-				maintain_moduleFields.add(maintainers);
-
-				final Form maintain_Form = new Form(maintain_moduleFields, "Maintain Module Form");
-				final PanelBuilder maintain_Panel = new PanelBuilder(maintain_Form);
-				maintain_Panel.makeForm();
-
-				JFrame Edit_MaintainPage = new JFrame("Edit Maintain Module Form");
-
-				JScrollPane scroll = new JScrollPane(maintain_Form.getJPanel());
-				Edit_MaintainPage.getContentPane().add(scroll);
-
-				// Add_MaintainPage.getContentPane().add(scroll,
-				// BorderLayout.NORTH);
-
-				JButton submiteditmaintainmoduleBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submiteditmaintainmoduleBtn);
-				Edit_MaintainPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Edit_MaintainPage.pack();
-				Edit_MaintainPage.setVisible(true);
-
-				final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
-				final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
-				final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel()
-						.getComponent(2);
-				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel()
-						.getComponent(4);
-
-				submiteditmaintainmoduleBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// INJA TODO Auto-generated method stub
-						int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
-
-						String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-								.toString()); // return
-						selected_maintaining_module = Integer.parseInt(Table_click.trim());
-
-						System.out.println(Table_click);
-						System.out.println("---maintian module id-- " + selected_module);
-
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < maintain_Form.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) maintain_Form.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + "adasa");
-						}
-
-						// MaintainingModule maintainmod =
-						// maintainmodulecat.ge(selected_maintaining_module);
-
-						// long maintainmodpk =
-						// maintainmodulecat.addMaintainingModule(selected_module,
-						// inputs.get(0),
-						// Integer.parseInt(inputs.get(1)));
-
-						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-						ArrayList<MaintainingModule> allmaintainmodule;
-						allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
-						for (int i = 0; i < allmaintainmodule.size(); i++) {
-							data.add((allmaintainmodule.get(i).toHashMap()));
-						}
-						System.out.println("DATA");
-
-						maintaining_tabledata.update(data);
-
-						System.out.println("----------");
-
-						final ArrayList<String> finanvales = checkBoxpane_financial.getCheckedValues();
-						System.out.println(finanvales);
-						final ArrayList<String> physicalvales = checkBoxpane_phys.getCheckedValues();
-						System.out.println(physicalvales);
-						final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
-						System.out.println(informationvales);
-						final ArrayList<String> employeevales = checkBoxpane_emp.getCheckedValues();
-						System.out.println(employeevales);
-						Pattern emp = Pattern.compile("empid=\\d+");
-						for (int i = 0; i < employeevales.size(); i++) {
-							String empids = null;
-							Matcher m_emp = emp.matcher(employeevales.get(i).toString());
-							if (m_emp.find()) {
-								empids = m_emp.group();
-							}
-							System.out.println("empids: " + empids);
-							maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")),
-									selected_maintaining_module);
-						}
-
-						Pattern res = Pattern.compile("rid=\\d+");
-						for (int i = 0; i < finanvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(finanvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("finan rid: " + respids);
-							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-									selected_maintaining_module);
-
-						}
-
-						for (int i = 0; i < physicalvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(physicalvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("phys rid: " + respids);
-							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-									selected_maintaining_module);
-
-						}
-
-						for (int i = 0; i < informationvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(informationvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("info rid: " + respids);
-							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-									selected_maintaining_module);
-
-						}
-
-					}
-				});
-
+				editMaintainingModule();
 			}
 		});
 		maintaining_btnEdit.setIcon(new ImageIcon(
@@ -3051,30 +1537,10 @@ public class NUserPage {
 		maintaining_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-						"Are you sure you want to Delete this item?");
-				if (myDialog.getAnswer()) {
-					int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
-
-					String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // return
-					selected_maintaining_module = Integer.parseInt(Table_click.trim());
-
-					System.out.println(Table_click);
-					System.out.println("---maintian module id-- " + selected_module);
-
-					maintainmodulecat.deleteMaintainingModule(selected_maintaining_module);
-					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-					ArrayList<MaintainingModule> allmaintainmodule;
-					allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
-					for (int i = 0; i < allmaintainmodule.size(); i++) {
-						data.add((allmaintainmodule.get(i).toHashMap()));
-					}
-					System.out.println("DATA " + data);
-					maintaining_tabledata.update(data);
-
-				}
+				deleteMaintainingModule();
 			}
+
+		
 		});
 
 		JButton btnAddMaintaining = new JButton("Add Maintaining");
@@ -3083,158 +1549,7 @@ public class NUserPage {
 
 		btnAddMaintaining.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				final ArrayList<String> employees = new ArrayList<String>();
-				final ArrayList<String> financials = new ArrayList<String>();
-				final ArrayList<String> physicals = new ArrayList<String>();
-				final ArrayList<String> information = new ArrayList<String>();
-
-				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
-				for (int i = 0; i < employe_readall.size(); i++) {
-					employees.add(employe_readall.get(i).toString());
-				}
-				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
-				for (int i = 0; i < financial_readall.size(); i++) {
-					financials.add(financial_readall.get(i).toString());
-				}
-
-				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
-				for (int i = 0; i < physical_readall.size(); i++) {
-					physicals.add(physical_readall.get(i).toString());
-				}
-
-				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
-				for (int i = 0; i < information_readall.size(); i++) {
-					information.add(information_readall.get(i).toString());
-				}
-
-				ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
-				Field change_type = new Field("text", "change type", "", 20, "change type");
-				Field duration = new Field("text", "duration", "", 20, "duration");
-				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
-				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
-				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
-				Field information_check = new Field("checkBox", "information", information, 20, "information");
-
-				maintain_moduleFields.add(change_type);
-				maintain_moduleFields.add(duration);
-				maintain_moduleFields.add(financial_check);
-				maintain_moduleFields.add(physical_check);
-				maintain_moduleFields.add(information_check);
-				maintain_moduleFields.add(maintainers);
-
-				final Form maintain_Form = new Form(maintain_moduleFields, "Maintain Module Form");
-				final PanelBuilder maintain_Panel = new PanelBuilder(maintain_Form);
-				maintain_Panel.makeForm();
-
-				JFrame Add_MaintainPage = new JFrame("Add Maintain Module Form");
-
-				JScrollPane scroll = new JScrollPane(maintain_Form.getJPanel());
-				Add_MaintainPage.getContentPane().add(scroll);
-
-				// Add_MaintainPage.getContentPane().add(scroll,
-				// BorderLayout.NORTH);
-
-				JButton submitmaintainmoduleBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitmaintainmoduleBtn);
-				Add_MaintainPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_MaintainPage.pack();
-				Add_MaintainPage.setVisible(true);
-
-				final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
-				final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
-				final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel()
-						.getComponent(2);
-				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel()
-						.getComponent(4);
-
-				submitmaintainmoduleBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// INJA TODO Auto-generated method stub
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < maintain_Form.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) maintain_Form.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + "adasa");
-						}
-
-						long maintainmodpk = maintainmodulecat.addMaintainingModule(selected_module, inputs.get(0),
-								Integer.parseInt(inputs.get(1)));
-
-						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-						ArrayList<MaintainingModule> allmaintainmodule;
-						allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
-						for (int i = 0; i < allmaintainmodule.size(); i++) {
-							data.add((allmaintainmodule.get(i).toHashMap()));
-						}
-						System.out.println("DATA");
-
-						maintaining_tabledata.update(data);
-
-						System.out.println("----------");
-
-						final ArrayList<String> finanvales = checkBoxpane_financial.getCheckedValues();
-						System.out.println(finanvales);
-						final ArrayList<String> physicalvales = checkBoxpane_phys.getCheckedValues();
-						System.out.println(physicalvales);
-						final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
-						System.out.println(informationvales);
-						final ArrayList<String> employeevales = checkBoxpane_emp.getCheckedValues();
-						System.out.println(employeevales);
-						Pattern emp = Pattern.compile("empid=\\d+");
-						for (int i = 0; i < employeevales.size(); i++) {
-							String empids = null;
-							Matcher m_emp = emp.matcher(employeevales.get(i).toString());
-							if (m_emp.find()) {
-								empids = m_emp.group();
-							}
-							System.out.println("empids: " + empids);
-							maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")),
-									(int) maintainmodpk);
-						}
-
-						Pattern res = Pattern.compile("rid=\\d+");
-						for (int i = 0; i < finanvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(finanvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("finan rid: " + respids);
-							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-									(int) maintainmodpk);
-
-						}
-
-						for (int i = 0; i < physicalvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(physicalvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("phys rid: " + respids);
-							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-									(int) maintainmodpk);
-
-						}
-
-						for (int i = 0; i < informationvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(informationvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("info rid: " + respids);
-							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-									(int) maintainmodpk);
-
-						}
-
-					}
-				});
+				addMaintainingModule();
 			}
 		});
 
@@ -3317,81 +1632,7 @@ public class NUserPage {
 
 		human_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				ArrayList<Field> human_moduleFields = new ArrayList<Field>();
-				human_moduleFields.add(new Field("text", "employee name", "", 20, "name"));
-				human_moduleFields.add(new Field("text", "username", "", 20, "username"));
-				human_moduleFields.add(new Field("text", "password", "", 20, "password"));
-				human_moduleFields.add(new Field("text", "post", "", 20, "post"));
-				human_moduleFields.add(sections);
-
-				final Form human_moduleForm = new Form(human_moduleFields, "Employee Edit Module Form");
-				final PanelBuilder human_modulePanel = new PanelBuilder(human_moduleForm);
-				human_modulePanel.makeForm();
-				JFrame Edit_EmployeePage = new JFrame("Edit Employee Form");
-				Edit_EmployeePage.getContentPane().add(human_moduleForm.getJPanel(), BorderLayout.NORTH);
-
-				JButton submiteditemployeeBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submiteditemployeeBtn);
-				Edit_EmployeePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Edit_EmployeePage.pack();
-				Edit_EmployeePage.setVisible(true);
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) human_moduleForm.getJPanel().getComponent(4);
-
-				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
-
-				submiteditemployeeBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
-						int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
-						if (rowIndex == -1) {
-							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-									"Please Select an Employee!");
-						} else {
-
-							System.out.println("all : ");
-							empcat.readAllEmployees();
-							ArrayList<String> inputs = new ArrayList<String>();
-							for (int i = 0; i < human_moduleForm.getJPanel().getComponentCount(); i++) {
-								FieldPanel fpanel = (FieldPanel) human_moduleForm.getJPanel().getComponent(i);
-								inputs.add(fpanel.getValues().get(0));
-							}
-							for (int i = 0; i < inputs.size(); i++) {
-								System.out.println(inputs.get(i) + " human");
-							}
-
-							System.out.println(sections_combo.getSelectedItem() + " //////");
-							Pattern p = Pattern.compile("sid=\\d+");
-							String section = null;
-							Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
-							if (m.find()) {
-								section = m.group();
-							}
-							System.out.println("sid: " + section);
-
-							String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-									.toString()); // the
-							System.out.println(Table_click + " this was clicked");
-							Employee employee = empcat.getEmployee(Integer.parseInt(Table_click));
-							employee.editHuman(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
-									inputs.get(2), inputs.get(3));
-
-							empcat.readAllEmployees();
-							allemployees.clear();
-							allemployees = empcat.readAllEmployees();
-							human_tabledata.update(empcat.readAllEmployees());
-						}
-					}
-				});
+				editHumanResource();
 
 			}
 		});
@@ -3403,25 +1644,7 @@ public class NUserPage {
 		human_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				System.out.println("-----");
-				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select an Employee!");
-				} else {
-
-					String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // return
-					System.out.println(Table_click);
-					empcat.deleteEmployee(Integer.parseInt(Table_click));
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						allemployees = empcat.readAllEmployees();
-						human_tabledata.update(empcat.readAllEmployees());
-					}
-				}
+				deleteHumanResource();
 			}
 		});
 
@@ -3431,20 +1654,10 @@ public class NUserPage {
 		JButton human_btnSearch = new JButton("Search");
 		human_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				HashMap<String, String> searchVars = new HashMap<String, String>();
-
-				if (search_humanname.getText() != null && !search_humanname.getText().trim().equals(""))
-					searchVars.put("empname", "\'" + search_humanname.getText() + "\'");
-				if (search_humanpost.getText() != null && !search_humanpost.getText().trim().equals(""))
-					searchVars.put("post", "\'" + search_humanpost.getText() + "\'");
-
-				if (empcat.SearchEmployee(searchVars).isEmpty()) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-				} else {
-					human_tabledata.update(empcat.SearchEmployee(searchVars));
-				}
-
+				searchHumanResource();
 			}
+
+			
 		});
 
 		JLabel lblHumanName = DefaultComponentFactory.getInstance().createLabel("Human name");
@@ -3478,66 +1691,7 @@ public class NUserPage {
 		human_btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				ArrayList<Field> human_moduleFields = new ArrayList<Field>();
-				human_moduleFields.add(new Field("text", "employee name", "", 20, "name"));
-				human_moduleFields.add(new Field("text", "username", "", 20, "username"));
-				human_moduleFields.add(new Field("text", "password", "", 20, "password"));
-				human_moduleFields.add(new Field("text", "post", "", 20, "post"));
-				human_moduleFields.add(sections);
-
-				final Form human_moduleForm = new Form(human_moduleFields, "Financial Edit Module Form");
-				final PanelBuilder human_modulePanel = new PanelBuilder(human_moduleForm);
-				human_modulePanel.makeForm();
-				JFrame Add_EmployeePage = new JFrame("Add Employee Form");
-				Add_EmployeePage.getContentPane().add(human_moduleForm.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaddemployeeBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddemployeeBtn);
-				Add_EmployeePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_EmployeePage.pack();
-				Add_EmployeePage.setVisible(true);
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) human_moduleForm.getJPanel().getComponent(4);
-
-				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
-
-				submitaddemployeeBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println("all : ");
-						empcat.readAllEmployees();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < human_moduleForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) human_moduleForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " human");
-						}
-
-						System.out.println(sections_combo.getSelectedItem() + " //////");
-						Pattern p = Pattern.compile("sid=\\d+");
-						String section = null;
-						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
-						if (m.find()) {
-							section = m.group();
-						}
-						System.out.println("sid: " + section);
-
-						empcat.addEmployee(inputs.get(0), inputs.get(3), Integer.parseInt(section.replace("sid=", "")),
-								inputs.get(1), inputs.get(2), false, false);
-						human_tabledata.update(empcat.readAllEmployees());
-
-					}
-				});
+				addHumanResource();
 
 			}
 		});
@@ -3610,68 +1764,10 @@ public class NUserPage {
 
 		btnAddPhysicalResource.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
-				physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
-				physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
-				physical_moduleFields.add(new Field("text", "description", "", 20, "description"));
-
-				physical_moduleFields.add(sections);
-				final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
-				final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
-				physical_modulePanel.makeForm();
-				JFrame Add_PhysicalModulePage = new JFrame("Add Physical Module Form");
-				Add_PhysicalModulePage.getContentPane().add(physical_moduleForm.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaddphysicalmoduleBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddphysicalmoduleBtn);
-				Add_PhysicalModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_PhysicalModulePage.pack();
-				Add_PhysicalModulePage.setVisible(true);
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) physical_moduleForm.getJPanel().getComponent(3);
-
-				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
-
-				submitaddphysicalmoduleBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println("all : ");
-						physcat.readAllResources();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < physical_moduleForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) physical_moduleForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " physical");
-						}
-
-						System.out.println(sections_combo.getSelectedItem() + " //////");
-						Pattern p = Pattern.compile("sid=\\d+");
-						String section = null;
-						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
-						if (m.find()) {
-							section = m.group();
-						}
-						System.out.println("sid: " + section);
-
-						physcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")), inputs.get(1),
-								inputs.get(1));
-
-						physical_tabledata.update(physcat.readAllResources());
-
-					}
-				});
+				addPhysicalResource();
 			}
+
+		
 		});
 
 		JScrollPane physical_scrollPane = new JScrollPane();
@@ -3682,78 +1778,7 @@ public class NUserPage {
 
 		physical_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//
-				int rowIndex = physical_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = physical_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Resource!");
-				} else {
-
-					String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-
-					ArrayList<String> section_arraylist = new ArrayList<String>();
-					ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-					for (int i = 0; i < section_hashmap.size(); i++) {
-						section_arraylist.add(section_hashmap.get(i).toString());
-					}
-
-					Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-					ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
-					physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
-					physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
-
-					physical_moduleFields.add(sections);
-					final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
-					final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
-					physical_modulePanel.makeForm();
-					JFrame Edit_PhysicalModulePage = new JFrame("Edit Physical Module Form");
-					Edit_PhysicalModulePage.getContentPane().add(physical_moduleForm.getJPanel(), BorderLayout.NORTH);
-
-					JButton submiteditphysicalmoduleBtn = new JButton("Submit");
-					JPanel buttonPanel = new JPanel();
-					buttonPanel.add(submiteditphysicalmoduleBtn);
-					Edit_PhysicalModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-					Edit_PhysicalModulePage.pack();
-					Edit_PhysicalModulePage.setVisible(true);
-
-					submiteditphysicalmoduleBtn.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							// TODO Auto-generated method stub
-							System.out.println("all : ");
-							physcat.readAllResources();
-							ArrayList<String> inputs = new ArrayList<String>();
-							for (int i = 0; i < physical_moduleForm.getJPanel().getComponentCount(); i++) {
-								FieldPanel fpanel = (FieldPanel) physical_moduleForm.getJPanel().getComponent(i);
-								inputs.add(fpanel.getValues().get(0));
-							}
-							for (int i = 0; i < inputs.size(); i++) {
-								System.out.println(inputs.get(i) + " physical");
-							}
-							// physcat.addResource((inputs.get(0)));
-							// // tu resource ham bayad insert she
-							// allphysicals.clear();
-							// allphysicals = physcat.readAllResources();
-							// System.out.println(phyiscal_tableModel.getRowCount()
-							// + " ---");
-							// int rowcount = phyiscal_tableModel.getRowCount();
-							// for (int j = rowcount - 1; j >= 0; j--) {
-							// phyiscal_tableModel.removeRow(j);
-							// }
-							// System.out.println(phyiscal_tableModel.getRowCount()
-							// + " ---");
-							// for (int i = 0; i < allphysicals.size(); i++) {
-							// Object[] objs = { allphysicals.get(i).get("rid"),
-							// allphysicals.get(i).get("physname") };
-							// phyiscal_tableModel.addRow(objs);
-							// }
-						}
-					});
-				}
+				editPhysicalResource();
 			}
 		});
 
@@ -3763,24 +1788,7 @@ public class NUserPage {
 
 		physical_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rowIndex = physical_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = physical_tabledata.getJdataTable().getSelectedColumn();
-
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Resource!");
-				} else {
-
-					String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						physcat.deleteResource(Integer.parseInt(Table_click));
-						physical_tabledata.update(physcat.readAllResources());
-					}
-				}
+				deletePhysicalResource();
 			}
 		});
 
@@ -3790,24 +1798,7 @@ public class NUserPage {
 		JButton physical_btnSearch = new JButton("Search");
 		physical_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				HashMap<String, String> searchVars = new HashMap<String, String>();
-
-				if (search_physicalname.getText() != null && !search_physicalname.getText().trim().equals(""))
-					searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
-				if (search_physicalmodel.getText() != null && !search_physicalmodel.getText().trim().equals(""))
-					searchVars.put("modeldesc", "\'" + search_physicalmodel.getText() + "\'");
-				searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
-
-				if (physcat.SearchResource(searchVars).isEmpty()) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-				} else {
-					physical_tabledata.update(physcat.SearchResource(searchVars));
-				}
-
-				
-
-
+				searchPhysicalResource();
 			}
 		});
 
@@ -3931,211 +1922,16 @@ public class NUserPage {
 
 		addprojectBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				final ArrayList<String> employees = new ArrayList<String>();
-				final ArrayList<String> financials = new ArrayList<String>();
-				final ArrayList<String> physicals = new ArrayList<String>();
-				final ArrayList<String> information = new ArrayList<String>();
-
-				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
-				for (int i = 0; i < employe_readall.size(); i++) {
-					employees.add(employe_readall.get(i).toString());
-				}
-				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
-				for (int i = 0; i < financial_readall.size(); i++) {
-					financials.add(financial_readall.get(i).toString());
-				}
-
-				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
-				for (int i = 0; i < physical_readall.size(); i++) {
-					physicals.add(physical_readall.get(i).toString());
-				}
-
-				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
-				for (int i = 0; i < information_readall.size(); i++) {
-					information.add(information_readall.get(i).toString());
-				}
-
-				ArrayList<Field> projectFields = new ArrayList<Field>();
-
-				projectFields.add(new Field("text", "project name", "", 20, "name"));
-				projectFields.add(new Field("text", "technology", "", 20, "tech"));
-				projectFields.add(new Field("text", "size", "", 20, "size"));
-
-				projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
-				ArrayList<String> iscomplete = new ArrayList<String>();
-				iscomplete.add("is complete");
-				projectFields.add(new Field("singlecheckbox", "is complete", iscomplete, 10, "items"));
-
-				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
-				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
-				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
-				Field information_check = new Field("checkBox", "information", information, 20, "information");
-
-				projectFields.add(financial_check);
-				projectFields.add(physical_check);
-				projectFields.add(information_check);
-				projectFields.add(maintainers);
-
-				final Form projectForm = new Form(projectFields, "Project Form");
-				final PanelBuilder project_addPanel = new PanelBuilder(projectForm);
-				project_addPanel.makeForm();
-				JFrame Add_ProjectPage = new JFrame("Add Project Form");
-				Add_ProjectPage.getContentPane().add(projectForm.getJPanel(), BorderLayout.NORTH);
-				JScrollPane scroll = new JScrollPane(projectForm.getJPanel());
-				Add_ProjectPage.getContentPane().add(scroll);
-
-				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) projectForm.getJPanel().getComponent(3);
-				final JComboBox employees_comboBox = comboBoxpane.getComboBox();
-
-				final SingleCheckBoxJPanel checkBoxpane = (SingleCheckBoxJPanel) projectForm.getJPanel()
-						.getComponent(4);
-				JButton submitaddprojectBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddprojectBtn);
-				Add_ProjectPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_ProjectPage.pack();
-				Add_ProjectPage.setVisible(true);
-
-				final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) projectForm.getJPanel().getComponent(5);
-				final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) projectForm.getJPanel().getComponent(6);
-				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) projectForm.getJPanel()
-						.getComponent(7);
-				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) projectForm.getJPanel().getComponent(8);
-
-				employees_comboBox.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println(employees_comboBox.getSelectedItem() + " ino select kardi project");
-					}
-				});
-
-				submitaddprojectBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						System.out.println("all : ");
-						projcat.getProjects();
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < projectForm.getJPanel().getComponentCount() - 1; i++) {
-							FieldPanel fpanel = (FieldPanel) projectForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " project");
-						}
-
-						employees_comboBox.getSelectedItem();
-						String empid = "";
-						Pattern emp_p = Pattern.compile("empid=\\d+");
-						Matcher emp_m = emp_p.matcher((CharSequence) employees_comboBox.getSelectedItem());
-						if (emp_m.find()) {
-							empid = emp_m.group();
-						}
-						System.out.println("empid: " + empid);
-						int employeeID = Integer.parseInt(empid.replace("empid=", ""));
-
-						Employee proj_manager = empcat.getEmployee(employeeID);
-						System.out.println(proj_manager.getName());
-
-						final ArrayList<String> vales_phys = checkBoxpane.getCheckedValues();
-						boolean confirmed = false;
-						if (vales_phys.size() == 1)
-							confirmed = true;
-
-						long projid = projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2),
-								inputs.get(1), confirmed);
-
-						project_tabledata.update(projcat.getProjects());
-
-						allprojects = projcat.getProjects();
-						project_tabledata.update(projcat.getProjects());
-						System.out.println(vales_phys.toString());
-
-						System.out.println("----------");
-
-						final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
-						System.out.println(finanvales);
-						final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
-						System.out.println(physicalvales);
-						final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
-						System.out.println(informationvales);
-						final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
-						System.out.println(employeevales);
-						Pattern emp = Pattern.compile("empid=\\d+");
-						for (int i = 0; i < employeevales.size(); i++) {
-							String empids = null;
-							Matcher m_emp = emp.matcher(employeevales.get(i).toString());
-							if (m_emp.find()) {
-								empids = m_emp.group();
-							}
-							System.out.println("empids: " + empids);
-							projempcat.addProjectEmployee((int) projid, Integer.parseInt(empids.replace("empid=", "")),
-									"1111-11-1", "1111-11-1");
-
-						}
-
-						Pattern res = Pattern.compile("rid=\\d+");
-						for (int i = 0; i < finanvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(finanvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("finan rid: " + respids);
-							presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
-									(int) projid, "1111-11-1", "1111-11-1");
-
-						}
-
-						for (int i = 0; i < physicalvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(physicalvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("phys rid: " + respids);
-							presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
-									(int) projid, "1111-11-1", "1111-11-1");
-
-						}
-
-						for (int i = 0; i < informationvales.size(); i++) {
-							String respids = null;
-							Matcher m_res = res.matcher(informationvales.get(i).toString());
-							if (m_res.find()) {
-								respids = m_res.group();
-							}
-							System.out.println("info rid: " + respids);
-							presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
-									(int) projid, "1111-11-1", "1111-11-1");
-						}
-
-					}
-				});
+				addProject();
 			}
+
+			
 		});
 
 		JButton project_btnSearch = new JButton("Search");
 		project_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				HashMap<String, String> searchVars = new HashMap<String, String>();
-
-				if (search_projectname.getText() != null && !search_projectname.getText().trim().equals(""))
-					searchVars.put("projname", "\'" + search_projectname.getText() + "\'");
-				if (search_projectsize.getText() != null && !search_projectsize.getText().trim().equals(""))
-					searchVars.put("size", "\'" + search_projectsize.getText() + "\'");
-				if (search_projecttech.getText() != null && !search_projecttech.getText().trim().equals(""))
-					searchVars.put("tech", "\'" + search_projecttech.getText() + "\'");
-				project_tabledata.update(projcat.Search(searchVars));
-
-
-				if (projcat.Search(searchVars).isEmpty()) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-				} else {
-					project_tabledata.update(projcat.Search(searchVars));
-				}
-
+				searchProject();
 			}
 		});
 
@@ -4219,97 +2015,7 @@ public class NUserPage {
 
 		btnEditProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// EDITPROJECT
-				ArrayList<Field> projectFields = new ArrayList<Field>();
-				ArrayList<HashMap<String, String>> employees_fromcatalouge = empcat.readAllEmployees();
-				ArrayList<String> employees = new ArrayList<String>();
-
-				projectFields.add(new Field("text", "project name", "", 20, "name"));
-				projectFields.add(new Field("text", "technology", "", 20, "tech"));
-				projectFields.add(new Field("text", "size", "", 20, "size"));
-
-				for (int i = 0; i < employees_fromcatalouge.size(); i++) {
-					employees.add("id:" + employees_fromcatalouge.get(i).get("empid").toString() + " "
-							+ employees_fromcatalouge.get(i).get("empname").toString());
-				}
-				System.out.println(employees + " 00");
-				projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
-				ArrayList<String> iscomplete = new ArrayList<String>();
-				iscomplete.add("is complete");
-				projectFields.add(new Field("singlecheckbox", "is complete", iscomplete, 10, "items"));
-
-				final Form edit_projectForm = new Form(projectFields, "Project Form");
-				final PanelBuilder project_addPanel = new PanelBuilder(edit_projectForm);
-				project_addPanel.makeForm();
-				JFrame Edit_ProjectPage = new JFrame("Edit Project Form");
-
-				Edit_ProjectPage.getContentPane().add(edit_projectForm.getJPanel(), BorderLayout.NORTH);
-
-				ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) edit_projectForm.getJPanel().getComponent(3);
-				final JComboBox employees_comboBox = comboBoxpane.getComboBox();
-
-				final SingleCheckBoxJPanel checkBoxpane = (SingleCheckBoxJPanel) edit_projectForm.getJPanel()
-						.getComponent(4);
-				JButton submiteditprojectBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submiteditprojectBtn);
-				Edit_ProjectPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Edit_ProjectPage.pack();
-				Edit_ProjectPage.setVisible(true);
-
-				employees_comboBox.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println(employees_comboBox.getSelectedItem() + " ino select kardi project");
-					}
-				});
-
-				submiteditprojectBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						System.out.println("-----");
-						int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
-						int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
-						if (rowIndex == -1) {
-							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-									"Please Select a module!");
-						} else {
-
-							String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-									.toString()); // return
-
-							selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
-							System.out.println("-----");
-
-							Project project = projcat.getProject(selected_project_forsubsystem);
-							System.out.println("all : ");
-							projcat.getProjects();
-							ArrayList<String> inputs = new ArrayList<String>();
-							for (int i = 0; i < edit_projectForm.getJPanel().getComponentCount() - 1; i++) {
-								FieldPanel fpanel = (FieldPanel) edit_projectForm.getJPanel().getComponent(i);
-								inputs.add(fpanel.getValues().get(0));
-							}
-							for (int i = 0; i < inputs.size(); i++) {
-								System.out.println(inputs.get(i) + " project");
-							}
-							int employeeID = Integer.parseInt((inputs.get(3).substring(0, 4).replace("id:", "")));
-							Employee proj_manager = empcat.getEmployee(employeeID);
-							System.out.println(proj_manager.getName());
-							final ArrayList<String> vales_phys = checkBoxpane.getCheckedValues();
-							boolean confirmed = false;
-							if (vales_phys.size() == 1)
-								confirmed = true;
-
-							project.editProject(inputs.get(0).toString(), "", inputs.get(1), proj_manager,
-									inputs.get(2), confirmed);
-
-							allprojects = projcat.getProjects();
-							project_tabledata.update(projcat.getProjects());
-							System.out.println(vales_phys.toString() + " is this it");
-						}
-					}
-				});
+				editProject();
 
 			}
 		});
@@ -4320,26 +2026,9 @@ public class NUserPage {
 
 		btnDeleteProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				System.out.println("-----");
-				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Project!");
-				} else {
-
-					String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // return
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						projcat.deleteProject(Integer.parseInt(Table_click));
-						project_tabledata.update(projcat.getProjects());
-					}
-				}
-
+				deleteProject();
 			}
+
 		});
 
 		search_projectmanager = new JTextField();
@@ -4574,102 +2263,9 @@ public class NUserPage {
 
 		circulation_btnGetReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> resource_types = new ArrayList<String>();
-				final ArrayList<String> resources = new ArrayList<String>();
-				resource_types.add("Information");
-				resource_types.add("Financial");
-				resource_types.add("Physical");
-				resource_types.add("Module");
-				ArrayList<Field> circulationReport_Fields = new ArrayList<Field>();
-				Field res_type = new Field("comboBox", "resource types", resource_types, 30, "items");
-				Field res = new Field("comboBox", "resources", resources, 30, "items");
-
-				circulationReport_Fields.add(res_type);
-				circulationReport_Fields.add(res);
-
-				final Form circulationreport_Form = new Form(circulationReport_Fields, "Circulation Report Form");
-				final PanelBuilder circulation_Panel = new PanelBuilder(circulationreport_Form);
-				circulation_Panel.makeForm();
-
-				JFrame getReport_CirculationPage = new JFrame("Get Report Circulation Resource Form");
-
-				getReport_CirculationPage.getContentPane().add(circulationreport_Form.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitgetReportBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitgetReportBtn);
-				getReport_CirculationPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				getReport_CirculationPage.pack();
-				getReport_CirculationPage.setVisible(true);
-				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) circulationreport_Form.getJPanel()
-						.getComponent(0);
-				ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) circulationreport_Form.getJPanel().getComponent(1);
-
-				final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
-				final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
-				resource_type.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						if (resource_type.getSelectedItem().toString().equals("Financial")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
-							for (int i = 0; i < financial_resource.size(); i++) {
-								resourceCombo.addItem(financial_resource.get(i).toString());
-							}
-						}
-						if (resource_type.getSelectedItem().toString().equals("Physical")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
-							for (int i = 0; i < physical_resource.size(); i++) {
-								resourceCombo.addItem(physical_resource.get(i).toString());
-							}
-
-						}
-						if (resource_type.getSelectedItem().toString().equals("Information")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
-							for (int i = 0; i < information_resource.size(); i++) {
-								resourceCombo.addItem(information_resource.get(i).toString());
-							}
-
-						}
-						if (resource_type.getSelectedItem().toString().equals("Module")) {
-							resourceCombo.removeAllItems();
-							ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
-							for (int i = 0; i < module_resource.size(); i++) {
-								resourceCombo.addItem(module_resource.get(i).toString());
-							}
-						}
-					}
-				});
-				submitgetReportBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println(resourceCombo.getSelectedItem() + " this is resource combo");
-						System.out.println(resource_type.getSelectedItem() + " this is resource type");
-
-							String rid = "";
-							Pattern p = Pattern.compile("rid=\\d+");
-							Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
-							if (m.find()) {
-								rid = m.group();
-							}
-							System.out.println("rid: " + rid);
-
-							System.out.println("This is the Project Resource Utilization Report:");
-							presutilcat.getCirculationReport(
-									physcat.getResource(Integer.parseInt(rid.replace("rid=", "")))).printRep();
-
-							circulation_tabledata.update(presutilcat
-									.getCirculationReport(
-											physcat.getResource(Integer.parseInt(rid.replace("rid=", ""))))
-									.getResults());
-
-					}
-				});
+				circulationReport();
 			}
+			
 		});
 		GroupLayout gl_circulationPanel = new GroupLayout(circulationPanel);
 		gl_circulationPanel
@@ -4702,58 +2298,10 @@ public class NUserPage {
 		resreq_btnGetReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				ArrayList<String> project_arraylist = new ArrayList<String>();
-
-				ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
-				for (int i = 0; i < project_hashmap.size(); i++) {
-					project_arraylist.add(project_hashmap.get(i).toString());
-				}
-
-				ArrayList<Field> getreport_resreqFields = new ArrayList<Field>();
-				Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
-
-				getreport_resreqFields.add(projects);
-
-				final Form getreport_resreqForm = new Form(getreport_resreqFields, "Report Resource Requirement Form");
-				final PanelBuilder report_resreq_panel = new PanelBuilder(getreport_resreqForm);
-				report_resreq_panel.makeForm();
-
-				JFrame getReport_ResReqPage = new JFrame("Get Report Resource Requirement Form");
-				getReport_ResReqPage.getContentPane().add(getreport_resreqForm.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitresreqreportBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitresreqreportBtn);
-				getReport_ResReqPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				getReport_ResReqPage.pack();
-				getReport_ResReqPage.setVisible(true);
-				ComboBoxJPanel comboBoxpanel_project = (ComboBoxJPanel) getreport_resreqForm.getJPanel()
-						.getComponent(0);
-				final JComboBox projectCombo = comboBoxpanel_project.getComboBox();
-
-				submitresreqreportBtn.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						for (int i = 0; i < getreport_resreqForm.getJPanel().getComponentCount(); i++) {
-							// System.out.println(fpanel.selected_Choice);
-						}
-						System.out.println(projectCombo.getSelectedItem() + " ino select");
-
-						Pattern p = Pattern.compile("projid=\\d+");
-						Matcher m = p.matcher(projectCombo.getSelectedItem().toString());
-						if (m.find()) {
-							System.out.println(m.group().replace("projid=", ""));
-							int projid = Integer.parseInt(m.group().replace("projid=", ""));
-							Project proj = projcat.getProject(projid);
-							resreqcat.getReport(proj).getResults();
-							resreq_tabledata.update(resreqcat.getReport(proj).getResults());
-
-						}
-
-					}
-				});
+				resourceRequirementReport();
 			}
+
+			
 		});
 		GroupLayout gl_resourcereqPanel = new GroupLayout(resourcereqPanel);
 		gl_resourcereqPanel
@@ -4784,78 +2332,10 @@ public class NUserPage {
 
 		resavail_btnGetReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> resource_types = new ArrayList<String>();
-				resource_types.add("Information");
-				resource_types.add("Financial");
-				resource_types.add("Physical");
-				resource_types.add("Employee");
-				resource_types.add("Module");
-
-				ArrayList<Field> getreport_resavailFields = new ArrayList<Field>();
-				Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
-
-				getreport_resavailFields.add(req_res_type);
-
-				final Form getreport_resavailForm = new Form(getreport_resavailFields,
-						"Report Resource Available Form");
-				final PanelBuilder report_resavail_panel = new PanelBuilder(getreport_resavailForm);
-				report_resavail_panel.makeForm();
-
-				JFrame getReport_ResAvailPage = new JFrame("Get Report Resource Available Form");
-				getReport_ResAvailPage.getContentPane().add(getreport_resavailForm.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitresavailreportBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitresavailreportBtn);
-				getReport_ResAvailPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				getReport_ResAvailPage.pack();
-				getReport_ResAvailPage.setVisible(true);
-				ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) getreport_resavailForm.getJPanel()
-						.getComponent(0);
-				final JComboBox resourceRepCombo = comboBoxpanel_restype.getComboBox();
-				submitresavailreportBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println(resourceRepCombo.getSelectedItem().toString() + " ine res type");
-						// FinancialResourceCatalogue finanResCat= new
-						// FinancialResourceCatalogue();
-						// finanResCat.getReport().printRep();
-						//
-						if (resourceRepCombo.getSelectedItem().toString().equals("Financial")) {
-							// System.out.println(finanResCat.getReport().getResults());
-							resavail_tabledata.update(financat.getReport().getResults(),
-									new String[] { "sid", "count", "finanname" });
-						}
-						if (resourceRepCombo.getSelectedItem().toString().equals("Physical")) {
-							// HERE
-							// System.out.println(physResCat.getReport().getResults());
-							resavail_tabledata.update(physcat.getReport().getResults(),
-									new String[] { "sid", "count", "physname" });
-
-						}
-						if (resourceRepCombo.getSelectedItem().toString().equals("Information")) {
-							// System.out.println(infoResCat.getReport().getResults());
-							resavail_tabledata.update(infocat.getReport().getResults(),
-									new String[] { "sid", "count", "irname" });
-
-						}
-						if (resourceRepCombo.getSelectedItem().toString().equals("Employee")) {
-							System.out.println(empcat.getReport().getResults());
-							resavail_tabledata.update(empcat.getReport().getResults(),
-									new String[] { "sid", "count", "empname" });
-
-						}
-						if (resourceRepCombo.getSelectedItem().toString().equals("Module")) {
-							// System.out.println(modResCat.getReport().getResults());
-							resavail_tabledata.update(modcat.getReport().getResults(),
-									new String[] { "sid", "count", "modname" });
-
-						}
-
-					}
-				});
+				resourceAvailableReport();
 			}
+
+			
 		});
 		GroupLayout gl_resourceavailPanel = new GroupLayout(resourceavailPanel);
 		gl_resourceavailPanel
@@ -5066,4 +2546,2757 @@ public class NUserPage {
 	public JFrame getUserpageFrame() {
 		return userpageFrame;
 	}
+	
+	private void assignAccessRight() {
+		ArrayList<String> accessrights_types = new ArrayList<String>();
+		accessrights_types.add("Default");
+		accessrights_types.add("Intermediate");
+		accessrights_types.add("Super");
+		ArrayList<Field> acessright_assignFields = new ArrayList<Field>();
+		Field access_right = new Field("comboBox", "accessrights", accessrights_types, 20, "items");
+
+		acessright_assignFields.add(access_right);
+
+		Form accessright_Form = new Form(acessright_assignFields, "AccessRight Form");
+		final PanelBuilder accessright_assignPanel = new PanelBuilder(accessright_Form);
+		accessright_assignPanel.makeForm();
+
+		JFrame Assign_AccessRightPage = new JFrame("Assign Access Right Form");
+		Assign_AccessRightPage.getContentPane().add(accessright_Form.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitaccessrightassignmentBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaccessrightassignmentBtn);
+
+		Assign_AccessRightPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Assign_AccessRightPage.pack();
+		Assign_AccessRightPage.setVisible(true);
+		submitaccessrightassignmentBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("-----");
+				int rowIndex = accessright_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = accessright_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a User!");
+				} else {
+
+					String Table_click = (accessright_tabledata.getJdataTable().getModel()
+							.getValueAt(rowIndex, 0).toString());
+					System.out.println(Table_click);
+					Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
+					System.out.println(emp_access.getName() + " WHAT  " + selected_accessright_forassignment);
+					emp_access.setAccessRight(selected_accessright_forassignment);
+					System.out.println("ACCESS RIGHT O DADAM");
+					accessright_tabledata.update(empcat.getConfirmedEmployees());
+				}
+			}
+		});
+
+		ComboBoxJPanel comboBoxpanel_accessright = (ComboBoxJPanel) accessright_Form.getJPanel()
+				.getComponent(0);
+		final JComboBox accessright_type = comboBoxpanel_accessright.getComboBox();
+
+		accessright_type.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println(accessright_type.getSelectedItem() + " ino select kardi access right "
+						+ accessright_type.getSelectedIndex());
+				selected_accessright_forassignment = accessright_type.getSelectedIndex() + 1;
+			}
+		});
+	}
+	
+	private void searchAccessRight() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+
+		System.out.println(search_accessrightname.getText()+" sssssssssssssssss");
+		if(search_accessrightname.getText().equals("default"))
+			searchVars.put("accessrightid", "\'" + 1 + "\'");
+
+		if(search_accessrightname.getText().equals("super"))
+			searchVars.put("accessrightid", "\'" + 3 + "\'");
+
+		if(search_accessrightname.getText().equals("intermediate"))
+			searchVars.put("accessrightid", "\'" + 2 + "\'");
+		System.out.println("ASDSADASDA");
+		System.out.println(searchVars);
+		
+		if (empcat.SearchEmployee(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+			accessright_tabledata.update(empcat.SearchEmployee(searchVars));
+		}
+	}
+	
+	private void addSubsystem() {
+		ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
+		Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		subsystem_addFields.add(subsystem_name);
+		subsystem_addFields.add(subsystem_desc);
+		subsystem_addFields.add(sections);
+
+		final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
+		final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
+		subsystemAdd_Panel.makeForm();
+
+		JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
+		Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitaddsubsystemBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddsubsystemBtn);
+		Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_SubsystemPage.pack();
+		Add_SubsystemPage.setVisible(true);
+
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) subsystem_Form.getJPanel().getComponent(2);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		submitaddsubsystemBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " subsystem");
+				}
+				System.out.println(sections_combo.getSelectedItem() + " //////");
+				Pattern p = Pattern.compile("sid=\\d+");
+				String section = null;
+				Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+				if (m.find()) {
+					section = m.group();
+				}
+				System.out.println("sid: " + section);
+
+				subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem,
+						Integer.parseInt(section.replace("sid=", "")));
+				subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
+				System.out.println("add shoood ");
+
+			}
+		});
+	}
+	private void deleteSubsystem() {
+		int rowIndex = subsystem_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = subsystem_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (subsystem_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				subsyscat.deleteSubSystem(Integer.parseInt(Table_click));
+				subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
+			}
+		}
+	}
+	
+	private void editSubsystem() {
+		int rowIndex = subsystem_tabledata.getJdataTable().getSelectedRow();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			final String Table_click = (subsystem_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+
+		ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
+		Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		subsystem_addFields.add(subsystem_name);
+		subsystem_addFields.add(subsystem_desc);
+		subsystem_addFields.add(sections);
+
+		final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
+		final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
+		subsystemAdd_Panel.makeForm();
+
+		JFrame Add_SubsystemPage = new JFrame("Edit Subsystem Form");
+		Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitaddsubsystemBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddsubsystemBtn);
+		Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_SubsystemPage.pack();
+		Add_SubsystemPage.setVisible(true);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) subsystem_Form.getJPanel().getComponent(2);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		
+		submitaddsubsystemBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " subsystem"); 
+				}
+
+				// subsyscat.addSubSystem(inputs.get(0),
+				// selected_project_forsubsystem);
+				SubSystem sub = subsyscat.getSubSystem(Integer.parseInt(Table_click));
+				sub.editSubSystem(inputs.get(0), sections_combo.getSelectedIndex());
+				subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
+				System.out.println("add shoood ");
+			}
+		});
+	}
+	}
+	
+	private void addResourceUtilization() {
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		ArrayList<String> resource_types = new ArrayList<String>();
+		final ArrayList<String> resources = new ArrayList<String>();
+		resource_types.add("Information");
+		resource_types.add("Financial");
+		resource_types.add("Physical");
+		resource_types.add("Employee");
+		resource_types.add("Module");
+		ArrayList<Field> resutil_Fields = new ArrayList<Field>();
+		Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
+		Field req_res = new Field("comboBox", "resources", resources, 20, "items");
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		resutil_Fields.add(req_res_type);
+		resutil_Fields.add(req_res);
+		resutil_Fields.add(sections);
+
+		final Form resutil_Form = new Form(resutil_Fields, "Resource Utilization Form");
+		final PanelBuilder requirement_Panel = new PanelBuilder(resutil_Form);
+		requirement_Panel.makeForm();
+
+		JFrame Add_ResUtilPage = new JFrame("Add Resource Utilization Form");
+		Add_ResUtilPage.getContentPane().add(resutil_Form.getJPanel(), BorderLayout.NORTH);
+
+		// adding date
+		UtilDateModel modelfor = new UtilDateModel();
+		UtilDateModel modelto = new UtilDateModel();
+
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+		JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
+		JLabel from = new JLabel("From");
+		JLabel to = new JLabel("To");
+		final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+		final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
+
+		JPanel date_panel = new JPanel(new FlowLayout());
+		date_panel.add(from);
+
+		date_panel.add(from_datePanel);
+		date_panel.add(to);
+		date_panel.add(to_datePanel);
+		Add_ResUtilPage.getContentPane().add(date_panel, BorderLayout.CENTER);
+		// end date
+
+		JButton submitaddresutilBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddresutilBtn);
+		Add_ResUtilPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_ResUtilPage.pack();
+		Add_ResUtilPage.setVisible(true);
+		ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(0);
+		ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(1);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) resutil_Form.getJPanel().getComponent(2);
+
+		final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
+		final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
+		final JComboBox sectionCombo = comboBoxpane_sections.getComboBox();
+
+		resourceCombo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				// System.out.println(resourceCombo.getSelectedItem() +
+				// " ino select kardi az resource");
+				// System.out.println(sectionCombo.getSelectedItem() + "
+				// ino select kardi section");
+				// System.out.println(projectCombo.getSelectedItem() + "
+				// ino select kardi proje");
+				// System.out.println(from_datePicker.getJFormattedTextField().getText()
+				// + " from date");
+				// System.out.println(to_datePicker.getJFormattedTextField().getText()
+				// + " to date");
+				//
+				System.out.println(from_datePicker.getJFormattedTextField().getText() + " from date");
+				System.out.println(to_datePicker.getJFormattedTextField().getText() + " to date");
+
+			}
+		});
+
+		resource_type.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (resource_type.getSelectedItem().toString().equals("Financial")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
+					for (int i = 0; i < financial_resource.size(); i++) {
+						resourceCombo.addItem(financial_resource.get(i).toString());
+					}
+				}
+				if (resource_type.getSelectedItem().toString().equals("Physical")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
+					for (int i = 0; i < physical_resource.size(); i++) {
+						resourceCombo.addItem(physical_resource.get(i).toString());
+					}
+
+				}
+				if (resource_type.getSelectedItem().toString().equals("Information")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
+					for (int i = 0; i < information_resource.size(); i++) {
+						resourceCombo.addItem(information_resource.get(i).toString());
+					}
+
+				}
+				if (resource_type.getSelectedItem().toString().equals("Employee")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
+					for (int i = 0; i < employee_resource.size(); i++) {
+						resourceCombo.addItem(employee_resource.get(i).toString());
+					}
+				}
+				if (resource_type.getSelectedItem().toString().equals("Module")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
+					for (int i = 0; i < module_resource.size(); i++) {
+						resourceCombo.addItem(module_resource.get(i).toString());
+					}
+				}
+			}
+		});
+		submitaddresutilBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				for (int i = 0; i < resutil_Form.getJPanel().getComponentCount(); i++) {
+					// System.out.println(fpanel.selected_Choice);
+				}
+				System.out.println("all : ");
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < resutil_Form.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) resutil_Form.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				String rid = "";
+				Pattern p = Pattern.compile("rid=\\d+");
+				Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
+				if (m.find()) {
+					rid = m.group();
+				}
+				String sid = "";
+				Pattern p1 = Pattern.compile("sid=\\d+");
+				Matcher m1 = p1.matcher((CharSequence) sectionCombo.getSelectedItem());
+				if (m1.find()) {
+					sid = m1.group();
+				}
+
+				String fromdate = from_datePicker.getJFormattedTextField().getText();
+				String todate = to_datePicker.getJFormattedTextField().getText();
+
+				System.out.println("--------------");
+				System.out.println(rid + " " + sid + " " + fromdate + " " + todate);
+
+				presutilcat.addProjectResourceUtilization(Integer.parseInt(rid.replace("rid=", "")),
+						Integer.parseInt(sid.replace("sid=", "")), selected_project_forsubsystem, fromdate,
+						todate);
+
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<ProjectResourceUtilization> allpresutil;
+				allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
+				for (int i = 0; i < allpresutil.size(); i++) {
+					data.add((allpresutil.get(i).toHashMap()));
+				}
+				resourceutil_tabledata.update(data);
+
+			}
+		});
+	}
+	private void editResourceUtilization() {
+		int rowIndex = resourceutil_tabledata.getJdataTable().getSelectedRow();
+
+		String Table_click = (resourceutil_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+				.toString()); // return
+		selected_resource_util = Integer.parseInt(Table_click.trim());
+
+		System.out.println(Table_click);
+		System.out.println("---resource util id-- " + selected_resource_util);
+
+
+		JFrame Edit_ResUtilPage = new JFrame("Edit Resource Utilization Form");
+
+		// adding date
+		UtilDateModel modelfor = new UtilDateModel();
+		UtilDateModel modelto = new UtilDateModel();
+
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+		JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
+		JLabel from = new JLabel("From");
+		JLabel to = new JLabel("To");
+		final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+		final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
+
+		JPanel date_panel = new JPanel(new FlowLayout());
+		date_panel.add(from);
+
+		date_panel.add(from_datePanel);
+		date_panel.add(to);
+		date_panel.add(to_datePanel);
+		Edit_ResUtilPage.getContentPane().add(date_panel, BorderLayout.CENTER);
+		// end date
+
+		JButton submiteditresutilBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submiteditresutilBtn);
+		Edit_ResUtilPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Edit_ResUtilPage.pack();
+		Edit_ResUtilPage.setVisible(true);
+
+		submiteditresutilBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+
+				String fromdate = from_datePicker.getJFormattedTextField().getText();
+				String todate = to_datePicker.getJFormattedTextField().getText();
+
+
+				ProjectResourceUtilization projresutil = presutilcat.getProjectResourceUtilization(selected_resource_util);
+				projresutil.edit(fromdate, todate);
+				
+
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<ProjectResourceUtilization> allpresutil;
+				allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
+				for (int i = 0; i < allpresutil.size(); i++) {
+					data.add((allpresutil.get(i).toHashMap()));
+				}
+				resourceutil_tabledata.update(data);
+
+			}
+		});
+	}
+	
+	private void deleteResourceUtilization() {
+		int rowIndex = resourceutil_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = resourceutil_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource Utilization!");
+		} else {
+
+			String Table_click = (resourceutil_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				presutilcat.deleteProjectResourceUtilization(Integer.parseInt(Table_click));
+
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<ProjectResourceUtilization> allpresutil;
+				allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
+				for (int i = 0; i < allpresutil.size(); i++) {
+					data.add((allpresutil.get(i).toHashMap()));
+				}
+				resourceutil_tabledata.update(data);
+				
+		}
+	}
+	}
+	
+	private void addRequirement() {
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<String> project_arraylist = new ArrayList<String>();
+
+		ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
+		for (int i = 0; i < project_hashmap.size(); i++) {
+			project_arraylist.add(project_hashmap.get(i).toString());
+		}
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		ArrayList<String> resource_types = new ArrayList<String>();
+		final ArrayList<String> resources = new ArrayList<String>();
+		resource_types.add("Information");
+		resource_types.add("Financial");
+		resource_types.add("Physical");
+		resource_types.add("Employee");
+		resource_types.add("Module");
+		ArrayList<Field> requirement_moduleFields = new ArrayList<Field>();
+		Field reqname = new Field("text", "req name       ", "", 10, "name");
+		Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
+		Field req_res = new Field("comboBox", "resources", resources, 20, "items");
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+		Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
+
+		requirement_moduleFields.add(reqname);
+		requirement_moduleFields.add(req_res_type);
+		requirement_moduleFields.add(req_res);
+		requirement_moduleFields.add(sections);
+		requirement_moduleFields.add(projects);
+
+		final Form requirement_Form = new Form(requirement_moduleFields, "Requirement Form");
+		final PanelBuilder requirement_Panel = new PanelBuilder(requirement_Form);
+		requirement_Panel.makeForm();
+
+		JFrame Add_RequirementPage = new JFrame("Add Requirement Module Form");
+		Add_RequirementPage.getContentPane().add(requirement_Form.getJPanel(), BorderLayout.NORTH);
+
+		// adding date
+		UtilDateModel modelfor = new UtilDateModel();
+		UtilDateModel modelto = new UtilDateModel();
+
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+		JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
+		JLabel from = new JLabel("From");
+		JLabel to = new JLabel("To");
+		final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+		final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
+
+		JPanel date_panel = new JPanel(new FlowLayout());
+		date_panel.add(from);
+
+		date_panel.add(from_datePanel);
+		date_panel.add(to);
+		date_panel.add(to_datePanel);
+		Add_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
+		// end date
+
+		JButton submitaddrequeirementBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddrequeirementBtn);
+		Add_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_RequirementPage.pack();
+		Add_RequirementPage.setVisible(true);
+		ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(1);
+		ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(2);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(3);
+		ComboBoxJPanel comboBoxpane_projects = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(4);
+
+		final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
+		final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
+		final JComboBox sectionCombo = comboBoxpane_sections.getComboBox();
+		final JComboBox projectCombo = comboBoxpane_projects.getComboBox();
+
+		resourceCombo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				// System.out.println(resourceCombo.getSelectedItem() +
+				// " ino select kardi az resource");
+				// System.out.println(sectionCombo.getSelectedItem() + "
+				// ino select kardi section");
+				// System.out.println(projectCombo.getSelectedItem() + "
+				// ino select kardi proje");
+				// System.out.println(from_datePicker.getJFormattedTextField().getText()
+				// + " from date");
+				// System.out.println(to_datePicker.getJFormattedTextField().getText()
+				// + " to date");
+				//
+				System.out.println(from_datePicker.getJFormattedTextField().getText() + " from date");
+				System.out.println(to_datePicker.getJFormattedTextField().getText() + " to date");
+
+			}
+		});
+
+		resource_type.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (resource_type.getSelectedItem().toString().equals("Financial")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
+					for (int i = 0; i < financial_resource.size(); i++) {
+						resourceCombo.addItem(financial_resource.get(i).toString());
+					}
+				}
+				if (resource_type.getSelectedItem().toString().equals("Physical")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
+					for (int i = 0; i < physical_resource.size(); i++) {
+						resourceCombo.addItem(physical_resource.get(i).toString());
+					}
+
+				}
+				if (resource_type.getSelectedItem().toString().equals("Information")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
+					for (int i = 0; i < information_resource.size(); i++) {
+						resourceCombo.addItem(information_resource.get(i).toString());
+					}
+
+				}
+				if (resource_type.getSelectedItem().toString().equals("Employee")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
+					for (int i = 0; i < employee_resource.size(); i++) {
+						resourceCombo.addItem(employee_resource.get(i).toString());
+					}
+				}
+				if (resource_type.getSelectedItem().toString().equals("Module")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
+					for (int i = 0; i < module_resource.size(); i++) {
+						resourceCombo.addItem(module_resource.get(i).toString());
+					}
+				}
+			}
+		});
+		submitaddrequeirementBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < requirement_Form.getJPanel().getComponentCount(); i++) {
+					// System.out.println(fpanel.selected_Choice);
+				}
+				System.out.println("all : ");
+				resreqcat.getResourceRequirements();
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < requirement_Form.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) requirement_Form.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				// for (int i = 0; i < inputs.size(); i++) {
+				// System.out.println(inputs.get(i) + "adasa");
+				// }
+				String empid = "";
+				String rid = "";
+				if (resource_type.getSelectedItem().toString().equals("Employee")) {
+					Pattern p = Pattern.compile("empid=\\d+");
+					Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
+					if (m.find()) {
+						empid = m.group();
+					}
+				} else {
+					Pattern p = Pattern.compile("rid=\\d+");
+					Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
+					if (m.find()) {
+						rid = m.group();
+					}
+				}
+
+				String sid = "";
+				Pattern p1 = Pattern.compile("sid=\\d+");
+				Matcher m1 = p1.matcher((CharSequence) sectionCombo.getSelectedItem());
+				if (m1.find()) {
+					sid = m1.group();
+				}
+
+				String projid = "";
+				Pattern p2 = Pattern.compile("projid=\\d+");
+				Matcher m2 = p2.matcher((CharSequence) projectCombo.getSelectedItem());
+				if (m2.find()) {
+					projid = m2.group();
+				}
+
+				String fromdate = from_datePicker.getJFormattedTextField().getText();
+				String todate = to_datePicker.getJFormattedTextField().getText();
+
+				System.out.println("--------------");
+				System.out
+						.println(empid + " " + rid + " " + sid + " " + projid + " " + fromdate + " " + todate);
+
+				resreqcat.addResourceRequirement(Integer.parseInt(rid.replace("rid=", "")),
+						Integer.parseInt(sid.replace("sid=", "")),
+						Integer.parseInt(projid.replace("projid=", "")), fromdate, todate);
+
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<ResourceRequirement> allresourcerequirements;
+				allresourcerequirements = resreqcat.getResourceRequirements();
+				for (int i = 0; i < allresourcerequirements.size(); i++) {
+					data.add((allresourcerequirements.get(i).toHashMap()));
+				}
+				resrequirement_tabledata.update(data);
+
+				// System.out.println(resreq_tableModel.getRowCount() +
+				// "");
+				// for (int i = 0; i < allresourcerequirements.size();
+				// i++) {
+				// Object[] objs = {
+				// allresourcerequirements.get(i).toHashMap().get("rid"),
+				// allresourcerequirements.get(i).getResource().getName(),
+				// allresourcerequirements.get(i).toHashMap().get("sid"),
+				// allresourcerequirements.get(i).getSection().getName(),
+				// allresourcerequirements.get(i).toHashMap().get("pid"),
+				// allresourcerequirements.get(i).getProject().getName(),
+				// allresourcerequirements.get(i).toHashMap().get("fromdate"),
+				// allresourcerequirements.get(i).toHashMap().get("todate")
+				// };
+				// resreq_tableModel.addRow(objs);
+				// }
+
+			}
+		});
+	}
+	private void editRequirement() {
+		ArrayList<Field> requirement_editFields = new ArrayList<Field>();
+		ArrayList<String> issatisfied = new ArrayList<String>();
+		issatisfied.add("satisfied");
+
+		requirement_editFields.add(new Field("singlecheckbox", "is satisfied", issatisfied, 10, "items"));
+
+		System.out.println("//////////////////");
+		final Form editrequirement_Form = new Form(requirement_editFields, "Edit Requirement Form");
+		final PanelBuilder editrequirement_Panel = new PanelBuilder(editrequirement_Form);
+		editrequirement_Panel.makeForm();
+
+		JFrame Edit_RequirementPage = new JFrame("Edit Requirement Module Form");
+		Edit_RequirementPage.getContentPane().add(editrequirement_Form.getJPanel(), BorderLayout.NORTH);
+
+		UtilDateModel modelsatisfydate = new UtilDateModel();
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		final JDatePanelImpl satisfy_datePanel = new JDatePanelImpl(modelsatisfydate, p);
+		JLabel satisfylbl = new JLabel("Satisfy Date");
+
+		final JDatePickerImpl satisfy_datePicker = new JDatePickerImpl(satisfy_datePanel,
+				new DateLabelFormatter());
+
+		// adding date
+		UtilDateModel modelfor = new UtilDateModel();
+		UtilDateModel modelto = new UtilDateModel();
+
+		final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+		JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
+		JLabel from = new JLabel("From");
+		JLabel to = new JLabel("To");
+		final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+		final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
+
+		JPanel date_panel = new JPanel(new FlowLayout());
+		date_panel.add(satisfylbl);
+		date_panel.add(satisfy_datePanel);
+		date_panel.add(from);
+		date_panel.add(from_datePanel);
+		date_panel.add(to);
+		date_panel.add(to_datePanel);
+		Edit_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
+		// end date
+
+		JButton submiteditrequeirementBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submiteditrequeirementBtn);
+		Edit_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Edit_RequirementPage.pack();
+		Edit_RequirementPage.setVisible(true);
+		final SingleCheckBoxJPanel statisfy_checkBoxpane = (SingleCheckBoxJPanel) editrequirement_Form
+				.getJPanel().getComponent(0);
+
+		// CheckBoxJPanel checkBoxpane = (CheckBoxJPanel)
+		// editrequirement_Form.getJPanel().getComponent(1);
+		// final ArrayList<String>vales =
+		// checkBoxpane.getCheckedValues();
+
+		submiteditrequeirementBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				int rowIndex = resrequirement_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = resrequirement_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
+
+					String Table_click = (resrequirement_tabledata.getJdataTable().getModel()
+							.getValueAt(rowIndex, 0).toString()); // the
+					System.out.println(Table_click + " what have you clicked");
+
+					String satisfydate = satisfy_datePicker.getJFormattedTextField().getText();
+
+					String fromdate = from_datePicker.getJFormattedTextField().getText();
+					String todate = to_datePicker.getJFormattedTextField().getText();
+					System.out.println(satisfydate + " " + fromdate + " " + todate);
+
+
+					boolean satisfied = false;
+					if (statisfy_checkBoxpane.getCheckedValues().size() == 1)
+						satisfied = true;
+
+					if (satisfied == false)
+						satisfydate = "1111-1-1";
+
+					ResourceRequirement resreq = resreqcat
+							.getResourceRequirement(Integer.parseInt(Table_click));
+					resreq.edit(fromdate, todate, satisfied, satisfydate);
+					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+					ArrayList<ResourceRequirement> allresourcerequirements;
+					allresourcerequirements = resreqcat.getResourceRequirements();
+					for (int i = 0; i < allresourcerequirements.size(); i++) {
+						data.add((allresourcerequirements.get(i).toHashMap()));
+					}
+					resrequirement_tabledata.update(data);
+				}
+			}
+		});
+	}
+	private void deleteRequirement() {
+		int rowIndex = resrequirement_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = resrequirement_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (resrequirement_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				resreqcat.deleteResourceRequirement(Integer.parseInt(Table_click));
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<ResourceRequirement> allresourcerequirements;
+				allresourcerequirements = resreqcat.getResourceRequirements();
+				for (int i = 0; i < allresourcerequirements.size(); i++) {
+					data.add((allresourcerequirements.get(i).toHashMap()));
+				}
+				resrequirement_tabledata.update(data);
+			}
+		}
+	}
+	private void satisfyRequirement() {
+		// TODO Auto-generated method stub
+		ArrayList<Field> satisfy = new ArrayList<Field>();
+		Field reqname = new Field("text", "req name       ", "", 10, "name");
+		final Form satisfy_requirement_Form = new Form(satisfy, "Satisfy Requirement");
+		final PanelBuilder satisfy_requirement_Panel = new PanelBuilder(satisfy_requirement_Form);
+		satisfy_requirement_Panel.makeForm();
+
+		JFrame Satisfy_RequirementPage = new JFrame("Satisfy Requirement Form");
+		Satisfy_RequirementPage.getContentPane().add(satisfy_requirement_Form.getJPanel(), BorderLayout.NORTH);
+
+		// adding date
+		UtilDateModel modelfor = new UtilDateModel();
+
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		final JDatePanelImpl satisfyfrom_datePanel = new JDatePanelImpl(modelfor, p);
+		final JDatePickerImpl satisfyfrom_datePicker = new JDatePickerImpl(satisfyfrom_datePanel,
+				new DateLabelFormatter());
+
+		JPanel date_panel = new JPanel(new FlowLayout());
+
+		date_panel.add(satisfyfrom_datePanel);
+		Satisfy_RequirementPage.getContentPane().add(date_panel, BorderLayout.CENTER);
+		// end date
+
+		JButton submitsatisfyBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitsatisfyBtn);
+		Satisfy_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Satisfy_RequirementPage.pack();
+		Satisfy_RequirementPage.setVisible(true);
+		submitsatisfyBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				int rowIndex = resrequirement_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = resrequirement_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
+
+					String Table_click = (resrequirement_tabledata.getJdataTable().getModel()
+							.getValueAt(rowIndex, 0).toString()); // the
+					System.out.println(Table_click + " what have you clicked");
+					System.out.println(satisfyfrom_datePicker.getJFormattedTextField().getText());
+					String satisfydate = satisfyfrom_datePicker.getJFormattedTextField().getText();
+
+					resreqcat.getResourceRequirement(Integer.parseInt(Table_click)).satisfy(satisfydate);
+
+					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+					ArrayList<ResourceRequirement> allresourcerequirements;
+					allresourcerequirements = resreqcat.getResourceRequirements();
+					for (int i = 0; i < allresourcerequirements.size(); i++) {
+						data.add((allresourcerequirements.get(i).toHashMap()));
+					}
+
+					resrequirement_tabledata.update(data);
+				}
+			}
+		});
+	}
+	
+	private void editInformationResource() {
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		// System.out.println(information_tableModel.getDataVector().elementAt(information_table.getSelectedRow()).toString().contains("1"));
+		ArrayList<Field> information_moduleFields = new ArrayList<Field>();
+		information_moduleFields.add(new Field("text", "information name", "", 20, "name"));
+		information_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+
+		information_moduleFields.add(sections);
+		final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
+		final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
+		information_modulePanel.makeForm();
+		JFrame Edit_InformationModulePage = new JFrame("Edit Information Module Form");
+		Edit_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+		// adding date
+		UtilDateModel modelfor = new UtilDateModel();
+
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		final JDatePanelImpl info_datePanel = new JDatePanelImpl(modelfor, p);
+		final JDatePickerImpl info_datePicker = new JDatePickerImpl(info_datePanel, new DateLabelFormatter());
+
+		JPanel date_panel = new JPanel(new FlowLayout());
+
+		date_panel.add(info_datePanel);
+		Edit_InformationModulePage.getContentPane().add(date_panel, BorderLayout.CENTER);
+		// end date
+
+		JButton submiteditinformationmoduleBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submiteditinformationmoduleBtn);
+		Edit_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Edit_InformationModulePage.pack();
+		Edit_InformationModulePage.setVisible(true);
+
+		submiteditinformationmoduleBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				System.out.println("all : ");
+				infocat.readAllResources();
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < information_moduleForm.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) information_moduleForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " information");
+				}
+				System.out.println(info_datePicker.getJFormattedTextField().getText());
+
+				int rowIndex = information_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = information_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
+
+					String Table_click = (information_tabledata.getJdataTable().getModel()
+							.getValueAt(rowIndex, 0).toString()); // the
+					System.out.println(Table_click + " what have you clicked");
+				}
+
+				// infocat.addResource((inputs.get(0)));
+				// // tu resource ham bayad insert she
+				// allinformation.clear();
+				// allinformation = infocat.readAllResources();
+				// System.out.println(information_tableModel.getRowCount()
+				// + " ---");
+				// int rowcount = information_tableModel.getRowCount();
+				// for (int j = rowcount - 1; j >= 0; j--) {
+				// information_tableModel.removeRow(j);
+				// }
+				// System.out.println(information_tableModel.getRowCount()
+				// + " ---");
+				// for (int i = 0; i < allinformation.size(); i++) {
+				// Object[] objs = { allinformation.get(i).get("rid"),
+				// allinformation.get(i).get("irname") };
+				// information_tableModel.addRow(objs);
+				// }
+			}
+		});
+	}
+	private void deleteInformationResource() {
+		int rowIndex = information_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = information_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (information_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				infocat.deleteResource(Integer.parseInt(Table_click));
+				information_tabledata.update(infocat.readAllResources());
+			}
+		}
+	}
+	private void searchInformationResource() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+		searchVars.put("irname", "\'" + search_informationname.getText() + "\'");
+		if (infocat.SearchResource(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+			information_tabledata.update(infocat.SearchResource(searchVars));
+		}
+	}
+	
+	private void addInformationResource() {
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		ArrayList<Field> information_moduleFields = new ArrayList<Field>();
+		information_moduleFields.add(new Field("text", "information name", "", 20, "name"));
+		information_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+
+		information_moduleFields.add(sections);
+		final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
+		final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
+		information_modulePanel.makeForm();
+		JFrame Add_InformationModulePage = new JFrame("Add Information Module Form");
+		Add_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+		// adding date
+		UtilDateModel modelfor = new UtilDateModel();
+
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		final JDatePanelImpl info_datePanel = new JDatePanelImpl(modelfor, p);
+		final JDatePickerImpl info_datePicker = new JDatePickerImpl(info_datePanel, new DateLabelFormatter());
+
+		JPanel date_panel = new JPanel(new FlowLayout());
+
+		date_panel.add(info_datePanel);
+		Add_InformationModulePage.getContentPane().add(date_panel, BorderLayout.CENTER);
+		// end date
+		JButton submitaddinformationmoduleBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddinformationmoduleBtn);
+		Add_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_InformationModulePage.pack();
+		Add_InformationModulePage.setVisible(true);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) information_moduleForm.getJPanel()
+				.getComponent(2);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		submitaddinformationmoduleBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("all : ");
+				infocat.readAllResources();
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < information_moduleForm.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) information_moduleForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " information");
+				}
+
+				System.out.println(sections_combo.getSelectedItem() + " //////");
+				Pattern p = Pattern.compile("sid=\\d+");
+				String section = null;
+				Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+				if (m.find()) {
+					section = m.group();
+				}
+				System.out.println("sid: " + section);
+
+				String infodate = info_datePicker.getJFormattedTextField().getText();
+
+				infocat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")), infodate,
+						inputs.get(1));
+				// tu resource ham bayad insert she
+				information_tabledata.update(infocat.readAllResources());
+
+			}
+		});
+	}
+	
+	private void editFinancialResource() {
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
+		financial_moduleFields.add(new Field("text", "financial name", "", 20, "name"));
+		financial_moduleFields.add(sections);
+		financial_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+		financial_moduleFields.add(new Field("text", "net value", "", 20, "value"));
+		financial_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+
+		final Form financial_moduleForm = new Form(financial_moduleFields, "Financial Edit Module Form");
+		final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
+		financial_modulePanel.makeForm();
+		JFrame Add_InformationModulePage = new JFrame("Edit Information Module Form");
+		Add_InformationModulePage.getContentPane().add(financial_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitaddfinancialBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddfinancialBtn);
+		Add_InformationModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_InformationModulePage.pack();
+		Add_InformationModulePage.setVisible(true);
+
+		submitaddfinancialBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				int rowIndex = financial_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = financial_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
+
+					String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+				}
+				System.out.println();
+				System.out.println("all : ");
+				financat.readAllResources();
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < financial_moduleForm.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) financial_moduleForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " financial edit");
+				}
+
+				// financat.getFinancialResource().editResource("changed
+				// name", 1, 10, "changed model", "changed");
+
+				financial_tabledata.update(financat.readAllResources());
+
+			}
+		});
+	}
+	private void deleteFinancialResource() {
+		int rowIndex = financial_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = financial_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				financat.deleteResource(Integer.parseInt(Table_click));
+				financial_tabledata.update(financat.readAllResources());
+			}
+		}
+	}
+	private void searchFinancialResource() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+		if (search_financialname.getText() != null && !search_financialname.getText().trim().equals(""))
+			searchVars.put("finanname", "\'" + search_financialname.getText() + "\'");
+		if (search_financialvalue.getText() != null && !search_financialvalue.getText().trim().equals(""))
+			searchVars.put("netvalue", "\'" + search_financialvalue.getText() + "\'");
+		if (search_financialmodel.getText() != null && !search_financialmodel.getText().trim().equals(""))
+			searchVars.put("modeldesc", "\'" + search_financialmodel.getText() + "\'");
+
+		if (financat.SearchResource(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+			financial_tabledata.update(financat.SearchResource(searchVars));
+		}
+	}
+	
+	private void addFinancialResource() {
+		// TODO Auto-generated method stub
+
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
+		financial_moduleFields.add(new Field("text", "financename", "", 20, "name"));
+		financial_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+		financial_moduleFields.add(new Field("text", "net value", "", 20, "value"));
+		financial_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+		financial_moduleFields.add(sections);
+
+		final Form financial_moduleForm = new Form(financial_moduleFields, "Information Module Form");
+		final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
+		financial_modulePanel.makeForm();
+		JFrame Add_FinancialModulePage = new JFrame("Add Financial Module Form");
+		Add_FinancialModulePage.getContentPane().add(financial_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitaddfinancialmoduleBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddfinancialmoduleBtn);
+		Add_FinancialModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_FinancialModulePage.pack();
+		Add_FinancialModulePage.setVisible(true);
+
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) financial_moduleForm.getJPanel()
+				.getComponent(4);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		submitaddfinancialmoduleBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("all : ");
+				financat.readAllResources();
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < financial_moduleForm.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) financial_moduleForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " financial");
+				}
+				System.out.println(sections_combo.getSelectedItem() + " //////");
+				Pattern p = Pattern.compile("sid=\\d+");
+				String section = null;
+				Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+				if (m.find()) {
+					section = m.group();
+				}
+				System.out.println("sid: " + section);
+				financat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sid=", "")),
+						Integer.parseInt(inputs.get(2)), inputs.get(1), inputs.get(3));
+				// tu resource ham bayad insert she
+				allfinance.clear();
+				allfinance = financat.readAllResources();
+				financial_tabledata.update(financat.readAllResources());
+			}
+		});
+	}
+	
+	private void searchModule() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+
+		if (search_modulename.getText() != null && !search_modulename.getText().trim().equals(""))
+			searchVars.put("modname", "\'" + search_modulename.getText() + "\'");
+		if (search_moduleduration.getText() != null && !search_moduleduration.getText().trim().equals(""))
+			searchVars.put("duration", "\'" + search_moduleduration.getText() + "\'");
+
+		if (modcat.SearchResource(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+			module_tabledata.update(modcat.SearchResource(searchVars));
+		}
+	}
+	
+	private void addModule() {
+		final ArrayList<String> employees = new ArrayList<String>();
+		final ArrayList<String> financials = new ArrayList<String>();
+		final ArrayList<String> physicals = new ArrayList<String>();
+		final ArrayList<String> information = new ArrayList<String>();
+
+		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		for (int i = 0; i < employe_readall.size(); i++) {
+			employees.add(employe_readall.get(i).toString());
+		}
+		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+		for (int i = 0; i < financial_readall.size(); i++) {
+			financials.add(financial_readall.get(i).toString());
+		}
+
+		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+		for (int i = 0; i < physical_readall.size(); i++) {
+			physicals.add(physical_readall.get(i).toString());
+		}
+
+		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+		for (int i = 0; i < information_readall.size(); i++) {
+			information.add(information_readall.get(i).toString());
+		}
+
+		ArrayList<Field> moduleFields = new ArrayList<Field>();
+		moduleFields.add(new Field("text", "name", "", 10, "name"));
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+		Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+		moduleFields.add(new Field("text", "duration", "", 20, "duration"));
+		moduleFields.add(new Field("text", "description", "", 20, "desc"));
+		moduleFields.add(sections);
+		moduleFields.add(financial_check);
+		moduleFields.add(physical_check);
+		moduleFields.add(information_check);
+		moduleFields.add(maintainers);
+
+		final Form moduleForm = new Form(moduleFields, "Module Form");
+		final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
+		modulePanel.makeForm();
+
+		JFrame AddModulePage = new JFrame("Add Module Form");
+		AddModulePage.getContentPane().add(moduleForm.getJPanel(), BorderLayout.NORTH);
+		JScrollPane scroll = new JScrollPane(moduleForm.getJPanel());
+		AddModulePage.getContentPane().add(scroll);
+
+		JButton submitaddmoduleBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddmoduleBtn);
+		AddModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		AddModulePage.pack();
+		AddModulePage.setVisible(true);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) moduleForm.getJPanel().getComponent(3);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(4);
+		final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(5);
+		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(6);
+		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(7);
+
+		submitaddmoduleBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("all : ");
+				modcat.readAllResources();
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < moduleForm.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) moduleForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + "adasa");
+				}
+				System.out.println(sections_combo.getSelectedItem() + " //////");
+				Pattern p = Pattern.compile("sid=\\d+");
+				String section = null;
+				Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+				if (m.find()) {
+					section = m.group();
+				}
+				System.out.println("sid: " + section);
+
+				System.out.println("----------");
+
+				//
+				long modrid = modcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
+						Integer.parseInt(inputs.get(1)), inputs.get(2));
+				// tu resource ham bayad insert she
+				module_tabledata.update(modcat.readAllResources());
+
+				//
+				System.out.println("----------");
+
+				final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
+				System.out.println(finanvales);
+				final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
+				System.out.println(physicalvales);
+				final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+				System.out.println(informationvales);
+				final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
+				System.out.println(employeevales);
+				Pattern emp = Pattern.compile("empid=\\d+");
+				for (int i = 0; i < employeevales.size(); i++) {
+					String empids = null;
+					Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+					if (m_emp.find()) {
+						empids = m_emp.group();
+					}
+					System.out.println("empids: " + empids);
+					makemodulecat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), (int) modrid);
+
+				}
+
+				Pattern res = Pattern.compile("rid=\\d+");
+				for (int i = 0; i < finanvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(finanvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("finan rid: " + respids);
+					makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
+
+				}
+
+				for (int i = 0; i < physicalvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(physicalvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("phys rid: " + respids);
+					makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
+
+				}
+
+				for (int i = 0; i < informationvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(informationvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("info rid: " + respids);
+					makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
+
+				}
+
+			}
+		});
+	}
+	private void deleteModule() {
+		int rowIndex = module_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = module_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Module!");
+		} else {
+
+			String Table_click = (module_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				modcat.deleteResource(Integer.parseInt(Table_click));
+				module_tabledata.update(modcat.readAllResources());
+			}
+		}
+	}
+	
+	private void editMaintainingModule() {
+		final ArrayList<String> employees = new ArrayList<String>();
+		final ArrayList<String> financials = new ArrayList<String>();
+		final ArrayList<String> physicals = new ArrayList<String>();
+		final ArrayList<String> information = new ArrayList<String>();
+
+		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		for (int i = 0; i < employe_readall.size(); i++) {
+			employees.add(employe_readall.get(i).toString());
+		}
+		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+		for (int i = 0; i < financial_readall.size(); i++) {
+			financials.add(financial_readall.get(i).toString());
+		}
+
+		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+		for (int i = 0; i < physical_readall.size(); i++) {
+			physicals.add(physical_readall.get(i).toString());
+		}
+
+		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+		for (int i = 0; i < information_readall.size(); i++) {
+			information.add(information_readall.get(i).toString());
+		}
+
+		ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
+		Field change_type = new Field("text", "change type", "", 20, "change type");
+		Field duration = new Field("text", "duration", "", 20, "duration");
+		Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+		Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+		maintain_moduleFields.add(change_type);
+		maintain_moduleFields.add(duration);
+		maintain_moduleFields.add(financial_check);
+		maintain_moduleFields.add(physical_check);
+		maintain_moduleFields.add(information_check);
+		maintain_moduleFields.add(maintainers);
+
+		final Form maintain_Form = new Form(maintain_moduleFields, "Maintain Module Form");
+		final PanelBuilder maintain_Panel = new PanelBuilder(maintain_Form);
+		maintain_Panel.makeForm();
+
+		JFrame Edit_MaintainPage = new JFrame("Edit Maintain Module Form");
+
+		JScrollPane scroll = new JScrollPane(maintain_Form.getJPanel());
+		Edit_MaintainPage.getContentPane().add(scroll);
+
+		// Add_MaintainPage.getContentPane().add(scroll,
+		// BorderLayout.NORTH);
+
+		JButton submiteditmaintainmoduleBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submiteditmaintainmoduleBtn);
+		Edit_MaintainPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Edit_MaintainPage.pack();
+		Edit_MaintainPage.setVisible(true);
+
+		final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
+		final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
+		final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel()
+				.getComponent(2);
+		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel()
+				.getComponent(4);
+
+		submiteditmaintainmoduleBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// INJA TODO Auto-generated method stub
+				int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
+
+				String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+						.toString()); // return
+				selected_maintaining_module = Integer.parseInt(Table_click.trim());
+
+				System.out.println(Table_click);
+				System.out.println("---maintian module id-- " + selected_module);
+
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < maintain_Form.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) maintain_Form.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + "adasa");
+				}
+
+				// MaintainingModule maintainmod =
+				// maintainmodulecat.ge(selected_maintaining_module);
+
+				// long maintainmodpk =
+				// maintainmodulecat.addMaintainingModule(selected_module,
+				// inputs.get(0),
+				// Integer.parseInt(inputs.get(1)));
+
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<MaintainingModule> allmaintainmodule;
+				allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
+				for (int i = 0; i < allmaintainmodule.size(); i++) {
+					data.add((allmaintainmodule.get(i).toHashMap()));
+				}
+				System.out.println("DATA");
+
+				maintaining_tabledata.update(data);
+
+				System.out.println("----------");
+
+				final ArrayList<String> finanvales = checkBoxpane_financial.getCheckedValues();
+				System.out.println(finanvales);
+				final ArrayList<String> physicalvales = checkBoxpane_phys.getCheckedValues();
+				System.out.println(physicalvales);
+				final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+				System.out.println(informationvales);
+				final ArrayList<String> employeevales = checkBoxpane_emp.getCheckedValues();
+				System.out.println(employeevales);
+				Pattern emp = Pattern.compile("empid=\\d+");
+				for (int i = 0; i < employeevales.size(); i++) {
+					String empids = null;
+					Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+					if (m_emp.find()) {
+						empids = m_emp.group();
+					}
+					System.out.println("empids: " + empids);
+					maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")),
+							selected_maintaining_module);
+				}
+
+				Pattern res = Pattern.compile("rid=\\d+");
+				for (int i = 0; i < finanvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(finanvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("finan rid: " + respids);
+					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
+							selected_maintaining_module);
+
+				}
+
+				for (int i = 0; i < physicalvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(physicalvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("phys rid: " + respids);
+					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
+							selected_maintaining_module);
+
+				}
+
+				for (int i = 0; i < informationvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(informationvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("info rid: " + respids);
+					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
+							selected_maintaining_module);
+
+				}
+
+			}
+		});
+	}
+	private void deleteMaintainingModule() {
+		DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+				"Are you sure you want to Delete this item?");
+		if (myDialog.getAnswer()) {
+			int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
+
+			String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // return
+			selected_maintaining_module = Integer.parseInt(Table_click.trim());
+
+			System.out.println(Table_click);
+			System.out.println("---maintian module id-- " + selected_module);
+
+			maintainmodulecat.deleteMaintainingModule(selected_maintaining_module);
+			ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+			ArrayList<MaintainingModule> allmaintainmodule;
+			allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
+			for (int i = 0; i < allmaintainmodule.size(); i++) {
+				data.add((allmaintainmodule.get(i).toHashMap()));
+			}
+			System.out.println("DATA " + data);
+			maintaining_tabledata.update(data);
+
+		}
+	}
+	
+	private void addMaintainingModule() {
+		final ArrayList<String> employees = new ArrayList<String>();
+		final ArrayList<String> financials = new ArrayList<String>();
+		final ArrayList<String> physicals = new ArrayList<String>();
+		final ArrayList<String> information = new ArrayList<String>();
+
+		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		for (int i = 0; i < employe_readall.size(); i++) {
+			employees.add(employe_readall.get(i).toString());
+		}
+		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+		for (int i = 0; i < financial_readall.size(); i++) {
+			financials.add(financial_readall.get(i).toString());
+		}
+
+		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+		for (int i = 0; i < physical_readall.size(); i++) {
+			physicals.add(physical_readall.get(i).toString());
+		}
+
+		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+		for (int i = 0; i < information_readall.size(); i++) {
+			information.add(information_readall.get(i).toString());
+		}
+
+		ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
+		Field change_type = new Field("text", "change type", "", 20, "change type");
+		Field duration = new Field("text", "duration", "", 20, "duration");
+		Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+		Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+		maintain_moduleFields.add(change_type);
+		maintain_moduleFields.add(duration);
+		maintain_moduleFields.add(financial_check);
+		maintain_moduleFields.add(physical_check);
+		maintain_moduleFields.add(information_check);
+		maintain_moduleFields.add(maintainers);
+
+		final Form maintain_Form = new Form(maintain_moduleFields, "Maintain Module Form");
+		final PanelBuilder maintain_Panel = new PanelBuilder(maintain_Form);
+		maintain_Panel.makeForm();
+
+		JFrame Add_MaintainPage = new JFrame("Add Maintain Module Form");
+
+		JScrollPane scroll = new JScrollPane(maintain_Form.getJPanel());
+		Add_MaintainPage.getContentPane().add(scroll);
+
+		// Add_MaintainPage.getContentPane().add(scroll,
+		// BorderLayout.NORTH);
+
+		JButton submitmaintainmoduleBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitmaintainmoduleBtn);
+		Add_MaintainPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_MaintainPage.pack();
+		Add_MaintainPage.setVisible(true);
+
+		final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
+		final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
+		final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel()
+				.getComponent(2);
+		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel()
+				.getComponent(4);
+
+		submitmaintainmoduleBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// INJA TODO Auto-generated method stub
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < maintain_Form.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) maintain_Form.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + "adasa");
+				}
+
+				long maintainmodpk = maintainmodulecat.addMaintainingModule(selected_module, inputs.get(0),
+						Integer.parseInt(inputs.get(1)));
+
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<MaintainingModule> allmaintainmodule;
+				allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
+				for (int i = 0; i < allmaintainmodule.size(); i++) {
+					data.add((allmaintainmodule.get(i).toHashMap()));
+				}
+				System.out.println("DATA");
+
+				maintaining_tabledata.update(data);
+
+				System.out.println("----------");
+
+				final ArrayList<String> finanvales = checkBoxpane_financial.getCheckedValues();
+				System.out.println(finanvales);
+				final ArrayList<String> physicalvales = checkBoxpane_phys.getCheckedValues();
+				System.out.println(physicalvales);
+				final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+				System.out.println(informationvales);
+				final ArrayList<String> employeevales = checkBoxpane_emp.getCheckedValues();
+				System.out.println(employeevales);
+				Pattern emp = Pattern.compile("empid=\\d+");
+				for (int i = 0; i < employeevales.size(); i++) {
+					String empids = null;
+					Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+					if (m_emp.find()) {
+						empids = m_emp.group();
+					}
+					System.out.println("empids: " + empids);
+					maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")),
+							(int) maintainmodpk);
+				}
+
+				Pattern res = Pattern.compile("rid=\\d+");
+				for (int i = 0; i < finanvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(finanvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("finan rid: " + respids);
+					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
+							(int) maintainmodpk);
+
+				}
+
+				for (int i = 0; i < physicalvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(physicalvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("phys rid: " + respids);
+					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
+							(int) maintainmodpk);
+
+				}
+
+				for (int i = 0; i < informationvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(informationvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("info rid: " + respids);
+					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
+							(int) maintainmodpk);
+
+				}
+
+			}
+		});
+	}
+	
+	private void editHumanResource() {
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		ArrayList<Field> human_moduleFields = new ArrayList<Field>();
+		human_moduleFields.add(new Field("text", "employee name", "", 20, "name"));
+		human_moduleFields.add(new Field("text", "username", "", 20, "username"));
+		human_moduleFields.add(new Field("text", "password", "", 20, "password"));
+		human_moduleFields.add(new Field("text", "post", "", 20, "post"));
+		human_moduleFields.add(sections);
+
+		final Form human_moduleForm = new Form(human_moduleFields, "Employee Edit Module Form");
+		final PanelBuilder human_modulePanel = new PanelBuilder(human_moduleForm);
+		human_modulePanel.makeForm();
+		JFrame Edit_EmployeePage = new JFrame("Edit Employee Form");
+		Edit_EmployeePage.getContentPane().add(human_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+		JButton submiteditemployeeBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submiteditemployeeBtn);
+		Edit_EmployeePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Edit_EmployeePage.pack();
+		Edit_EmployeePage.setVisible(true);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) human_moduleForm.getJPanel().getComponent(4);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		submiteditemployeeBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select an Employee!");
+				} else {
+
+					System.out.println("all : ");
+					empcat.readAllEmployees();
+					ArrayList<String> inputs = new ArrayList<String>();
+					for (int i = 0; i < human_moduleForm.getJPanel().getComponentCount(); i++) {
+						FieldPanel fpanel = (FieldPanel) human_moduleForm.getJPanel().getComponent(i);
+						inputs.add(fpanel.getValues().get(0));
+					}
+					for (int i = 0; i < inputs.size(); i++) {
+						System.out.println(inputs.get(i) + " human");
+					}
+
+					System.out.println(sections_combo.getSelectedItem() + " //////");
+					Pattern p = Pattern.compile("sid=\\d+");
+					String section = null;
+					Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+					if (m.find()) {
+						section = m.group();
+					}
+					System.out.println("sid: " + section);
+
+					String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					Employee employee = empcat.getEmployee(Integer.parseInt(Table_click));
+					employee.editHuman(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
+							inputs.get(2), inputs.get(3));
+
+					empcat.readAllEmployees();
+					allemployees.clear();
+					allemployees = empcat.readAllEmployees();
+					human_tabledata.update(empcat.readAllEmployees());
+				}
+			}
+		});
+	}
+	
+	private void deleteHumanResource() {
+		System.out.println("-----");
+		int rowIndex = human_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = human_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select an Employee!");
+		} else {
+
+			String Table_click = (human_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // return
+			System.out.println(Table_click);
+			empcat.deleteEmployee(Integer.parseInt(Table_click));
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				allemployees = empcat.readAllEmployees();
+				human_tabledata.update(empcat.readAllEmployees());
+			}
+		}
+	}
+	private void searchHumanResource() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+
+		if (search_humanname.getText() != null && !search_humanname.getText().trim().equals(""))
+			searchVars.put("empname", "\'" + search_humanname.getText() + "\'");
+		if (search_humanpost.getText() != null && !search_humanpost.getText().trim().equals(""))
+			searchVars.put("post", "\'" + search_humanpost.getText() + "\'");
+
+		if (empcat.SearchEmployee(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+			human_tabledata.update(empcat.SearchEmployee(searchVars));
+		}
+	}
+	private void addHumanResource() {
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		ArrayList<Field> human_moduleFields = new ArrayList<Field>();
+		human_moduleFields.add(new Field("text", "employee name", "", 20, "name"));
+		human_moduleFields.add(new Field("text", "username", "", 20, "username"));
+		human_moduleFields.add(new Field("text", "password", "", 20, "password"));
+		human_moduleFields.add(new Field("text", "post", "", 20, "post"));
+		human_moduleFields.add(sections);
+
+		final Form human_moduleForm = new Form(human_moduleFields, "Financial Edit Module Form");
+		final PanelBuilder human_modulePanel = new PanelBuilder(human_moduleForm);
+		human_modulePanel.makeForm();
+		JFrame Add_EmployeePage = new JFrame("Add Employee Form");
+		Add_EmployeePage.getContentPane().add(human_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitaddemployeeBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddemployeeBtn);
+		Add_EmployeePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_EmployeePage.pack();
+		Add_EmployeePage.setVisible(true);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) human_moduleForm.getJPanel().getComponent(4);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		submitaddemployeeBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("all : ");
+				empcat.readAllEmployees();
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < human_moduleForm.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) human_moduleForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " human");
+				}
+
+				System.out.println(sections_combo.getSelectedItem() + " //////");
+				Pattern p = Pattern.compile("sid=\\d+");
+				String section = null;
+				Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+				if (m.find()) {
+					section = m.group();
+				}
+				System.out.println("sid: " + section);
+
+				empcat.addEmployee(inputs.get(0), inputs.get(3), Integer.parseInt(section.replace("sid=", "")),
+						inputs.get(1), inputs.get(2), false, false);
+				human_tabledata.update(empcat.readAllEmployees());
+
+			}
+		});
+	}
+	private void searchPhysicalResource() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+
+		if (search_physicalname.getText() != null && !search_physicalname.getText().trim().equals(""))
+			searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
+		if (search_physicalmodel.getText() != null && !search_physicalmodel.getText().trim().equals(""))
+			searchVars.put("modeldesc", "\'" + search_physicalmodel.getText() + "\'");
+		searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
+
+		if (physcat.SearchResource(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+			physical_tabledata.update(physcat.SearchResource(searchVars));
+		}
+	}
+	private void addPhysicalResource() {
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
+		physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
+		physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+		physical_moduleFields.add(new Field("text", "description", "", 20, "description"));
+
+		physical_moduleFields.add(sections);
+		final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
+		final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
+		physical_modulePanel.makeForm();
+		JFrame Add_PhysicalModulePage = new JFrame("Add Physical Module Form");
+		Add_PhysicalModulePage.getContentPane().add(physical_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitaddphysicalmoduleBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddphysicalmoduleBtn);
+		Add_PhysicalModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_PhysicalModulePage.pack();
+		Add_PhysicalModulePage.setVisible(true);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) physical_moduleForm.getJPanel().getComponent(3);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		submitaddphysicalmoduleBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("all : ");
+				physcat.readAllResources();
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < physical_moduleForm.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) physical_moduleForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " physical");
+				}
+
+				System.out.println(sections_combo.getSelectedItem() + " //////");
+				Pattern p = Pattern.compile("sid=\\d+");
+				String section = null;
+				Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+				if (m.find()) {
+					section = m.group();
+				}
+				System.out.println("sid: " + section);
+
+				physcat.addResource(inputs.get(0), Integer.parseInt(section.replace("sid=", "")), inputs.get(1),
+						inputs.get(1));
+
+				physical_tabledata.update(physcat.readAllResources());
+
+			}
+		});
+	}
+	
+	private void editPhysicalResource() {
+		//
+		int rowIndex = physical_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = physical_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+
+			ArrayList<String> section_arraylist = new ArrayList<String>();
+			ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+			for (int i = 0; i < section_hashmap.size(); i++) {
+				section_arraylist.add(section_hashmap.get(i).toString());
+			}
+
+			Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+			ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
+			physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
+			physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+
+			physical_moduleFields.add(sections);
+			final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
+			final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
+			physical_modulePanel.makeForm();
+			JFrame Edit_PhysicalModulePage = new JFrame("Edit Physical Module Form");
+			Edit_PhysicalModulePage.getContentPane().add(physical_moduleForm.getJPanel(), BorderLayout.NORTH);
+
+			JButton submiteditphysicalmoduleBtn = new JButton("Submit");
+			JPanel buttonPanel = new JPanel();
+			buttonPanel.add(submiteditphysicalmoduleBtn);
+			Edit_PhysicalModulePage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+			Edit_PhysicalModulePage.pack();
+			Edit_PhysicalModulePage.setVisible(true);
+
+			submiteditphysicalmoduleBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					System.out.println("all : ");
+					physcat.readAllResources();
+					ArrayList<String> inputs = new ArrayList<String>();
+					for (int i = 0; i < physical_moduleForm.getJPanel().getComponentCount(); i++) {
+						FieldPanel fpanel = (FieldPanel) physical_moduleForm.getJPanel().getComponent(i);
+						inputs.add(fpanel.getValues().get(0));
+					}
+					for (int i = 0; i < inputs.size(); i++) {
+						System.out.println(inputs.get(i) + " physical");
+					}
+					// physcat.addResource((inputs.get(0)));
+					// // tu resource ham bayad insert she
+					// allphysicals.clear();
+					// allphysicals = physcat.readAllResources();
+					// System.out.println(phyiscal_tableModel.getRowCount()
+					// + " ---");
+					// int rowcount = phyiscal_tableModel.getRowCount();
+					// for (int j = rowcount - 1; j >= 0; j--) {
+					// phyiscal_tableModel.removeRow(j);
+					// }
+					// System.out.println(phyiscal_tableModel.getRowCount()
+					// + " ---");
+					// for (int i = 0; i < allphysicals.size(); i++) {
+					// Object[] objs = { allphysicals.get(i).get("rid"),
+					// allphysicals.get(i).get("physname") };
+					// phyiscal_tableModel.addRow(objs);
+					// }
+				}
+			});
+		}
+	}
+	
+	private void deletePhysicalResource() {
+		int rowIndex = physical_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = physical_tabledata.getJdataTable().getSelectedColumn();
+
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				physcat.deleteResource(Integer.parseInt(Table_click));
+				physical_tabledata.update(physcat.readAllResources());
+			}
+		}
+	}
+	private void searchProject() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+
+		if (search_projectname.getText() != null && !search_projectname.getText().trim().equals(""))
+			searchVars.put("projname", "\'" + search_projectname.getText() + "\'");
+		if (search_projectsize.getText() != null && !search_projectsize.getText().trim().equals(""))
+			searchVars.put("size", "\'" + search_projectsize.getText() + "\'");
+		if (search_projecttech.getText() != null && !search_projecttech.getText().trim().equals(""))
+			searchVars.put("tech", "\'" + search_projecttech.getText() + "\'");
+		project_tabledata.update(projcat.Search(searchVars));
+
+
+		if (projcat.Search(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+			project_tabledata.update(projcat.Search(searchVars));
+		}
+	}
+	private void addProject() {
+		final ArrayList<String> employees = new ArrayList<String>();
+		final ArrayList<String> financials = new ArrayList<String>();
+		final ArrayList<String> physicals = new ArrayList<String>();
+		final ArrayList<String> information = new ArrayList<String>();
+
+		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		for (int i = 0; i < employe_readall.size(); i++) {
+			employees.add(employe_readall.get(i).toString());
+		}
+		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+		for (int i = 0; i < financial_readall.size(); i++) {
+			financials.add(financial_readall.get(i).toString());
+		}
+
+		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+		for (int i = 0; i < physical_readall.size(); i++) {
+			physicals.add(physical_readall.get(i).toString());
+		}
+
+		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+		for (int i = 0; i < information_readall.size(); i++) {
+			information.add(information_readall.get(i).toString());
+		}
+
+		ArrayList<Field> projectFields = new ArrayList<Field>();
+
+		projectFields.add(new Field("text", "project name", "", 20, "name"));
+		projectFields.add(new Field("text", "technology", "", 20, "tech"));
+		projectFields.add(new Field("text", "size", "", 20, "size"));
+
+		projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
+		ArrayList<String> iscomplete = new ArrayList<String>();
+		iscomplete.add("is complete");
+		projectFields.add(new Field("singlecheckbox", "is complete", iscomplete, 10, "items"));
+
+		Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+		Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+		projectFields.add(financial_check);
+		projectFields.add(physical_check);
+		projectFields.add(information_check);
+		projectFields.add(maintainers);
+
+		final Form projectForm = new Form(projectFields, "Project Form");
+		final PanelBuilder project_addPanel = new PanelBuilder(projectForm);
+		project_addPanel.makeForm();
+		JFrame Add_ProjectPage = new JFrame("Add Project Form");
+		Add_ProjectPage.getContentPane().add(projectForm.getJPanel(), BorderLayout.NORTH);
+		JScrollPane scroll = new JScrollPane(projectForm.getJPanel());
+		Add_ProjectPage.getContentPane().add(scroll);
+
+		ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) projectForm.getJPanel().getComponent(3);
+		final JComboBox employees_comboBox = comboBoxpane.getComboBox();
+
+		final SingleCheckBoxJPanel checkBoxpane = (SingleCheckBoxJPanel) projectForm.getJPanel()
+				.getComponent(4);
+		JButton submitaddprojectBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddprojectBtn);
+		Add_ProjectPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_ProjectPage.pack();
+		Add_ProjectPage.setVisible(true);
+
+		final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) projectForm.getJPanel().getComponent(5);
+		final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) projectForm.getJPanel().getComponent(6);
+		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) projectForm.getJPanel()
+				.getComponent(7);
+		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) projectForm.getJPanel().getComponent(8);
+
+		employees_comboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println(employees_comboBox.getSelectedItem() + " ino select kardi project");
+			}
+		});
+
+		submitaddprojectBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("all : ");
+				projcat.getProjects();
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < projectForm.getJPanel().getComponentCount() - 1; i++) {
+					FieldPanel fpanel = (FieldPanel) projectForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " project");
+				}
+
+				employees_comboBox.getSelectedItem();
+				String empid = "";
+				Pattern emp_p = Pattern.compile("empid=\\d+");
+				Matcher emp_m = emp_p.matcher((CharSequence) employees_comboBox.getSelectedItem());
+				if (emp_m.find()) {
+					empid = emp_m.group();
+				}
+				System.out.println("empid: " + empid);
+				int employeeID = Integer.parseInt(empid.replace("empid=", ""));
+
+				Employee proj_manager = empcat.getEmployee(employeeID);
+				System.out.println(proj_manager.getName());
+
+				final ArrayList<String> vales_phys = checkBoxpane.getCheckedValues();
+				boolean confirmed = false;
+				if (vales_phys.size() == 1)
+					confirmed = true;
+
+				long projid = projcat.addProject(inputs.get(0).toString(), proj_manager, inputs.get(2),
+						inputs.get(1), confirmed);
+
+				project_tabledata.update(projcat.getProjects());
+
+				allprojects = projcat.getProjects();
+				project_tabledata.update(projcat.getProjects());
+				System.out.println(vales_phys.toString());
+
+				System.out.println("----------");
+
+				final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
+				System.out.println(finanvales);
+				final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
+				System.out.println(physicalvales);
+				final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+				System.out.println(informationvales);
+				final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
+				System.out.println(employeevales);
+				Pattern emp = Pattern.compile("empid=\\d+");
+				for (int i = 0; i < employeevales.size(); i++) {
+					String empids = null;
+					Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+					if (m_emp.find()) {
+						empids = m_emp.group();
+					}
+					System.out.println("empids: " + empids);
+					projempcat.addProjectEmployee((int) projid, Integer.parseInt(empids.replace("empid=", "")),
+							"1111-11-1", "1111-11-1");
+
+				}
+
+				Pattern res = Pattern.compile("rid=\\d+");
+				for (int i = 0; i < finanvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(finanvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("finan rid: " + respids);
+					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+							(int) projid, "1111-11-1", "1111-11-1");
+
+				}
+
+				for (int i = 0; i < physicalvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(physicalvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("phys rid: " + respids);
+					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+							(int) projid, "1111-11-1", "1111-11-1");
+
+				}
+
+				for (int i = 0; i < informationvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(informationvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("info rid: " + respids);
+					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+							(int) projid, "1111-11-1", "1111-11-1");
+				}
+
+			}
+		});
+	}
+	
+	private void editProject() {
+		// EDITPROJECT
+		ArrayList<Field> projectFields = new ArrayList<Field>();
+		ArrayList<HashMap<String, String>> employees_fromcatalouge = empcat.readAllEmployees();
+		ArrayList<String> employees = new ArrayList<String>();
+
+		projectFields.add(new Field("text", "project name", "", 20, "name"));
+		projectFields.add(new Field("text", "technology", "", 20, "tech"));
+		projectFields.add(new Field("text", "size", "", 20, "size"));
+
+		for (int i = 0; i < employees_fromcatalouge.size(); i++) {
+			employees.add("id:" + employees_fromcatalouge.get(i).get("empid").toString() + " "
+					+ employees_fromcatalouge.get(i).get("empname").toString());
+		}
+		System.out.println(employees + " 00");
+		projectFields.add(new Field("comboBox", "project manager", employees, 20, "project manager"));
+		ArrayList<String> iscomplete = new ArrayList<String>();
+		iscomplete.add("is complete");
+		projectFields.add(new Field("singlecheckbox", "is complete", iscomplete, 10, "items"));
+
+		final Form edit_projectForm = new Form(projectFields, "Project Form");
+		final PanelBuilder project_addPanel = new PanelBuilder(edit_projectForm);
+		project_addPanel.makeForm();
+		JFrame Edit_ProjectPage = new JFrame("Edit Project Form");
+
+		Edit_ProjectPage.getContentPane().add(edit_projectForm.getJPanel(), BorderLayout.NORTH);
+
+		ComboBoxJPanel comboBoxpane = (ComboBoxJPanel) edit_projectForm.getJPanel().getComponent(3);
+		final JComboBox employees_comboBox = comboBoxpane.getComboBox();
+
+		final SingleCheckBoxJPanel checkBoxpane = (SingleCheckBoxJPanel) edit_projectForm.getJPanel()
+				.getComponent(4);
+		JButton submiteditprojectBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submiteditprojectBtn);
+		Edit_ProjectPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Edit_ProjectPage.pack();
+		Edit_ProjectPage.setVisible(true);
+
+		employees_comboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println(employees_comboBox.getSelectedItem() + " ino select kardi project");
+			}
+		});
+
+		submiteditprojectBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("-----");
+				int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a module!");
+				} else {
+
+					String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // return
+
+					selected_project_forsubsystem = Integer.parseInt(Table_click.trim());
+					System.out.println("-----");
+
+					Project project = projcat.getProject(selected_project_forsubsystem);
+					System.out.println("all : ");
+					projcat.getProjects();
+					ArrayList<String> inputs = new ArrayList<String>();
+					for (int i = 0; i < edit_projectForm.getJPanel().getComponentCount() - 1; i++) {
+						FieldPanel fpanel = (FieldPanel) edit_projectForm.getJPanel().getComponent(i);
+						inputs.add(fpanel.getValues().get(0));
+					}
+					for (int i = 0; i < inputs.size(); i++) {
+						System.out.println(inputs.get(i) + " project");
+					}
+					int employeeID = Integer.parseInt((inputs.get(3).substring(0, 4).replace("id:", "")));
+					Employee proj_manager = empcat.getEmployee(employeeID);
+					System.out.println(proj_manager.getName());
+					final ArrayList<String> vales_phys = checkBoxpane.getCheckedValues();
+					boolean confirmed = false;
+					if (vales_phys.size() == 1)
+						confirmed = true;
+
+					project.editProject(inputs.get(0).toString(), "", inputs.get(1), proj_manager,
+							inputs.get(2), confirmed);
+
+					allprojects = projcat.getProjects();
+					project_tabledata.update(projcat.getProjects());
+					System.out.println(vales_phys.toString() + " is this it");
+				}
+			}
+		});
+	}
+	
+
+	private void deleteProject() {
+		System.out.println("-----");
+		int rowIndex = project_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Project!");
+		} else {
+
+			String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // return
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				projcat.deleteProject(Integer.parseInt(Table_click));
+				project_tabledata.update(projcat.getProjects());
+			}
+		}
+	}
+	
+	private void circulationReport() {
+		ArrayList<String> resource_types = new ArrayList<String>();
+		final ArrayList<String> resources = new ArrayList<String>();
+		resource_types.add("Information");
+		resource_types.add("Financial");
+		resource_types.add("Physical");
+		resource_types.add("Module");
+		ArrayList<Field> circulationReport_Fields = new ArrayList<Field>();
+		Field res_type = new Field("comboBox", "resource types", resource_types, 30, "items");
+		Field res = new Field("comboBox", "resources", resources, 30, "items");
+
+		circulationReport_Fields.add(res_type);
+		circulationReport_Fields.add(res);
+
+		final Form circulationreport_Form = new Form(circulationReport_Fields, "Circulation Report Form");
+		final PanelBuilder circulation_Panel = new PanelBuilder(circulationreport_Form);
+		circulation_Panel.makeForm();
+
+		JFrame getReport_CirculationPage = new JFrame("Get Report Circulation Resource Form");
+
+		getReport_CirculationPage.getContentPane().add(circulationreport_Form.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitgetReportBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitgetReportBtn);
+		getReport_CirculationPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		getReport_CirculationPage.pack();
+		getReport_CirculationPage.setVisible(true);
+		ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) circulationreport_Form.getJPanel()
+				.getComponent(0);
+		ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) circulationreport_Form.getJPanel().getComponent(1);
+
+		final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
+		final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
+		resource_type.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (resource_type.getSelectedItem().toString().equals("Financial")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
+					for (int i = 0; i < financial_resource.size(); i++) {
+						resourceCombo.addItem(financial_resource.get(i).toString());
+					}
+				}
+				if (resource_type.getSelectedItem().toString().equals("Physical")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
+					for (int i = 0; i < physical_resource.size(); i++) {
+						resourceCombo.addItem(physical_resource.get(i).toString());
+					}
+
+				}
+				if (resource_type.getSelectedItem().toString().equals("Information")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
+					for (int i = 0; i < information_resource.size(); i++) {
+						resourceCombo.addItem(information_resource.get(i).toString());
+					}
+
+				}
+				if (resource_type.getSelectedItem().toString().equals("Module")) {
+					resourceCombo.removeAllItems();
+					ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
+					for (int i = 0; i < module_resource.size(); i++) {
+						resourceCombo.addItem(module_resource.get(i).toString());
+					}
+				}
+			}
+		});
+		submitgetReportBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println(resourceCombo.getSelectedItem() + " this is resource combo");
+				System.out.println(resource_type.getSelectedItem() + " this is resource type");
+
+					String rid = "";
+					Pattern p = Pattern.compile("rid=\\d+");
+					Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
+					if (m.find()) {
+						rid = m.group();
+					}
+					System.out.println("rid: " + rid);
+
+					System.out.println("This is the Project Resource Utilization Report:");
+					presutilcat.getCirculationReport(
+							physcat.getResource(Integer.parseInt(rid.replace("rid=", "")))).printRep();
+
+					circulation_tabledata.update(presutilcat
+							.getCirculationReport(
+									physcat.getResource(Integer.parseInt(rid.replace("rid=", ""))))
+							.getResults());
+
+			}
+		});
+	}
+	
+	private void resourceRequirementReport() {
+		ArrayList<String> project_arraylist = new ArrayList<String>();
+
+		ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
+		for (int i = 0; i < project_hashmap.size(); i++) {
+			project_arraylist.add(project_hashmap.get(i).toString());
+		}
+
+		ArrayList<Field> getreport_resreqFields = new ArrayList<Field>();
+		Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
+
+		getreport_resreqFields.add(projects);
+
+		final Form getreport_resreqForm = new Form(getreport_resreqFields, "Report Resource Requirement Form");
+		final PanelBuilder report_resreq_panel = new PanelBuilder(getreport_resreqForm);
+		report_resreq_panel.makeForm();
+
+		JFrame getReport_ResReqPage = new JFrame("Get Report Resource Requirement Form");
+		getReport_ResReqPage.getContentPane().add(getreport_resreqForm.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitresreqreportBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitresreqreportBtn);
+		getReport_ResReqPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		getReport_ResReqPage.pack();
+		getReport_ResReqPage.setVisible(true);
+		ComboBoxJPanel comboBoxpanel_project = (ComboBoxJPanel) getreport_resreqForm.getJPanel()
+				.getComponent(0);
+		final JComboBox projectCombo = comboBoxpanel_project.getComboBox();
+
+		submitresreqreportBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < getreport_resreqForm.getJPanel().getComponentCount(); i++) {
+					// System.out.println(fpanel.selected_Choice);
+				}
+				System.out.println(projectCombo.getSelectedItem() + " ino select");
+
+				Pattern p = Pattern.compile("projid=\\d+");
+				Matcher m = p.matcher(projectCombo.getSelectedItem().toString());
+				if (m.find()) {
+					System.out.println(m.group().replace("projid=", ""));
+					int projid = Integer.parseInt(m.group().replace("projid=", ""));
+					Project proj = projcat.getProject(projid);
+					resreqcat.getReport(proj).getResults();
+					resreq_tabledata.update(resreqcat.getReport(proj).getResults());
+
+				}
+
+			}
+		});
+	}
+	
+	private void resourceAvailableReport() {
+		ArrayList<String> resource_types = new ArrayList<String>();
+		resource_types.add("Information");
+		resource_types.add("Financial");
+		resource_types.add("Physical");
+		resource_types.add("Employee");
+		resource_types.add("Module");
+
+		ArrayList<Field> getreport_resavailFields = new ArrayList<Field>();
+		Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
+
+		getreport_resavailFields.add(req_res_type);
+
+		final Form getreport_resavailForm = new Form(getreport_resavailFields,
+				"Report Resource Available Form");
+		final PanelBuilder report_resavail_panel = new PanelBuilder(getreport_resavailForm);
+		report_resavail_panel.makeForm();
+
+		JFrame getReport_ResAvailPage = new JFrame("Get Report Resource Available Form");
+		getReport_ResAvailPage.getContentPane().add(getreport_resavailForm.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitresavailreportBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitresavailreportBtn);
+		getReport_ResAvailPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		getReport_ResAvailPage.pack();
+		getReport_ResAvailPage.setVisible(true);
+		ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) getreport_resavailForm.getJPanel()
+				.getComponent(0);
+		final JComboBox resourceRepCombo = comboBoxpanel_restype.getComboBox();
+		submitresavailreportBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println(resourceRepCombo.getSelectedItem().toString() + " ine res type");
+				// FinancialResourceCatalogue finanResCat= new
+				// FinancialResourceCatalogue();
+				// finanResCat.getReport().printRep();
+				//
+				if (resourceRepCombo.getSelectedItem().toString().equals("Financial")) {
+					// System.out.println(finanResCat.getReport().getResults());
+					resavail_tabledata.update(financat.getReport().getResults(),
+							new String[] { "sid", "count", "finanname" });
+				}
+				if (resourceRepCombo.getSelectedItem().toString().equals("Physical")) {
+					// HERE
+					// System.out.println(physResCat.getReport().getResults());
+					resavail_tabledata.update(physcat.getReport().getResults(),
+							new String[] { "sid", "count", "physname" });
+
+				}
+				if (resourceRepCombo.getSelectedItem().toString().equals("Information")) {
+					// System.out.println(infoResCat.getReport().getResults());
+					resavail_tabledata.update(infocat.getReport().getResults(),
+							new String[] { "sid", "count", "irname" });
+
+				}
+				if (resourceRepCombo.getSelectedItem().toString().equals("Employee")) {
+					System.out.println(empcat.getReport().getResults());
+					resavail_tabledata.update(empcat.getReport().getResults(),
+							new String[] { "sid", "count", "empname" });
+
+				}
+				if (resourceRepCombo.getSelectedItem().toString().equals("Module")) {
+					// System.out.println(modResCat.getReport().getResults());
+					resavail_tabledata.update(modcat.getReport().getResults(),
+							new String[] { "sid", "count", "modname" });
+
+				}
+
+			}
+		});
+	}
 }
+
+

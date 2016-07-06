@@ -17,7 +17,7 @@ public class SectionCatalogue {
 	String tableName;
 	
 	public SectionCatalogue() {
-		DB = new DataBase();
+		DB = DB.getInstance();
 		tableName = "section";
 	}
 	

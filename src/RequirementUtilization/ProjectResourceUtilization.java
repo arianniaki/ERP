@@ -25,7 +25,7 @@ public class ProjectResourceUtilization {
 		this.from = from;
 		this.to = to;
 		this.pruId = pruid;
-		DB = new DataBase();
+		DB = DB.getInstance();
 	}
 	
 	public int getId(){

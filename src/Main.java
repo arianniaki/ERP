@@ -11,6 +11,7 @@ import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.ProjectEmployee;
 import ProjectEmployee.ProjectEmployeeCatalogue;
+import ProjectEmployee.SubSystem.SubSystem;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import RequirementUtilization.*;
 import ResourceManagement.Section.SectionCatalogue;
@@ -18,7 +19,18 @@ import ResourceManagement.Section.Resource.*;
 
 public class Main {
 	public static void main(String[] args) throws ParseException {
-
+//		SubSystemCatalogue subCat = new SubSystemCatalogue();
+//		ArrayList<HashMap<String,String>> res = subCat.getSubSystems();
+//		for(HashMap<String,String> item : res){
+//			System.out.println(item.toString());
+//		}
+//		HashMap<String,String> vars = new HashMap<>();
+//		vars.put("sname","\'"+"subsytem e hanali"+"\'");
+//		System.out.println("search issss:");
+//		res = subCat.searchSubsystem(vars);
+//		for(HashMap<String,String> item : res){
+//			System.out.println(item.toString());
+//		}
 //		PhysicalResourceCatalogue physResCat = new PhysicalResourceCatalogue();
 //		physResCat.getReport().printRep();
 //		System.out.println("This is the Resource Avail Report:");

@@ -28,7 +28,7 @@ public class SubSystem {
 		this.name = name;
 		project = proj;
 		section = sec;
-		DB = new DataBase();
+		DB = DB.getInstance();
 	}
 		
 	public void editSubSystem(String name, int secid){
@@ -38,7 +38,7 @@ public class SubSystem {
 		
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("sname", "\'" + name + "\'");
-		vars.put("subid", Integer.toString(secid));
+		vars.put("sid", Integer.toString(secid));
 		submitToDB(vars);
 
 	}

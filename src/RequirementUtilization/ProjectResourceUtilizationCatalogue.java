@@ -22,7 +22,7 @@ public class ProjectResourceUtilizationCatalogue {
 	
 	public ProjectResourceUtilizationCatalogue() {
 		// TODO Auto-generated constructor stub
-		DB = new DataBase();
+		DB = DB.getInstance();
 		tableName = "projectresourceutilization";
 	}
 	

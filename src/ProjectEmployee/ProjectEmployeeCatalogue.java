@@ -14,7 +14,7 @@ public class ProjectEmployeeCatalogue {
 	DataBase DB;
 	
 	public ProjectEmployeeCatalogue(){
-		DB = new DataBase();
+		DB = DB.getInstance();
 	}
 	
 	public long addProjectEmployee(int pid, int empid, String from, String to){

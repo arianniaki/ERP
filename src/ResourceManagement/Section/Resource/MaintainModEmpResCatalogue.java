@@ -13,7 +13,7 @@ public class MaintainModEmpResCatalogue {
 	String resTableName;
 	String empTableName;
 	public MaintainModEmpResCatalogue() {
-		DB = new DataBase();
+		DB = DB.getInstance();
 		resTableName = "maintainmodres";
 		empTableName = "maintainmodemp";
 	}

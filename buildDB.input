@@ -26,5 +26,6 @@ create view physressection as (select * from physres natural join resource);
 create view finanressection as (select * from finanres natural join resource);
 create view inforessection as (select * from infores natural join resource);
 create view modulesection as (select * from module natural join resource);
+create view subsystemsection as (select * from subsystem natural join section); 
 
 

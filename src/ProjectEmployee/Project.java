@@ -18,7 +18,7 @@ public class Project {
 	
 	
 	public Project(String name, String desc, String size, Employee manager, String tech){
-		DB = new DataBase();
+		DB = DB.getInstance();
 		this.name = name;
 		description = desc;
 		projectSize = size;

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import DataBase.DataBase;
 import DataBase.Table;
 import ProjectEmployee.Employee;
+import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
 import ResourceManagement.Section.Section;
@@ -19,21 +20,21 @@ public class SubSystemCatalogue {
 	String tableName;
 	
 	public SubSystemCatalogue() {
-		DB = new DataBase();
+		DB = DB.getInstance();
 		tableName = "subsystem";
 	}
 	
 	public ArrayList<HashMap<String, String>> getSubSystems() {
-		Table table = new Table(tableName);
+		Table table = new Table(tableName+"section");
 		ArrayList<HashMap<String, String>> result = table.readAll();
 		for (int i = 0; i < result.size(); i++) {
-			System.out.println(result.get(i).toString());
+			System.out.println("getSubsystems: "+result.get(i).toString());
 		}
 		return result;
 	}
 
 	public ArrayList<HashMap<String, String>> getSubSystemsByProject(int pid) {
-		Table table = new Table(tableName);
+		Table table = new Table(tableName+"section");
 		HashMap<String,String> vars = new HashMap<String,String>();
 		vars.put("pid", Integer.toString(pid));
 		
@@ -47,7 +48,7 @@ public class SubSystemCatalogue {
 	public SubSystem getSubSystem(int subid){
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("subid", Integer.toString(subid));
-		ResultSet res = DB.select("subsystem",vars,null);
+		ResultSet res = DB.select("subsystemsection",vars,null);
 		ProjectCatalogue projCat = new ProjectCatalogue();
 		SectionCatalogue secCat = new SectionCatalogue();
 		SubSystem subSystem = null;
@@ -83,5 +84,14 @@ public class SubSystemCatalogue {
 		vars.put("subid", Integer.toString(id));
 		DB.delete(vars, "subsystem");
 	}
-
+	
+	public ArrayList<HashMap<String, String>> searchSubsystem(HashMap<String, String> searchvars){
+		
+		Table table = new Table(tableName+"section");
+		ArrayList<HashMap<String, String>> result = table.search(searchvars);
+		for (int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i).toString());
+		}
+		return result;		
+	}
 }

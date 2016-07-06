@@ -27,7 +27,7 @@ public class Employee {
 	int rid;
 
 	public Employee() {
-		DB = new DataBase();
+		DB = DB.getInstance();
 	}
 	
 	public void editHuman(String name, int sectionId, String password, String post){

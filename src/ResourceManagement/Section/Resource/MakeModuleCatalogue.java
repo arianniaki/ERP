@@ -19,7 +19,7 @@ public class MakeModuleCatalogue {
 	String resTableName;
 	String empTableName;
 	public MakeModuleCatalogue(){
-		DB = new DataBase();
+		DB = DB.getInstance();
 		resTableName = "moduleresourceutilization";
 		empTableName = "moduleemployee";
 	}
@@ -40,13 +40,16 @@ public class MakeModuleCatalogue {
 	}
 	
 	public ArrayList<Resource> getResources(int  modrid){
+		System.out.println("THIS IS MODIRD+ "+modrid);
 		ArrayList<Resource> resRes = new ArrayList<Resource>();
 		Table table = new Table(resTableName);
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("modrid", Integer.toString(modrid));
 		ArrayList<HashMap<String, String>> result = table.search(vars);
 		ResourceCatalogue rescat = new ResourceCatalogue();
+		System.out.println(result.size()+" MOTMOTMOMTOTMOTM");
 		for (int i = 0; i < result.size(); i++) {
+			System.out.println("LLLLLLLL: "+Integer.parseInt(result.get(i).get("rid")));
 			Resource res = rescat.getResource(Integer.parseInt(result.get(i).get("rid")));
 			resRes.add(res);
 		}
