@@ -10,15 +10,20 @@ import DataBase.Table;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
+import ProjectEmployee.ProjectEmployeeCatalogue;
 
 public class SectionCatalogue {
-
-	DataBase DB;
-	String tableName;
+	private static SectionCatalogue secCat = new SectionCatalogue();
+	private DataBase DB;
+	private String tableName;
 	
-	public SectionCatalogue() {
+	private SectionCatalogue() {
 		DB = DB.getInstance();
 		tableName = "section";
+	}
+	
+	public static SectionCatalogue getInstance(){
+		return secCat;
 	}
 	
 	public ArrayList<HashMap<String, String>> getSections() {

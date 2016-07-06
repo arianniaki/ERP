@@ -200,20 +200,20 @@ public class NUserPage {
 	 * @param loggedin_user
 	 */
 	public NUserPage() {
-		empcat= new EmployeeCatalogue();
-		seccat= new SectionCatalogue();
-		projcat= new ProjectCatalogue();
+		empcat= EmployeeCatalogue.getInstance();
+		seccat= SectionCatalogue.getInstance();
+		projcat= ProjectCatalogue.getInstance();
 		subsyscat= new SubSystemCatalogue();
 		financat = new FinancialResourceCatalogue();
 		infocat = new InformationResourceCatalogue();
 		physcat = new PhysicalResourceCatalogue();
 		rcat= new ResourceCatalogue();
 		makemodulecat = new MakeModuleCatalogue();
-		presutilcat = new ProjectResourceUtilizationCatalogue();
-		resreqcat= new ResourceRequirementCatalogue();
+		presutilcat = ProjectResourceUtilizationCatalogue.getInstance();
+		resreqcat= ResourceRequirementCatalogue.getInstance();
 		modcat = new ModuleCatalogue();
 		maintainmodulecat= new MaintainingModuleCatalogue();
-		projempcat = new ProjectEmployeeCatalogue();
+		projempcat = ProjectEmployeeCatalogue.getInstance();
 		initialize();
 	}
 

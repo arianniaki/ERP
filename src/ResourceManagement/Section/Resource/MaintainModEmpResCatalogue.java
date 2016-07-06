@@ -24,7 +24,7 @@ public class MaintainModEmpResCatalogue {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("maintainid", Integer.toString(maintainid));
 		ArrayList<HashMap<String, String>> result = table.search(vars);
-		EmployeeCatalogue empcat = new EmployeeCatalogue();
+		EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 		for (int i = 0; i < result.size(); i++) {
 			Employee emp = empcat.getEmployee(Integer.parseInt(result.get(i).get("empid")));
 			empRes.add(emp);

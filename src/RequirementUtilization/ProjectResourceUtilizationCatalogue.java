@@ -16,15 +16,20 @@ import ResourceManagement.Section.Resource.Resource;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 public class ProjectResourceUtilizationCatalogue {
-
-	DataBase DB;
-	String tableName;
+	private static ProjectResourceUtilizationCatalogue pruCat = new ProjectResourceUtilizationCatalogue();
+	private DataBase DB;
+	private String tableName;
 	
-	public ProjectResourceUtilizationCatalogue() {
+	private ProjectResourceUtilizationCatalogue() {
 		// TODO Auto-generated constructor stub
 		DB = DB.getInstance();
 		tableName = "projectresourceutilization";
 	}
+	
+	public static ProjectResourceUtilizationCatalogue getInstance(){
+		return pruCat;
+	}
+	
 	
 	public ArrayList<ProjectResourceUtilization> getProjectResourceUtilizations() {
 		ArrayList<ProjectResourceUtilization> ProjResUtil = new ArrayList<ProjectResourceUtilization>();
@@ -33,8 +38,8 @@ public class ProjectResourceUtilizationCatalogue {
 		for (int i = 0; i < result.size(); i++) {
 			
 			System.out.println(result.get(i).toString());
-			ProjectCatalogue pcat = new ProjectCatalogue();
-			SectionCatalogue scat = new SectionCatalogue();
+			ProjectCatalogue pcat = ProjectCatalogue.getInstance();
+			SectionCatalogue scat = SectionCatalogue.getInstance();
 			ResourceCatalogue rcat = new ResourceCatalogue();
 			
 			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("pid")));
@@ -53,8 +58,8 @@ public class ProjectResourceUtilizationCatalogue {
 		vars.put("presutilId", Integer.toString(presutilId));
 		ResultSet res = DB.select("ProjectResourceUtilization",vars,null);
 		
-		ProjectCatalogue pcat = new ProjectCatalogue();
-		SectionCatalogue scat = new SectionCatalogue();
+		ProjectCatalogue pcat = ProjectCatalogue.getInstance();
+		SectionCatalogue scat = SectionCatalogue.getInstance();
 		ResourceCatalogue rcat = new ResourceCatalogue();
 		
 		ProjectResourceUtilization pru = null;
@@ -84,8 +89,8 @@ public class ProjectResourceUtilizationCatalogue {
 		ArrayList<HashMap<String, String>> result = table.search(vars);
 		for (int i = 0; i < result.size(); i++) {
 			
-			ProjectCatalogue pcat = new ProjectCatalogue();
-			SectionCatalogue scat = new SectionCatalogue();
+			ProjectCatalogue pcat = ProjectCatalogue.getInstance();
+			SectionCatalogue scat = SectionCatalogue.getInstance();
 			ResourceCatalogue rcat = new ResourceCatalogue();
 			
 			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("pid")));
@@ -129,9 +134,9 @@ public class ProjectResourceUtilizationCatalogue {
 		rep.setResults(results);
 		for(int i=0; i<results.size(); i++){
 			String line="";
-			SectionCatalogue secCat = new SectionCatalogue();
+			SectionCatalogue secCat = SectionCatalogue.getInstance();
 			ResourceCatalogue resCat = new ResourceCatalogue();
-			ProjectCatalogue projCat = new ProjectCatalogue();
+			ProjectCatalogue projCat = ProjectCatalogue.getInstance();
 			results.get(i).put("sname", ""+secCat.getSection(Integer.valueOf(results.get(i).get("sid"))).getName());
 			results.get(i).put("rname", ""+resCat.getResource((Integer.valueOf(results.get(i).get("rid")))).getName());
 			results.get(i).put("pname", ""+projCat.getProject((Integer.valueOf(results.get(i).get("pid")))).getName());

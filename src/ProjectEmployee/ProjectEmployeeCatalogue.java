@@ -5,17 +5,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import AccessRight.AccessRightCatalogue;
 import DataBase.DataBase;
 import DataBase.Table;
 import Report.Report;
 
 public class ProjectEmployeeCatalogue {
+	private static ProjectEmployeeCatalogue projectEmpCat = new ProjectEmployeeCatalogue();
 
-	DataBase DB;
+	private DataBase DB;
 	
-	public ProjectEmployeeCatalogue(){
+	private ProjectEmployeeCatalogue(){
 		DB = DB.getInstance();
 	}
+	
+	public static ProjectEmployeeCatalogue getInstance(){
+		return projectEmpCat;
+	}
+	
 	
 	public long addProjectEmployee(int pid, int empid, String from, String to){
 		HashMap<String, String> vars = new HashMap<String, String>();
@@ -41,8 +48,8 @@ public class ProjectEmployeeCatalogue {
 		
 		for (int i = 0; i < result.size(); i++) {
 //			System.out.println(result.get(i).toString());
-			ProjectCatalogue pcat = new ProjectCatalogue();
-			EmployeeCatalogue empcat = new EmployeeCatalogue();
+			ProjectCatalogue pcat = ProjectCatalogue.getInstance();
+			EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 			Employee emp = empcat.getEmployee(Integer.parseInt(result.get(i).get("empid")));
 			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("projid")));
 
@@ -59,8 +66,8 @@ public class ProjectEmployeeCatalogue {
 		
 		ResultSet res = DB.select("projectemployee",vars,null);
 
-		ProjectCatalogue pcat = new ProjectCatalogue();
-		EmployeeCatalogue empcat = new EmployeeCatalogue();
+		ProjectCatalogue pcat = ProjectCatalogue.getInstance();
+		EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 		ProjectEmployee premp = null;
 		try {
 			if(res.next()){
@@ -95,8 +102,8 @@ public class ProjectEmployeeCatalogue {
 		rep.setResults(results);
 		for(int i=0; i<results.size(); i++){
 			String line="";
-			ProjectCatalogue projCat = new ProjectCatalogue();
-			EmployeeCatalogue empcat = new EmployeeCatalogue();
+			ProjectCatalogue projCat = ProjectCatalogue.getInstance();
+			EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 			results.get(i).put("empname", ""+empcat.getEmployee(Integer.valueOf(results.get(i).get("empid"))).getName());
 			results.get(i).put("pname", ""+projCat.getProject((Integer.valueOf(results.get(i).get("projid")))).getName());
 			for(String key : results.get(i).keySet()){

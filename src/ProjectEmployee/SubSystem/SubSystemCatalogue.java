@@ -49,8 +49,8 @@ public class SubSystemCatalogue {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("subid", Integer.toString(subid));
 		ResultSet res = DB.select("subsystemsection",vars,null);
-		ProjectCatalogue projCat = new ProjectCatalogue();
-		SectionCatalogue secCat = new SectionCatalogue();
+		ProjectCatalogue projCat = ProjectCatalogue.getInstance();
+		SectionCatalogue secCat = SectionCatalogue.getInstance();
 		SubSystem subSystem = null;
 		try {
 			if (res.next()) {

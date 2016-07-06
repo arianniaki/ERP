@@ -10,6 +10,7 @@ import DataBase.DataBase;
 import DataBase.Table;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
+import ProjectEmployee.ProjectEmployeeCatalogue;
 import Report.Report;
 import ResourceManagement.Section.Section;
 import ResourceManagement.Section.SectionCatalogue;
@@ -17,13 +18,17 @@ import ResourceManagement.Section.Resource.Resource;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 public class ResourceRequirementCatalogue{
+	private static ResourceRequirementCatalogue resReqCat = new ResourceRequirementCatalogue();
+	private DataBase DB;
+	private String tableName;
 	
-	DataBase DB;
-	String tableName;
-	
-	public ResourceRequirementCatalogue() {
+	private ResourceRequirementCatalogue() {
 		DB = DB.getInstance();
 		tableName = "resourcerequirement";
+	}
+	
+	public static ResourceRequirementCatalogue getInstance(){
+		return resReqCat;
 	}
 	
 	public ArrayList<ResourceRequirement> getResourceRequirements() {
@@ -31,8 +36,8 @@ public class ResourceRequirementCatalogue{
 		Table table = new Table(tableName);
 		ArrayList<HashMap<String, String>> result = table.readAll();
 		for (int i = 0; i < result.size(); i++) {
-			ProjectCatalogue pcat = new ProjectCatalogue();
-			SectionCatalogue scat = new SectionCatalogue();
+			ProjectCatalogue pcat = ProjectCatalogue.getInstance();
+			SectionCatalogue scat = SectionCatalogue.getInstance();
 			ResourceCatalogue rcat = new ResourceCatalogue();
 			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("pid")));
 			Section sc = scat.getSection(Integer.parseInt(result.get(i).get("sid")));
@@ -48,8 +53,8 @@ public class ResourceRequirementCatalogue{
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("resreqId", Integer.toString(resreqId));
 		ResultSet res = DB.select("resourcerequirement",vars,null);
-		ProjectCatalogue pcat = new ProjectCatalogue();
-		SectionCatalogue scat = new SectionCatalogue();
+		ProjectCatalogue pcat = ProjectCatalogue.getInstance();
+		SectionCatalogue scat = SectionCatalogue.getInstance();
 		ResourceCatalogue rcat = new ResourceCatalogue();
 		ResourceRequirement rr = null;
 		Project pr;
@@ -99,9 +104,9 @@ public class ResourceRequirementCatalogue{
 		rep.setResults(results);
 		for(int i=0; i<results.size(); i++){
 			String line="";
-			SectionCatalogue secCat = new SectionCatalogue();
+			SectionCatalogue secCat = SectionCatalogue.getInstance();
 			ResourceCatalogue resCat = new ResourceCatalogue();
-			ProjectCatalogue projCat = new ProjectCatalogue();
+			ProjectCatalogue projCat = ProjectCatalogue.getInstance();
 			results.get(i).put("sname", ""+secCat.getSection(Integer.valueOf(results.get(i).get("sid"))).getName());
 			results.get(i).put("rname", ""+resCat.getResource((Integer.valueOf(results.get(i).get("rid")))).getName());
 			results.get(i).put("pname", ""+projCat.getProject((Integer.valueOf(results.get(i).get("pid")))).getName());

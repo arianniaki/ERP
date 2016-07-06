@@ -70,7 +70,7 @@ public class main {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub
-							EmployeeCatalogue empcat = new EmployeeCatalogue();
+							EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 							System.out.println(signupform.getText(0)+" "+signupform.getText(1)+" "+signupform.getText(2)+" "+signupform.getText(3)+" "+signupform.getText(4));
 							
 //							empcat.addEmployee(Integer.parseInt(signupform.getText(1)), false, signupform.getText(0), "newuser",Integer.parseInt(signupform.getText(2)),signupform.getText(3), signupform.getText(4),false,false);
