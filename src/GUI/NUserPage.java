@@ -1040,7 +1040,7 @@ public class NUserPage {
 		resourcesTab.addTab("Module Detail", null, moduledetailpanel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
 
-		// moduledetail_tabledata = new TableData(new Modu);
+//		 moduledetail_tabledata = new TableData(new M());
 
 		JScrollPane module_detail_scrollPane = new JScrollPane();
 

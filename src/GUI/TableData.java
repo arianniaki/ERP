@@ -15,6 +15,7 @@ import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.Resource.MaintainingModule;
 import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
+import ResourceManagement.Section.Resource.MakeModuleCatalogue;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 public class TableData {
@@ -122,8 +123,8 @@ public class TableData {
 	public TableData(ProjectResourceUtilizationCatalogue presutilcat) {
 		
 		data= new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "presutilid","rid", "sid", "pid","fromdate","todate" };
-		dbnames = new String[] { "presutilid","rid", "sid", "pid","fromdate","todate"};
+		columns = new String[] { "presutilid","rid","resourceName", "sid", "sectionName","pid","projectName","fromdate","todate" };
+		dbnames = new String[] { "presutilid","rid","resourceName", "sid", "sectionName","pid","projectName","fromdate","todate" };
 		ArrayList<ProjectResourceUtilization> allpresutil;
 		allpresutil = presutilcat.getProjectResourceUtilizations();
 		for (int i = 0; i < allpresutil.size(); i++) {
@@ -145,11 +146,16 @@ public class TableData {
 			data.add((allmaintainmod.get(i).toHashMap()));
 		}
 		this.buildFilledJTable();
-
-		
-		this.buildFilledJTable();
-
 	}
+	
+//	public TableData(MakeModuleCatalogue makemodcat,int modrid) {
+//		data = makemodcat.ge();
+//		columns = new String[] { "Subsystem Id","Project Id", "Name","Sectionid","Sectionname"};
+//		dbnames = new String[] { "subid","pid", "sname","sid","sectionname"};
+//		this.buildFilledJTable();
+//
+//	}
+	
 	public TableData(ResourceRequirementCatalogue resreqcat) {
 		data= new ArrayList<HashMap<String, String>>();
 		columns = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate","projectName","sectionName","resourceName","is_satisfied","satisfydate" };
