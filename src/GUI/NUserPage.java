@@ -52,6 +52,7 @@ import RequirementUtilization.ProjectResourceUtilizationCatalogue;
 import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.SectionCatalogue;
+import ResourceManagement.Section.Resource.FinancialResource;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResource;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
@@ -61,6 +62,7 @@ import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.MakeModuleCatalogue;
 import ResourceManagement.Section.Resource.Module;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
+import ResourceManagement.Section.Resource.PhysicalResource;
 import ResourceManagement.Section.Resource.PhysicalResourceCatalogue;
 import ResourceManagement.Section.Resource.Resource;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
@@ -3461,15 +3463,16 @@ public class NUserPage {
 
 		ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
 		financial_moduleFields.add(new Field("text", "financial name", "", 20, "name"));
-		financial_moduleFields.add(sections);
 		financial_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
 		financial_moduleFields.add(new Field("text", "net value", "", 20, "value"));
 		financial_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+		financial_moduleFields.add(sections);
+
 
 		final Form financial_moduleForm = new Form(financial_moduleFields, "Financial Edit Module Form");
 		final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
 		financial_modulePanel.makeForm();
-		JFrame Add_InformationModulePage = new JFrame("Edit Information Module Form");
+		JFrame Add_InformationModulePage = new JFrame("Edit Financial Module Form");
 		Add_InformationModulePage.getContentPane().add(financial_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 		JButton submitaddfinancialBtn = new JButton("Submit");
@@ -3479,6 +3482,12 @@ public class NUserPage {
 		Add_InformationModulePage.pack();
 		Add_InformationModulePage.setVisible(true);
 
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) financial_moduleForm.getJPanel()
+				.getComponent(4);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		
 		submitaddfinancialBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -3494,7 +3503,6 @@ public class NUserPage {
 					String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // the
 					System.out.println(Table_click + " this was clicked");
-				}
 				System.out.println();
 				System.out.println("all : ");
 				financat.readAllResources();
@@ -3508,11 +3516,13 @@ public class NUserPage {
 					System.out.println(inputs.get(i) + " financial edit");
 				}
 
+				FinancialResource finanres = financat.getFinancialResource(Integer.parseInt(Table_click));
+				finanres.editResource(inputs.get(0), sections_combo.getSelectedIndex(), Integer.parseInt(inputs.get(2)),inputs.get(1), inputs.get(3));
 				// financat.getFinancialResource().editResource("changed
 				// name", 1, 10, "changed model", "changed");
 
 				financial_tabledata.update(financat.readAllResources());
-
+				}
 			}
 		});
 	}
@@ -3900,44 +3910,13 @@ public class NUserPage {
 	}
 	
 	private void editMaintainingModule() {
-		final ArrayList<String> employees = new ArrayList<String>();
-		final ArrayList<String> financials = new ArrayList<String>();
-		final ArrayList<String> physicals = new ArrayList<String>();
-		final ArrayList<String> information = new ArrayList<String>();
-
-		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
-		for (int i = 0; i < employe_readall.size(); i++) {
-			employees.add(employe_readall.get(i).toString());
-		}
-		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
-		for (int i = 0; i < financial_readall.size(); i++) {
-			financials.add(financial_readall.get(i).toString());
-		}
-
-		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
-		for (int i = 0; i < physical_readall.size(); i++) {
-			physicals.add(physical_readall.get(i).toString());
-		}
-
-		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
-		for (int i = 0; i < information_readall.size(); i++) {
-			information.add(information_readall.get(i).toString());
-		}
 
 		ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
 		Field change_type = new Field("text", "change type", "", 20, "change type");
 		Field duration = new Field("text", "duration", "", 20, "duration");
-		Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
-		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
-		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
-		Field information_check = new Field("checkBox", "information", information, 20, "information");
 
 		maintain_moduleFields.add(change_type);
 		maintain_moduleFields.add(duration);
-		maintain_moduleFields.add(financial_check);
-		maintain_moduleFields.add(physical_check);
-		maintain_moduleFields.add(information_check);
-		maintain_moduleFields.add(maintainers);
 
 		final Form maintain_Form = new Form(maintain_moduleFields, "Maintain Module Form");
 		final PanelBuilder maintain_Panel = new PanelBuilder(maintain_Form);
@@ -3958,21 +3937,22 @@ public class NUserPage {
 		Edit_MaintainPage.pack();
 		Edit_MaintainPage.setVisible(true);
 
-		final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
-		final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
-		final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel()
-				.getComponent(2);
-		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel()
-				.getComponent(4);
-
 		submiteditmaintainmoduleBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// INJA TODO Auto-generated method stub
+				
 				int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
 
-				String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-						.toString()); // return
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Module!");
+				} else {
+
+					String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					
 				selected_maintaining_module = Integer.parseInt(Table_click.trim());
 
 				System.out.println(Table_click);
@@ -3987,13 +3967,9 @@ public class NUserPage {
 					System.out.println(inputs.get(i) + "adasa");
 				}
 
-				// MaintainingModule maintainmod =
-				// maintainmodulecat.ge(selected_maintaining_module);
+				 MaintainingModule maintainmod = maintainmodulecat.getMaintainingModule(selected_maintaining_module);
+				 maintainmod.edit(inputs.get(0), Integer.parseInt(inputs.get(1)));
 
-				// long maintainmodpk =
-				// maintainmodulecat.addMaintainingModule(selected_module,
-				// inputs.get(0),
-				// Integer.parseInt(inputs.get(1)));
 
 				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 				ArrayList<MaintainingModule> allmaintainmodule;
@@ -4004,64 +3980,6 @@ public class NUserPage {
 				System.out.println("DATA");
 
 				maintaining_tabledata.update(data);
-
-				System.out.println("----------");
-
-				final ArrayList<String> finanvales = checkBoxpane_financial.getCheckedValues();
-				System.out.println(finanvales);
-				final ArrayList<String> physicalvales = checkBoxpane_phys.getCheckedValues();
-				System.out.println(physicalvales);
-				final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
-				System.out.println(informationvales);
-				final ArrayList<String> employeevales = checkBoxpane_emp.getCheckedValues();
-				System.out.println(employeevales);
-				Pattern emp = Pattern.compile("empid=\\d+");
-				for (int i = 0; i < employeevales.size(); i++) {
-					String empids = null;
-					Matcher m_emp = emp.matcher(employeevales.get(i).toString());
-					if (m_emp.find()) {
-						empids = m_emp.group();
-					}
-					System.out.println("empids: " + empids);
-					maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")),
-							selected_maintaining_module);
-				}
-
-				Pattern res = Pattern.compile("rid=\\d+");
-				for (int i = 0; i < finanvales.size(); i++) {
-					String respids = null;
-					Matcher m_res = res.matcher(finanvales.get(i).toString());
-					if (m_res.find()) {
-						respids = m_res.group();
-					}
-					System.out.println("finan rid: " + respids);
-					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-							selected_maintaining_module);
-
-				}
-
-				for (int i = 0; i < physicalvales.size(); i++) {
-					String respids = null;
-					Matcher m_res = res.matcher(physicalvales.get(i).toString());
-					if (m_res.find()) {
-						respids = m_res.group();
-					}
-					System.out.println("phys rid: " + respids);
-					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-							selected_maintaining_module);
-
-				}
-
-				for (int i = 0; i < informationvales.size(); i++) {
-					String respids = null;
-					Matcher m_res = res.matcher(informationvales.get(i).toString());
-					if (m_res.find()) {
-						respids = m_res.group();
-					}
-					System.out.println("info rid: " + respids);
-					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-							selected_maintaining_module);
-
 				}
 
 			}
@@ -4317,10 +4235,7 @@ public class NUserPage {
 					employee.editHuman(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
 							inputs.get(2), inputs.get(3));
 
-					empcat.readAllEmployees();
-					allemployees.clear();
-					allemployees = empcat.readAllEmployees();
-					human_tabledata.update(empcat.readAllEmployees());
+					human_tabledata.update(empcat.getConfirmedEmployees());
 				}
 			}
 		});
@@ -4343,7 +4258,7 @@ public class NUserPage {
 					"Are you sure you want to Delete this item?");
 			if (myDialog.getAnswer()) {
 				allemployees = empcat.readAllEmployees();
-				human_tabledata.update(empcat.readAllEmployees());
+				human_tabledata.update(empcat.getConfirmedEmployees());
 			}
 		}
 	}
@@ -4426,11 +4341,8 @@ public class NUserPage {
 	private void searchPhysicalResource() {
 		HashMap<String, String> searchVars = new HashMap<String, String>();
 
-		if (search_physicalname.getText() != null && !search_physicalname.getText().trim().equals(""))
-			searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
-		if (search_physicalmodel.getText() != null && !search_physicalmodel.getText().trim().equals(""))
-			searchVars.put("modeldesc", "\'" + search_physicalmodel.getText() + "\'");
 		searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
+		searchVars.put("modeldesc", "\'" + search_physicalmodel.getText() + "\'");
 
 		if (physcat.SearchResource(searchVars).isEmpty()) {
 			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
@@ -4511,7 +4423,7 @@ public class NUserPage {
 					"Please Select a Resource!");
 		} else {
 
-			String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+			final String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 					.toString()); // the
 			System.out.println(Table_click + " this was clicked");
 
@@ -4526,6 +4438,7 @@ public class NUserPage {
 			ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
 			physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
 			physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+			physical_moduleFields.add(new Field("text", "description", "", 20, "description"));
 
 			physical_moduleFields.add(sections);
 			final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
@@ -4541,6 +4454,10 @@ public class NUserPage {
 			Edit_PhysicalModulePage.pack();
 			Edit_PhysicalModulePage.setVisible(true);
 
+			ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) physical_moduleForm.getJPanel().getComponent(3);
+
+			final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
 			submiteditphysicalmoduleBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -4555,23 +4472,9 @@ public class NUserPage {
 					for (int i = 0; i < inputs.size(); i++) {
 						System.out.println(inputs.get(i) + " physical");
 					}
-					// physcat.addResource((inputs.get(0)));
-					// // tu resource ham bayad insert she
-					// allphysicals.clear();
-					// allphysicals = physcat.readAllResources();
-					// System.out.println(phyiscal_tableModel.getRowCount()
-					// + " ---");
-					// int rowcount = phyiscal_tableModel.getRowCount();
-					// for (int j = rowcount - 1; j >= 0; j--) {
-					// phyiscal_tableModel.removeRow(j);
-					// }
-					// System.out.println(phyiscal_tableModel.getRowCount()
-					// + " ---");
-					// for (int i = 0; i < allphysicals.size(); i++) {
-					// Object[] objs = { allphysicals.get(i).get("rid"),
-					// allphysicals.get(i).get("physname") };
-					// phyiscal_tableModel.addRow(objs);
-					// }
+					PhysicalResource physres = physcat.getPhysicalResource(Integer.parseInt(Table_click));
+					physres.editResource(inputs.get(0), sections_combo.getSelectedIndex(), inputs.get(1), inputs.get(2));
+					physical_tabledata.update(physcat.readAllResources());
 				}
 			});
 		}
