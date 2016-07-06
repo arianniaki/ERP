@@ -1423,6 +1423,7 @@ public class NUserPage {
 					allemp = makemodulecat.getEmployees(selected_module);
 					for (int i = 0; i < allemp.size(); i++) {
 						HashMap<String,String> emps = new HashMap<String,String>();
+						emps.put("empid", allemp.get(i).getId()+"");
 						emps.put("empname", allemp.get(i).getName());
 						data.add(emps);
 					}
@@ -1435,6 +1436,7 @@ public class NUserPage {
 					allres = makemodulecat.getResources(selected_module);
 					for (int i = 0; i < allres.size(); i++) {
 						HashMap<String,String> ress = new HashMap<String,String>();
+						ress.put("rid", allres.get(i).getId()+"");
 						ress.put("rname", allres.get(i).getName());
 						resdata.add(ress);
 					}
