@@ -192,7 +192,7 @@ public class TableData {
 		this.buildFilledJTable();
 
 	}
-	public TableData(MakeModuleCatalogue makemodulecat, String type,int modrid) {
+	public TableData(MakeModuleCatalogue makemodulecat, String type) {
 		data = new ArrayList<HashMap<String, String>>();
 		if(type.equals("Employee")){
 			columns = new String[] { "EmployeeID","Employee Name"};
@@ -206,7 +206,7 @@ public class TableData {
 		this.buildFilledJTable();
 	}
 
-	public TableData(MaintainModEmpResCatalogue maintainModEmpResCatalogue, String type, int selected_module) {
+	public TableData(MaintainModEmpResCatalogue maintainModEmpResCatalogue, String type) {
 		// TODO Auto-generated constructor stub
 		data = new ArrayList<HashMap<String, String>>();
 		if(type.equals("Employee")){

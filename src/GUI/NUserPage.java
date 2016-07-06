@@ -133,6 +133,8 @@ public class NUserPage {
 	private TableData resourceutil_tabledata;
 	private TableData moduledetail_tabledata;
 	private  TableData moduledetailemployee_tabledata;
+	private TableData maintainingdetail_tabledata;
+	private TableData maintainingdetailemployee_tabledata;
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
@@ -218,6 +220,7 @@ public class NUserPage {
 		modcat = new ModuleCatalogue();
 		maintainmodulecat= new MaintainingModuleCatalogue();
 		projempcat = ProjectEmployeeCatalogue.getInstance();
+		maintainmodempresCat= new MaintainModEmpResCatalogue();
 		initialize();
 	}
 
@@ -1046,7 +1049,7 @@ public class NUserPage {
 		resourcesTab.addTab("Module Detail", null, moduledetailpanel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
 
-		moduledetail_tabledata = new TableData(new MakeModuleCatalogue(),"Resource",selected_module);
+		moduledetail_tabledata = new TableData(new MakeModuleCatalogue(),"Resource");
 		JScrollPane module_detail_scrollPane = new JScrollPane();
 		module_detail_scrollPane.setViewportView(moduledetail_tabledata.getJdataTable());
 
@@ -1079,7 +1082,7 @@ public class NUserPage {
 		
 		
 		JScrollPane module_detailemployee_scrollPane = new JScrollPane();
-		moduledetailemployee_tabledata = new TableData(makemodulecat, "Employee",selected_module);
+		moduledetailemployee_tabledata = new TableData(makemodulecat, "Employee");
 		module_detailemployee_scrollPane.setViewportView(moduledetailemployee_tabledata.getJdataTable());
 
 
@@ -1411,10 +1414,58 @@ public class NUserPage {
 
 		btnViewMaintainingDetail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int selected_index = resourcesTab.getSelectedIndex();
-				resourcesTab.remove(selected_index);
-				resourcesTab.insertTab("Maintaining Detail", null, maintainingdetailpanel, null, selected_index);
-				resourcesTab.setSelectedComponent(maintainingdetailpanel);
+				
+				//
+
+
+				System.out.println("-----");
+				int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = maintaining_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a maintaining!");
+				} else {
+
+					String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // return
+					selected_maintaining_module = Integer.parseInt(Table_click.trim());
+
+					System.out.println(Table_click);
+					System.out.println("---matinainig id-- " + selected_maintaining_module);
+					System.out.println("Change JPanel");
+					MaintainModEmpResCatalogue maintainmodempres = new MaintainModEmpResCatalogue();
+					
+					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+					ArrayList<Employee> allemp;
+					allemp = maintainmodempres.getEmployees(selected_maintaining_module);
+					for (int i = 0; i < allemp.size(); i++) {
+						HashMap<String,String> emps = new HashMap<String,String>();
+						emps.put("empid", allemp.get(i).getId()+"");
+						emps.put("empname", allemp.get(i).getName());
+						data.add(emps);
+					}
+					System.out.println(data+" DATA");
+					ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+					ArrayList<Resource> allres;
+					allres = maintainmodempres.getResources(selected_maintaining_module);
+					for (int i = 0; i < allres.size(); i++) {
+						HashMap<String,String> ress = new HashMap<String,String>();
+						ress.put("rid", allres.get(i).getId()+"");
+						ress.put("rname", allres.get(i).getName());
+						resdata.add(ress);
+					}
+					System.out.println(resdata+" RESDATA");
+					
+					maintainingdetail_tabledata.update(resdata);
+					maintainingdetailemployee_tabledata.update(data);
+					
+					int selected_index = resourcesTab.getSelectedIndex();
+					resourcesTab.remove(selected_index);
+					resourcesTab.insertTab("Maintaining Detail", null, maintainingdetailpanel, null, selected_index);
+					resourcesTab.setSelectedComponent(maintainingdetailpanel);				}
+				//
+				
+				
 			}
 		});
 
@@ -1482,18 +1533,37 @@ public class NUserPage {
 			}
 		});
 		
+		maintainingdetail_tabledata = new TableData(new MaintainModEmpResCatalogue(),"Resource");
+		JScrollPane maintaining_detail_scrollPane = new JScrollPane();
+		maintaining_detail_scrollPane.setViewportView(maintainingdetail_tabledata.getJdataTable());
+
+		maintainingdetailemployee_tabledata = new TableData(new MaintainModEmpResCatalogue(), "Employee");
+		JScrollPane maintaining_detailemployee_scrollPane = new JScrollPane();
+		maintaining_detailemployee_scrollPane.setViewportView(maintainingdetailemployee_tabledata.getJdataTable());
+
 		GroupLayout gl_maintainingdetailpanel = new GroupLayout(maintainingdetailpanel);
 		gl_maintainingdetailpanel.setHorizontalGroup(
 			gl_maintainingdetailpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(maintainingdetail_btnBack)
-					.addContainerGap(673, Short.MAX_VALUE))
+					.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(maintainingdetail_btnBack))
+						.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+							.addGap(42)
+							.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(maintaining_detailemployee_scrollPane, GroupLayout.PREFERRED_SIZE, 598, GroupLayout.PREFERRED_SIZE)
+								.addComponent(maintaining_detail_scrollPane, GroupLayout.PREFERRED_SIZE, 599, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(155, Short.MAX_VALUE))
 		);
 		gl_maintainingdetailpanel.setVerticalGroup(
-			gl_maintainingdetailpanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_maintainingdetailpanel.createSequentialGroup()
-					.addContainerGap(440, Short.MAX_VALUE)
+			gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+					.addGap(38)
+					.addComponent(maintaining_detail_scrollPane, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
+					.addGap(53)
+					.addComponent(maintaining_detailemployee_scrollPane, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
 					.addComponent(maintainingdetail_btnBack))
 		);
 		maintainingdetailpanel.setLayout(gl_maintainingdetailpanel);
