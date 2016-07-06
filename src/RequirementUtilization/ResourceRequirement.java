@@ -35,7 +35,7 @@ public class ResourceRequirement{
 		this.isSatisfied = isSatisfied;
 		this.satisfyDate = satisfyDate;
 		this.resReqId = resReqId;
-		DB = new DataBase();
+		DB = DB.getInstance();
 		
 	}
 	

@@ -13,7 +13,7 @@ public class Table {
 	ResultSet rs;
 	
 	public Table(String tableName) {
-		DB = new DataBase();
+		DB = DB.getInstance();
 		this.tableName = tableName;
 		try {
 			ResultSet cols = DB.getColumns(tableName);

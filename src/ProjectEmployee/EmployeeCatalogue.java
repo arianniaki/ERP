@@ -17,7 +17,7 @@ public class EmployeeCatalogue {
 	DataBase DB;
 	String tablename = "employee";
 	public EmployeeCatalogue() {
-		DB = new DataBase();
+		DB = DB.getInstance();
 	}
 
 	public void makeDecision(int empid, boolean decision) {

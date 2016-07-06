@@ -14,7 +14,7 @@ public class ProjectCatalogue {
 	String tableName;
 
 	public ProjectCatalogue() {
-		DB = new DataBase();
+		DB = DB.getInstance();
 		tableName = "project";
 	}
 

@@ -16,7 +16,7 @@ public class AccessRightCatalogue {
 	String tableName;
 	
 	public AccessRightCatalogue(){
-		DB = new DataBase();
+		DB = DB.getInstance();
 		tableName = "accessright";
 	}
 	
