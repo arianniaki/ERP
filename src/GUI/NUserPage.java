@@ -455,40 +455,69 @@ public class NUserPage {
 		JButton subsystem_btnSearch = new JButton("Search");
 		subsystem_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				HashMap<String, String> searchVars = new HashMap<String, String>();
-//				searchVars.put("sname", "\'" + search_subsystemname.getText() + "\'");
-//				if (subsyscat.SearchResource(searchVars).isEmpty()) {
-//					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-//				} else {
-//					information_tabledata.update(infocat.SearchResource(searchVars));
-//				}
+				HashMap<String, String> searchVars = new HashMap<String, String>();
+				searchVars.put("sname", "\'" + search_subsystemname.getText() + "\'");
+				if (subsyscat.searchSubsystem(searchVars).isEmpty()) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+				} else {
+					subsystem_tabledata.update(subsyscat.searchSubsystem(searchVars));
+				}
+			}
+		});
+		
+		JButton subsystem_btnRefresh = new JButton("Refresh");
+		subsystem_btnRefresh.setIcon(new ImageIcon(
+				new ImageIcon("images/refresh.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		subsystem_btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
+
 			}
 		});
 		GroupLayout gl_subsystemPanel = new GroupLayout(subsystemPanel);
-		gl_subsystemPanel.setHorizontalGroup(gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addComponent(subsystem_btnEdit)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(subsystem_btnDelete)
-						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnBacktoProject)
-						.addPreferredGap(ComponentPlacement.RELATED, 551, Short.MAX_VALUE)
-						.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(40)
-						.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE).addGap(40))
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addContainerGap(492, Short.MAX_VALUE)
-						.addComponent(subsystem_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(search_subsystemname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblSubsystemName).addContainerGap()));
-		gl_subsystemPanel.setVerticalGroup(gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_subsystemPanel.createSequentialGroup().addGap(12)
-						.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblSubsystemName).addComponent(subsystem_btnSearch)
-								.addComponent(search_subsystemname, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(40).addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
-						.addGap(40)
-						.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(addsubsystemBtn).addComponent(subsystem_btnEdit)
-								.addComponent(subsystem_btnDelete).addComponent(btnBacktoProject))));
+		gl_subsystemPanel.setHorizontalGroup(
+			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addComponent(subsystem_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(subsystem_btnDelete)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnBacktoProject)
+					.addPreferredGap(ComponentPlacement.RELATED, 551, Short.MAX_VALUE)
+					.addComponent(addsubsystemBtn, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addComponent(subsystem_btnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 375, Short.MAX_VALUE)
+					.addComponent(subsystem_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_subsystemname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblSubsystemName)
+					.addContainerGap())
+		);
+		gl_subsystemPanel.setVerticalGroup(
+			gl_subsystemPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_subsystemPanel.createSequentialGroup()
+					.addGap(12)
+					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblSubsystemName)
+						.addComponent(subsystem_btnSearch)
+						.addComponent(search_subsystemname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(subsystem_btnRefresh))
+					.addGap(40)
+					.addComponent(subsystem_scrollPane, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+					.addGap(40)
+					.addGroup(gl_subsystemPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addsubsystemBtn)
+						.addComponent(subsystem_btnEdit)
+						.addComponent(subsystem_btnDelete)
+						.addComponent(btnBacktoProject)))
+		);
 
 		subsystem_tabledata = new TableData(subsyscat);
 		subsystem_scrollPane.setViewportView(subsystem_tabledata.getJdataTable());
@@ -2680,7 +2709,7 @@ public class NUserPage {
 		final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
 		subsystemAdd_Panel.makeForm();
 
-		JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
+		JFrame Add_SubsystemPage = new JFrame("Edit Subsystem Form");
 		Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
 
 		JButton submitaddsubsystemBtn = new JButton("Submit");
