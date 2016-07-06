@@ -104,15 +104,6 @@ public class NUserPage {
 
 	private JFrame userpageFrame;
 	private JTextField editname_textField;
-	private ArrayList<HashMap<String, String>> allmodules;
-	private ArrayList<HashMap<String, String>> allphysicals;
-	private ArrayList<HashMap<String, String>> allfinance;
-	private ArrayList<HashMap<String, String>> allinformation;
-	private ArrayList<HashMap<String, String>> allres;
-	private ArrayList<HashMap<String, String>> allprojects;
-	private ArrayList<HashMap<String, String>> allemployees;
-	private ArrayList<HashMap<String, String>> allsubsystems;
-	private ArrayList<HashMap<String, String>> allregisteredusers;
 
 	private TableData resrequirement_tabledata;
 	private TableData accessright_tabledata;
@@ -783,7 +774,6 @@ public class NUserPage {
 		// get human list
 
 		System.out.println("all : ");
-		allemployees = empcat.readAllEmployees();
 
 		human_tabledata = new TableData(empcat, "human");
 
@@ -893,7 +883,6 @@ public class NUserPage {
 		// get financial list
 
 		System.out.println("all : ");
-		allfinance = financat.readAllResources();
 
 		// end get financial list
 
@@ -954,8 +943,6 @@ public class NUserPage {
 		search_financialbtnRefresh.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				allfinance.clear();
-				allfinance = financat.readAllResources();
 				financial_tabledata.update(financat.readAllResources());
 			}
 		});
@@ -1044,7 +1031,6 @@ public class NUserPage {
 
 		// get module list
 		System.out.println("all : ");
-		allmodules = modcat.readAllResources();
 
 		final JPanel moduledetailpanel = new JPanel();
 		resourcesTab.addTab("Module Detail", null, moduledetailpanel, null);
@@ -1325,7 +1311,7 @@ public class NUserPage {
 
 		GroupLayout gl_moduledetailpanel = new GroupLayout(moduledetailpanel);
 		gl_moduledetailpanel.setHorizontalGroup(
-			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+			gl_moduledetailpanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(moduledetailemployee_btnDelete)
@@ -1334,25 +1320,26 @@ public class NUserPage {
 					.addPreferredGap(ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
 					.addComponent(btnAddModuleUtilization)
 					.addContainerGap())
-				.addGroup(Alignment.TRAILING, gl_moduledetailpanel.createSequentialGroup()
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
 					.addGap(30)
 					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.TRAILING)
 						.addComponent(module_detail_scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
 						.addComponent(module_detailemployee_scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
 					.addGap(30))
-				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+				.addGroup(Alignment.LEADING, gl_moduledetailpanel.createSequentialGroup()
+					.addContainerGap()
 					.addComponent(moduledetail_btnDelete)
-					.addContainerGap(679, Short.MAX_VALUE))
+					.addContainerGap(741, Short.MAX_VALUE))
 		);
 		gl_moduledetailpanel.setVerticalGroup(
 			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
-					.addGap(20)
+					.addGap(30)
 					.addComponent(module_detail_scrollPane, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(8)
 					.addComponent(moduledetail_btnDelete)
-					.addGap(12)
-					.addComponent(module_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(module_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
 					.addGap(30)
 					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(moduledetailemployee_btnDelete)
@@ -1461,8 +1448,6 @@ public class NUserPage {
 		search_modulebtnRefresh.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				allmodules.clear();
-				allmodules = modcat.readAllResources();
 				module_tabledata.update(modcat.readAllResources());
 			}
 		});
@@ -1580,7 +1565,6 @@ public class NUserPage {
 		// get phys res list
 
 		System.out.println("all : ");
-		allphysicals = physcat.readAllResources();
 
 		resourcesTab.addTab("Maintaining Module", null, maintaining_panel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
@@ -1656,9 +1640,6 @@ public class NUserPage {
 
 		btnViewMaintainingDetail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				//
-
 
 				System.out.println("-----");
 				int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
@@ -1782,31 +1763,123 @@ public class NUserPage {
 		maintainingdetailemployee_tabledata = new TableData(new MaintainModEmpResCatalogue(), "Employee");
 		JScrollPane maintaining_detailemployee_scrollPane = new JScrollPane();
 		maintaining_detailemployee_scrollPane.setViewportView(maintainingdetailemployee_tabledata.getJdataTable());
+		
+		JButton maintainingdetailemployee_btnDelete = new JButton("Delete");
+		maintainingdetailemployee_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int rowIndex = maintainingdetailemployee_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = maintainingdetailemployee_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
+
+					String Table_click = (maintainingdetailemployee_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						MaintainModEmpResCatalogue maintainmodemprescat = new MaintainModEmpResCatalogue();
+						maintainmodemprescat.deleteEmployee(Integer.parseInt(Table_click), selected_maintaining_module);
+						
+						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+						ArrayList<Employee> allemp;
+						allemp = maintainmodemprescat.getEmployees(selected_maintaining_module);
+						for (int i = 0; i < allemp.size(); i++) {
+							HashMap<String,String> emps = new HashMap<String,String>();
+							emps.put("empid", allemp.get(i).getId()+"");
+							emps.put("empname", allemp.get(i).getName());
+							data.add(emps);
+						}
+						
+						maintainingdetailemployee_tabledata.update(data);
+						
+					}
+				}
+			}
+		});
+		maintainingdetailemployee_btnDelete.setIcon(new ImageIcon(
+				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		
+		JButton maintainingdetail_btnDelete = new JButton("Delete");
+		maintainingdetail_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				int rowIndex = maintainingdetail_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = maintainingdetail_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
+
+					String Table_click = (maintainingdetail_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						MaintainModEmpResCatalogue maintainmodemprescat = new MaintainModEmpResCatalogue();
+						maintainmodemprescat.deleteResource(Integer.parseInt(Table_click), selected_maintaining_module);
+						
+						
+						
+						ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+						ArrayList<Resource> allres;
+						allres = maintainmodemprescat.getResources(selected_maintaining_module);
+						for (int i = 0; i < allres.size(); i++) {
+							HashMap<String,String> ress = new HashMap<String,String>();
+							ress.put("rid", allres.get(i).getId()+"");
+							ress.put("rname", allres.get(i).getName());
+							resdata.add(ress);
+						}
+						
+						maintainingdetail_tabledata.update(resdata);
+						
+					}
+				}
+			}
+		});
+		maintainingdetail_btnDelete.setIcon(new ImageIcon(
+				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
 		GroupLayout gl_maintainingdetailpanel = new GroupLayout(maintainingdetailpanel);
 		gl_maintainingdetailpanel.setHorizontalGroup(
-			gl_maintainingdetailpanel.createParallelGroup(Alignment.LEADING)
+			gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(maintainingdetail_btnDelete)
+					.addContainerGap(741, Short.MAX_VALUE))
 				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
 					.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+							.addGap(30)
+							.addComponent(maintaining_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
+						.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
 							.addContainerGap()
+							.addComponent(maintainingdetailemployee_btnDelete)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(maintainingdetail_btnBack))
 						.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
-							.addGap(42)
-							.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
-								.addComponent(maintaining_detailemployee_scrollPane, GroupLayout.PREFERRED_SIZE, 598, GroupLayout.PREFERRED_SIZE)
-								.addComponent(maintaining_detail_scrollPane, GroupLayout.PREFERRED_SIZE, 599, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(155, Short.MAX_VALUE))
+							.addGap(30)
+							.addComponent(maintaining_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)))
+					.addGap(30))
 		);
 		gl_maintainingdetailpanel.setVerticalGroup(
 			gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
-					.addGap(38)
-					.addComponent(maintaining_detail_scrollPane, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
-					.addGap(53)
-					.addComponent(maintaining_detailemployee_scrollPane, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
-					.addComponent(maintainingdetail_btnBack))
+					.addGap(30)
+					.addComponent(maintaining_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+					.addGap(10)
+					.addComponent(maintainingdetail_btnDelete)
+					.addGap(10)
+					.addComponent(maintaining_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+					.addGap(30)
+					.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(maintainingdetailemployee_btnDelete)
+						.addComponent(maintainingdetail_btnBack))
+					.addContainerGap())
 		);
 		maintainingdetailpanel.setLayout(gl_maintainingdetailpanel);
 
@@ -1856,7 +1929,6 @@ public class NUserPage {
 
 		search_humanbtnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				allemployees.clear();
 				human_tabledata.update(empcat.readAllEmployees());
 
 			}
@@ -1999,8 +2071,6 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				allphysicals.clear();
-				allphysicals = physcat.readAllResources();
 
 				physical_tabledata.update(physcat.readAllResources());
 			}
@@ -3990,8 +4060,6 @@ public class NUserPage {
 				financat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sid=", "")),
 						Integer.parseInt(inputs.get(2)), inputs.get(1), inputs.get(3));
 				// tu resource ham bayad insert she
-				allfinance.clear();
-				allfinance = financat.readAllResources();
 				financial_tabledata.update(financat.readAllResources());
 			}
 		});
@@ -4625,7 +4693,6 @@ public class NUserPage {
 			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 					"Are you sure you want to Delete this item?");
 			if (myDialog.getAnswer()) {
-				allemployees = empcat.readAllEmployees();
 				human_tabledata.update(empcat.getConfirmedEmployees());
 			}
 		}
@@ -5003,7 +5070,6 @@ public class NUserPage {
 
 				project_tabledata.update(projcat.getProjects());
 
-				allprojects = projcat.getProjects();
 				project_tabledata.update(projcat.getProjects());
 				System.out.println(vales_phys.toString());
 
@@ -5156,7 +5222,6 @@ public class NUserPage {
 					project.editProject(inputs.get(0).toString(), "", inputs.get(1), proj_manager,
 							inputs.get(2), confirmed);
 
-					allprojects = projcat.getProjects();
 					project_tabledata.update(projcat.getProjects());
 					System.out.println(vales_phys.toString() + " is this it");
 				}
