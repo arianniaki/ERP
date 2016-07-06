@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import AccessRight.AccessRight;
+import AccessRight.AccessRightCatalogue;
 import DataBase.DataBase;
 import DataBase.Table;
 import Report.Report;
@@ -14,12 +15,15 @@ import ResourceManagement.Section.SectionCatalogue;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
 
 public class EmployeeCatalogue {
+	private static EmployeeCatalogue employeeCat = new EmployeeCatalogue();
 	DataBase DB;
 	String tablename = "employee";
-	public EmployeeCatalogue() {
+	private EmployeeCatalogue() {
 		DB = DB.getInstance();
 	}
-
+	public static EmployeeCatalogue getInstance(){
+		return employeeCat;
+	}
 	public void makeDecision(int empid, boolean decision) {
 
 		if (decision) {
@@ -66,7 +70,7 @@ public class EmployeeCatalogue {
 			System.out.println(result.get(i).toString());
 			AccessRight acc = new AccessRight(Integer.parseInt(result.get(i).get("accessrightid")));
 			result.get(i).put("accessrightname", acc.getName());
-			SectionCatalogue secCat = new SectionCatalogue();
+			SectionCatalogue secCat = SectionCatalogue.getInstance();
 			Section sec = secCat.getSection(Integer.parseInt(result.get(i).get("sid")));
 			result.get(i).put("sectionname", sec.getName());
 		}
@@ -97,13 +101,12 @@ public class EmployeeCatalogue {
 
 	}
 
-	public Employee signUp(boolean ismodir, String empname, String post, String username,
+	public Employee signUp(String empname, String post, String username,
 			String password, boolean is_loggedin) {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empname", "\'" + empname + "\'");
 		vars.put("post", "\'" + post + "\'");
-		vars.put("ismodir", Boolean.toString(ismodir));
 		vars.put("username", "\'" + username + "\'");
 		vars.put("password", "\'" + password + "\'");
 		vars.put("is_loggedin", Boolean.toString(is_loggedin));
@@ -188,7 +191,7 @@ public class EmployeeCatalogue {
 		rep.setResults(results);
 		for(int i=0; i<results.size(); i++){
 			String line="";
-			SectionCatalogue secCat = new SectionCatalogue();
+			SectionCatalogue secCat = SectionCatalogue.getInstance();
 			results.get(i).put("sname", ""+secCat.getSection(Integer.valueOf(results.get(i).get("sid"))).getName());
 			for(String key : results.get(i).keySet()){
 				line+= results.get(i).get(key).toString()+", ";

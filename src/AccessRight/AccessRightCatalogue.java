@@ -7,15 +7,20 @@ import java.util.HashMap;
 
 import DataBase.DataBase;
 import DataBase.Table;
+import ProjectEmployee.AuthenticatedEmployee;
 import ProjectEmployee.Employee;
 import ProjectEmployee.Project;
 
 public class AccessRightCatalogue {
-
-	DataBase DB;
-	String tableName;
+	private static AccessRightCatalogue accessRightCat = new AccessRightCatalogue();
+	private DataBase DB;
+	private String tableName;
 	
-	public AccessRightCatalogue(){
+	public static AccessRightCatalogue getInstance(){
+		return accessRightCat;
+	}
+	
+	private AccessRightCatalogue(){
 		DB = DB.getInstance();
 		tableName = "accessright";
 	}

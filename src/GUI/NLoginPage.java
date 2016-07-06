@@ -177,7 +177,7 @@ public class NLoginPage {
 						for (int i = 0; i < inputs.size(); i++) {
 							System.out.println(inputs.get(i) + "adasa");
 						}
-						EmployeeCatalogue empcat = new EmployeeCatalogue();
+						EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 						// ++section e default mikhaim ke badan avaz she
 						Employee added_emp= empcat.addEmployee(inputs.get(2)+""+inputs.get(3), "Default post", 1, inputs.get(1), inputs.get(4), false, false);
 						if (added_emp == null) {

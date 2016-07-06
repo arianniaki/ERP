@@ -187,7 +187,7 @@ displayemployees.addActionListener(new ActionListener() {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		EmployeeCatalogue empcat = new EmployeeCatalogue();
+		EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 		System.out.println("all : ");
 		ArrayList<HashMap<String, String>> allemps = empcat.readAllEmployees();
 		if (model.getRowCount() > 0) {

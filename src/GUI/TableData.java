@@ -14,6 +14,7 @@ import RequirementUtilization.ProjectResourceUtilization;
 import RequirementUtilization.ProjectResourceUtilizationCatalogue;
 import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
+import ResourceManagement.Section.Resource.MaintainModEmpResCatalogue;
 import ResourceManagement.Section.Resource.MaintainingModule;
 import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.MakeModuleCatalogue;
@@ -191,7 +192,22 @@ public class TableData {
 		this.buildFilledJTable();
 
 	}
-	public TableData(MakeModuleCatalogue makemodulecat, String type,int modrid) {
+	public TableData(MakeModuleCatalogue makemodulecat, String type) {
+		data = new ArrayList<HashMap<String, String>>();
+		if(type.equals("Employee")){
+			columns = new String[] { "EmployeeID","Employee Name"};
+			dbnames = new String[] { "empid","empname"};	
+		}
+		if(type.equals("Resource"))
+		{
+			columns = new String[] { "Resource ID","Resource Name"};
+			dbnames = new String[] { "rid", "rname"};
+		}
+		this.buildFilledJTable();
+	}
+
+	public TableData(MaintainModEmpResCatalogue maintainModEmpResCatalogue, String type) {
+		// TODO Auto-generated constructor stub
 		data = new ArrayList<HashMap<String, String>>();
 		if(type.equals("Employee")){
 			columns = new String[] { "EmployeeID","Employee Name"};

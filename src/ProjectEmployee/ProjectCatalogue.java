@@ -5,25 +5,30 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import AccessRight.AccessRightCatalogue;
 import DataBase.DataBase;
 import DataBase.Table;
 
 public class ProjectCatalogue {
+	private static ProjectCatalogue projectCat = new ProjectCatalogue();
+	private DataBase DB;
+	private String tableName;
 
-	DataBase DB;
-	String tableName;
-
-	public ProjectCatalogue() {
+	private ProjectCatalogue() {
 		DB = DB.getInstance();
 		tableName = "project";
 	}
-
+	
+	public static ProjectCatalogue getInstance(){
+		return projectCat;
+	}
+	
 	public ArrayList<HashMap<String, String>> getProjects() {
 		Table table = new Table(tableName);
 		ArrayList<HashMap<String, String>> result = table.readAll();
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString()+" SSsssss");
-			EmployeeCatalogue empcat = new EmployeeCatalogue();
+			EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 			result.get(i).put("managername", empcat.getEmployee(Integer.parseInt(result.get(i).get("projectmanager"))).getName());
 		}
 		return result;
@@ -34,7 +39,7 @@ public class ProjectCatalogue {
 		vars.put("projid", Integer.toString(pid));
 		ResultSet res = DB.select("project", vars, null);
 
-		EmployeeCatalogue empcat = new EmployeeCatalogue();
+		EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 		Project proj = null;
 		try {
 			if (res.next()) {
@@ -80,7 +85,7 @@ public class ProjectCatalogue {
 		ArrayList<HashMap<String, String>> result = table.search(vars);
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
-			EmployeeCatalogue empcat = new EmployeeCatalogue();
+			EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 			result.get(i).put("managername", empcat.getEmployee(Integer.parseInt(result.get(i).get("projectmanager"))).getName());
 		}
 		return result;
@@ -93,7 +98,7 @@ public class ProjectCatalogue {
 		ArrayList<HashMap<String, String>> result = table.search(searchvars);
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
-			EmployeeCatalogue empcat = new EmployeeCatalogue();
+			EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 			result.get(i).put("managername", empcat.getEmployee(Integer.parseInt(result.get(i).get("projectmanager"))).getName());
 		}
 		return result;		

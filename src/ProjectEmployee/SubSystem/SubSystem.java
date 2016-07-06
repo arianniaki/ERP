@@ -33,7 +33,7 @@ public class SubSystem {
 		
 	public void editSubSystem(String name, int secid){
 		this.name = name;
-		SectionCatalogue secCat = new SectionCatalogue();
+		SectionCatalogue secCat = SectionCatalogue.getInstance();
 		this.section = secCat.getSection(secid);
 		
 		HashMap<String, String> vars = new HashMap<String, String>();
