@@ -55,6 +55,7 @@ public class MaintainModEmpResCatalogue {
 		return pk;
 	}
 	
+	
 	public long addResource(int resid, int maintainid) {
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("rid", "\'"+resid+"\'");
