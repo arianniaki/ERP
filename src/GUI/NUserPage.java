@@ -1390,6 +1390,12 @@ public class NUserPage {
 			}
 		});
 
+		final JPanel maintainingdetailpanel = new JPanel();
+		resourcesTab.addTab("Maintaining Detail", null, maintainingdetailpanel, null);
+		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
+
+
+		
 		JButton btnSearch = new JButton("Search");
 
 		search_maintainingname = new JTextField();
@@ -1398,49 +1404,99 @@ public class NUserPage {
 		JButton search_maintainingbtnRefresh = new JButton("Refresh");
 		search_maintainingbtnRefresh.setIcon(new ImageIcon(
 				new ImageIcon("images/refresh.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+		
+		JButton btnViewMaintainingDetail = new JButton("View Maintaining Detail");
+		btnViewMaintainingDetail.setIcon(new ImageIcon(
+				new ImageIcon("images/view.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		btnViewMaintainingDetail.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selected_index = resourcesTab.getSelectedIndex();
+				resourcesTab.remove(selected_index);
+				resourcesTab.insertTab("Maintaining Detail", null, maintainingdetailpanel, null, selected_index);
+				resourcesTab.setSelectedComponent(maintainingdetailpanel);
+			}
+		});
 
 		GroupLayout gl_maintaining_panel = new GroupLayout(maintaining_panel);
-		gl_maintaining_panel
-				.setHorizontalGroup(
-						gl_maintaining_panel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_maintaining_panel.createSequentialGroup().addGap(30)
-										.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
-												Short.MAX_VALUE)
-										.addGap(30))
-								.addGroup(Alignment.LEADING, gl_maintaining_panel.createSequentialGroup()
-										.addComponent(maintaining_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnBacktoModule)
-										.addPreferredGap(ComponentPlacement.RELATED, 447, Short.MAX_VALUE)
-										.addComponent(btnAddMaintaining, GroupLayout.PREFERRED_SIZE, 147,
-												GroupLayout.PREFERRED_SIZE))
-								.addGroup(
-										gl_maintaining_panel.createSequentialGroup()
-												.addComponent(search_maintainingbtnRefresh)
-												.addPreferredGap(ComponentPlacement.RELATED, 382, Short.MAX_VALUE)
-												.addComponent(btnSearch).addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(132)));
-		gl_maintaining_panel.setVerticalGroup(gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_maintaining_panel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE).addComponent(btnSearch)
-								.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(search_maintainingbtnRefresh))
-						.addGap(30).addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnAddMaintaining).addComponent(maintaining_btnEdit)
-								.addComponent(maintaining_btnDelete).addComponent(btnBacktoModule))
-						.addContainerGap()));
+		gl_maintaining_panel.setHorizontalGroup(
+			gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addComponent(maintaining_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnBacktoModule)
+					.addPreferredGap(ComponentPlacement.RELATED, 324, Short.MAX_VALUE)
+					.addComponent(btnViewMaintainingDetail)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnAddMaintaining, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addComponent(search_maintainingbtnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 382, Short.MAX_VALUE)
+					.addComponent(btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(132))
+		);
+		gl_maintaining_panel.setVerticalGroup(
+			gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnSearch)
+						.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(search_maintainingbtnRefresh))
+					.addGap(30)
+					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnAddMaintaining)
+						.addComponent(maintaining_btnEdit)
+						.addComponent(maintaining_btnDelete)
+						.addComponent(btnBacktoModule)
+						.addComponent(btnViewMaintainingDetail))
+					.addContainerGap())
+		);
 
 		maintaining_tabledata = new TableData(maintainmodulecat, selected_module);
 		maintaining_scrollPane.setViewportView(maintaining_tabledata.getJdataTable());
 		maintaining_panel.setLayout(gl_maintaining_panel);
+		
+		JButton maintainingdetail_btnBack = new JButton("Back");
+		maintainingdetail_btnBack.setIcon(new ImageIcon(
+				new ImageIcon("images/back.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		maintainingdetail_btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("change tab to maintaining");
+				System.out.println("Change JPanel");
+				int selected_index = resourcesTab.getSelectedIndex();
+				resourcesTab.remove(selected_index);
+				resourcesTab.insertTab("Maintaining", null, maintaining_panel, null, selected_index);
+				resourcesTab.setSelectedComponent(maintaining_panel);
+			}
+		});
+		
+		GroupLayout gl_maintainingdetailpanel = new GroupLayout(maintainingdetailpanel);
+		gl_maintainingdetailpanel.setHorizontalGroup(
+			gl_maintainingdetailpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(maintainingdetail_btnBack)
+					.addContainerGap(673, Short.MAX_VALUE))
+		);
+		gl_maintainingdetailpanel.setVerticalGroup(
+			gl_maintainingdetailpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_maintainingdetailpanel.createSequentialGroup()
+					.addContainerGap(440, Short.MAX_VALUE)
+					.addComponent(maintainingdetail_btnBack))
+		);
+		maintainingdetailpanel.setLayout(gl_maintainingdetailpanel);
 
 		JPanel humanPanel = new JPanel();
 		resourcesTab.addTab("Human", null, humanPanel, null);
