@@ -44,7 +44,7 @@ public class SubSystem {
 		
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("sname", "\'" + name + "\'");
-		vars.put("subid", Integer.toString(secid));
+		vars.put("sid", Integer.toString(secid));
 		submitToDB(vars);
 
 	}

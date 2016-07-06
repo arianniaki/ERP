@@ -45,6 +45,7 @@ import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.ProjectEmployeeCatalogue;
+import ProjectEmployee.SubSystem.SubSystem;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import RequirementUtilization.ProjectResourceUtilization;
 import RequirementUtilization.ProjectResourceUtilizationCatalogue;
@@ -322,66 +323,7 @@ public class NUserPage {
 		btnAssignAccessright.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> accessrights_types = new ArrayList<String>();
-				accessrights_types.add("Default");
-				accessrights_types.add("Intermediate");
-				accessrights_types.add("Super");
-				ArrayList<Field> acessright_assignFields = new ArrayList<Field>();
-				Field access_right = new Field("comboBox", "accessrights", accessrights_types, 20, "items");
-
-				acessright_assignFields.add(access_right);
-
-				Form accessright_Form = new Form(acessright_assignFields, "AccessRight Form");
-				final PanelBuilder accessright_assignPanel = new PanelBuilder(accessright_Form);
-				accessright_assignPanel.makeForm();
-
-				JFrame Assign_AccessRightPage = new JFrame("Assign Access Right Form");
-				Assign_AccessRightPage.getContentPane().add(accessright_Form.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaccessrightassignmentBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaccessrightassignmentBtn);
-
-				Assign_AccessRightPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Assign_AccessRightPage.pack();
-				Assign_AccessRightPage.setVisible(true);
-				submitaccessrightassignmentBtn.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						System.out.println("-----");
-						int rowIndex = accessright_tabledata.getJdataTable().getSelectedRow();
-						int colIndex = accessright_tabledata.getJdataTable().getSelectedColumn();
-						if (rowIndex == -1) {
-							NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-									"Please Select a User!");
-						} else {
-
-							String Table_click = (accessright_tabledata.getJdataTable().getModel()
-									.getValueAt(rowIndex, 0).toString());
-							System.out.println(Table_click);
-							Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
-							System.out.println(emp_access.getName() + " WHAT  " + selected_accessright_forassignment);
-							emp_access.setAccessRight(selected_accessright_forassignment);
-							System.out.println("ACCESS RIGHT O DADAM");
-							accessright_tabledata.update(empcat.readAllEmployees());
-						}
-					}
-				});
-
-				ComboBoxJPanel comboBoxpanel_accessright = (ComboBoxJPanel) accessright_Form.getJPanel()
-						.getComponent(0);
-				final JComboBox accessright_type = comboBoxpanel_accessright.getComboBox();
-
-				accessright_type.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println(accessright_type.getSelectedItem() + " ino select kardi access right "
-								+ accessright_type.getSelectedIndex());
-						selected_accessright_forassignment = accessright_type.getSelectedIndex() + 1;
-					}
-				});
+				assignAccessRight();
 			}
 		});
 
@@ -503,66 +445,7 @@ public class NUserPage {
 		addsubsystemBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
-				Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				subsystem_addFields.add(subsystem_name);
-				subsystem_addFields.add(subsystem_desc);
-				subsystem_addFields.add(sections);
-
-				final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
-				final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
-				subsystemAdd_Panel.makeForm();
-
-				JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
-				Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaddsubsystemBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddsubsystemBtn);
-				Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_SubsystemPage.pack();
-				Add_SubsystemPage.setVisible(true);
-
-				ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) subsystem_Form.getJPanel().getComponent(2);
-
-				final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
-
-				submitaddsubsystemBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " subsystem");
-						}
-						System.out.println(sections_combo.getSelectedItem() + " //////");
-						Pattern p = Pattern.compile("sid=\\d+");
-						String section = null;
-						Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
-						if (m.find()) {
-							section = m.group();
-						}
-						System.out.println("sid: " + section);
-
-						subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem,
-								Integer.parseInt(section.replace("sid=", "")));
-						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
-						System.out.println("add shoood ");
-
-					}
-				});
+				addSubsystem();
 
 			}
 		});
@@ -573,54 +456,11 @@ public class NUserPage {
 
 		subsystem_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
-				ArrayList<String> section_arraylist = new ArrayList<String>();
-				ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
-				for (int i = 0; i < section_hashmap.size(); i++) {
-					section_arraylist.add(section_hashmap.get(i).toString());
-				}
-
-				Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
-				Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
-				Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
-
-				subsystem_addFields.add(subsystem_name);
-				subsystem_addFields.add(subsystem_desc);
-				subsystem_addFields.add(sections);
-
-				final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
-				final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
-				subsystemAdd_Panel.makeForm();
-
-				JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
-				Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
-
-				JButton submitaddsubsystemBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submitaddsubsystemBtn);
-				Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Add_SubsystemPage.pack();
-				Add_SubsystemPage.setVisible(true);
-				submitaddsubsystemBtn.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + " subsystem");
-						}
-
-						// subsyscat.addSubSystem(inputs.get(0),
-						// selected_project_forsubsystem);
-						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
-						System.out.println("add shoood ");
-					}
-				});
+				editSubsystem();
 
 			}
+
+		
 		});
 
 		JButton subsystem_btnDelete = new JButton("Delete");
@@ -629,23 +469,7 @@ public class NUserPage {
 
 		subsystem_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rowIndex = subsystem_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = subsystem_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Resource!");
-				} else {
-
-					String Table_click = (subsystem_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						subsyscat.deleteSubSystem(Integer.parseInt(Table_click));
-						subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
-					}
-				}
+				deleteSubsystem();
 			}
 		});
 
@@ -5065,5 +4889,216 @@ public class NUserPage {
 
 	public JFrame getUserpageFrame() {
 		return userpageFrame;
+	}
+	private void assignAccessRight() {
+		ArrayList<String> accessrights_types = new ArrayList<String>();
+		accessrights_types.add("Default");
+		accessrights_types.add("Intermediate");
+		accessrights_types.add("Super");
+		ArrayList<Field> acessright_assignFields = new ArrayList<Field>();
+		Field access_right = new Field("comboBox", "accessrights", accessrights_types, 20, "items");
+
+		acessright_assignFields.add(access_right);
+
+		Form accessright_Form = new Form(acessright_assignFields, "AccessRight Form");
+		final PanelBuilder accessright_assignPanel = new PanelBuilder(accessright_Form);
+		accessright_assignPanel.makeForm();
+
+		JFrame Assign_AccessRightPage = new JFrame("Assign Access Right Form");
+		Assign_AccessRightPage.getContentPane().add(accessright_Form.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitaccessrightassignmentBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaccessrightassignmentBtn);
+
+		Assign_AccessRightPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Assign_AccessRightPage.pack();
+		Assign_AccessRightPage.setVisible(true);
+		submitaccessrightassignmentBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("-----");
+				int rowIndex = accessright_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = accessright_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a User!");
+				} else {
+
+					String Table_click = (accessright_tabledata.getJdataTable().getModel()
+							.getValueAt(rowIndex, 0).toString());
+					System.out.println(Table_click);
+					Employee emp_access = empcat.getEmployee(Integer.parseInt(Table_click));
+					System.out.println(emp_access.getName() + " WHAT  " + selected_accessright_forassignment);
+					emp_access.setAccessRight(selected_accessright_forassignment);
+					System.out.println("ACCESS RIGHT O DADAM");
+					accessright_tabledata.update(empcat.getConfirmedEmployees());
+				}
+			}
+		});
+
+		ComboBoxJPanel comboBoxpanel_accessright = (ComboBoxJPanel) accessright_Form.getJPanel()
+				.getComponent(0);
+		final JComboBox accessright_type = comboBoxpanel_accessright.getComboBox();
+
+		accessright_type.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println(accessright_type.getSelectedItem() + " ino select kardi access right "
+						+ accessright_type.getSelectedIndex());
+				selected_accessright_forassignment = accessright_type.getSelectedIndex() + 1;
+			}
+		});
+	}
+	
+	private void addSubsystem() {
+		ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
+		Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		subsystem_addFields.add(subsystem_name);
+		subsystem_addFields.add(subsystem_desc);
+		subsystem_addFields.add(sections);
+
+		final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
+		final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
+		subsystemAdd_Panel.makeForm();
+
+		JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
+		Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitaddsubsystemBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddsubsystemBtn);
+		Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_SubsystemPage.pack();
+		Add_SubsystemPage.setVisible(true);
+
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) subsystem_Form.getJPanel().getComponent(2);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		submitaddsubsystemBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " subsystem");
+				}
+				System.out.println(sections_combo.getSelectedItem() + " //////");
+				Pattern p = Pattern.compile("sid=\\d+");
+				String section = null;
+				Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
+				if (m.find()) {
+					section = m.group();
+				}
+				System.out.println("sid: " + section);
+
+				subsyscat.addSubSystem(inputs.get(0), selected_project_forsubsystem,
+						Integer.parseInt(section.replace("sid=", "")));
+				subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
+				System.out.println("add shoood ");
+
+			}
+		});
+	}
+	private void deleteSubsystem() {
+		int rowIndex = subsystem_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = subsystem_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (subsystem_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				subsyscat.deleteSubSystem(Integer.parseInt(Table_click));
+				subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
+			}
+		}
+	}
+	
+	private void editSubsystem() {
+		int rowIndex = subsystem_tabledata.getJdataTable().getSelectedRow();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			final String Table_click = (subsystem_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+
+		ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
+		ArrayList<String> section_arraylist = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
+		for (int i = 0; i < section_hashmap.size(); i++) {
+			section_arraylist.add(section_hashmap.get(i).toString());
+		}
+
+		Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
+		Field subsystem_desc = new Field("text", "Subsystem Description", "", 30, "desc");
+		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
+
+		subsystem_addFields.add(subsystem_name);
+		subsystem_addFields.add(subsystem_desc);
+		subsystem_addFields.add(sections);
+
+		final Form subsystem_Form = new Form(subsystem_addFields, "Subsystem Form");
+		final PanelBuilder subsystemAdd_Panel = new PanelBuilder(subsystem_Form);
+		subsystemAdd_Panel.makeForm();
+
+		JFrame Add_SubsystemPage = new JFrame("Add Subsystem Form");
+		Add_SubsystemPage.getContentPane().add(subsystem_Form.getJPanel(), BorderLayout.NORTH);
+
+		JButton submitaddsubsystemBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddsubsystemBtn);
+		Add_SubsystemPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Add_SubsystemPage.pack();
+		Add_SubsystemPage.setVisible(true);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) subsystem_Form.getJPanel().getComponent(2);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		
+		submitaddsubsystemBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < subsystem_Form.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) subsystem_Form.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + " subsystem"); 
+				}
+
+				// subsyscat.addSubSystem(inputs.get(0),
+				// selected_project_forsubsystem);
+				SubSystem sub = subsyscat.getSubSystem(Integer.parseInt(Table_click));
+				sub.editSubSystem(inputs.get(0), sections_combo.getSelectedIndex());
+				subsystem_tabledata.update(subsyscat.getSubSystemsByProject(selected_project_forsubsystem));
+				System.out.println("add shoood ");
+			}
+		});
+	}
 	}
 }
