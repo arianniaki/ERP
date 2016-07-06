@@ -17,7 +17,7 @@ public class MaintainingModule {
 		this.module = module;
 		this.changeType = changeType;
 		this.duration = duration;
-		DB = new DataBase();
+		DB = DB.getInstance();
 	}
 	
 	public void edit(String changeType, int duration){

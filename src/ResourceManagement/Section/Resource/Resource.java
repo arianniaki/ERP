@@ -15,7 +15,7 @@ public class Resource{
 	int sectionId;
 	
 	public Resource(){
-		DB = new DataBase();
+		DB = DB.getInstance();
 		tableName = "resource";
 	}
 	

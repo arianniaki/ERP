@@ -18,7 +18,7 @@ public class ResourceCatalogue {
 	String tableName;
 
 	public ResourceCatalogue() {
-		DB = new DataBase();
+		DB = DB.getInstance();
 		tableName = "resource";
 	}
 

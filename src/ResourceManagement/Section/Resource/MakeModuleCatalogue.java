@@ -19,7 +19,7 @@ public class MakeModuleCatalogue {
 	String resTableName;
 	String empTableName;
 	public MakeModuleCatalogue(){
-		DB = new DataBase();
+		DB = DB.getInstance();
 		resTableName = "moduleresourceutilization";
 		empTableName = "moduleemployee";
 	}

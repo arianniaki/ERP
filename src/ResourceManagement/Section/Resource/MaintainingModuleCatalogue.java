@@ -17,7 +17,7 @@ public class MaintainingModuleCatalogue {
 	DataBase DB;
 	
 	public MaintainingModuleCatalogue(){
-		DB = new DataBase();
+		DB = DB.getInstance();
 	}
 	
 	public ArrayList<MaintainingModule> getMaintainingModules(int modrid){

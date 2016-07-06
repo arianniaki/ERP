@@ -11,14 +11,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import ProjectEmployee.AuthenticatedEmployee;
+
 public class DataBase {
-	static Connection c = null;
-	static Statement stmt = null;
-	static String dbName = "jdbc:postgresql://localhost:5432/erp";
-	static String user = "postgres";
-	static String pass = "123456m.";
-	static String port = "5432";
-	public DataBase(){
+	private static DataBase database = new DataBase();
+	private Connection c = null;
+	private Statement stmt = null;
+	private String dbName = "jdbc:postgresql://localhost:5432/erp";
+	private String user = "postgres";
+	private String pass = "123456m.";
+	private String port = "5432";
+	public static DataBase getInstance(){
+		return database;
+	}
+	private DataBase(){
 		File file = new File("userInfo.txt");
 		try {
 			Scanner scn = new Scanner(file);
@@ -26,35 +32,39 @@ public class DataBase {
 			pass = scn.nextLine();
 			this.setPort(scn.nextLine());
 			scn.close();
-		} catch (FileNotFoundException e) {
+			Class.forName("org.postgresql.Driver");
+			c = DriverManager.getConnection(dbName, user, pass);
+			c.setAutoCommit(false);
+			System.out.println("insert : Opened database successfully");
+		} catch (FileNotFoundException | ClassNotFoundException | SQLException e) {
 			
 			e.printStackTrace();
 		}
 		
 	}
-	public static String getPort() {
+	public String getPort() {
 		return port;
 	}
 
-	public static void setPort(String port) {
-		DataBase.port = port;
+	public void setPort(String port) {
+		this.port = port;
 		dbName = "jdbc:postgresql://localhost:"+port+"/erp";
 	}
 
-	public static String getPass() {
+	public String getPass() {
 		return pass;
 	}
 
-	public static void setPass(String pass) {
-		DataBase.pass = pass;
+	public void setPass(String pass) {
+		this.pass = pass;
 	}
 
-	public static String getUser() {
+	public String getUser() {
 		return user;
 	}
 
-	public static void setUser(String user) {
-		DataBase.user = user;
+	public void setUser(String user) {
+		this.user = user;
 	}
 
 
@@ -62,11 +72,6 @@ public class DataBase {
 	public long insert(HashMap<String, String> vars, String tableName) {
 		long pk=0;
 		try {
-			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection(dbName, user, pass);
-			c.setAutoCommit(false);
-			System.out.println("insert : Opened database successfully");
-			System.out.println();
 			stmt = c.createStatement();
 			String sql = "INSERT INTO " + tableName + " (";
 			for (String key : vars.keySet()) {
@@ -86,7 +91,6 @@ public class DataBase {
 
 			stmt.close();
 			c.commit();
-			c.close();
 			System.out.println("insert : Closed database successfully");
 
 		} catch (Exception e) {
@@ -100,12 +104,6 @@ public class DataBase {
 
 	public ResultSet select(String tableName, HashMap<String, String> vars, ArrayList<String> groupBy) {
 		try {
-			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection(
-					dbName, "postgres",
-					"123456m.");
-			c.setAutoCommit(false);
-//			System.out.println("select : Opened database successfully");
 			stmt = c.createStatement();
 			String sql = new String();
 			if(groupBy!=null){
@@ -140,12 +138,6 @@ public class DataBase {
 
 	public ResultSet search(String tableName, HashMap<String, String> exactVars, HashMap<String,String> simVars, ArrayList<String> groupBy) {
 		try {
-			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection(
-					dbName, "postgres",
-					"123456m.");
-			c.setAutoCommit(false);
-//			System.out.println("select : Opened database successfully");
 			stmt = c.createStatement();
 			String sql = new String();
 			if(groupBy!=null){
@@ -185,11 +177,6 @@ public class DataBase {
 			HashMap<String, String> setVars, String tableName) {
 		try {
 			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection(dbName, user, pass);
-
-			c.setAutoCommit(false);
-			System.out.println("update : Opened database successfully");
-
 			stmt = c.createStatement();
 			String sql = "UPDATE " + tableName + " set ";
 
@@ -206,27 +193,18 @@ public class DataBase {
 			c.commit();
 			if (out > 0) {
 				System.out.println("Operation done successfully");
-				this.connectionClose();
 				return true;
 			} else {
-				this.connectionClose();
 				return false;
 			}
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			this.connectionClose();
 			return false;
 		}
 	}
 
 	public ResultSet getColumns (String tableName){
 		try {
-			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection(dbName, user, pass);
-
-			c.setAutoCommit(false);
-			System.out.println("getColumns : Opened database successfully");
-
 			stmt = c.createStatement();
 			ResultSet rs = stmt
 					.executeQuery("SELECT column_name, data_type FROM information_schema.columns where table_schema = 'public' and table_name = \'" + tableName + "\'"+ ";");
@@ -243,12 +221,6 @@ public class DataBase {
 
 	public boolean delete(HashMap<String, String> vars, String tableName) {
 		try {
-			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection(dbName, user, pass);
-
-			c.setAutoCommit(false);
-			System.out.println("delete : Opened database successfully");
-
 			stmt = c.createStatement();
 			String sql = "DELETE from " + tableName + " where ";
 			for (String key : vars.keySet()) {
@@ -260,7 +232,6 @@ public class DataBase {
 			stmt.executeUpdate(sql);
 			c.commit();
 			stmt.close();
-			c.close();
 			System.out.println("delete : Closed database successfully");
 
 		} catch (Exception e) {
@@ -272,7 +243,6 @@ public class DataBase {
 
 	public void connectionClose() {
 		try {
-			c.close();
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

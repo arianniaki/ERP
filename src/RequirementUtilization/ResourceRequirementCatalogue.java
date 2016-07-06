@@ -22,7 +22,7 @@ public class ResourceRequirementCatalogue{
 	String tableName;
 	
 	public ResourceRequirementCatalogue() {
-		DB = new DataBase();
+		DB = DB.getInstance();
 		tableName = "resourcerequirement";
 	}
 	

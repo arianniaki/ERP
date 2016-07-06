@@ -19,7 +19,7 @@ public class SubSystemCatalogue {
 	String tableName;
 	
 	public SubSystemCatalogue() {
-		DB = new DataBase();
+		DB = DB.getInstance();
 		tableName = "subsystem";
 	}
 	

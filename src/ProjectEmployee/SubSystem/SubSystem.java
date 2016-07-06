@@ -30,7 +30,7 @@ public class SubSystem {
 		project = proj;
 		section = sec;
 		modules = new ArrayList<Module>();
-		DB = new DataBase();
+		DB = DB.getInstance();
 	}
 	
 	public void addModule(Module module){
