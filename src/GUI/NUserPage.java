@@ -62,6 +62,7 @@ import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.MakeModuleCatalogue;
 import ResourceManagement.Section.Resource.Module;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
+import ResourceManagement.Section.Resource.ModuleResourceUtilization;
 import ResourceManagement.Section.Resource.PhysicalResource;
 import ResourceManagement.Section.Resource.PhysicalResourceCatalogue;
 import ResourceManagement.Section.Resource.Resource;
@@ -1053,8 +1054,43 @@ public class NUserPage {
 		JScrollPane module_detail_scrollPane = new JScrollPane();
 		module_detail_scrollPane.setViewportView(moduledetail_tabledata.getJdataTable());
 
-		JButton moduledetail_btnDelete = new JButton("Delete");
-		moduledetail_btnDelete.setIcon(new ImageIcon(
+		JButton moduledetailemployee_btnDelete = new JButton("Delete");
+		moduledetailemployee_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				int rowIndex = moduledetailemployee_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = moduledetailemployee_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
+
+					String Table_click = (moduledetailemployee_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						MakeModuleCatalogue makemodcat = new MakeModuleCatalogue();
+						makemodcat.deleteEmployee(Integer.parseInt(Table_click), selected_module);
+						
+						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+						ArrayList<Employee> allemp;
+						allemp = makemodulecat.getEmployees(selected_module);
+						for (int i = 0; i < allemp.size(); i++) {
+							HashMap<String,String> emps = new HashMap<String,String>();
+							emps.put("empid", allemp.get(i).getId()+"");
+							emps.put("empname", allemp.get(i).getName());
+							data.add(emps);
+						}
+						
+						moduledetailemployee_tabledata.update(data);
+						
+					}
+				}
+			}
+		});
+		moduledetailemployee_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
 		JButton moduledetail_btnBack = new JButton("Back");
@@ -1243,6 +1279,47 @@ public class NUserPage {
 				});
 			}
 		});
+		
+		JButton moduledetail_btnDelete = new JButton("Delete");
+		moduledetail_btnDelete.setIcon(new ImageIcon(
+				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		moduledetail_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int rowIndex = moduledetail_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = moduledetail_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Resource!");
+				} else {
+
+					String Table_click = (moduledetail_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+							"Are you sure you want to Delete this item?");
+					if (myDialog.getAnswer()) {
+						MakeModuleCatalogue makemodcat = new MakeModuleCatalogue();
+						makemodcat.deleteResource(Integer.parseInt(Table_click), selected_module);
+						
+						
+						
+						ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+						ArrayList<Resource> allres;
+						allres = makemodulecat.getResources(selected_module);
+						for (int i = 0; i < allres.size(); i++) {
+							HashMap<String,String> ress = new HashMap<String,String>();
+							ress.put("rid", allres.get(i).getId()+"");
+							ress.put("rname", allres.get(i).getName());
+							resdata.add(ress);
+						}
+						
+						moduledetail_tabledata.update(resdata);
+						
+					}
+				}
+			}
+		});
 
 
 
@@ -1251,29 +1328,34 @@ public class NUserPage {
 			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(moduledetail_btnDelete)
+					.addComponent(moduledetailemployee_btnDelete)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(moduledetail_btnBack)
-					.addPreferredGap(ComponentPlacement.RELATED, 572, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
 					.addComponent(btnAddModuleUtilization)
 					.addContainerGap())
-				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+				.addGroup(Alignment.TRAILING, gl_moduledetailpanel.createSequentialGroup()
 					.addGap(30)
-					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(module_detailemployee_scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-						.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
+					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(module_detail_scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+						.addComponent(module_detailemployee_scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
 					.addGap(30))
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addComponent(moduledetail_btnDelete)
+					.addContainerGap(679, Short.MAX_VALUE))
 		);
 		gl_moduledetailpanel.setVerticalGroup(
 			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
 					.addGap(20)
-					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-					.addGap(30)
+					.addComponent(module_detail_scrollPane, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(moduledetail_btnDelete)
+					.addGap(12)
 					.addComponent(module_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
 					.addGap(30)
 					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(moduledetail_btnDelete)
+						.addComponent(moduledetailemployee_btnDelete)
 						.addComponent(moduledetail_btnBack)
 						.addComponent(btnAddModuleUtilization))
 					.addContainerGap())
