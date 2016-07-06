@@ -127,6 +127,7 @@ public class NUserPage {
 	private TableData subsystem_tabledata;
 	private TableData resourceutil_tabledata;
 	private TableData moduledetail_tabledata;
+	private  TableData moduledetailemployee_tabledata;
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
@@ -1040,7 +1041,7 @@ public class NUserPage {
 		resourcesTab.addTab("Module Detail", null, moduledetailpanel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
 
-//		 moduledetail_tabledata = new TableData(new M());
+		 moduledetail_tabledata = new TableData(new MakeModuleCatalogue(),"Resource",selected_module);
 
 		JScrollPane module_detail_scrollPane = new JScrollPane();
 
@@ -1067,30 +1068,43 @@ public class NUserPage {
 
 			}
 		});
+		
+		
+		JScrollPane module_detailemployee_scrollPane = new JScrollPane();
+		moduledetailemployee_tabledata = new TableData(makemodulecat, "Employee",selected_module);
+
 		GroupLayout gl_moduledetailpanel = new GroupLayout(moduledetailpanel);
-		gl_moduledetailpanel
-				.setHorizontalGroup(
-						gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_moduledetailpanel.createSequentialGroup().addGap(30)
-										.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
-												Short.MAX_VALUE)
-										.addGap(30))
-								.addGroup(gl_moduledetailpanel.createSequentialGroup()
-										.addComponent(moduledetail_btnEdit).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(moduledetail_btnDelete)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(moduledetail_btnBack)
-										.addContainerGap(550, Short.MAX_VALUE)));
-		gl_moduledetailpanel
-				.setVerticalGroup(
-						gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_moduledetailpanel.createSequentialGroup().addGap(30)
-										.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 398,
-												Short.MAX_VALUE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(moduledetail_btnEdit).addComponent(moduledetail_btnDelete)
-												.addComponent(moduledetail_btnBack))
-										.addContainerGap()));
+		gl_moduledetailpanel.setHorizontalGroup(
+			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addComponent(moduledetail_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(module_detailemployee_scrollPane, GroupLayout.PREFERRED_SIZE, 240, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_moduledetailpanel.createSequentialGroup()
+							.addComponent(moduledetail_btnDelete)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(moduledetail_btnBack)))
+					.addContainerGap(514, Short.MAX_VALUE))
+		);
+		gl_moduledetailpanel.setVerticalGroup(
+			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_moduledetailpanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+					.addGap(18)
+					.addComponent(module_detailemployee_scrollPane, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
+					.addGap(60)
+					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(moduledetail_btnEdit)
+						.addComponent(moduledetail_btnDelete)
+						.addComponent(moduledetail_btnBack))
+					.addContainerGap())
+		);
 		moduledetailpanel.setLayout(gl_moduledetailpanel);
 
 		// end module list
