@@ -8,11 +8,9 @@ public class Section {
 
 	int sid;
 	String name;
-	ArrayList<SubSystem> subSystems;
 	
 	public Section(String name){
 		this.name = name;
-		subSystems = new ArrayList<SubSystem>();
 	}
 	
 	public void setId(int inputId) {
@@ -21,10 +19,6 @@ public class Section {
 
 	public int getId() {
 		return this.sid;
-	}
-
-	public void addSubSystem(SubSystem sub){
-		subSystems.add(sub);
 	}
 
 	public String getName() {

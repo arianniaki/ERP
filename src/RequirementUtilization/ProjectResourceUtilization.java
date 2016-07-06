@@ -52,12 +52,7 @@ public class ProjectResourceUtilization {
 
 		DB.update(condVars, setVars, "projectresourceutilization");
 	}
-	
-	public String toString(){
-		String str = "{rid="+this.resource.getId()+", sid="+this.section.getId()+", pid="+this.project.getId()+ ", fromdate="+this.from + ", todate="+this.to+"}";
-		return str;
-	}
-	
+		
 	public HashMap<String,String> toHashMap(){
 		HashMap<String,String> resreq = new HashMap<String,String>();
 		resreq.put("presutilid", Integer.toString(this.pruId));

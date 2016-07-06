@@ -15,7 +15,6 @@ public class SubSystem {
 	String name;
 	Project project;
 	Section section;
-	ArrayList<Module> modules;
 	DataBase DB;
 	
 	
@@ -29,14 +28,9 @@ public class SubSystem {
 		this.name = name;
 		project = proj;
 		section = sec;
-		modules = new ArrayList<Module>();
 		DB = new DataBase();
 	}
-	
-	public void addModule(Module module){
-		modules.add(module);
-	}
-	
+		
 	public void editSubSystem(String name, int secid){
 		this.name = name;
 		SectionCatalogue secCat = new SectionCatalogue();
