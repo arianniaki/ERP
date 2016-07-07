@@ -39,6 +39,7 @@ import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
 import GUI.Form.SingleCheckBoxJPanel;
+import GUI.Form.TextJPanel;
 import ProjectEmployee.AuthenticatedEmployee;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
@@ -5208,9 +5209,24 @@ public class NUserPage {
 		Field information_check = new Field("checkBox", "information", information, 20, "information");
 
 		projectFields.add(financial_check);
+		projectFields.add(new Field("text", "financial Date from", "", 20, "financial Date from"));
+		projectFields.add(new Field("text", "financial Date to", "", 20, "financial Date to"));
+
 		projectFields.add(physical_check);
+		projectFields.add(new Field("text", "physical Date from", "", 20, "physical Date from"));
+		projectFields.add(new Field("text", "physical Date to", "", 20, "physical Date to"));
+		
+
 		projectFields.add(information_check);
+		projectFields.add(new Field("text", "information Date from", "", 20, "information Date from"));
+		projectFields.add(new Field("text", "information Date to", "", 20, "information Date to"));
+
+		
 		projectFields.add(maintainers);
+		projectFields.add(new Field("text", "employee Date from", "", 20, "employee Date from"));
+		projectFields.add(new Field("text", "employee Date to", "", 20, "employee Date to"));
+
+		
 
 		final Form projectForm = new Form(projectFields, "Project Form");
 		final PanelBuilder project_addPanel = new PanelBuilder(projectForm);
@@ -5233,11 +5249,38 @@ public class NUserPage {
 		Add_ProjectPage.setVisible(true);
 
 		final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) projectForm.getJPanel().getComponent(5);
-		final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) projectForm.getJPanel().getComponent(6);
+		final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) projectForm.getJPanel().getComponent(8);
 		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) projectForm.getJPanel()
-				.getComponent(7);
-		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) projectForm.getJPanel().getComponent(8);
+				.getComponent(11);
+		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) projectForm.getJPanel().getComponent(14);
+		final TextJPanel to_finance = (TextJPanel) projectForm.getJPanel().getComponent(6);
+		final TextJPanel from_finance = (TextJPanel) projectForm.getJPanel().getComponent(7);
+		final TextJPanel to_physical = (TextJPanel) projectForm.getJPanel().getComponent(9);
+		final TextJPanel from_physical = (TextJPanel) projectForm.getJPanel().getComponent(10);
+		final TextJPanel to_info = (TextJPanel) projectForm.getJPanel().getComponent(12);
+		final TextJPanel from_info = (TextJPanel) projectForm.getJPanel().getComponent(13);
+		final TextJPanel to_employee = (TextJPanel) projectForm.getJPanel().getComponent(15);
+		final TextJPanel from_employee = (TextJPanel) projectForm.getJPanel().getComponent(16);
 
+		
+		JTextField todate_finance = to_finance.getTextField();
+		JTextField fromdate_finance = from_finance.getTextField();
+		JTextField todate_physical = to_physical.getTextField();
+		JTextField fromdate_physical = from_physical.getTextField();
+		JTextField todate_info = to_info.getTextField();
+		JTextField fromdate_info = from_info.getTextField();
+		JTextField todate_employee = to_employee.getTextField();
+		JTextField fromdate_employee = from_employee.getTextField();
+		todate_finance.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		fromdate_finance.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		todate_physical.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		fromdate_physical.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		todate_info.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		fromdate_info.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		todate_employee.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		from_employee.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		
+		
 		employees_comboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -5252,7 +5295,7 @@ public class NUserPage {
 				System.out.println("all : ");
 				projcat.getProjects();
 				ArrayList<String> inputs = new ArrayList<String>();
-				for (int i = 0; i < projectForm.getJPanel().getComponentCount() - 1; i++) {
+				for (int i = 0; i < projectForm.getJPanel().getComponentCount(); i++) {
 					FieldPanel fpanel = (FieldPanel) projectForm.getJPanel().getComponent(i);
 					inputs.add(fpanel.getValues().get(0));
 				}
@@ -5305,7 +5348,7 @@ public class NUserPage {
 					}
 					System.out.println("empids: " + empids);
 					projempcat.addProjectEmployee((int) projid, Integer.parseInt(empids.replace("empid=", "")),
-							"1111-11-1", "1111-11-1");
+							inputs.get(15), inputs.get(16));
 
 				}
 
@@ -5318,7 +5361,7 @@ public class NUserPage {
 					}
 					System.out.println("finan rid: " + respids);
 					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
-							(int) projid, "1111-11-1", "1111-11-1");
+							(int) projid, inputs.get(6), inputs.get(7));
 
 				}
 
@@ -5330,7 +5373,7 @@ public class NUserPage {
 					}
 					System.out.println("phys rid: " + respids);
 					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
-							(int) projid, "1111-11-1", "1111-11-1");
+							(int) projid, inputs.get(9), inputs.get(10));
 
 				}
 
@@ -5342,7 +5385,7 @@ public class NUserPage {
 					}
 					System.out.println("info rid: " + respids);
 					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
-							(int) projid, "1111-11-1", "1111-11-1");
+							(int) projid, inputs.get(12), inputs.get(13));
 				}
 
 			}
