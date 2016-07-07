@@ -1150,21 +1150,21 @@ public class NUserPage {
 
 				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 				for (int i = 0; i < employe_readall.size(); i++) {
-					employees.add(employe_readall.get(i).toString());
+					employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
 				}
 				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 				for (int i = 0; i < financial_readall.size(); i++) {
-					financials.add(financial_readall.get(i).toString());
+					financials.add("rid="+financial_readall.get(i).get("rid")+" "+financial_readall.get(i).get("finanname"));
 				}
 
 				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 				for (int i = 0; i < physical_readall.size(); i++) {
-					physicals.add(physical_readall.get(i).toString());
+					physicals.add("rid="+physical_readall.get(i).get("rid")+" "+physical_readall.get(i).get("physname"));
 				}
 
 				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 				for (int i = 0; i < information_readall.size(); i++) {
-					information.add(information_readall.get(i).toString());
+					information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
 				}
 
 				ArrayList<Field> moduleutilFields = new ArrayList<Field>();
@@ -2864,7 +2864,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
@@ -2956,7 +2956,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
@@ -3012,7 +3012,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		ArrayList<String> resource_types = new ArrayList<String>();
@@ -3105,14 +3105,14 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
 					for (int i = 0; i < financial_resource.size(); i++) {
-						resourceCombo.addItem(financial_resource.get(i).toString());
+						resourceCombo.addItem("rid="+financial_resource.get(i).get("rid")+" "+financial_resource.get(i).get("finanname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Physical")) {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
 					for (int i = 0; i < physical_resource.size(); i++) {
-						resourceCombo.addItem(physical_resource.get(i).toString());
+						resourceCombo.addItem("rid="+physical_resource.get(i).get("rid")+" "+physical_resource.get(i).get("physname"));
 					}
 
 				}
@@ -3120,7 +3120,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
 					for (int i = 0; i < information_resource.size(); i++) {
-						resourceCombo.addItem(information_resource.get(i).toString());
+						resourceCombo.addItem("rid="+information_resource.get(i).get("rid")+" "+information_resource.get(i).get("irname"));
 					}
 
 				}
@@ -3128,14 +3128,14 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 					for (int i = 0; i < employee_resource.size(); i++) {
-						resourceCombo.addItem(employee_resource.get(i).toString());
+						resourceCombo.addItem("empid="+employee_resource.get(i).get("empid")+" "+employee_resource.get(i).get("empname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Module")) {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
 					for (int i = 0; i < module_resource.size(); i++) {
-						resourceCombo.addItem(module_resource.get(i).toString());
+						resourceCombo.addItem("rid="+module_resource.get(i).get("modrid")+" "+module_resource.get(i).get("modname"));
 					}
 				}
 			}
@@ -3293,11 +3293,11 @@ public class NUserPage {
 
 		ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
 		for (int i = 0; i < project_hashmap.size(); i++) {
-			project_arraylist.add(project_hashmap.get(i).toString());
+			project_arraylist.add("projid="+project_hashmap.get(i).get("projid")+" "+project_hashmap.get(i).get("projname"));
 		}
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		ArrayList<String> resource_types = new ArrayList<String>();
@@ -3396,14 +3396,14 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
 					for (int i = 0; i < financial_resource.size(); i++) {
-						resourceCombo.addItem(financial_resource.get(i).toString());
+						resourceCombo.addItem("rid="+financial_resource.get(i).get("rid")+" "+financial_resource.get(i).get("finanname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Physical")) {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
 					for (int i = 0; i < physical_resource.size(); i++) {
-						resourceCombo.addItem(physical_resource.get(i).toString());
+						resourceCombo.addItem("rid="+physical_resource.get(i).get("rid")+" "+physical_resource.get(i).get("physname"));
 					}
 
 				}
@@ -3411,7 +3411,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
 					for (int i = 0; i < information_resource.size(); i++) {
-						resourceCombo.addItem(information_resource.get(i).toString());
+						resourceCombo.addItem("rid="+information_resource.get(i).get("rid")+" "+information_resource.get(i).get("irname"));
 					}
 
 				}
@@ -3419,14 +3419,14 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 					for (int i = 0; i < employee_resource.size(); i++) {
-						resourceCombo.addItem(employee_resource.get(i).toString());
+						resourceCombo.addItem("empid="+employee_resource.get(i).get("empid")+" "+employee_resource.get(i).get("empname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Module")) {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
 					for (int i = 0; i < module_resource.size(); i++) {
-						resourceCombo.addItem(module_resource.get(i).toString());
+						resourceCombo.addItem("rid="+module_resource.get(i).get("modrid")+" "+module_resource.get(i).get("modname"));
 					}
 				}
 			}
@@ -3718,7 +3718,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -3849,7 +3849,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -3930,7 +3930,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 
@@ -4040,7 +4040,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -4123,21 +4123,21 @@ public class NUserPage {
 
 		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
-			employees.add(employe_readall.get(i).toString());
+			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
 		}
 		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 		for (int i = 0; i < financial_readall.size(); i++) {
-			financials.add(financial_readall.get(i).toString());
+			financials.add("rid="+financial_readall.get(i).get("rid")+" "+financial_readall.get(i).get("finanname"));
 		}
 
 		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 		for (int i = 0; i < physical_readall.size(); i++) {
-			physicals.add(physical_readall.get(i).toString());
+			physicals.add("rid="+physical_readall.get(i).get("rid")+" "+physical_readall.get(i).get("physname"));
 		}
 
 		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 		for (int i = 0; i < information_readall.size(); i++) {
-			information.add(information_readall.get(i).toString());
+			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
 		}
 
 		ArrayList<Field> moduleFields = new ArrayList<Field>();
@@ -4145,7 +4145,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -4286,7 +4286,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -4490,21 +4490,21 @@ public class NUserPage {
 
 		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
-			employees.add(employe_readall.get(i).toString());
+			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
 		}
 		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 		for (int i = 0; i < financial_readall.size(); i++) {
-			financials.add(financial_readall.get(i).toString());
+			financials.add("rid="+financial_readall.get(i).get("rid")+" "+financial_readall.get(i).get("finanname"));
 		}
 
 		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 		for (int i = 0; i < physical_readall.size(); i++) {
-			physicals.add(physical_readall.get(i).toString());
+			physicals.add("rid="+physical_readall.get(i).get("rid")+" "+physical_readall.get(i).get("physname"));
 		}
 
 		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 		for (int i = 0; i < information_readall.size(); i++) {
-			information.add(information_readall.get(i).toString());
+			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
 		}
 
 		ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
@@ -4641,7 +4641,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 
@@ -4750,7 +4750,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 
@@ -4824,7 +4824,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -4900,7 +4900,7 @@ public class NUserPage {
 			ArrayList<String> section_arraylist = new ArrayList<String>();
 			ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 			for (int i = 0; i < section_hashmap.size(); i++) {
-				section_arraylist.add(section_hashmap.get(i).toString());
+				section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 			}
 
 			Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -4996,21 +4996,21 @@ public class NUserPage {
 
 		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
-			employees.add(employe_readall.get(i).toString());
+			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+ " -username="+employe_readall.get(i).get("username"));
 		}
 		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 		for (int i = 0; i < financial_readall.size(); i++) {
-			financials.add(financial_readall.get(i).toString());
+			financials.add("rid="+financial_readall.get(i).get("rid")+" "+financial_readall.get(i).get("finanname"));
 		}
 
 		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 		for (int i = 0; i < physical_readall.size(); i++) {
-			physicals.add(physical_readall.get(i).toString());
+			physicals.add("rid="+physical_readall.get(i).get("rid")+" "+physical_readall.get(i).get("physname"));
 		}
 
 		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 		for (int i = 0; i < information_readall.size(); i++) {
-			information.add(information_readall.get(i).toString());
+			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
 		}
 
 		ArrayList<Field> projectFields = new ArrayList<Field>();
@@ -5327,14 +5327,14 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
 					for (int i = 0; i < financial_resource.size(); i++) {
-						resourceCombo.addItem(financial_resource.get(i).toString());
+						resourceCombo.addItem("rid="+financial_resource.get(i).get("rid")+" "+financial_resource.get(i).get("finanname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Physical")) {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
 					for (int i = 0; i < physical_resource.size(); i++) {
-						resourceCombo.addItem(physical_resource.get(i).toString());
+						resourceCombo.addItem("rid="+physical_resource.get(i).get("rid")+" "+physical_resource.get(i).get("physname"));
 					}
 
 				}
@@ -5342,7 +5342,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
 					for (int i = 0; i < information_resource.size(); i++) {
-						resourceCombo.addItem(information_resource.get(i).toString());
+						resourceCombo.addItem("rid="+information_resource.get(i).get("rid")+" "+information_resource.get(i).get("irname"));
 					}
 
 				}
@@ -5350,7 +5350,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
 					for (int i = 0; i < module_resource.size(); i++) {
-						resourceCombo.addItem(module_resource.get(i).toString());
+						resourceCombo.addItem("rid="+module_resource.get(i).get("modrid")+" "+module_resource.get(i).get("modname"));
 					}
 				}
 			}
@@ -5541,7 +5541,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 					for (int i = 0; i < employee_resource.size(); i++) {
-						resourceCombo.addItem(employee_resource.get(i).toString());
+						resourceCombo.addItem("empid="+employee_resource.get(i).get("empid")+" "+employee_resource.get(i).get("empname"));
 					}
 		submitgetReportBtn.addActionListener(new ActionListener() {
 			@Override
