@@ -4457,29 +4457,41 @@ public class NUserPage {
 		});
 	}
 	private void deleteMaintainingModule() {
-		DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-				"Are you sure you want to Delete this item?");
-		if (myDialog.getAnswer()) {
-			int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
+		System.out.println("-----");
+		int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = maintaining_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Maintaining!");
+		} else {
 
 			String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 					.toString()); // return
+			System.out.println(Table_click);
+			
 			selected_maintaining_module = Integer.parseInt(Table_click.trim());
 
 			System.out.println(Table_click);
 			System.out.println("---maintian module id-- " + selected_module);
-
-			maintainmodulecat.deleteMaintainingModule(selected_maintaining_module);
-			ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-			ArrayList<MaintainingModule> allmaintainmodule;
-			allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
-			for (int i = 0; i < allmaintainmodule.size(); i++) {
-				data.add((allmaintainmodule.get(i).toHashMap()));
+			
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				maintainmodulecat.deleteMaintainingModule(selected_maintaining_module);
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<MaintainingModule> allmaintainmodule;
+				allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
+				for (int i = 0; i < allmaintainmodule.size(); i++) {
+					data.add((allmaintainmodule.get(i).toHashMap()));
+				}
+				System.out.println("DATA " + data);
+				maintaining_tabledata.update(data);
+				
 			}
-			System.out.println("DATA " + data);
-			maintaining_tabledata.update(data);
-
 		}
+		
+		
+		
 	}
 	
 	private void addMaintainingModule() {
