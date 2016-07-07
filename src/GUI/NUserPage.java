@@ -176,6 +176,8 @@ public class NUserPage {
 	private MaintainModEmpResCatalogue maintainmodempresCat;
 	private JTextField search_reqprojectname;
 	private JTextField search_reqsectionname;
+	private JTextField accessright_textField;
+	private JTextField post_textField;
 	/**
 	 * Launch the application.
 	 */
@@ -269,12 +271,40 @@ public class NUserPage {
 				}
 			}
 		});
+		
+		JLabel lblAccessRight = DefaultComponentFactory.getInstance().createLabel("Access Right");
+		
+		JLabel lblPost_1 = DefaultComponentFactory.getInstance().createLabel("Post");
+		
+		accessright_textField = new JTextField();
+		
+		accessright_textField.setText(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName());
+
+		accessright_textField.setColumns(10);
+		accessright_textField.setEditable(false);
+		
+		post_textField = new JTextField();
+		post_textField.setColumns(10);
+		post_textField.setText(AuthenticatedEmployee.getInstance().getEmployee().getPost());
+		post_textField.setEditable(false);
+
+
 
 		GroupLayout gl_editPanel = new GroupLayout(editPanel);
 		gl_editPanel.setHorizontalGroup(
 			gl_editPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_editPanel.createSequentialGroup()
-					.addContainerGap(538, Short.MAX_VALUE)
+					.addContainerGap(165, Short.MAX_VALUE)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_editPanel.createSequentialGroup()
+							.addComponent(accessright_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(lblAccessRight))
+						.addGroup(gl_editPanel.createSequentialGroup()
+							.addComponent(post_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblPost_1)))
+					.addGap(140)
 					.addGroup(gl_editPanel.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(passwordField)
 						.addComponent(editname_textField)
@@ -293,12 +323,17 @@ public class NUserPage {
 				.addGroup(gl_editPanel.createSequentialGroup()
 					.addGap(94)
 					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblAccessRight)
+							.addComponent(accessright_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(lblName))
 					.addGap(26)
 					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(password)
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPost_1)
+						.addComponent(post_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(31)
 					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblRepassword)

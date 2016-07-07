@@ -111,11 +111,16 @@ public class EmployeeCatalogue {
 		vars.put("password", "\'" + password + "\'");
 		vars.put("is_loggedin", Boolean.toString(is_loggedin));
 		vars.put("is_confirmed", Boolean.toString(false));
-
+		
 		long pk = DB.insert(vars, tablename);
-		Employee employee = new Employee();
-		employee.getFromDB((int) pk);
-		return employee;
+		if(pk==-1)
+			return null;
+		else{
+			Employee employee = new Employee();
+			employee.getFromDB((int) pk);
+			return employee;
+				
+		}
 		
 	}
 
