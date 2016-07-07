@@ -1691,11 +1691,10 @@ public class NUserPage {
 					System.out.println(Table_click);
 					System.out.println("---matinainig id-- " + selected_maintaining_module);
 					System.out.println("Change JPanel");
-					MaintainModEmpResCatalogue maintainmodempres = new MaintainModEmpResCatalogue();
 					
 					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 					ArrayList<Employee> allemp;
-					allemp = maintainmodempres.getEmployees(selected_maintaining_module);
+					allemp = maintainmodempresCat.getEmployees(selected_maintaining_module);
 					for (int i = 0; i < allemp.size(); i++) {
 						HashMap<String,String> emps = new HashMap<String,String>();
 						emps.put("empid", allemp.get(i).getId()+"");
@@ -1705,7 +1704,7 @@ public class NUserPage {
 					System.out.println(data+" DATA");
 					ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
 					ArrayList<Resource> allres;
-					allres = maintainmodempres.getResources(selected_maintaining_module);
+					allres = maintainmodempresCat.getResources(selected_maintaining_module);
 					for (int i = 0; i < allres.size(); i++) {
 						HashMap<String,String> ress = new HashMap<String,String>();
 						ress.put("rid", allres.get(i).getId()+"");
@@ -1791,11 +1790,11 @@ public class NUserPage {
 			}
 		});
 		
-		maintainingdetail_tabledata = new TableData(new MaintainModEmpResCatalogue(),"Resource");
+		maintainingdetail_tabledata = new TableData(maintainmodempresCat,"Resource");
 		JScrollPane maintaining_detail_scrollPane = new JScrollPane();
 		maintaining_detail_scrollPane.setViewportView(maintainingdetail_tabledata.getJdataTable());
 
-		maintainingdetailemployee_tabledata = new TableData(new MaintainModEmpResCatalogue(), "Employee");
+		maintainingdetailemployee_tabledata = new TableData(maintainmodempresCat, "Employee");
 		JScrollPane maintaining_detailemployee_scrollPane = new JScrollPane();
 		maintaining_detailemployee_scrollPane.setViewportView(maintainingdetailemployee_tabledata.getJdataTable());
 		
@@ -1815,12 +1814,11 @@ public class NUserPage {
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
-						MaintainModEmpResCatalogue maintainmodemprescat = new MaintainModEmpResCatalogue();
-						maintainmodemprescat.deleteEmployee(Integer.parseInt(Table_click), selected_maintaining_module);
+						maintainmodempresCat.deleteEmployee(Integer.parseInt(Table_click), selected_maintaining_module);
 						
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<Employee> allemp;
-						allemp = maintainmodemprescat.getEmployees(selected_maintaining_module);
+						allemp = maintainmodempresCat.getEmployees(selected_maintaining_module);
 						for (int i = 0; i < allemp.size(); i++) {
 							HashMap<String,String> emps = new HashMap<String,String>();
 							emps.put("empid", allemp.get(i).getId()+"");
@@ -1855,14 +1853,13 @@ public class NUserPage {
 					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 							"Are you sure you want to Delete this item?");
 					if (myDialog.getAnswer()) {
-						MaintainModEmpResCatalogue maintainmodemprescat = new MaintainModEmpResCatalogue();
-						maintainmodemprescat.deleteResource(Integer.parseInt(Table_click), selected_maintaining_module);
+						maintainmodempresCat.deleteResource(Integer.parseInt(Table_click), selected_maintaining_module);
 						
 						
 						
 						ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
 						ArrayList<Resource> allres;
-						allres = maintainmodemprescat.getResources(selected_maintaining_module);
+						allres = maintainmodempresCat.getResources(selected_maintaining_module);
 						for (int i = 0; i < allres.size(); i++) {
 							HashMap<String,String> ress = new HashMap<String,String>();
 							ress.put("rid", allres.get(i).getId()+"");
@@ -1878,42 +1875,211 @@ public class NUserPage {
 		});
 		maintainingdetail_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+		
+		JButton btnAddMaintainingUtilization = new JButton("Add Maintaining Utilization");
+		btnAddMaintainingUtilization.setIcon(new ImageIcon(
+				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		btnAddMaintainingUtilization.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				final ArrayList<String> employees = new ArrayList<String>();
+				final ArrayList<String> financials = new ArrayList<String>();
+				final ArrayList<String> physicals = new ArrayList<String>();
+				final ArrayList<String> information = new ArrayList<String>();
+
+				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+				for (int i = 0; i < employe_readall.size(); i++) {
+					employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
+				}
+				ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+				for (int i = 0; i < financial_readall.size(); i++) {
+					financials.add("rid="+financial_readall.get(i).get("rid")+" "+financial_readall.get(i).get("finanname"));
+				}
+
+				ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+				for (int i = 0; i < physical_readall.size(); i++) {
+					physicals.add("rid="+physical_readall.get(i).get("rid")+" "+physical_readall.get(i).get("physname"));
+				}
+
+				ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+				for (int i = 0; i < information_readall.size(); i++) {
+					information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
+				}
+
+				ArrayList<Field> maintainingutilFields = new ArrayList<Field>();
+
+				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+				Field information_check = new Field("checkBox", "information", information, 20, "information");
+
+				maintainingutilFields.add(financial_check);
+				maintainingutilFields.add(physical_check);
+				maintainingutilFields.add(information_check);
+				maintainingutilFields.add(maintainers);
+
+				final Form maintainingutilForm = new Form(maintainingutilFields, "Add Maintaining Utilization Form");
+				final PanelBuilder moduleutilPanel = new PanelBuilder(maintainingutilForm);
+				moduleutilPanel.makeForm();
+
+				JFrame AddMaintainingUtilizationPage = new JFrame("Add Maintaining Utilization Form");
+				AddMaintainingUtilizationPage.getContentPane().add(maintainingutilForm.getJPanel(), BorderLayout.NORTH);
+				JScrollPane scroll = new JScrollPane(maintainingutilForm.getJPanel());
+				AddMaintainingUtilizationPage.getContentPane().add(scroll);
+
+				JButton submitaddmaintainingutilBtn = new JButton("Submit");
+				JPanel buttonPanel = new JPanel();
+				buttonPanel.add(submitaddmaintainingutilBtn);
+				AddMaintainingUtilizationPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+				AddMaintainingUtilizationPage.pack();
+				AddMaintainingUtilizationPage.setVisible(true);
+
+
+				final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(0);
+				final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(1);
+				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(2);
+				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(3);
+
+				submitaddmaintainingutilBtn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println("all : ");
+						ArrayList<String> inputs = new ArrayList<String>();
+						for (int i = 0; i < maintainingutilForm.getJPanel().getComponentCount(); i++) {
+							FieldPanel fpanel = (FieldPanel) maintainingutilForm.getJPanel().getComponent(i);
+							inputs.add(fpanel.getValues().get(0));
+						}
+						for (int i = 0; i < inputs.size(); i++) {
+							System.out.println(inputs.get(i) + "adasa");
+						}
+
+						//
+						System.out.println("----------");
+
+						final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
+						System.out.println(finanvales);
+						final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
+						System.out.println(physicalvales);
+						final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+						System.out.println(informationvales);
+						final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
+						System.out.println(employeevales);
+						Pattern emp = Pattern.compile("empid=\\d+");
+						for (int i = 0; i < employeevales.size(); i++) {
+							String empids = null;
+							Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+							if (m_emp.find()) {
+								empids = m_emp.group();
+							}
+							System.out.println("empids: " + empids);
+							
+							maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_maintaining_module);
+
+						}
+
+						Pattern res = Pattern.compile("rid=\\d+");
+						for (int i = 0; i < finanvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(finanvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("finan rid: " + respids);
+							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+
+						}
+
+						for (int i = 0; i < physicalvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(physicalvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("phys rid: " + respids);
+							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+
+						}
+
+						for (int i = 0; i < informationvales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(informationvales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("info rid: " + respids);
+							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+
+						}
+						
+						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+						ArrayList<Employee> allemp;
+						allemp = maintainmodempresCat.getEmployees(selected_maintaining_module);
+						for (int i = 0; i < allemp.size(); i++) {
+							HashMap<String,String> emps = new HashMap<String,String>();
+							emps.put("empid", allemp.get(i).getId()+"");
+							emps.put("empname", allemp.get(i).getName());
+							data.add(emps);
+						}
+						ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+						ArrayList<Resource> allres;
+						allres = maintainmodempresCat.getResources(selected_maintaining_module);
+						for (int i = 0; i < allres.size(); i++) {
+							HashMap<String,String> ress = new HashMap<String,String>();
+							ress.put("rid", allres.get(i).getId()+"");
+							ress.put("rname", allres.get(i).getName());
+							resdata.add(ress);
+						}
+						
+						maintainingdetail_tabledata.update(resdata);
+						maintainingdetailemployee_tabledata.update(data);
+						
+
+					}
+				});
+				
+			}
+		});
 
 		GroupLayout gl_maintainingdetailpanel = new GroupLayout(maintainingdetailpanel);
 		gl_maintainingdetailpanel.setHorizontalGroup(
 			gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(maintainingdetail_btnDelete)
-					.addContainerGap(741, Short.MAX_VALUE))
-				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
 					.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
-							.addGap(30)
-							.addComponent(maintaining_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
+							.addContainerGap()
+							.addComponent(maintainingdetail_btnDelete))
 						.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(maintainingdetailemployee_btnDelete)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(maintainingdetail_btnBack))
-						.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+							.addComponent(maintainingdetail_btnBack)
+							.addPreferredGap(ComponentPlacement.RELATED, 529, Short.MAX_VALUE)
+							.addComponent(btnAddMaintainingUtilization))
+						.addGroup(Alignment.TRAILING, gl_maintainingdetailpanel.createSequentialGroup()
 							.addGap(30)
-							.addComponent(maintaining_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)))
-					.addGap(30))
+							.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(maintaining_detail_scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+								.addComponent(maintaining_detailemployee_scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
+							.addGap(30)))
+					.addContainerGap())
 		);
 		gl_maintainingdetailpanel.setVerticalGroup(
 			gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
 					.addGap(30)
-					.addComponent(maintaining_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+					.addComponent(maintaining_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
 					.addGap(10)
 					.addComponent(maintainingdetail_btnDelete)
 					.addGap(10)
-					.addComponent(maintaining_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+					.addComponent(maintaining_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
 					.addGap(30)
 					.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(maintainingdetailemployee_btnDelete)
-						.addComponent(maintainingdetail_btnBack))
+						.addComponent(maintainingdetail_btnBack)
+						.addComponent(btnAddMaintainingUtilization, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		maintainingdetailpanel.setLayout(gl_maintainingdetailpanel);
