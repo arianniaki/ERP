@@ -2591,6 +2591,8 @@ public class NUserPage {
 
 		if(search_accessrightname.getText().equals("intermediate"))
 			searchVars.put("accessrightid", "\'" + 2 + "\'");
+		else
+			searchVars.put("accessrightid", "\'"+13+"\'");
 		System.out.println("ASDSADASDA");
 		System.out.println(searchVars);
 		
@@ -3101,13 +3103,11 @@ public class NUserPage {
 		resource_types.add("Employee");
 		resource_types.add("Module");
 		ArrayList<Field> requirement_moduleFields = new ArrayList<Field>();
-		Field reqname = new Field("text", "req name       ", "", 10, "name");
 		Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
 		Field req_res = new Field("comboBox", "resources", resources, 20, "items");
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 		Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
 
-		requirement_moduleFields.add(reqname);
 		requirement_moduleFields.add(req_res_type);
 		requirement_moduleFields.add(req_res);
 		requirement_moduleFields.add(sections);
@@ -3150,10 +3150,10 @@ public class NUserPage {
 		Add_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		Add_RequirementPage.pack();
 		Add_RequirementPage.setVisible(true);
-		ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(1);
-		ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(2);
-		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(3);
-		ComboBoxJPanel comboBoxpane_projects = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(4);
+		ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(0);
+		ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(1);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(2);
+		ComboBoxJPanel comboBoxpane_projects = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(3);
 
 		final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
 		final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
