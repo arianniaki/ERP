@@ -63,24 +63,24 @@ public class TableData {
 	public TableData(ResourceCatalogue rescat, String type) {
 		data = rescat.readAllResources();
 		if (type == "physical") {
-			columns = new String[] { "Id", "Name", "Model", "Description"};
+			columns = new String[] { "Physical Id", "Name", "Model", "Description"};
 			dbnames = new String[] { "rid", "physname","modeldesc","description" };
 		}
 		if (type == "information") {
-			columns = new String[] { "Id", "Name","Create Date","Description" };
+			columns = new String[] { "Information Id", "Name","Create Date","Description" };
 			dbnames = new String[] { "rid", "irname","createdate","description" };
 		}
 		if (type == "financial") {
-			columns = new String[] { "Id", "Name","Value","Model","Description" };
+			columns = new String[] { "Financial Id", "Name","Value","Model","Description" };
 			dbnames = new String[] { "rid", "finanname","netvalue","modeldesc","description" };
 		}
 		if (type == "module") {
-			columns = new String[] { "Id", "Name","Duration","Description" };
+			columns = new String[] { "Module Id", "Name","Duration","Description" };
 			dbnames = new String[] { "modrid", "modname","duration","description" };
 		}
 		if(type=="all")
 		{
-			columns = new String[] { "Id", "Name" };
+			columns = new String[] { "Resource Id", "Name" };
 			dbnames = new String[] { "rid", "rname" };
 		}
 
@@ -102,7 +102,7 @@ public class TableData {
 		}
 		if(type=="human")
 		{
-			columns = new String[] { "Id", "Name","Post","Accessright" ,"Section"};
+			columns = new String[] { "Id", "Name","Post","Access Right" ,"Section Id"};
 			dbnames = new String[] { "empid", "empname","post" ,"accessrightname","sid"};
 		}
 		this.buildFilledJTable();
@@ -110,7 +110,7 @@ public class TableData {
 
 	public TableData(ProjectCatalogue projcat) {
 		data = projcat.getProjects();
-		columns = new String[] { "Id", "Name", "Project Manager","Manager Name","Size", "Technology","is complete" };
+		columns = new String[] { "Id", "Project", "Project Manager","Manager Name","Size", "Technology","Complete" };
 		dbnames = new String[] { "projid", "projname", "projectmanager","managername","size","tech","is_complete" };
 		this.buildFilledJTable();
 
@@ -118,7 +118,7 @@ public class TableData {
 	
 	public TableData(SubSystemCatalogue subsyscat) {
 		data = subsyscat.getSubSystems();
-		columns = new String[] { "Subsystem Id","Project Id", "Name","Sectionid","Sectionname"};
+		columns = new String[] { "Subsystem Id","Project Id", "Subsystem","Section Id","Section"};
 		dbnames = new String[] { "subid","pid", "sname","sid","sectionname"};
 		this.buildFilledJTable();
 
@@ -126,7 +126,7 @@ public class TableData {
 	public TableData(ProjectResourceUtilizationCatalogue presutilcat) {
 		
 		data= new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "presutilid","rid","resourceName", "sid", "sectionName","pid","projectName","fromdate","todate" };
+		columns = new String[] { "presutilid","Resource Id","Resource", "Section Id", "Section","Project Id","Project","From","To" };
 		dbnames = new String[] { "presutilid","rid","resourceName", "sid", "sectionName","pid","projectName","fromdate","todate" };
 		ArrayList<ProjectResourceUtilization> allpresutil;
 		allpresutil = presutilcat.getProjectResourceUtilizations();
@@ -141,7 +141,7 @@ public class TableData {
 
 	public TableData(MaintainingModuleCatalogue mainmodcat,int moduleid) {
 		data = new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "maintainid", "modrid", "duration","changetype" };
+		columns = new String[] { "Maintain Id", "Module Id", "Duration","Change Type" };
 		dbnames = new String[] { "maintainid", "modrid", "duration","changetype" };
 		ArrayList<MaintainingModule> allmaintainmod;
 		allmaintainmod = mainmodcat.getMaintainingModules(moduleid);
@@ -153,8 +153,8 @@ public class TableData {
 	
 	public TableData(ResourceRequirementCatalogue resreqcat) {
 		data= new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate","projectName","sectionName","resourceName","is_satisfied","satisfydate" };
-		dbnames = new String[] { "resReqid","rid", "sid", "pid","fromdate","todate","projectName","sectionName","resourceName","is_satisfied","satisfydate"};
+		columns = new String[] { "resReqid","Resource ID", "Resource", "Section Id","Section", "Project Id","Project","From","To","Satisfied","Satisfy Date" };
+		dbnames = new String[] {  "resReqid","rid", "resourceName", "sid","sectionName", "pid","projectName","fromdate","todate","is_satisfied","satisfydate" };
 		ArrayList<ResourceRequirement> allresourcerequirements;
 		allresourcerequirements = resreqcat.getResourceRequirements();
 		for (int i = 0; i < allresourcerequirements.size(); i++) {
@@ -168,22 +168,22 @@ public class TableData {
 		data= report;
 		if(type=="req report")
 		{
-			columns = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
+			columns = new String[] { "Resource Id","Resource" ,"Section Id", "Section","Project Id","Project","From","To", "Satisfy Date" };
 			dbnames = new String[] { "rid","rname" ,"sid", "sname","pid","pname","fromdate","todate", "satisfydate" };
 		}
 		if(type=="cycle report")
 		{
-			columns = new String[] {"sid", "presutilid", "rid", "pname", "fromdate", "rname", "todate", "pid", "sname"};
-			dbnames = new String[] { "sid", "presutilid", "rid", "pname", "fromdate", "rname", "todate", "pid", "sname"};
+			columns = new String[] {"presutilid", "Resource Id","Resource", "Section Id","Section","Project Id","Project", "From", "To"};
+			dbnames = new String[] {"presutilid", "rid","rname", "sname","sid","pid","pname", "fromdate", "todate"};
 		}
 		if(type=="employee cycle report")
 		{
-			columns = new String[] {"sid", "empname", "rid", "pname", "fromdate", "rname", "todate", "pid", "sname"};
-			dbnames = new String[] {"sid", "empname", "rid", "pname", "fromdate", "rname", "todate", "pid", "sname"};
+			columns = new String[] {"Employee Id", "Project Id","Project","Employee", "From", "To"};
+			dbnames = new String[] {"empid", "projid","pname", "empname","fromdate", "todate"};
 		}
 		if(type=="resavail report")
 		{
-			columns = new String[] {"sid", "count", "resource name"};
+			columns = new String[] {"Section Id", "Count", "Resource"};
 			dbnames = new String[] { "sid", "count", "physname"};
 
 		}
@@ -195,12 +195,12 @@ public class TableData {
 	public TableData(MakeModuleCatalogue makemodulecat, String type) {
 		data = new ArrayList<HashMap<String, String>>();
 		if(type.equals("Employee")){
-			columns = new String[] { "EmployeeID","Employee Name"};
+			columns = new String[] { "Employee Id","Employee"};
 			dbnames = new String[] { "empid","empname"};	
 		}
 		if(type.equals("Resource"))
 		{
-			columns = new String[] { "Resource ID","Resource Name"};
+			columns = new String[] { "Resource Id","Resource"};
 			dbnames = new String[] { "rid", "rname"};
 		}
 		this.buildFilledJTable();
@@ -210,12 +210,12 @@ public class TableData {
 		// TODO Auto-generated constructor stub
 		data = new ArrayList<HashMap<String, String>>();
 		if(type.equals("Employee")){
-			columns = new String[] { "EmployeeID","Employee Name"};
+			columns = new String[] { "Employee Id","Employee"};
 			dbnames = new String[] { "empid","empname"};	
 		}
 		if(type.equals("Resource"))
 		{
-			columns = new String[] { "Resource ID","Resource Name"};
+			columns = new String[] { "Resource Id","Resource"};
 			dbnames = new String[] { "rid", "rname"};
 		}
 		this.buildFilledJTable();
