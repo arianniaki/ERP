@@ -1148,6 +1148,7 @@ public class NUserPage {
 				final ArrayList<String> financials = new ArrayList<String>();
 				final ArrayList<String> physicals = new ArrayList<String>();
 				final ArrayList<String> information = new ArrayList<String>();
+				final ArrayList<String> module = new ArrayList<String>();
 
 				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 				for (int i = 0; i < employe_readall.size(); i++) {
@@ -1168,17 +1169,24 @@ public class NUserPage {
 					information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
 				}
 
+				ArrayList<HashMap<String, String>> module_readall = modcat.readAllResources();
+				for (int i = 0; i < module_readall.size(); i++) {
+					module.add("rid="+module_readall.get(i).get("modrid")+" "+module_readall.get(i).get("modname"));
+				}
+
 				ArrayList<Field> moduleutilFields = new ArrayList<Field>();
 
 				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
 				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
 				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
 				Field information_check = new Field("checkBox", "information", information, 20, "information");
+				Field module_check = new Field("checkBox", "module", module, 20, "module");
 
 				moduleutilFields.add(financial_check);
 				moduleutilFields.add(physical_check);
 				moduleutilFields.add(information_check);
 				moduleutilFields.add(maintainers);
+				moduleutilFields.add(module_check);
 
 				final Form moduleutilForm = new Form(moduleutilFields, "Module Form");
 				final PanelBuilder moduleutilPanel = new PanelBuilder(moduleutilForm);
@@ -1201,6 +1209,8 @@ public class NUserPage {
 				final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(1);
 				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(2);
 				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(3);
+				final CheckBoxJPanel checkBoxpane_module = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(4);
+
 
 				submitaddmoduleutilBtn.addActionListener(new ActionListener() {
 
@@ -1228,6 +1238,8 @@ public class NUserPage {
 						System.out.println(informationvales);
 						final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
 						System.out.println(employeevales);
+						final ArrayList<String> modulevales = checkBoxpane_module.getCheckedValues();
+						System.out.println(modulevales);
 						Pattern emp = Pattern.compile("empid=\\d+");
 						for (int i = 0; i < employeevales.size(); i++) {
 							String empids = null;
@@ -1273,6 +1285,16 @@ public class NUserPage {
 							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
 
 						}
+						for (int i = 0; i < modulevales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(modulevales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("module rid: " + respids);
+							makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+						}
+						
 						
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<Employee> allemp;
@@ -1888,6 +1910,7 @@ public class NUserPage {
 				final ArrayList<String> financials = new ArrayList<String>();
 				final ArrayList<String> physicals = new ArrayList<String>();
 				final ArrayList<String> information = new ArrayList<String>();
+				final ArrayList<String> module = new ArrayList<String>();
 
 				ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 				for (int i = 0; i < employe_readall.size(); i++) {
@@ -1908,18 +1931,25 @@ public class NUserPage {
 					information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
 				}
 
+				ArrayList<HashMap<String, String>> module_readall = modcat.readAllResources();
+				for (int i = 0; i < module_readall.size(); i++) {
+					module.add("rid="+module_readall.get(i).get("modrid")+" "+module_readall.get(i).get("modname"));
+				}
 				ArrayList<Field> maintainingutilFields = new ArrayList<Field>();
 
 				Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
 				Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
 				Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
 				Field information_check = new Field("checkBox", "information", information, 20, "information");
+				Field module_check = new Field("checkBox", "module", module, 20, "module");
 
 				maintainingutilFields.add(financial_check);
 				maintainingutilFields.add(physical_check);
 				maintainingutilFields.add(information_check);
 				maintainingutilFields.add(maintainers);
+				maintainingutilFields.add(module_check);
 
+				
 				final Form maintainingutilForm = new Form(maintainingutilFields, "Add Maintaining Utilization Form");
 				final PanelBuilder moduleutilPanel = new PanelBuilder(maintainingutilForm);
 				moduleutilPanel.makeForm();
@@ -1941,6 +1971,8 @@ public class NUserPage {
 				final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(1);
 				final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(2);
 				final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(3);
+				final CheckBoxJPanel checkBoxpane_module = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(4);
+
 
 				submitaddmaintainingutilBtn.addActionListener(new ActionListener() {
 
@@ -1968,6 +2000,9 @@ public class NUserPage {
 						System.out.println(informationvales);
 						final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
 						System.out.println(employeevales);
+						final ArrayList<String> modulevales = checkBoxpane_module.getCheckedValues();
+						System.out.println(modulevales);
+
 						Pattern emp = Pattern.compile("empid=\\d+");
 						for (int i = 0; i < employeevales.size(); i++) {
 							String empids = null;
@@ -2015,6 +2050,17 @@ public class NUserPage {
 
 						}
 						
+						
+						for (int i = 0; i < modulevales.size(); i++) {
+							String respids = null;
+							Matcher m_res = res.matcher(modulevales.get(i).toString());
+							if (m_res.find()) {
+								respids = m_res.group();
+							}
+							System.out.println("module rid: " + respids);
+							maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+
+						}
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 						ArrayList<Employee> allemp;
 						allemp = maintainmodempresCat.getEmployees(selected_maintaining_module);
@@ -4287,6 +4333,7 @@ public class NUserPage {
 		final ArrayList<String> financials = new ArrayList<String>();
 		final ArrayList<String> physicals = new ArrayList<String>();
 		final ArrayList<String> information = new ArrayList<String>();
+		final ArrayList<String> module = new ArrayList<String>();
 
 		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
@@ -4306,6 +4353,11 @@ public class NUserPage {
 		for (int i = 0; i < information_readall.size(); i++) {
 			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
 		}
+		
+		ArrayList<HashMap<String, String>> module_readall = modcat.readAllResources();
+		for (int i = 0; i < module_readall.size(); i++) {
+			module.add("rid="+module_readall.get(i).get("modrid")+" "+module_readall.get(i).get("modname"));
+		}
 
 		ArrayList<Field> moduleFields = new ArrayList<Field>();
 		moduleFields.add(new Field("text", "name", "", 10, "name"));
@@ -4321,6 +4373,8 @@ public class NUserPage {
 		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
 		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
 		Field information_check = new Field("checkBox", "information", information, 20, "information");
+		Field module_check = new Field("checkBox", "module", module, 20, "module");
+
 
 		moduleFields.add(new Field("text", "duration", "", 20, "duration"));
 		moduleFields.add(new Field("text", "description", "", 20, "desc"));
@@ -4329,6 +4383,8 @@ public class NUserPage {
 		moduleFields.add(physical_check);
 		moduleFields.add(information_check);
 		moduleFields.add(maintainers);
+		moduleFields.add(module_check);
+
 
 		final Form moduleForm = new Form(moduleFields, "Module Form");
 		final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
@@ -4353,6 +4409,8 @@ public class NUserPage {
 		final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(5);
 		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(6);
 		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(7);
+		final CheckBoxJPanel checkBoxpane_module = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(8);
+
 
 		submitaddmoduleBtn.addActionListener(new ActionListener() {
 
@@ -4397,6 +4455,9 @@ public class NUserPage {
 				System.out.println(informationvales);
 				final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
 				System.out.println(employeevales);
+				final ArrayList<String> modulevales = checkBoxpane_module.getCheckedValues();
+				System.out.println(modulevales);
+
 				Pattern emp = Pattern.compile("empid=\\d+");
 				for (int i = 0; i < employeevales.size(); i++) {
 					String empids = null;
@@ -4439,6 +4500,17 @@ public class NUserPage {
 						respids = m_res.group();
 					}
 					System.out.println("info rid: " + respids);
+					makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
+
+				}
+
+				for (int i = 0; i < modulevales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(modulevales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("module rid: " + respids);
 					makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
 
 				}
@@ -4666,6 +4738,7 @@ public class NUserPage {
 		final ArrayList<String> financials = new ArrayList<String>();
 		final ArrayList<String> physicals = new ArrayList<String>();
 		final ArrayList<String> information = new ArrayList<String>();
+		final ArrayList<String> module = new ArrayList<String>();
 
 		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
@@ -4685,6 +4758,11 @@ public class NUserPage {
 		for (int i = 0; i < information_readall.size(); i++) {
 			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
 		}
+		
+		ArrayList<HashMap<String, String>> module_readall = modcat.readAllResources();
+		for (int i = 0; i < module_readall.size(); i++) {
+			module.add("rid="+module_readall.get(i).get("modrid")+" "+module_readall.get(i).get("modname"));
+		}
 
 		ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
 		Field change_type = new Field("text", "change type", "", 20, "change type");
@@ -4693,6 +4771,8 @@ public class NUserPage {
 		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
 		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
 		Field information_check = new Field("checkBox", "information", information, 20, "information");
+		Field module_check = new Field("checkBox", "module", module, 20, "module");
+
 
 		maintain_moduleFields.add(change_type);
 		maintain_moduleFields.add(duration);
@@ -4700,6 +4780,7 @@ public class NUserPage {
 		maintain_moduleFields.add(physical_check);
 		maintain_moduleFields.add(information_check);
 		maintain_moduleFields.add(maintainers);
+		maintain_moduleFields.add(module_check);
 
 		final Form maintain_Form = new Form(maintain_moduleFields, "Maintain Module Form");
 		final PanelBuilder maintain_Panel = new PanelBuilder(maintain_Form);
@@ -4720,12 +4801,12 @@ public class NUserPage {
 		Add_MaintainPage.pack();
 		Add_MaintainPage.setVisible(true);
 
-		final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
+		
+		final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(2);
 		final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
-		final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel()
-				.getComponent(2);
-		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel()
-				.getComponent(4);
+		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(4);
+		final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
+		final CheckBoxJPanel checkBoxpane_module = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(6);
 
 		submitmaintainmoduleBtn.addActionListener(new ActionListener() {
 			@Override
@@ -4763,6 +4844,8 @@ public class NUserPage {
 				System.out.println(informationvales);
 				final ArrayList<String> employeevales = checkBoxpane_emp.getCheckedValues();
 				System.out.println(employeevales);
+				final ArrayList<String> modulevales = checkBoxpane_module.getCheckedValues();
+				System.out.println(modulevales);
 				Pattern emp = Pattern.compile("empid=\\d+");
 				for (int i = 0; i < employeevales.size(); i++) {
 					String empids = null;
@@ -4809,6 +4892,16 @@ public class NUserPage {
 					System.out.println("info rid: " + respids);
 					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
 							(int) maintainmodpk);
+
+				}
+				for (int i = 0; i < modulevales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(modulevales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("module rid: " + respids);
+					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),(int) maintainmodpk);
 
 				}
 
@@ -5172,6 +5265,8 @@ public class NUserPage {
 		final ArrayList<String> financials = new ArrayList<String>();
 		final ArrayList<String> physicals = new ArrayList<String>();
 		final ArrayList<String> information = new ArrayList<String>();
+		final ArrayList<String> module = new ArrayList<String>();
+
 
 		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
@@ -5192,6 +5287,11 @@ public class NUserPage {
 			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
 		}
 
+		ArrayList<HashMap<String, String>> module_readall = modcat.readAllResources();
+		for (int i = 0; i < module_readall.size(); i++) {
+			module.add("rid="+module_readall.get(i).get("modrid")+" "+module_readall.get(i).get("modname"));
+		}
+
 		ArrayList<Field> projectFields = new ArrayList<Field>();
 
 		projectFields.add(new Field("text", "project name", "", 20, "name"));
@@ -5207,6 +5307,8 @@ public class NUserPage {
 		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
 		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
 		Field information_check = new Field("checkBox", "information", information, 20, "information");
+		Field module_check = new Field("checkBox", "module", module, 20, "module");
+
 
 		projectFields.add(financial_check);
 		projectFields.add(new Field("text", "financial Date from", "", 20, "financial Date from"));
@@ -5225,6 +5327,10 @@ public class NUserPage {
 		projectFields.add(maintainers);
 		projectFields.add(new Field("text", "employee Date from", "", 20, "employee Date from"));
 		projectFields.add(new Field("text", "employee Date to", "", 20, "employee Date to"));
+
+		projectFields.add(module_check);
+		projectFields.add(new Field("text", "module Date from", "", 20, "module Date from"));
+		projectFields.add(new Field("text", "module Date to", "", 20, "module Date to"));
 
 		
 
@@ -5253,6 +5359,8 @@ public class NUserPage {
 		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) projectForm.getJPanel()
 				.getComponent(11);
 		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) projectForm.getJPanel().getComponent(14);
+		final CheckBoxJPanel checkBoxpane_module = (CheckBoxJPanel) projectForm.getJPanel().getComponent(17);
+
 		final TextJPanel to_finance = (TextJPanel) projectForm.getJPanel().getComponent(6);
 		final TextJPanel from_finance = (TextJPanel) projectForm.getJPanel().getComponent(7);
 		final TextJPanel to_physical = (TextJPanel) projectForm.getJPanel().getComponent(9);
@@ -5261,6 +5369,8 @@ public class NUserPage {
 		final TextJPanel from_info = (TextJPanel) projectForm.getJPanel().getComponent(13);
 		final TextJPanel to_employee = (TextJPanel) projectForm.getJPanel().getComponent(15);
 		final TextJPanel from_employee = (TextJPanel) projectForm.getJPanel().getComponent(16);
+		final TextJPanel to_module = (TextJPanel) projectForm.getJPanel().getComponent(18);
+		final TextJPanel from_module = (TextJPanel) projectForm.getJPanel().getComponent(19);
 
 		
 		JTextField todate_finance = to_finance.getTextField();
@@ -5271,6 +5381,8 @@ public class NUserPage {
 		JTextField fromdate_info = from_info.getTextField();
 		JTextField todate_employee = to_employee.getTextField();
 		JTextField fromdate_employee = from_employee.getTextField();
+		JTextField todate_module = to_module.getTextField();
+		JTextField fromdate_module = from_module.getTextField();
 		todate_finance.setToolTipText("Enter Date in this format: YYYY-MM-DD");
 		fromdate_finance.setToolTipText("Enter Date in this format: YYYY-MM-DD");
 		todate_physical.setToolTipText("Enter Date in this format: YYYY-MM-DD");
@@ -5278,7 +5390,9 @@ public class NUserPage {
 		todate_info.setToolTipText("Enter Date in this format: YYYY-MM-DD");
 		fromdate_info.setToolTipText("Enter Date in this format: YYYY-MM-DD");
 		todate_employee.setToolTipText("Enter Date in this format: YYYY-MM-DD");
-		from_employee.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		fromdate_employee.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		todate_module.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		fromdate_module.setToolTipText("Enter Date in this format: YYYY-MM-DD");
 		
 		
 		employees_comboBox.addActionListener(new ActionListener() {
@@ -5339,6 +5453,9 @@ public class NUserPage {
 				System.out.println(informationvales);
 				final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
 				System.out.println(employeevales);
+				final ArrayList<String> modulevales = checkBoxpane_module.getCheckedValues();
+				System.out.println(modulevales);
+
 				Pattern emp = Pattern.compile("empid=\\d+");
 				for (int i = 0; i < employeevales.size(); i++) {
 					String empids = null;
@@ -5386,6 +5503,18 @@ public class NUserPage {
 					System.out.println("info rid: " + respids);
 					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
 							(int) projid, inputs.get(12), inputs.get(13));
+				}
+				
+				
+				for (int i = 0; i < modulevales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(modulevales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("mod rid: " + respids);
+					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+							(int) projid, inputs.get(18), inputs.get(19));
 				}
 
 			}
