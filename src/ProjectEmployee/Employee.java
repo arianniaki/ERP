@@ -210,4 +210,27 @@ public class Employee {
 	public void setAccessRight(AccessRight accessRight) {
 		this.accessRight = accessRight;
 	}
+
+	public void accept() {
+		ResourceCatalogue resCat = new ResourceCatalogue();
+		int rid = (int) resCat.addResource(this.name,6);
+
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("is_confirmed", "true");
+		setVars.put("sid", Integer.toString(6));
+		setVars.put("rid", Integer.toString(rid));
+		setVars.put("accessrightid", Integer.toString(1));
+		HashMap<String, String> condVars = new HashMap<String, String>();
+		condVars.put("empid", Integer.toString(this.id));
+		DB.update(condVars, setVars, "Employee");
+
+		
+	}
+
+	public void reject() {
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("empid", Integer.toString(this.id));
+		DB.delete(vars, "Employee");
+	}
+
 }

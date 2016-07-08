@@ -109,7 +109,6 @@ public class Table {
 				}else if (col.type.equals("boolean")){
 					val.put(col.name, Boolean.toString(rs.getBoolean(col.name)));
 				}
-
 			}
 			result.add(val);		
 		}

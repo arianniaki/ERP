@@ -25,26 +25,11 @@ public class EmployeeCatalogue {
 		return employeeCat;
 	}
 	public void makeDecision(int empid, boolean decision) {
-
-		if (decision) {
-			ResourceCatalogue resCat = new ResourceCatalogue();
-			String empname = getEmployee(empid).getName();
-			int rid = (int) resCat.addResource(empname,6);
-
-			HashMap<String, String> setVars = new HashMap<String, String>();
-			setVars.put("is_confirmed", "true");
-			setVars.put("sid", Integer.toString(6));
-			setVars.put("rid", Integer.toString(rid));
-			setVars.put("accessrightid", Integer.toString(1));
-			HashMap<String, String> condVars = new HashMap<String, String>();
-			condVars.put("empid", Integer.toString(empid));
-			DB.update(condVars, setVars, tablename);
-
-		} else {
-			HashMap<String, String> vars = new HashMap<String, String>();
-			vars.put("empid", Integer.toString(empid));
-			DB.delete(vars, tablename);
-		}
+		Employee emp = getEmployee(empid);
+		if (decision) 
+			emp.accept();	
+		else
+			emp.reject();
 	}
 
 	public ArrayList<HashMap<String, String>> getRegistrations() {
@@ -92,12 +77,11 @@ public class EmployeeCatalogue {
 
 	public void deleteEmployee(int id) {
 		ResourceCatalogue resCat = new ResourceCatalogue();
-		EmployeeCatalogue empCat = new EmployeeCatalogue();
 
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empid", Integer.toString(id));
 		DB.delete(vars, tablename);
-		resCat.deleteResource(empCat.getEmployee(id).getResId());
+		resCat.deleteResource(this.getEmployee(id).getResId());
 
 	}
 

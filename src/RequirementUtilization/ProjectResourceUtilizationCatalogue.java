@@ -100,8 +100,6 @@ public class ProjectResourceUtilizationCatalogue {
 			ProjResUtil.add(pru);
 		}
 		return ProjResUtil;
-
-
 	}
 
 	

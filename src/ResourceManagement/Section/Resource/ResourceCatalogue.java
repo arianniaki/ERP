@@ -9,9 +9,11 @@ import DataBase.Column;
 import DataBase.DataBase;
 import DataBase.Table;
 import Report.Report;
+import ResourceManagement.Section.SectionCatalogue;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
+import ProjectEmployee.ProjectCatalogue;
 
 public class ResourceCatalogue {
 	DataBase DB;
@@ -54,15 +56,17 @@ public class ResourceCatalogue {
 		Report rep = new Report();
 		Table table = new Table(tableName+"section");
 		ArrayList<HashMap<String,String>> results = table.getReportTable();
-		rep.setResults(results);
 		for(int i=0; i<results.size(); i++){
 			String line="";
+			SectionCatalogue secCat = SectionCatalogue.getInstance();
+			results.get(i).put("sname", ""+secCat.getSection(Integer.valueOf(results.get(i).get("sid"))).getName());
 			for(String key : results.get(i).keySet()){
 				line+= results.get(i).get(key).toString()+", ";
 			}
 			line = line.substring(0, line.length() - 2);
 			rep.addLine(line);
 		}
+		rep.setResults(results);
 		return rep;
 	}
 
