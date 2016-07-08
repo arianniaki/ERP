@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
+import DataBase.DataBase;
 import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
@@ -143,7 +144,6 @@ public class NLoginPage {
 			public void actionPerformed(ActionEvent e) {
 
 				ArrayList<Field> signupFields = new ArrayList<Field>();
-				signupFields.add(new Field("text", "email", "", 10, "email"));
 				signupFields.add(new Field("text", "username", "", 10, "username"));
 				signupFields.add(new Field("text", "name", "", 10, "name"));
 
@@ -159,13 +159,13 @@ public class NLoginPage {
 
 				SignupPage.getContentPane().add(signupForm.getJPanel(), BorderLayout.NORTH);
 
-				JButton submit = new JButton("Submit");
+				JButton confirm = new JButton("Confirm");
 				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submit);
+				buttonPanel.add(confirm);
 				SignupPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 				SignupPage.pack();
 				SignupPage.setVisible(true);
-				submit.addActionListener(new ActionListener() {
+				confirm.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
@@ -178,16 +178,34 @@ public class NLoginPage {
 							System.out.println(inputs.get(i) + "adasa");
 						}
 						EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
-						// ++section e default mikhaim ke badan avaz she
-						Employee added_emp= empcat.addEmployee(inputs.get(2)+""+inputs.get(3), "Default post", 1, inputs.get(1), inputs.get(4), false, false);
-						if (added_emp == null) {
+
+						if((inputs.get(0).isEmpty()) || (inputs.get(1).isEmpty()) ||(inputs.get(2).isEmpty()) ||(inputs.get(3).isEmpty()) ||(inputs.get(4).isEmpty())){
+							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+									"Please fill all of the required data");
+
+						}
+						else{
+						if(!(inputs.get(3).equals(inputs.get(4)))){
+							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+									"Passwords do not match.");
+						}
+						else
+						{
+						Employee new_emp= empcat.signUp(inputs.get(1)+" "+inputs.get(2), "Default post", inputs.get(0), inputs.get(3), false);
+						if (new_emp == null) {
 							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
 									"Username is already taken!");
-						} else {
+							DataBase.getInstance().connectionClose();
+							DataBase.getInstance().setConnection();
+
+						} 
+							else{
 							System.out.println("Employee added");
 							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
 									"You have been successfully signed up!");
+							}
 						}
+					}
 					}
 				});
 			}

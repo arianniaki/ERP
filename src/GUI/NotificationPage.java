@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 public class NotificationPage extends JDialog implements ActionListener {
+	private JButton button;
   public NotificationPage(JFrame parent, String title, String message) {
     super(parent, title, true);
     if (parent != null) {
@@ -22,7 +23,7 @@ public class NotificationPage extends JDialog implements ActionListener {
     messagePane.add(new JLabel(message));
     getContentPane().add(messagePane);
     JPanel buttonPane = new JPanel();
-    JButton button = new JButton("OK"); 
+    button= new JButton("OK"); 
     buttonPane.add(button); 
     button.addActionListener(this);
     getContentPane().add(buttonPane, BorderLayout.SOUTH);

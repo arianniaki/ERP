@@ -5,7 +5,6 @@ import java.util.HashMap;
 public class PhysicalResource extends Resource{
 
 	String modeldesc;
-	String description;
 	
 	public PhysicalResource(){
 		super();

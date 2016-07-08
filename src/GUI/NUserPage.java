@@ -32,6 +32,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
+import DataBase.DataBase;
 import GUI.Form.CheckBoxJPanel;
 import GUI.Form.ComboBoxJPanel;
 import GUI.Form.Field;
@@ -39,6 +40,7 @@ import GUI.Form.FieldPanel;
 import GUI.Form.Form;
 import GUI.Form.PanelBuilder;
 import GUI.Form.SingleCheckBoxJPanel;
+import GUI.Form.TextJPanel;
 import ProjectEmployee.AuthenticatedEmployee;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
@@ -52,6 +54,7 @@ import RequirementUtilization.ProjectResourceUtilizationCatalogue;
 import RequirementUtilization.ResourceRequirement;
 import RequirementUtilization.ResourceRequirementCatalogue;
 import ResourceManagement.Section.SectionCatalogue;
+import ResourceManagement.Section.Resource.FinancialResource;
 import ResourceManagement.Section.Resource.FinancialResourceCatalogue;
 import ResourceManagement.Section.Resource.InformationResource;
 import ResourceManagement.Section.Resource.InformationResourceCatalogue;
@@ -61,6 +64,8 @@ import ResourceManagement.Section.Resource.MaintainingModuleCatalogue;
 import ResourceManagement.Section.Resource.MakeModuleCatalogue;
 import ResourceManagement.Section.Resource.Module;
 import ResourceManagement.Section.Resource.ModuleCatalogue;
+import ResourceManagement.Section.Resource.ModuleResourceUtilization;
+import ResourceManagement.Section.Resource.PhysicalResource;
 import ResourceManagement.Section.Resource.PhysicalResourceCatalogue;
 import ResourceManagement.Section.Resource.Resource;
 import ResourceManagement.Section.Resource.ResourceCatalogue;
@@ -101,15 +106,6 @@ public class NUserPage {
 
 	private JFrame userpageFrame;
 	private JTextField editname_textField;
-	private ArrayList<HashMap<String, String>> allmodules;
-	private ArrayList<HashMap<String, String>> allphysicals;
-	private ArrayList<HashMap<String, String>> allfinance;
-	private ArrayList<HashMap<String, String>> allinformation;
-	private ArrayList<HashMap<String, String>> allres;
-	private ArrayList<HashMap<String, String>> allprojects;
-	private ArrayList<HashMap<String, String>> allemployees;
-	private ArrayList<HashMap<String, String>> allsubsystems;
-	private ArrayList<HashMap<String, String>> allregisteredusers;
 
 	private TableData resrequirement_tabledata;
 	private TableData accessright_tabledata;
@@ -122,7 +118,7 @@ public class NUserPage {
 	private TableData human_tabledata;
 	private TableData allresource_tabledata;
 	private TableData maintaining_tabledata;
-	private TableData resreq_tabledata;
+	private TableData resreqreport_tabledata;
 	private TableData circulation_tabledata;
 	private TableData employeecirculation_tabledata;
 
@@ -131,6 +127,8 @@ public class NUserPage {
 	private TableData resourceutil_tabledata;
 	private TableData moduledetail_tabledata;
 	private  TableData moduledetailemployee_tabledata;
+	private TableData maintainingdetail_tabledata;
+	private TableData maintainingdetailemployee_tabledata;
 
 	private int selected_project_forsubsystem;
 	private int selected_accessright_forassignment;
@@ -145,7 +143,7 @@ public class NUserPage {
 	private JTextField search_physicalname;
 	private JTextField search_projectname;
 
-	private JTextField search_maintainingname;
+	private JTextField search_maintainingchangetype;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_re;
 	private JTextField search_projectmanager;
@@ -159,7 +157,7 @@ public class NUserPage {
 	private JTextField search_physicalmodel;
 	private JTextField search_subsystemname;
 	private JTextField search_accessrightname;
-	private JTextField search_resourcename;
+	private JTextField search_utilresourcename;
 	private JTextField search_reqresourcename;
 	private JTextField search_regemployeename;
 	
@@ -180,6 +178,10 @@ public class NUserPage {
 	private MaintainModEmpResCatalogue maintainmodempresCat;
 	private JTextField search_reqprojectname;
 	private JTextField search_reqsectionname;
+	private JTextField accessright_textField;
+	private JTextField post_textField;
+	private JTextField search_utilprojectname;
+	private JTextField search_utilsectionname;
 	/**
 	 * Launch the application.
 	 */
@@ -216,6 +218,7 @@ public class NUserPage {
 		modcat = new ModuleCatalogue();
 		maintainmodulecat= new MaintainingModuleCatalogue();
 		projempcat = ProjectEmployeeCatalogue.getInstance();
+		maintainmodempresCat= new MaintainModEmpResCatalogue();
 		initialize();
 	}
 
@@ -272,12 +275,40 @@ public class NUserPage {
 				}
 			}
 		});
+		
+		JLabel lblAccessRight = DefaultComponentFactory.getInstance().createLabel("Access Right");
+		
+		JLabel lblPost_1 = DefaultComponentFactory.getInstance().createLabel("Post");
+		
+		accessright_textField = new JTextField();
+		
+		accessright_textField.setText(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName());
+
+		accessright_textField.setColumns(10);
+		accessright_textField.setEditable(false);
+		
+		post_textField = new JTextField();
+		post_textField.setColumns(10);
+		post_textField.setText(AuthenticatedEmployee.getInstance().getEmployee().getPost());
+		post_textField.setEditable(false);
+
+
 
 		GroupLayout gl_editPanel = new GroupLayout(editPanel);
 		gl_editPanel.setHorizontalGroup(
 			gl_editPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_editPanel.createSequentialGroup()
-					.addContainerGap(538, Short.MAX_VALUE)
+					.addContainerGap(165, Short.MAX_VALUE)
+					.addGroup(gl_editPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_editPanel.createSequentialGroup()
+							.addComponent(accessright_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(lblAccessRight))
+						.addGroup(gl_editPanel.createSequentialGroup()
+							.addComponent(post_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblPost_1)))
+					.addGap(140)
 					.addGroup(gl_editPanel.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(passwordField)
 						.addComponent(editname_textField)
@@ -296,12 +327,17 @@ public class NUserPage {
 				.addGroup(gl_editPanel.createSequentialGroup()
 					.addGap(94)
 					.addGroup(gl_editPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(editname_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblAccessRight)
+							.addComponent(accessright_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(lblName))
 					.addGap(26)
 					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(password)
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPost_1)
+						.addComponent(post_textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(31)
 					.addGroup(gl_editPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblRepassword)
@@ -459,14 +495,9 @@ public class NUserPage {
 		JButton subsystem_btnSearch = new JButton("Search");
 		subsystem_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				HashMap<String, String> searchVars = new HashMap<String, String>();
-				searchVars.put("sname", "\'" + search_subsystemname.getText() + "\'");
-				if (subsyscat.searchSubsystem(searchVars).isEmpty()) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-				} else {
-					subsystem_tabledata.update(subsyscat.searchSubsystem(searchVars));
-				}
+				searchSubsystem();
 			}
+
 		});
 		
 		JButton subsystem_btnRefresh = new JButton("Refresh");
@@ -581,43 +612,84 @@ public class NUserPage {
 		JLabel lblResourceName = DefaultComponentFactory.getInstance().createLabel("Resource Name");
 
 		JButton resutil_btnSearch = new JButton("Search");
+		resutil_btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				searchResourceUtilization();
+			}
 
-		search_resourcename = new JTextField();
-		search_resourcename.setColumns(10);
+		
+		});
+
+		search_utilresourcename = new JTextField();
+		search_utilresourcename.setColumns(10);
+		
+		JLabel lblProjectName_2 = DefaultComponentFactory.getInstance().createLabel("Project Name");
+		
+		search_utilprojectname = new JTextField();
+		search_utilprojectname.setColumns(10);
+		
+		JLabel lblSectionName_1 = DefaultComponentFactory.getInstance().createLabel("Section Name");
+		
+		search_utilsectionname = new JTextField();
+		search_utilsectionname.setColumns(10);
 
 		GroupLayout gl_resourceutilpanel = new GroupLayout(resourceutilpanel);
-		gl_resourceutilpanel
-				.setHorizontalGroup(
-						gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(
-										gl_resourceutilpanel.createSequentialGroup().addGap(40)
-												.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
-														Short.MAX_VALUE)
-												.addGap(40))
-								.addGroup(gl_resourceutilpanel.createSequentialGroup().addComponent(presutil_btnEdit)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(presutil_btnDelete)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(utilbtnBacktoProject)
-										.addPreferredGap(ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
-										.addComponent(btnAddResourceUtilization))
-								.addGroup(gl_resourceutilpanel.createSequentialGroup()
-										.addContainerGap(503, Short.MAX_VALUE).addComponent(resutil_btnSearch)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(search_resourcename, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblResourceName)
-										.addContainerGap()));
-		gl_resourceutilpanel.setVerticalGroup(gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_resourceutilpanel.createSequentialGroup().addGap(12)
-						.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblResourceName).addComponent(resutil_btnSearch).addComponent(
-										search_resourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(40)
-						.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
-						.addGap(40)
-						.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(utilbtnBacktoProject).addComponent(btnAddResourceUtilization)
-								.addComponent(presutil_btnEdit).addComponent(presutil_btnDelete))));
+		gl_resourceutilpanel.setHorizontalGroup(
+			gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addComponent(presutil_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(presutil_btnDelete)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(utilbtnBacktoProject)
+					.addPreferredGap(ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
+					.addComponent(btnAddResourceUtilization))
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addContainerGap(271, Short.MAX_VALUE)
+					.addComponent(resutil_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_utilsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblSectionName_1)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(Alignment.TRAILING, gl_resourceutilpanel.createSequentialGroup()
+							.addComponent(search_utilprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblProjectName_2))
+						.addGroup(Alignment.TRAILING, gl_resourceutilpanel.createSequentialGroup()
+							.addComponent(search_utilresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblResourceName)))
+					.addContainerGap())
+		);
+		gl_resourceutilpanel.setVerticalGroup(
+			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(12)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(resutil_btnSearch)
+						.addComponent(search_utilresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSectionName_1)
+						.addComponent(search_utilsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblResourceName))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblProjectName_2)
+						.addComponent(search_utilprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+					.addGap(40)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(utilbtnBacktoProject)
+						.addComponent(btnAddResourceUtilization)
+						.addComponent(presutil_btnEdit)
+						.addComponent(presutil_btnDelete)))
+		);
 
 		resourceutil_tabledata = new TableData(presutilcat);
 		resourceutil_scrollPane.setViewportView(resourceutil_tabledata.getJdataTable());
@@ -685,6 +757,22 @@ public class NUserPage {
 		
 		search_reqsectionname = new JTextField();
 		search_reqsectionname.setColumns(10);
+		
+		JButton resreq_btnRefresh = new JButton("Refresh");
+		resreq_btnRefresh.setIcon(new ImageIcon(
+				new ImageIcon("images/refresh.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		resreq_btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<ResourceRequirement> allresourcerequirements;
+				allresourcerequirements = resreqcat.getResourceRequirements();
+				for (int i = 0; i < allresourcerequirements.size(); i++) {
+					data.add((allresourcerequirements.get(i).toHashMap()));
+				}
+				resrequirement_tabledata.update(data);
+			}
+		});
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
 		gl_requirementPanel.setHorizontalGroup(
 			gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
@@ -701,19 +789,21 @@ public class NUserPage {
 					.addPreferredGap(ComponentPlacement.RELATED, 580, Short.MAX_VALUE)
 					.addComponent(addreqBtn))
 				.addGroup(gl_requirementPanel.createSequentialGroup()
-					.addContainerGap(371, Short.MAX_VALUE)
+					.addContainerGap()
+					.addComponent(resreq_btnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
 					.addComponent(searchreqBtn)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(search_reqsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblSectionName)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(Alignment.TRAILING, gl_requirementPanel.createSequentialGroup()
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_requirementPanel.createSequentialGroup()
 							.addComponent(search_reqprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(lblProjectName_1))
-						.addGroup(Alignment.TRAILING, gl_requirementPanel.createSequentialGroup()
+						.addGroup(gl_requirementPanel.createSequentialGroup()
 							.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(lblResourceName_1)))
@@ -728,7 +818,8 @@ public class NUserPage {
 						.addComponent(lblResourceName_1)
 						.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblSectionName)
-						.addComponent(search_reqsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(search_reqsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(resreq_btnRefresh))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblProjectName_1)
@@ -749,14 +840,7 @@ public class NUserPage {
 		requirementPanel.setLayout(gl_requirementPanel);
 		searchreqBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// ResourceRequirementCatalogue resreqcat = new
-				// ResourceRequirementCatalogue();
-				// HashMap<String, String> searchVars = new HashMap<String,
-				// String>();
-				// searchVars.put("irname", "\'" +
-				// search_reqresourcename.getText() + "\'");
-				// information_tabledata.update(resreqcat.SearchResource(searchVars));
-
+				searchRequirement();
 			}
 		});
 
@@ -777,7 +861,6 @@ public class NUserPage {
 		// get human list
 
 		System.out.println("all : ");
-		allemployees = empcat.readAllEmployees();
 
 		human_tabledata = new TableData(empcat, "human");
 
@@ -887,7 +970,6 @@ public class NUserPage {
 		// get financial list
 
 		System.out.println("all : ");
-		allfinance = financat.readAllResources();
 
 		// end get financial list
 
@@ -904,10 +986,7 @@ public class NUserPage {
 		financial_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				editFinancialResource();
-
 			}
-
-		
 		});
 
 		JScrollPane financial_table_scrollPane = new JScrollPane();
@@ -923,8 +1002,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				deleteFinancialResource();
 			}
-
-			
 		});
 
 		search_financialname = new JTextField();
@@ -934,9 +1011,7 @@ public class NUserPage {
 		financial_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				searchFinancialResource();
-
 			}
-			
 		});
 
 		JLabel lblFinancialName = DefaultComponentFactory.getInstance().createLabel("Financial Name");
@@ -948,8 +1023,6 @@ public class NUserPage {
 		search_financialbtnRefresh.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				allfinance.clear();
-				allfinance = financat.readAllResources();
 				financial_tabledata.update(financat.readAllResources());
 			}
 		});
@@ -1029,8 +1102,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				addFinancialResource();
 			}
-
-			
 		});
 
 		final JPanel modulePanel = new JPanel();
@@ -1038,23 +1109,24 @@ public class NUserPage {
 
 		// get module list
 		System.out.println("all : ");
-		allmodules = modcat.readAllResources();
 
 		final JPanel moduledetailpanel = new JPanel();
 		resourcesTab.addTab("Module Detail", null, moduledetailpanel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
 
-		moduledetail_tabledata = new TableData(new MakeModuleCatalogue(),"Resource",selected_module);
+		moduledetail_tabledata = new TableData(new MakeModuleCatalogue(),"Resource");
 		JScrollPane module_detail_scrollPane = new JScrollPane();
 		module_detail_scrollPane.setViewportView(moduledetail_tabledata.getJdataTable());
 
-		
-		JButton moduledetail_btnEdit = new JButton("Edit");
-		moduledetail_btnEdit.setIcon(new ImageIcon(
-				new ImageIcon("images/edit.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+		JButton moduledetailemployee_btnDelete = new JButton("Delete");
+		moduledetailemployee_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteModuleEmployee();
+			}
 
-		JButton moduledetail_btnDelete = new JButton("Delete");
-		moduledetail_btnDelete.setIcon(new ImageIcon(
+			
+		});
+		moduledetailemployee_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
 		JButton moduledetail_btnBack = new JButton("Back");
@@ -1077,40 +1149,68 @@ public class NUserPage {
 		
 		
 		JScrollPane module_detailemployee_scrollPane = new JScrollPane();
-		moduledetailemployee_tabledata = new TableData(makemodulecat, "Employee",selected_module);
+		moduledetailemployee_tabledata = new TableData(makemodulecat, "Employee");
 		module_detailemployee_scrollPane.setViewportView(moduledetailemployee_tabledata.getJdataTable());
+		
+		JButton btnAddModuleUtilization = new JButton("Add Module Utilization");
+		btnAddModuleUtilization.setIcon(new ImageIcon(
+				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		btnAddModuleUtilization.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addModuleUtilization();
+			}
+
+		});
+		
+		JButton moduledetail_btnDelete = new JButton("Delete");
+		moduledetail_btnDelete.setIcon(new ImageIcon(
+				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		moduledetail_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteModuleResource();
+			}
+		});
 
 
 
 		GroupLayout gl_moduledetailpanel = new GroupLayout(moduledetailpanel);
 		gl_moduledetailpanel.setHorizontalGroup(
-			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
+			gl_moduledetailpanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
-					.addComponent(moduledetail_btnEdit)
-					.addGap(30)
-					.addComponent(moduledetail_btnDelete)
+					.addContainerGap()
+					.addComponent(moduledetailemployee_btnDelete)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(moduledetail_btnBack)
-					.addContainerGap(635, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
+					.addComponent(btnAddModuleUtilization)
+					.addContainerGap())
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
 					.addGap(30)
-					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(module_detailemployee_scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
-						.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
+					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(module_detail_scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+						.addComponent(module_detailemployee_scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
 					.addGap(30))
+				.addGroup(Alignment.LEADING, gl_moduledetailpanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(moduledetail_btnDelete)
+					.addContainerGap(741, Short.MAX_VALUE))
 		);
 		gl_moduledetailpanel.setVerticalGroup(
 			gl_moduledetailpanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_moduledetailpanel.createSequentialGroup()
-					.addGap(20)
-					.addComponent(module_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
 					.addGap(30)
-					.addComponent(module_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+					.addComponent(module_detail_scrollPane, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
+					.addGap(8)
+					.addComponent(moduledetail_btnDelete)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(module_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
 					.addGap(30)
 					.addGroup(gl_moduledetailpanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(moduledetail_btnEdit)
-						.addComponent(moduledetail_btnDelete)
-						.addComponent(moduledetail_btnBack))
+						.addComponent(moduledetailemployee_btnDelete)
+						.addComponent(moduledetail_btnBack)
+						.addComponent(btnAddModuleUtilization))
 					.addContainerGap())
 		);
 		moduledetailpanel.setLayout(gl_moduledetailpanel);
@@ -1124,8 +1224,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				addModule();
 			}
-
-			
 		});
 
 		JScrollPane module_scrollPane = new JScrollPane();
@@ -1214,8 +1312,6 @@ public class NUserPage {
 		search_modulebtnRefresh.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				allmodules.clear();
-				allmodules = modcat.readAllResources();
 				module_tabledata.update(modcat.readAllResources());
 			}
 		});
@@ -1333,7 +1429,6 @@ public class NUserPage {
 		// get phys res list
 
 		System.out.println("all : ");
-		allphysicals = physcat.readAllResources();
 
 		resourcesTab.addTab("Maintaining Module", null, maintaining_panel, null);
 		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
@@ -1388,57 +1483,233 @@ public class NUserPage {
 			}
 		});
 
-		JButton btnSearch = new JButton("Search");
+		final JPanel maintainingdetailpanel = new JPanel();
+		resourcesTab.addTab("Maintaining Detail", null, maintainingdetailpanel, null);
+		resourcesTab.remove(resourcesTab.getTabCount() - 1); // remove
 
-		search_maintainingname = new JTextField();
-		search_maintainingname.setColumns(10);
+
+		
+		JButton search_maintaining = new JButton("Search");
+		search_maintaining.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				searchMaintaining();
+			}
+
+			
+		});
+
+		search_maintainingchangetype = new JTextField();
+		search_maintainingchangetype.setColumns(10);
 
 		JButton search_maintainingbtnRefresh = new JButton("Refresh");
 		search_maintainingbtnRefresh.setIcon(new ImageIcon(
 				new ImageIcon("images/refresh.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+		
+		JButton btnViewMaintainingDetail = new JButton("View Maintaining Detail");
+		btnViewMaintainingDetail.setIcon(new ImageIcon(
+				new ImageIcon("images/view.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		btnViewMaintainingDetail.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				System.out.println("-----");
+				int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
+				int colIndex = maintaining_tabledata.getJdataTable().getSelectedColumn();
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a maintaining!");
+				} else {
+
+					String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // return
+					selected_maintaining_module = Integer.parseInt(Table_click.trim());
+
+					System.out.println(Table_click);
+					System.out.println("---matinainig id-- " + selected_maintaining_module);
+					System.out.println("Change JPanel");
+					
+					ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+					ArrayList<Employee> allemp;
+					allemp = maintainmodempresCat.getEmployees(selected_maintaining_module);
+					for (int i = 0; i < allemp.size(); i++) {
+						HashMap<String,String> emps = new HashMap<String,String>();
+						emps.put("empid", allemp.get(i).getId()+"");
+						emps.put("empname", allemp.get(i).getName());
+						data.add(emps);
+					}
+					System.out.println(data+" DATA");
+					ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+					ArrayList<Resource> allres;
+					allres = maintainmodempresCat.getResources(selected_maintaining_module);
+					for (int i = 0; i < allres.size(); i++) {
+						HashMap<String,String> ress = new HashMap<String,String>();
+						ress.put("rid", allres.get(i).getId()+"");
+						ress.put("rname", allres.get(i).getName());
+						resdata.add(ress);
+					}
+					System.out.println(resdata+" RESDATA");
+					
+					maintainingdetail_tabledata.update(resdata);
+					maintainingdetailemployee_tabledata.update(data);
+					
+					int selected_index = resourcesTab.getSelectedIndex();
+					resourcesTab.remove(selected_index);
+					resourcesTab.insertTab("Maintaining Detail", null, maintainingdetailpanel, null, selected_index);
+					resourcesTab.setSelectedComponent(maintainingdetailpanel);				}
+				
+			}
+		});
+		
+		JLabel lblChangeType = DefaultComponentFactory.getInstance().createLabel("Change Type");
 
 		GroupLayout gl_maintaining_panel = new GroupLayout(maintaining_panel);
-		gl_maintaining_panel
-				.setHorizontalGroup(
-						gl_maintaining_panel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_maintaining_panel.createSequentialGroup().addGap(30)
-										.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
-												Short.MAX_VALUE)
-										.addGap(30))
-								.addGroup(Alignment.LEADING, gl_maintaining_panel.createSequentialGroup()
-										.addComponent(maintaining_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnBacktoModule)
-										.addPreferredGap(ComponentPlacement.RELATED, 447, Short.MAX_VALUE)
-										.addComponent(btnAddMaintaining, GroupLayout.PREFERRED_SIZE, 147,
-												GroupLayout.PREFERRED_SIZE))
-								.addGroup(
-										gl_maintaining_panel.createSequentialGroup()
-												.addComponent(search_maintainingbtnRefresh)
-												.addPreferredGap(ComponentPlacement.RELATED, 382, Short.MAX_VALUE)
-												.addComponent(btnSearch).addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(132)));
-		gl_maintaining_panel.setVerticalGroup(gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_maintaining_panel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE).addComponent(btnSearch)
-								.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(search_maintainingbtnRefresh))
-						.addGap(30).addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnAddMaintaining).addComponent(maintaining_btnEdit)
-								.addComponent(maintaining_btnDelete).addComponent(btnBacktoModule))
-						.addContainerGap()));
+		gl_maintaining_panel.setHorizontalGroup(
+			gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addComponent(maintaining_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnBacktoModule)
+					.addPreferredGap(ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
+					.addComponent(btnViewMaintainingDetail)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnAddMaintaining, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addComponent(search_maintainingbtnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 421, Short.MAX_VALUE)
+					.addComponent(search_maintaining)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_maintainingchangetype, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblChangeType)
+					.addContainerGap())
+		);
+		gl_maintaining_panel.setVerticalGroup(
+			gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_maintaining_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(search_maintainingchangetype, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(search_maintainingbtnRefresh)
+						.addComponent(lblChangeType)
+						.addComponent(search_maintaining))
+					.addGap(30)
+					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnAddMaintaining)
+						.addComponent(maintaining_btnEdit)
+						.addComponent(maintaining_btnDelete)
+						.addComponent(btnBacktoModule)
+						.addComponent(btnViewMaintainingDetail))
+					.addContainerGap())
+		);
 
 		maintaining_tabledata = new TableData(maintainmodulecat, selected_module);
 		maintaining_scrollPane.setViewportView(maintaining_tabledata.getJdataTable());
 		maintaining_panel.setLayout(gl_maintaining_panel);
+		
+		JButton maintainingdetail_btnBack = new JButton("Back");
+		maintainingdetail_btnBack.setIcon(new ImageIcon(
+				new ImageIcon("images/back.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		maintainingdetail_btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("change tab to maintaining");
+				System.out.println("Change JPanel");
+				int selected_index = resourcesTab.getSelectedIndex();
+				resourcesTab.remove(selected_index);
+				resourcesTab.insertTab("Maintaining", null, maintaining_panel, null, selected_index);
+				resourcesTab.setSelectedComponent(maintaining_panel);
+			}
+		});
+		
+		maintainingdetail_tabledata = new TableData(maintainmodempresCat,"Resource");
+		JScrollPane maintaining_detail_scrollPane = new JScrollPane();
+		maintaining_detail_scrollPane.setViewportView(maintainingdetail_tabledata.getJdataTable());
+
+		maintainingdetailemployee_tabledata = new TableData(maintainmodempresCat, "Employee");
+		JScrollPane maintaining_detailemployee_scrollPane = new JScrollPane();
+		maintaining_detailemployee_scrollPane.setViewportView(maintainingdetailemployee_tabledata.getJdataTable());
+		
+		JButton maintainingdetailemployee_btnDelete = new JButton("Delete");
+		maintainingdetailemployee_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteMaintainingEmployee();
+			}
+
+			
+		});
+		maintainingdetailemployee_btnDelete.setIcon(new ImageIcon(
+				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		
+		JButton maintainingdetail_btnDelete = new JButton("Delete");
+		maintainingdetail_btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteMaintainingResource();
+			}
+
+			
+		});
+		maintainingdetail_btnDelete.setIcon(new ImageIcon(
+				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+		
+		JButton btnAddMaintainingUtilization = new JButton("Add Maintaining Utilization");
+		btnAddMaintainingUtilization.setIcon(new ImageIcon(
+				new ImageIcon("images/add.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+
+		btnAddMaintainingUtilization.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addMaintainingUtilization();
+			}
+		});
+
+		GroupLayout gl_maintainingdetailpanel = new GroupLayout(maintainingdetailpanel);
+		gl_maintainingdetailpanel.setHorizontalGroup(
+			gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+					.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(maintainingdetail_btnDelete))
+						.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(maintainingdetailemployee_btnDelete)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(maintainingdetail_btnBack)
+							.addPreferredGap(ComponentPlacement.RELATED, 529, Short.MAX_VALUE)
+							.addComponent(btnAddMaintainingUtilization))
+						.addGroup(Alignment.TRAILING, gl_maintainingdetailpanel.createSequentialGroup()
+							.addGap(30)
+							.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(maintaining_detail_scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+								.addComponent(maintaining_detailemployee_scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE))
+							.addGap(30)))
+					.addContainerGap())
+		);
+		gl_maintainingdetailpanel.setVerticalGroup(
+			gl_maintainingdetailpanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_maintainingdetailpanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(maintaining_detail_scrollPane, GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+					.addGap(10)
+					.addComponent(maintainingdetail_btnDelete)
+					.addGap(10)
+					.addComponent(maintaining_detailemployee_scrollPane, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+					.addGap(30)
+					.addGroup(gl_maintainingdetailpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(maintainingdetailemployee_btnDelete)
+						.addComponent(maintainingdetail_btnBack)
+						.addComponent(btnAddMaintainingUtilization, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		maintainingdetailpanel.setLayout(gl_maintainingdetailpanel);
 
 		JPanel humanPanel = new JPanel();
 		resourcesTab.addTab("Human", null, humanPanel, null);
@@ -1461,7 +1732,6 @@ public class NUserPage {
 
 		human_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				deleteHumanResource();
 			}
 		});
@@ -1474,8 +1744,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				searchHumanResource();
 			}
-
-			
 		});
 
 		JLabel lblHumanName = DefaultComponentFactory.getInstance().createLabel("Human name");
@@ -1486,9 +1754,7 @@ public class NUserPage {
 
 		search_humanbtnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				allemployees.clear();
 				human_tabledata.update(empcat.readAllEmployees());
-
 			}
 		});
 
@@ -1508,9 +1774,7 @@ public class NUserPage {
 
 		human_btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				addHumanResource();
-
 			}
 		});
 		GroupLayout gl_humanPanel = new GroupLayout(humanPanel);
@@ -1584,7 +1848,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				addPhysicalResource();
 			}
-
 		});
 
 		JScrollPane physical_scrollPane = new JScrollPane();
@@ -1629,9 +1892,6 @@ public class NUserPage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				allphysicals.clear();
-				allphysicals = physcat.readAllResources();
-
 				physical_tabledata.update(physcat.readAllResources());
 			}
 		});
@@ -1642,56 +1902,56 @@ public class NUserPage {
 		search_physicalmodel.setColumns(10);
 
 		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
-		gl_physicalPanel
-				.setHorizontalGroup(
-						gl_physicalPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_physicalPanel.createSequentialGroup().addGap(30)
-										.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
-												Short.MAX_VALUE)
-										.addGap(30))
-								.addGroup(gl_physicalPanel.createSequentialGroup()
-										.addComponent(physical_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(physical_btnDelete, GroupLayout.PREFERRED_SIZE, 84,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, 494, Short.MAX_VALUE)
-										.addComponent(btnAddPhysicalResource))
-								.addGroup(gl_physicalPanel.createSequentialGroup()
-										.addComponent(search_physicalbtnRefresh)
-										.addPreferredGap(ComponentPlacement.RELATED, 271, Short.MAX_VALUE)
-										.addComponent(physical_btnSearch).addGap(146)
-										.addGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING, false)
-												.addGroup(Alignment.TRAILING, gl_physicalPanel.createSequentialGroup()
-														.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(lblPhysicalName))
-												.addGroup(Alignment.TRAILING, gl_physicalPanel.createSequentialGroup()
-														.addComponent(search_physicalmodel, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.RELATED,
-																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-														.addComponent(lblModel_1)))
-										.addContainerGap()));
-		gl_physicalPanel.setVerticalGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_physicalPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(physical_btnSearch).addComponent(lblPhysicalName)
-								.addComponent(search_physicalbtnRefresh))
-						.addGap(3)
-						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblModel_1)
-								.addComponent(search_physicalmodel, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnAddPhysicalResource).addComponent(physical_btnEdit)
-								.addComponent(physical_btnDelete))
-						.addContainerGap()));
+		gl_physicalPanel.setHorizontalGroup(
+			gl_physicalPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addComponent(physical_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(physical_btnDelete, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 494, Short.MAX_VALUE)
+					.addComponent(btnAddPhysicalResource))
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addComponent(search_physicalbtnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 411, Short.MAX_VALUE)
+					.addComponent(physical_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_physicalPanel.createSequentialGroup()
+							.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblPhysicalName))
+						.addGroup(gl_physicalPanel.createSequentialGroup()
+							.addComponent(search_physicalmodel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblModel_1)))
+					.addContainerGap())
+		);
+		gl_physicalPanel.setVerticalGroup(
+			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPhysicalName)
+						.addComponent(search_physicalbtnRefresh)
+						.addComponent(physical_btnSearch))
+					.addGap(3)
+					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblModel_1)
+						.addComponent(search_physicalmodel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnAddPhysicalResource)
+						.addComponent(physical_btnEdit)
+						.addComponent(physical_btnDelete))
+					.addContainerGap())
+		);
 
 		physical_tabledata = new TableData(physcat, "physical");
 		physical_scrollPane.setViewportView(physical_tabledata.getJdataTable());
@@ -1833,7 +2093,6 @@ public class NUserPage {
 		btnEditProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				editProject();
-
 			}
 		});
 
@@ -1845,7 +2104,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				deleteProject();
 			}
-
 		});
 
 		search_projectmanager = new JTextField();
@@ -1870,7 +2128,6 @@ public class NUserPage {
 		project_btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				project_tabledata.update(projcat.getProjects());
-
 			}
 		});
 		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
@@ -2020,7 +2277,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				circulationReport();
 			}
-			
 		});
 		GroupLayout gl_circulationPanel = new GroupLayout(circulationPanel);
 		gl_circulationPanel
@@ -2069,8 +2325,8 @@ public class NUserPage {
 				.addGroup(gl_resourcereqPanel.createSequentialGroup().addComponent(resreq_btnGetReport).addGap(20)
 						.addComponent(resreq_scrollPane, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE).addGap(20)));
 
-		resreq_tabledata = new TableData(new ArrayList<HashMap<String, String>>(), "req report");
-		resreq_scrollPane.setViewportView(resreq_tabledata.getJdataTable());
+		resreqreport_tabledata = new TableData(new ArrayList<HashMap<String, String>>(), "req report");
+		resreq_scrollPane.setViewportView(resreqreport_tabledata.getJdataTable());
 		resourcereqPanel.setLayout(gl_resourcereqPanel);
 
 		JPanel resourceavailPanel = new JPanel();
@@ -2086,8 +2342,6 @@ public class NUserPage {
 			public void actionPerformed(ActionEvent e) {
 				resourceAvailableReport();
 			}
-
-			
 		});
 		GroupLayout gl_resourceavailPanel = new GroupLayout(resourceavailPanel);
 		gl_resourceavailPanel
@@ -2123,21 +2377,7 @@ public class NUserPage {
 		btnConfirm.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				System.out.println("-----");
-				int rowIndex = registered_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = registered_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a User!");
-				} else {
-
-					String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString());
-					System.out.println(Table_click);
-					empcat.makeDecision(Integer.parseInt(Table_click), true);
-					registered_tabledata.update(empcat.getRegistrations());
-				}
+				confirmRegistered();
 			}
 		});
 
@@ -2148,24 +2388,7 @@ public class NUserPage {
 		btnDeny.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("-----");
-				int rowIndex = registered_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = registered_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a User!");
-				} else {
-
-					String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString());
-					System.out.println(Table_click);
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Deny this user?");
-					if (myDialog.getAnswer()) {
-						empcat.makeDecision(Integer.parseInt(Table_click), false);
-						registered_tabledata.update(empcat.getRegistrations());
-					}
-				}
+				denyRegisitered();
 			}
 		});
 
@@ -2177,14 +2400,9 @@ public class NUserPage {
 		JButton employee_btnSearch = new JButton("Search");
 		employee_btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				HashMap<String, String> searchVars = new HashMap<String, String>();
-				searchVars.put("empname", "\'" + search_regemployeename.getText() + "\'");
-				if (empcat.SearchEmployee(searchVars).isEmpty()) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-				} else {
-					registered_tabledata.update(empcat.SearchEmployee(searchVars));
-				}
+				searchRegistered();
 			}
+			
 		});
 		
 		JButton employee_btnRefresh = new JButton("Refresh");
@@ -2374,6 +2592,8 @@ public class NUserPage {
 
 		if(search_accessrightname.getText().equals("intermediate"))
 			searchVars.put("accessrightid", "\'" + 2 + "\'");
+		else
+			searchVars.put("accessrightid", "\'"+13+"\'");
 		System.out.println("ASDSADASDA");
 		System.out.println(searchVars);
 		
@@ -2384,12 +2604,21 @@ public class NUserPage {
 		}
 	}
 	
+	private void searchSubsystem() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+		searchVars.put("sname", "\'" + search_subsystemname.getText() + "\'");
+		if (subsyscat.searchSubsystem(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+			subsystem_tabledata.update(subsyscat.searchSubsystem(searchVars));
+		}
+	}
 	private void addSubsystem() {
 		ArrayList<Field> subsystem_addFields = new ArrayList<Field>();
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
@@ -2429,7 +2658,6 @@ public class NUserPage {
 				for (int i = 0; i < inputs.size(); i++) {
 					System.out.println(inputs.get(i) + " subsystem");
 				}
-				System.out.println(sections_combo.getSelectedItem() + " //////");
 				Pattern p = Pattern.compile("sid=\\d+");
 				String section = null;
 				Matcher m = p.matcher((CharSequence) sections_combo.getSelectedItem());
@@ -2481,7 +2709,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field subsystem_name = new Field("text", "Subsystem Name", "", 10, "name");
@@ -2533,11 +2761,29 @@ public class NUserPage {
 	}
 	}
 	
+	private void searchResourceUtilization() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+
+		if (search_utilresourcename.getText() != null && !search_utilresourcename.getText().trim().equals(""))
+			searchVars.put("rname", "\'" + search_utilresourcename.getText() + "\'");
+		if (search_utilprojectname.getText() != null && !search_utilprojectname.getText().trim().equals(""))
+			searchVars.put("pname", "\'" + search_utilprojectname.getText() + "\'");
+		if (search_utilsectionname.getText() != null && !search_utilsectionname.getText().trim().equals(""))
+			searchVars.put("sname", "\'" + search_utilsectionname.getText() + "\'");
+
+
+//		if (presutilcat.Search(searchVars).isEmpty()) {
+//			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+//		} else {
+//			resourceutil_tabledata.update(presutilcat.Search(searchVars));
+//		}
+	}
+	
 	private void addResourceUtilization() {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		ArrayList<String> resource_types = new ArrayList<String>();
@@ -2630,14 +2876,14 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
 					for (int i = 0; i < financial_resource.size(); i++) {
-						resourceCombo.addItem(financial_resource.get(i).toString());
+						resourceCombo.addItem("rid="+financial_resource.get(i).get("rid")+" "+financial_resource.get(i).get("finanname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Physical")) {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
 					for (int i = 0; i < physical_resource.size(); i++) {
-						resourceCombo.addItem(physical_resource.get(i).toString());
+						resourceCombo.addItem("rid="+physical_resource.get(i).get("rid")+" "+physical_resource.get(i).get("physname"));
 					}
 
 				}
@@ -2645,7 +2891,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
 					for (int i = 0; i < information_resource.size(); i++) {
-						resourceCombo.addItem(information_resource.get(i).toString());
+						resourceCombo.addItem("rid="+information_resource.get(i).get("rid")+" "+information_resource.get(i).get("irname"));
 					}
 
 				}
@@ -2653,14 +2899,14 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 					for (int i = 0; i < employee_resource.size(); i++) {
-						resourceCombo.addItem(employee_resource.get(i).toString());
+						resourceCombo.addItem("empid="+employee_resource.get(i).get("empid")+" "+employee_resource.get(i).get("empname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Module")) {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
 					for (int i = 0; i < module_resource.size(); i++) {
-						resourceCombo.addItem(module_resource.get(i).toString());
+						resourceCombo.addItem("rid="+module_resource.get(i).get("modrid")+" "+module_resource.get(i).get("modname"));
 					}
 				}
 			}
@@ -2811,6 +3057,31 @@ public class NUserPage {
 		}
 	}
 	}
+	private void searchRequirement() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+
+		if (search_reqprojectname.getText() != null && !search_reqprojectname.getText().trim().equals(""))
+			searchVars.put("pname", "\'" + search_reqprojectname.getText() + "\'");
+		if (search_reqresourcename.getText() != null && !search_reqresourcename.getText().trim().equals(""))
+			searchVars.put("rname", "\'" + search_reqresourcename.getText() + "\'");
+		if (search_reqsectionname.getText() != null && !search_reqsectionname.getText().trim().equals(""))
+			searchVars.put("sname", "\'" + search_reqsectionname.getText() + "\'");
+
+		if (resreqcat.Search(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+			resrequirement_tabledata.update(resreqcat.Search(searchVars));
+		}
+		
+		
+		// ResourceRequirementCatalogue resreqcat = new
+		// ResourceRequirementCatalogue();
+		// HashMap<String, String> searchVars = new HashMap<String,
+		// String>();
+		// searchVars.put("irname", "\'" +
+		// search_reqresourcename.getText() + "\'");
+		// information_tabledata.update(resreqcat.SearchResource(searchVars));
+	}
 	
 	private void addRequirement() {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
@@ -2818,11 +3089,11 @@ public class NUserPage {
 
 		ArrayList<HashMap<String, String>> project_hashmap = projcat.getProjects();
 		for (int i = 0; i < project_hashmap.size(); i++) {
-			project_arraylist.add(project_hashmap.get(i).toString());
+			project_arraylist.add("projid="+project_hashmap.get(i).get("projid")+" "+project_hashmap.get(i).get("projname"));
 		}
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		ArrayList<String> resource_types = new ArrayList<String>();
@@ -2833,13 +3104,11 @@ public class NUserPage {
 		resource_types.add("Employee");
 		resource_types.add("Module");
 		ArrayList<Field> requirement_moduleFields = new ArrayList<Field>();
-		Field reqname = new Field("text", "req name       ", "", 10, "name");
 		Field req_res_type = new Field("comboBox", "resource types", resource_types, 20, "items");
 		Field req_res = new Field("comboBox", "resources", resources, 20, "items");
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 		Field projects = new Field("comboBox", "projects", project_arraylist, 20, "items");
 
-		requirement_moduleFields.add(reqname);
 		requirement_moduleFields.add(req_res_type);
 		requirement_moduleFields.add(req_res);
 		requirement_moduleFields.add(sections);
@@ -2882,10 +3151,10 @@ public class NUserPage {
 		Add_RequirementPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		Add_RequirementPage.pack();
 		Add_RequirementPage.setVisible(true);
-		ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(1);
-		ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(2);
-		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(3);
-		ComboBoxJPanel comboBoxpane_projects = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(4);
+		ComboBoxJPanel comboBoxpanel_restype = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(0);
+		ComboBoxJPanel comboBoxpane_res = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(1);
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(2);
+		ComboBoxJPanel comboBoxpane_projects = (ComboBoxJPanel) requirement_Form.getJPanel().getComponent(3);
 
 		final JComboBox resource_type = comboBoxpanel_restype.getComboBox();
 		final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
@@ -2921,14 +3190,14 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
 					for (int i = 0; i < financial_resource.size(); i++) {
-						resourceCombo.addItem(financial_resource.get(i).toString());
+						resourceCombo.addItem("rid="+financial_resource.get(i).get("rid")+" "+financial_resource.get(i).get("finanname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Physical")) {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
 					for (int i = 0; i < physical_resource.size(); i++) {
-						resourceCombo.addItem(physical_resource.get(i).toString());
+						resourceCombo.addItem("rid="+physical_resource.get(i).get("rid")+" "+physical_resource.get(i).get("physname"));
 					}
 
 				}
@@ -2936,7 +3205,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
 					for (int i = 0; i < information_resource.size(); i++) {
-						resourceCombo.addItem(information_resource.get(i).toString());
+						resourceCombo.addItem("rid="+information_resource.get(i).get("rid")+" "+information_resource.get(i).get("irname"));
 					}
 
 				}
@@ -2944,14 +3213,14 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 					for (int i = 0; i < employee_resource.size(); i++) {
-						resourceCombo.addItem(employee_resource.get(i).toString());
+						resourceCombo.addItem("empid="+employee_resource.get(i).get("empid")+" "+employee_resource.get(i).get("empname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Module")) {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
 					for (int i = 0; i < module_resource.size(); i++) {
-						resourceCombo.addItem(module_resource.get(i).toString());
+						resourceCombo.addItem("rid="+module_resource.get(i).get("modrid")+" "+module_resource.get(i).get("modname"));
 					}
 				}
 			}
@@ -3243,7 +3512,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -3374,7 +3643,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -3455,21 +3724,22 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 
 		ArrayList<Field> financial_moduleFields = new ArrayList<Field>();
 		financial_moduleFields.add(new Field("text", "financial name", "", 20, "name"));
-		financial_moduleFields.add(sections);
 		financial_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
 		financial_moduleFields.add(new Field("text", "net value", "", 20, "value"));
 		financial_moduleFields.add(new Field("text", "description", "", 20, "desc"));
+		financial_moduleFields.add(sections);
+
 
 		final Form financial_moduleForm = new Form(financial_moduleFields, "Financial Edit Module Form");
 		final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
 		financial_modulePanel.makeForm();
-		JFrame Add_InformationModulePage = new JFrame("Edit Information Module Form");
+		JFrame Add_InformationModulePage = new JFrame("Edit Financial Module Form");
 		Add_InformationModulePage.getContentPane().add(financial_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 		JButton submitaddfinancialBtn = new JButton("Submit");
@@ -3479,6 +3749,12 @@ public class NUserPage {
 		Add_InformationModulePage.pack();
 		Add_InformationModulePage.setVisible(true);
 
+		ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) financial_moduleForm.getJPanel()
+				.getComponent(4);
+
+		final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
+		
 		submitaddfinancialBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -3494,7 +3770,6 @@ public class NUserPage {
 					String Table_click = (financial_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 							.toString()); // the
 					System.out.println(Table_click + " this was clicked");
-				}
 				System.out.println();
 				System.out.println("all : ");
 				financat.readAllResources();
@@ -3508,11 +3783,13 @@ public class NUserPage {
 					System.out.println(inputs.get(i) + " financial edit");
 				}
 
+				FinancialResource finanres = financat.getFinancialResource(Integer.parseInt(Table_click));
+				finanres.editResource(inputs.get(0), sections_combo.getSelectedIndex(), Integer.parseInt(inputs.get(2)),inputs.get(1), inputs.get(3));
 				// financat.getFinancialResource().editResource("changed
 				// name", 1, 10, "changed model", "changed");
 
 				financial_tabledata.update(financat.readAllResources());
-
+				}
 			}
 		});
 	}
@@ -3557,7 +3834,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -3612,8 +3889,6 @@ public class NUserPage {
 				financat.addResource((inputs.get(0)), Integer.parseInt(section.replace("sid=", "")),
 						Integer.parseInt(inputs.get(2)), inputs.get(1), inputs.get(3));
 				// tu resource ham bayad insert she
-				allfinance.clear();
-				allfinance = financat.readAllResources();
 				financial_tabledata.update(financat.readAllResources());
 			}
 		});
@@ -3639,24 +3914,30 @@ public class NUserPage {
 		final ArrayList<String> financials = new ArrayList<String>();
 		final ArrayList<String> physicals = new ArrayList<String>();
 		final ArrayList<String> information = new ArrayList<String>();
+		final ArrayList<String> module = new ArrayList<String>();
 
 		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
-			employees.add(employe_readall.get(i).toString());
+			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
 		}
 		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 		for (int i = 0; i < financial_readall.size(); i++) {
-			financials.add(financial_readall.get(i).toString());
+			financials.add("rid="+financial_readall.get(i).get("rid")+" "+financial_readall.get(i).get("finanname"));
 		}
 
 		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 		for (int i = 0; i < physical_readall.size(); i++) {
-			physicals.add(physical_readall.get(i).toString());
+			physicals.add("rid="+physical_readall.get(i).get("rid")+" "+physical_readall.get(i).get("physname"));
 		}
 
 		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 		for (int i = 0; i < information_readall.size(); i++) {
-			information.add(information_readall.get(i).toString());
+			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
+		}
+		
+		ArrayList<HashMap<String, String>> module_readall = modcat.readAllResources();
+		for (int i = 0; i < module_readall.size(); i++) {
+			module.add("rid="+module_readall.get(i).get("modrid")+" "+module_readall.get(i).get("modname"));
 		}
 
 		ArrayList<Field> moduleFields = new ArrayList<Field>();
@@ -3664,7 +3945,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -3673,6 +3954,8 @@ public class NUserPage {
 		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
 		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
 		Field information_check = new Field("checkBox", "information", information, 20, "information");
+		Field module_check = new Field("checkBox", "module", module, 20, "module");
+
 
 		moduleFields.add(new Field("text", "duration", "", 20, "duration"));
 		moduleFields.add(new Field("text", "description", "", 20, "desc"));
@@ -3681,6 +3964,8 @@ public class NUserPage {
 		moduleFields.add(physical_check);
 		moduleFields.add(information_check);
 		moduleFields.add(maintainers);
+		moduleFields.add(module_check);
+
 
 		final Form moduleForm = new Form(moduleFields, "Module Form");
 		final PanelBuilder modulePanel = new PanelBuilder(moduleForm);
@@ -3705,6 +3990,8 @@ public class NUserPage {
 		final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(5);
 		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(6);
 		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(7);
+		final CheckBoxJPanel checkBoxpane_module = (CheckBoxJPanel) moduleForm.getJPanel().getComponent(8);
+
 
 		submitaddmoduleBtn.addActionListener(new ActionListener() {
 
@@ -3749,6 +4036,9 @@ public class NUserPage {
 				System.out.println(informationvales);
 				final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
 				System.out.println(employeevales);
+				final ArrayList<String> modulevales = checkBoxpane_module.getCheckedValues();
+				System.out.println(modulevales);
+
 				Pattern emp = Pattern.compile("empid=\\d+");
 				for (int i = 0; i < employeevales.size(); i++) {
 					String empids = null;
@@ -3795,6 +4085,17 @@ public class NUserPage {
 
 				}
 
+				for (int i = 0; i < modulevales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(modulevales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("module rid: " + respids);
+					makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), (int) modrid);
+
+				}
+
 			}
 		});
 	}
@@ -3805,7 +4106,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -3900,44 +4201,13 @@ public class NUserPage {
 	}
 	
 	private void editMaintainingModule() {
-		final ArrayList<String> employees = new ArrayList<String>();
-		final ArrayList<String> financials = new ArrayList<String>();
-		final ArrayList<String> physicals = new ArrayList<String>();
-		final ArrayList<String> information = new ArrayList<String>();
-
-		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
-		for (int i = 0; i < employe_readall.size(); i++) {
-			employees.add(employe_readall.get(i).toString());
-		}
-		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
-		for (int i = 0; i < financial_readall.size(); i++) {
-			financials.add(financial_readall.get(i).toString());
-		}
-
-		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
-		for (int i = 0; i < physical_readall.size(); i++) {
-			physicals.add(physical_readall.get(i).toString());
-		}
-
-		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
-		for (int i = 0; i < information_readall.size(); i++) {
-			information.add(information_readall.get(i).toString());
-		}
 
 		ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
 		Field change_type = new Field("text", "change type", "", 20, "change type");
 		Field duration = new Field("text", "duration", "", 20, "duration");
-		Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
-		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
-		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
-		Field information_check = new Field("checkBox", "information", information, 20, "information");
 
 		maintain_moduleFields.add(change_type);
 		maintain_moduleFields.add(duration);
-		maintain_moduleFields.add(financial_check);
-		maintain_moduleFields.add(physical_check);
-		maintain_moduleFields.add(information_check);
-		maintain_moduleFields.add(maintainers);
 
 		final Form maintain_Form = new Form(maintain_moduleFields, "Maintain Module Form");
 		final PanelBuilder maintain_Panel = new PanelBuilder(maintain_Form);
@@ -3958,21 +4228,22 @@ public class NUserPage {
 		Edit_MaintainPage.pack();
 		Edit_MaintainPage.setVisible(true);
 
-		final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
-		final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
-		final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel()
-				.getComponent(2);
-		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel()
-				.getComponent(4);
-
 		submiteditmaintainmoduleBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// INJA TODO Auto-generated method stub
+				
 				int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
 
-				String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-						.toString()); // return
+				if (rowIndex == -1) {
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+							"Please Select a Module!");
+				} else {
+
+					String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+							.toString()); // the
+					System.out.println(Table_click + " this was clicked");
+					
 				selected_maintaining_module = Integer.parseInt(Table_click.trim());
 
 				System.out.println(Table_click);
@@ -3987,13 +4258,9 @@ public class NUserPage {
 					System.out.println(inputs.get(i) + "adasa");
 				}
 
-				// MaintainingModule maintainmod =
-				// maintainmodulecat.ge(selected_maintaining_module);
+				 MaintainingModule maintainmod = maintainmodulecat.getMaintainingModule(selected_maintaining_module);
+				 maintainmod.edit(inputs.get(0), Integer.parseInt(inputs.get(1)));
 
-				// long maintainmodpk =
-				// maintainmodulecat.addMaintainingModule(selected_module,
-				// inputs.get(0),
-				// Integer.parseInt(inputs.get(1)));
 
 				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 				ArrayList<MaintainingModule> allmaintainmodule;
@@ -4004,92 +4271,59 @@ public class NUserPage {
 				System.out.println("DATA");
 
 				maintaining_tabledata.update(data);
-
-				System.out.println("----------");
-
-				final ArrayList<String> finanvales = checkBoxpane_financial.getCheckedValues();
-				System.out.println(finanvales);
-				final ArrayList<String> physicalvales = checkBoxpane_phys.getCheckedValues();
-				System.out.println(physicalvales);
-				final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
-				System.out.println(informationvales);
-				final ArrayList<String> employeevales = checkBoxpane_emp.getCheckedValues();
-				System.out.println(employeevales);
-				Pattern emp = Pattern.compile("empid=\\d+");
-				for (int i = 0; i < employeevales.size(); i++) {
-					String empids = null;
-					Matcher m_emp = emp.matcher(employeevales.get(i).toString());
-					if (m_emp.find()) {
-						empids = m_emp.group();
-					}
-					System.out.println("empids: " + empids);
-					maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")),
-							selected_maintaining_module);
-				}
-
-				Pattern res = Pattern.compile("rid=\\d+");
-				for (int i = 0; i < finanvales.size(); i++) {
-					String respids = null;
-					Matcher m_res = res.matcher(finanvales.get(i).toString());
-					if (m_res.find()) {
-						respids = m_res.group();
-					}
-					System.out.println("finan rid: " + respids);
-					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-							selected_maintaining_module);
-
-				}
-
-				for (int i = 0; i < physicalvales.size(); i++) {
-					String respids = null;
-					Matcher m_res = res.matcher(physicalvales.get(i).toString());
-					if (m_res.find()) {
-						respids = m_res.group();
-					}
-					System.out.println("phys rid: " + respids);
-					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-							selected_maintaining_module);
-
-				}
-
-				for (int i = 0; i < informationvales.size(); i++) {
-					String respids = null;
-					Matcher m_res = res.matcher(informationvales.get(i).toString());
-					if (m_res.find()) {
-						respids = m_res.group();
-					}
-					System.out.println("info rid: " + respids);
-					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),
-							selected_maintaining_module);
-
 				}
 
 			}
 		});
 	}
 	private void deleteMaintainingModule() {
-		DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-				"Are you sure you want to Delete this item?");
-		if (myDialog.getAnswer()) {
-			int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
+		System.out.println("-----");
+		int rowIndex = maintaining_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = maintaining_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Maintaining!");
+		} else {
 
 			String Table_click = (maintaining_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 					.toString()); // return
+			System.out.println(Table_click);
+			
 			selected_maintaining_module = Integer.parseInt(Table_click.trim());
 
 			System.out.println(Table_click);
 			System.out.println("---maintian module id-- " + selected_module);
-
-			maintainmodulecat.deleteMaintainingModule(selected_maintaining_module);
-			ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-			ArrayList<MaintainingModule> allmaintainmodule;
-			allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
-			for (int i = 0; i < allmaintainmodule.size(); i++) {
-				data.add((allmaintainmodule.get(i).toHashMap()));
+			
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				maintainmodulecat.deleteMaintainingModule(selected_maintaining_module);
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<MaintainingModule> allmaintainmodule;
+				allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
+				for (int i = 0; i < allmaintainmodule.size(); i++) {
+					data.add((allmaintainmodule.get(i).toHashMap()));
+				}
+				System.out.println("DATA " + data);
+				maintaining_tabledata.update(data);
+				
 			}
-			System.out.println("DATA " + data);
-			maintaining_tabledata.update(data);
+		}
+		
+		
+		
+	}
+	
+	private void searchMaintaining() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
 
+		if (search_maintainingchangetype.getText() != null && !search_maintainingchangetype.getText().trim().equals(""))
+			searchVars.put("changetype", "\'" + search_maintainingchangetype.getText() + "\'");
+
+		if (empcat.SearchEmployee(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+//			maintaining_tabledata.update(maintainmodulecat.s(searchVars));
 		}
 	}
 	
@@ -4098,24 +4332,30 @@ public class NUserPage {
 		final ArrayList<String> financials = new ArrayList<String>();
 		final ArrayList<String> physicals = new ArrayList<String>();
 		final ArrayList<String> information = new ArrayList<String>();
+		final ArrayList<String> module = new ArrayList<String>();
 
 		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
-			employees.add(employe_readall.get(i).toString());
+			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
 		}
 		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 		for (int i = 0; i < financial_readall.size(); i++) {
-			financials.add(financial_readall.get(i).toString());
+			financials.add("rid="+financial_readall.get(i).get("rid")+" "+financial_readall.get(i).get("finanname"));
 		}
 
 		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 		for (int i = 0; i < physical_readall.size(); i++) {
-			physicals.add(physical_readall.get(i).toString());
+			physicals.add("rid="+physical_readall.get(i).get("rid")+" "+physical_readall.get(i).get("physname"));
 		}
 
 		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 		for (int i = 0; i < information_readall.size(); i++) {
-			information.add(information_readall.get(i).toString());
+			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
+		}
+		
+		ArrayList<HashMap<String, String>> module_readall = modcat.readAllResources();
+		for (int i = 0; i < module_readall.size(); i++) {
+			module.add("rid="+module_readall.get(i).get("modrid")+" "+module_readall.get(i).get("modname"));
 		}
 
 		ArrayList<Field> maintain_moduleFields = new ArrayList<Field>();
@@ -4125,6 +4365,8 @@ public class NUserPage {
 		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
 		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
 		Field information_check = new Field("checkBox", "information", information, 20, "information");
+		Field module_check = new Field("checkBox", "module", module, 20, "module");
+
 
 		maintain_moduleFields.add(change_type);
 		maintain_moduleFields.add(duration);
@@ -4132,6 +4374,7 @@ public class NUserPage {
 		maintain_moduleFields.add(physical_check);
 		maintain_moduleFields.add(information_check);
 		maintain_moduleFields.add(maintainers);
+		maintain_moduleFields.add(module_check);
 
 		final Form maintain_Form = new Form(maintain_moduleFields, "Maintain Module Form");
 		final PanelBuilder maintain_Panel = new PanelBuilder(maintain_Form);
@@ -4152,12 +4395,12 @@ public class NUserPage {
 		Add_MaintainPage.pack();
 		Add_MaintainPage.setVisible(true);
 
-		final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
+		
+		final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(2);
 		final CheckBoxJPanel checkBoxpane_phys = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(3);
-		final CheckBoxJPanel checkBoxpane_financial = (CheckBoxJPanel) maintain_Form.getJPanel()
-				.getComponent(2);
-		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel()
-				.getComponent(4);
+		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(4);
+		final CheckBoxJPanel checkBoxpane_emp = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(5);
+		final CheckBoxJPanel checkBoxpane_module = (CheckBoxJPanel) maintain_Form.getJPanel().getComponent(6);
 
 		submitmaintainmoduleBtn.addActionListener(new ActionListener() {
 			@Override
@@ -4195,6 +4438,8 @@ public class NUserPage {
 				System.out.println(informationvales);
 				final ArrayList<String> employeevales = checkBoxpane_emp.getCheckedValues();
 				System.out.println(employeevales);
+				final ArrayList<String> modulevales = checkBoxpane_module.getCheckedValues();
+				System.out.println(modulevales);
 				Pattern emp = Pattern.compile("empid=\\d+");
 				for (int i = 0; i < employeevales.size(); i++) {
 					String empids = null;
@@ -4243,6 +4488,16 @@ public class NUserPage {
 							(int) maintainmodpk);
 
 				}
+				for (int i = 0; i < modulevales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(modulevales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("module rid: " + respids);
+					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")),(int) maintainmodpk);
+
+				}
 
 			}
 		});
@@ -4252,7 +4507,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 
@@ -4317,10 +4572,7 @@ public class NUserPage {
 					employee.editHuman(inputs.get(0), Integer.parseInt(section.replace("sid=", "")),
 							inputs.get(2), inputs.get(3));
 
-					empcat.readAllEmployees();
-					allemployees.clear();
-					allemployees = empcat.readAllEmployees();
-					human_tabledata.update(empcat.readAllEmployees());
+					human_tabledata.update(empcat.getConfirmedEmployees());
 				}
 			}
 		});
@@ -4342,8 +4594,7 @@ public class NUserPage {
 			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
 					"Are you sure you want to Delete this item?");
 			if (myDialog.getAnswer()) {
-				allemployees = empcat.readAllEmployees();
-				human_tabledata.update(empcat.readAllEmployees());
+				human_tabledata.update(empcat.getConfirmedEmployees());
 			}
 		}
 	}
@@ -4365,7 +4616,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
 
@@ -4426,11 +4677,8 @@ public class NUserPage {
 	private void searchPhysicalResource() {
 		HashMap<String, String> searchVars = new HashMap<String, String>();
 
-		if (search_physicalname.getText() != null && !search_physicalname.getText().trim().equals(""))
-			searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
-		if (search_physicalmodel.getText() != null && !search_physicalmodel.getText().trim().equals(""))
-			searchVars.put("modeldesc", "\'" + search_physicalmodel.getText() + "\'");
 		searchVars.put("physname", "\'" + search_physicalname.getText() + "\'");
+		searchVars.put("modeldesc", "\'" + search_physicalmodel.getText() + "\'");
 
 		if (physcat.SearchResource(searchVars).isEmpty()) {
 			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
@@ -4442,7 +4690,7 @@ public class NUserPage {
 		ArrayList<String> section_arraylist = new ArrayList<String>();
 		ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 		for (int i = 0; i < section_hashmap.size(); i++) {
-			section_arraylist.add(section_hashmap.get(i).toString());
+			section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 		}
 
 		Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -4511,14 +4759,14 @@ public class NUserPage {
 					"Please Select a Resource!");
 		} else {
 
-			String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+			final String Table_click = (physical_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
 					.toString()); // the
 			System.out.println(Table_click + " this was clicked");
 
 			ArrayList<String> section_arraylist = new ArrayList<String>();
 			ArrayList<HashMap<String, String>> section_hashmap = seccat.getSections();
 			for (int i = 0; i < section_hashmap.size(); i++) {
-				section_arraylist.add(section_hashmap.get(i).toString());
+				section_arraylist.add("sid="+section_hashmap.get(i).get("sid")+" "+section_hashmap.get(i).get("sectionname"));
 			}
 
 			Field sections = new Field("comboBox", "sections", section_arraylist, 20, "items");
@@ -4526,6 +4774,7 @@ public class NUserPage {
 			ArrayList<Field> physical_moduleFields = new ArrayList<Field>();
 			physical_moduleFields.add(new Field("text", "physical name", "", 20, "name"));
 			physical_moduleFields.add(new Field("text", "model description", "", 20, "model desc"));
+			physical_moduleFields.add(new Field("text", "description", "", 20, "description"));
 
 			physical_moduleFields.add(sections);
 			final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
@@ -4541,6 +4790,10 @@ public class NUserPage {
 			Edit_PhysicalModulePage.pack();
 			Edit_PhysicalModulePage.setVisible(true);
 
+			ComboBoxJPanel comboBoxpane_sections = (ComboBoxJPanel) physical_moduleForm.getJPanel().getComponent(3);
+
+			final JComboBox sections_combo = comboBoxpane_sections.getComboBox();
+
 			submiteditphysicalmoduleBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -4555,23 +4808,9 @@ public class NUserPage {
 					for (int i = 0; i < inputs.size(); i++) {
 						System.out.println(inputs.get(i) + " physical");
 					}
-					// physcat.addResource((inputs.get(0)));
-					// // tu resource ham bayad insert she
-					// allphysicals.clear();
-					// allphysicals = physcat.readAllResources();
-					// System.out.println(phyiscal_tableModel.getRowCount()
-					// + " ---");
-					// int rowcount = phyiscal_tableModel.getRowCount();
-					// for (int j = rowcount - 1; j >= 0; j--) {
-					// phyiscal_tableModel.removeRow(j);
-					// }
-					// System.out.println(phyiscal_tableModel.getRowCount()
-					// + " ---");
-					// for (int i = 0; i < allphysicals.size(); i++) {
-					// Object[] objs = { allphysicals.get(i).get("rid"),
-					// allphysicals.get(i).get("physname") };
-					// phyiscal_tableModel.addRow(objs);
-					// }
+					PhysicalResource physres = physcat.getPhysicalResource(Integer.parseInt(Table_click));
+					physres.editResource(inputs.get(0), sections_combo.getSelectedIndex(), inputs.get(1), inputs.get(2));
+					physical_tabledata.update(physcat.readAllResources());
 				}
 			});
 		}
@@ -4620,24 +4859,31 @@ public class NUserPage {
 		final ArrayList<String> financials = new ArrayList<String>();
 		final ArrayList<String> physicals = new ArrayList<String>();
 		final ArrayList<String> information = new ArrayList<String>();
+		final ArrayList<String> module = new ArrayList<String>();
+
 
 		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
-			employees.add(employe_readall.get(i).toString());
+			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+ " -username="+employe_readall.get(i).get("username"));
 		}
 		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
 		for (int i = 0; i < financial_readall.size(); i++) {
-			financials.add(financial_readall.get(i).toString());
+			financials.add("rid="+financial_readall.get(i).get("rid")+" "+financial_readall.get(i).get("finanname"));
 		}
 
 		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
 		for (int i = 0; i < physical_readall.size(); i++) {
-			physicals.add(physical_readall.get(i).toString());
+			physicals.add("rid="+physical_readall.get(i).get("rid")+" "+physical_readall.get(i).get("physname"));
 		}
 
 		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
 		for (int i = 0; i < information_readall.size(); i++) {
-			information.add(information_readall.get(i).toString());
+			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
+		}
+
+		ArrayList<HashMap<String, String>> module_readall = modcat.readAllResources();
+		for (int i = 0; i < module_readall.size(); i++) {
+			module.add("rid="+module_readall.get(i).get("modrid")+" "+module_readall.get(i).get("modname"));
 		}
 
 		ArrayList<Field> projectFields = new ArrayList<Field>();
@@ -4655,11 +4901,32 @@ public class NUserPage {
 		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
 		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
 		Field information_check = new Field("checkBox", "information", information, 20, "information");
+		Field module_check = new Field("checkBox", "module", module, 20, "module");
+
 
 		projectFields.add(financial_check);
+		projectFields.add(new Field("text", "financial Date from", "", 20, "financial Date from"));
+		projectFields.add(new Field("text", "financial Date to", "", 20, "financial Date to"));
+
 		projectFields.add(physical_check);
+		projectFields.add(new Field("text", "physical Date from", "", 20, "physical Date from"));
+		projectFields.add(new Field("text", "physical Date to", "", 20, "physical Date to"));
+		
+
 		projectFields.add(information_check);
+		projectFields.add(new Field("text", "information Date from", "", 20, "information Date from"));
+		projectFields.add(new Field("text", "information Date to", "", 20, "information Date to"));
+
+		
 		projectFields.add(maintainers);
+		projectFields.add(new Field("text", "employee Date from", "", 20, "employee Date from"));
+		projectFields.add(new Field("text", "employee Date to", "", 20, "employee Date to"));
+
+		projectFields.add(module_check);
+		projectFields.add(new Field("text", "module Date from", "", 20, "module Date from"));
+		projectFields.add(new Field("text", "module Date to", "", 20, "module Date to"));
+
+		
 
 		final Form projectForm = new Form(projectFields, "Project Form");
 		final PanelBuilder project_addPanel = new PanelBuilder(projectForm);
@@ -4682,11 +4949,46 @@ public class NUserPage {
 		Add_ProjectPage.setVisible(true);
 
 		final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) projectForm.getJPanel().getComponent(5);
-		final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) projectForm.getJPanel().getComponent(6);
+		final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) projectForm.getJPanel().getComponent(8);
 		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) projectForm.getJPanel()
-				.getComponent(7);
-		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) projectForm.getJPanel().getComponent(8);
+				.getComponent(11);
+		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) projectForm.getJPanel().getComponent(14);
+		final CheckBoxJPanel checkBoxpane_module = (CheckBoxJPanel) projectForm.getJPanel().getComponent(17);
 
+		final TextJPanel to_finance = (TextJPanel) projectForm.getJPanel().getComponent(6);
+		final TextJPanel from_finance = (TextJPanel) projectForm.getJPanel().getComponent(7);
+		final TextJPanel to_physical = (TextJPanel) projectForm.getJPanel().getComponent(9);
+		final TextJPanel from_physical = (TextJPanel) projectForm.getJPanel().getComponent(10);
+		final TextJPanel to_info = (TextJPanel) projectForm.getJPanel().getComponent(12);
+		final TextJPanel from_info = (TextJPanel) projectForm.getJPanel().getComponent(13);
+		final TextJPanel to_employee = (TextJPanel) projectForm.getJPanel().getComponent(15);
+		final TextJPanel from_employee = (TextJPanel) projectForm.getJPanel().getComponent(16);
+		final TextJPanel to_module = (TextJPanel) projectForm.getJPanel().getComponent(18);
+		final TextJPanel from_module = (TextJPanel) projectForm.getJPanel().getComponent(19);
+
+		
+		JTextField todate_finance = to_finance.getTextField();
+		JTextField fromdate_finance = from_finance.getTextField();
+		JTextField todate_physical = to_physical.getTextField();
+		JTextField fromdate_physical = from_physical.getTextField();
+		JTextField todate_info = to_info.getTextField();
+		JTextField fromdate_info = from_info.getTextField();
+		JTextField todate_employee = to_employee.getTextField();
+		JTextField fromdate_employee = from_employee.getTextField();
+		JTextField todate_module = to_module.getTextField();
+		JTextField fromdate_module = from_module.getTextField();
+		todate_finance.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		fromdate_finance.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		todate_physical.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		fromdate_physical.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		todate_info.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		fromdate_info.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		todate_employee.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		fromdate_employee.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		todate_module.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		fromdate_module.setToolTipText("Enter Date in this format: YYYY-MM-DD");
+		
+		
 		employees_comboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -4701,7 +5003,7 @@ public class NUserPage {
 				System.out.println("all : ");
 				projcat.getProjects();
 				ArrayList<String> inputs = new ArrayList<String>();
-				for (int i = 0; i < projectForm.getJPanel().getComponentCount() - 1; i++) {
+				for (int i = 0; i < projectForm.getJPanel().getComponentCount(); i++) {
 					FieldPanel fpanel = (FieldPanel) projectForm.getJPanel().getComponent(i);
 					inputs.add(fpanel.getValues().get(0));
 				}
@@ -4732,7 +5034,6 @@ public class NUserPage {
 
 				project_tabledata.update(projcat.getProjects());
 
-				allprojects = projcat.getProjects();
 				project_tabledata.update(projcat.getProjects());
 				System.out.println(vales_phys.toString());
 
@@ -4746,6 +5047,9 @@ public class NUserPage {
 				System.out.println(informationvales);
 				final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
 				System.out.println(employeevales);
+				final ArrayList<String> modulevales = checkBoxpane_module.getCheckedValues();
+				System.out.println(modulevales);
+
 				Pattern emp = Pattern.compile("empid=\\d+");
 				for (int i = 0; i < employeevales.size(); i++) {
 					String empids = null;
@@ -4755,7 +5059,7 @@ public class NUserPage {
 					}
 					System.out.println("empids: " + empids);
 					projempcat.addProjectEmployee((int) projid, Integer.parseInt(empids.replace("empid=", "")),
-							"1111-11-1", "1111-11-1");
+							inputs.get(15), inputs.get(16));
 
 				}
 
@@ -4768,7 +5072,7 @@ public class NUserPage {
 					}
 					System.out.println("finan rid: " + respids);
 					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
-							(int) projid, "1111-11-1", "1111-11-1");
+							(int) projid, inputs.get(6), inputs.get(7));
 
 				}
 
@@ -4780,7 +5084,7 @@ public class NUserPage {
 					}
 					System.out.println("phys rid: " + respids);
 					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
-							(int) projid, "1111-11-1", "1111-11-1");
+							(int) projid, inputs.get(9), inputs.get(10));
 
 				}
 
@@ -4792,7 +5096,19 @@ public class NUserPage {
 					}
 					System.out.println("info rid: " + respids);
 					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
-							(int) projid, "1111-11-1", "1111-11-1");
+							(int) projid, inputs.get(12), inputs.get(13));
+				}
+				
+				
+				for (int i = 0; i < modulevales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(modulevales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("mod rid: " + respids);
+					presutilcat.addProjectResourceUtilization(Integer.parseInt(respids.replace("rid=", "")), 1,
+							(int) projid, inputs.get(18), inputs.get(19));
 				}
 
 			}
@@ -4885,7 +5201,6 @@ public class NUserPage {
 					project.editProject(inputs.get(0).toString(), "", inputs.get(1), proj_manager,
 							inputs.get(2), confirmed);
 
-					allprojects = projcat.getProjects();
 					project_tabledata.update(projcat.getProjects());
 					System.out.println(vales_phys.toString() + " is this it");
 				}
@@ -4956,14 +5271,14 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> financial_resource = financat.readAllResources();
 					for (int i = 0; i < financial_resource.size(); i++) {
-						resourceCombo.addItem(financial_resource.get(i).toString());
+						resourceCombo.addItem("rid="+financial_resource.get(i).get("rid")+" "+financial_resource.get(i).get("finanname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Physical")) {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> physical_resource = physcat.readAllResources();
 					for (int i = 0; i < physical_resource.size(); i++) {
-						resourceCombo.addItem(physical_resource.get(i).toString());
+						resourceCombo.addItem("rid="+physical_resource.get(i).get("rid")+" "+physical_resource.get(i).get("physname"));
 					}
 
 				}
@@ -4971,7 +5286,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> information_resource = infocat.readAllResources();
 					for (int i = 0; i < information_resource.size(); i++) {
-						resourceCombo.addItem(information_resource.get(i).toString());
+						resourceCombo.addItem("rid="+information_resource.get(i).get("rid")+" "+information_resource.get(i).get("irname"));
 					}
 
 				}
@@ -4979,7 +5294,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> module_resource = modcat.readAllResources();
 					for (int i = 0; i < module_resource.size(); i++) {
-						resourceCombo.addItem(module_resource.get(i).toString());
+						resourceCombo.addItem("rid="+module_resource.get(i).get("modrid")+" "+module_resource.get(i).get("modname"));
 					}
 				}
 			}
@@ -5058,7 +5373,7 @@ public class NUserPage {
 					int projid = Integer.parseInt(m.group().replace("projid=", ""));
 					Project proj = projcat.getProject(projid);
 					resreqcat.getReport(proj).getResults();
-					resreq_tabledata.update(resreqcat.getReport(proj).getResults());
+					resreqreport_tabledata.update(resreqcat.getReport(proj).getResults());
 
 				}
 
@@ -5170,7 +5485,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 					for (int i = 0; i < employee_resource.size(); i++) {
-						resourceCombo.addItem(employee_resource.get(i).toString());
+						resourceCombo.addItem("empid="+employee_resource.get(i).get("empid")+" "+employee_resource.get(i).get("empname"));
 					}
 		submitgetReportBtn.addActionListener(new ActionListener() {
 			@Override
@@ -5203,6 +5518,615 @@ public class NUserPage {
 				// %%%
 
 		});
+	}
+	
+	private void searchRegistered() {
+		HashMap<String, String> searchVars = new HashMap<String, String>();
+		searchVars.put("empname", "\'" + search_regemployeename.getText() + "\'");
+		if (empcat.SearchEmployee(searchVars).isEmpty()) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
+		} else {
+			registered_tabledata.update(empcat.SearchEmployee(searchVars));
+		}
+	}
+	
+	private void confirmRegistered() {
+		System.out.println("-----");
+		int rowIndex = registered_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = registered_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a User!");
+		} else {
+
+			String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString());
+			System.out.println(Table_click);
+			empcat.makeDecision(Integer.parseInt(Table_click), true);
+			registered_tabledata.update(empcat.getRegistrations());
+		}
+	}
+	private void denyRegisitered() {
+		System.out.println("-----");
+		int rowIndex = registered_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = registered_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a User!");
+		} else {
+
+			String Table_click = (registered_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString());
+			System.out.println(Table_click);
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Deny this user?");
+			if (myDialog.getAnswer()) {
+				empcat.makeDecision(Integer.parseInt(Table_click), false);
+				registered_tabledata.update(empcat.getRegistrations());
+			}
+		}
+	}
+	
+
+	private void addModuleUtilization() {
+		final ArrayList<String> employees = new ArrayList<String>();
+		final ArrayList<String> financials = new ArrayList<String>();
+		final ArrayList<String> physicals = new ArrayList<String>();
+		final ArrayList<String> information = new ArrayList<String>();
+		final ArrayList<String> module = new ArrayList<String>();
+
+		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		for (int i = 0; i < employe_readall.size(); i++) {
+			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
+		}
+		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+		for (int i = 0; i < financial_readall.size(); i++) {
+			financials.add("rid="+financial_readall.get(i).get("rid")+" "+financial_readall.get(i).get("finanname"));
+		}
+
+		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+		for (int i = 0; i < physical_readall.size(); i++) {
+			physicals.add("rid="+physical_readall.get(i).get("rid")+" "+physical_readall.get(i).get("physname"));
+		}
+
+		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+		for (int i = 0; i < information_readall.size(); i++) {
+			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
+		}
+
+		ArrayList<HashMap<String, String>> module_readall = modcat.readAllResources();
+		for (int i = 0; i < module_readall.size(); i++) {
+			module.add("rid="+module_readall.get(i).get("modrid")+" "+module_readall.get(i).get("modname"));
+		}
+
+		ArrayList<Field> moduleutilFields = new ArrayList<Field>();
+
+		Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+		Field information_check = new Field("checkBox", "information", information, 20, "information");
+		Field module_check = new Field("checkBox", "module", module, 20, "module");
+
+		moduleutilFields.add(financial_check);
+		moduleutilFields.add(physical_check);
+		moduleutilFields.add(information_check);
+		moduleutilFields.add(maintainers);
+		moduleutilFields.add(module_check);
+
+		final Form moduleutilForm = new Form(moduleutilFields, "Module Form");
+		final PanelBuilder moduleutilPanel = new PanelBuilder(moduleutilForm);
+		moduleutilPanel.makeForm();
+
+		JFrame AddModuleUtilizationPage = new JFrame("Add Module Utilization Form");
+		AddModuleUtilizationPage.getContentPane().add(moduleutilForm.getJPanel(), BorderLayout.NORTH);
+		JScrollPane scroll = new JScrollPane(moduleutilForm.getJPanel());
+		AddModuleUtilizationPage.getContentPane().add(scroll);
+
+		JButton submitaddmoduleutilBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddmoduleutilBtn);
+		AddModuleUtilizationPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		AddModuleUtilizationPage.pack();
+		AddModuleUtilizationPage.setVisible(true);
+
+
+		final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(0);
+		final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(1);
+		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(2);
+		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(3);
+		final CheckBoxJPanel checkBoxpane_module = (CheckBoxJPanel) moduleutilForm.getJPanel().getComponent(4);
+
+
+		submitaddmoduleutilBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("all : ");
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < moduleutilForm.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) moduleutilForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + "adasa");
+				}
+
+				//
+				System.out.println("----------");
+
+				final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
+				System.out.println(finanvales);
+				final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
+				System.out.println(physicalvales);
+				final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+				System.out.println(informationvales);
+				final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
+				System.out.println(employeevales);
+				final ArrayList<String> modulevales = checkBoxpane_module.getCheckedValues();
+				System.out.println(modulevales);
+				Pattern emp = Pattern.compile("empid=\\d+");
+				for (int i = 0; i < employeevales.size(); i++) {
+					String empids = null;
+					Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+					if (m_emp.find()) {
+						empids = m_emp.group();
+					}
+					System.out.println("empids: " + empids);
+					long resemp= makemodulecat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_module);
+					if(resemp==-1)
+						{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",empids+" This Resource already exists");
+						}
+				}
+
+				Pattern res = Pattern.compile("rid=\\d+");
+				for (int i = 0; i < finanvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(finanvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("finan rid: " + respids);
+					long resfinan= makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+					if(resfinan==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					
+					}
+				}
+
+				for (int i = 0; i < physicalvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(physicalvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("phys rid: " + respids);
+					long physres=makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+
+					if(physres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
+				}
+
+				for (int i = 0; i < informationvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(informationvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("info rid: " + respids);
+					long infores= makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+					if(infores==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
+					
+
+				}
+				for (int i = 0; i < modulevales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(modulevales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("module rid: " + respids);
+					long modres= makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+					if(modres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
+				}
+				
+				
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<Employee> allemp;
+				allemp = makemodulecat.getEmployees(selected_module);
+				for (int i = 0; i < allemp.size(); i++) {
+					HashMap<String,String> emps = new HashMap<String,String>();
+					emps.put("empid", allemp.get(i).getId()+"");
+					emps.put("empname", allemp.get(i).getName());
+					data.add(emps);
+				}
+				ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+				ArrayList<Resource> allres;
+				allres = makemodulecat.getResources(selected_module);
+				for (int i = 0; i < allres.size(); i++) {
+					HashMap<String,String> ress = new HashMap<String,String>();
+					ress.put("rid", allres.get(i).getId()+"");
+					ress.put("rname", allres.get(i).getName());
+					resdata.add(ress);
+				}
+				
+				moduledetail_tabledata.update(resdata);
+				moduledetailemployee_tabledata.update(data);
+				
+
+			}
+		});
+	}
+	
+	private void addMaintainingUtilization() {
+		final ArrayList<String> employees = new ArrayList<String>();
+		final ArrayList<String> financials = new ArrayList<String>();
+		final ArrayList<String> physicals = new ArrayList<String>();
+		final ArrayList<String> information = new ArrayList<String>();
+		final ArrayList<String> module = new ArrayList<String>();
+
+		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		for (int i = 0; i < employe_readall.size(); i++) {
+			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
+		}
+		ArrayList<HashMap<String, String>> financial_readall = financat.readAllResources();
+		for (int i = 0; i < financial_readall.size(); i++) {
+			financials.add("rid="+financial_readall.get(i).get("rid")+" "+financial_readall.get(i).get("finanname"));
+		}
+
+		ArrayList<HashMap<String, String>> physical_readall = physcat.readAllResources();
+		for (int i = 0; i < physical_readall.size(); i++) {
+			physicals.add("rid="+physical_readall.get(i).get("rid")+" "+physical_readall.get(i).get("physname"));
+		}
+
+		ArrayList<HashMap<String, String>> information_readall = infocat.readAllResources();
+		for (int i = 0; i < information_readall.size(); i++) {
+			information.add("rid="+information_readall.get(i).get("rid")+" "+information_readall.get(i).get("irname"));
+		}
+
+		ArrayList<HashMap<String, String>> module_readall = modcat.readAllResources();
+		for (int i = 0; i < module_readall.size(); i++) {
+			module.add("rid="+module_readall.get(i).get("modrid")+" "+module_readall.get(i).get("modname"));
+		}
+		ArrayList<Field> maintainingutilFields = new ArrayList<Field>();
+
+		Field maintainers = new Field("checkBox", "employees", employees, 20, "res");
+		Field financial_check = new Field("checkBox", "fianance", financials, 20, "fianance");
+		Field physical_check = new Field("checkBox", "physical", physicals, 20, "physical");
+		Field information_check = new Field("checkBox", "information", information, 20, "information");
+		Field module_check = new Field("checkBox", "module", module, 20, "module");
+
+		maintainingutilFields.add(financial_check);
+		maintainingutilFields.add(physical_check);
+		maintainingutilFields.add(information_check);
+		maintainingutilFields.add(maintainers);
+		maintainingutilFields.add(module_check);
+
+		
+		final Form maintainingutilForm = new Form(maintainingutilFields, "Add Maintaining Utilization Form");
+		final PanelBuilder moduleutilPanel = new PanelBuilder(maintainingutilForm);
+		moduleutilPanel.makeForm();
+
+		JFrame AddMaintainingUtilizationPage = new JFrame("Add Maintaining Utilization Form");
+		AddMaintainingUtilizationPage.getContentPane().add(maintainingutilForm.getJPanel(), BorderLayout.NORTH);
+		JScrollPane scroll = new JScrollPane(maintainingutilForm.getJPanel());
+		AddMaintainingUtilizationPage.getContentPane().add(scroll);
+
+		JButton submitaddmaintainingutilBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submitaddmaintainingutilBtn);
+		AddMaintainingUtilizationPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		AddMaintainingUtilizationPage.pack();
+		AddMaintainingUtilizationPage.setVisible(true);
+
+
+		final CheckBoxJPanel checkBoxpane_finance = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(0);
+		final CheckBoxJPanel checkBoxpane_physical = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(1);
+		final CheckBoxJPanel checkBoxpane_information = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(2);
+		final CheckBoxJPanel checkBoxpane_employee = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(3);
+		final CheckBoxJPanel checkBoxpane_module = (CheckBoxJPanel) maintainingutilForm.getJPanel().getComponent(4);
+
+
+		submitaddmaintainingutilBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("all : ");
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < maintainingutilForm.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) maintainingutilForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + "adasa");
+				}
+
+				//
+				System.out.println("----------");
+
+				final ArrayList<String> finanvales = checkBoxpane_finance.getCheckedValues();
+				System.out.println(finanvales);
+				final ArrayList<String> physicalvales = checkBoxpane_physical.getCheckedValues();
+				System.out.println(physicalvales);
+				final ArrayList<String> informationvales = checkBoxpane_information.getCheckedValues();
+				System.out.println(informationvales);
+				final ArrayList<String> employeevales = checkBoxpane_employee.getCheckedValues();
+				System.out.println(employeevales);
+				final ArrayList<String> modulevales = checkBoxpane_module.getCheckedValues();
+				System.out.println(modulevales);
+
+				Pattern emp = Pattern.compile("empid=\\d+");
+				for (int i = 0; i < employeevales.size(); i++) {
+					String empids = null;
+					Matcher m_emp = emp.matcher(employeevales.get(i).toString());
+					if (m_emp.find()) {
+						empids = m_emp.group();
+					}
+					System.out.println("empids: " + empids);
+					
+					long empres= maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_maintaining_module);
+					if(empres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",empids+" This Resource already exists");
+					}
+				}
+
+				Pattern res = Pattern.compile("rid=\\d+");
+				for (int i = 0; i < finanvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(finanvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("finan rid: " + respids);
+					long finanres = maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					if(finanres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
+				}
+
+				for (int i = 0; i < physicalvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(physicalvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("phys rid: " + respids);
+					long physres= maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					if(physres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
+				}
+
+				for (int i = 0; i < informationvales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(informationvales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("info rid: " + respids);
+					long infores= maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					if(infores==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
+				}
+				
+				
+				for (int i = 0; i < modulevales.size(); i++) {
+					String respids = null;
+					Matcher m_res = res.matcher(modulevales.get(i).toString());
+					if (m_res.find()) {
+						respids = m_res.group();
+					}
+					System.out.println("module rid: " + respids);
+					long modres= maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					if(modres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
+				}
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<Employee> allemp;
+				allemp = maintainmodempresCat.getEmployees(selected_maintaining_module);
+				for (int i = 0; i < allemp.size(); i++) {
+					HashMap<String,String> emps = new HashMap<String,String>();
+					emps.put("empid", allemp.get(i).getId()+"");
+					emps.put("empname", allemp.get(i).getName());
+					data.add(emps);
+				}
+				ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+				ArrayList<Resource> allres;
+				allres = maintainmodempresCat.getResources(selected_maintaining_module);
+				for (int i = 0; i < allres.size(); i++) {
+					HashMap<String,String> ress = new HashMap<String,String>();
+					ress.put("rid", allres.get(i).getId()+"");
+					ress.put("rname", allres.get(i).getName());
+					resdata.add(ress);
+				}
+				
+				maintainingdetail_tabledata.update(resdata);
+				maintainingdetailemployee_tabledata.update(data);
+				
+
+			}
+		});
+	}
+	
+	private void deleteModuleEmployee() {
+		int rowIndex = moduledetailemployee_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = moduledetailemployee_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (moduledetailemployee_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				MakeModuleCatalogue makemodcat = new MakeModuleCatalogue();
+				makemodcat.deleteEmployee(Integer.parseInt(Table_click), selected_module);
+				
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<Employee> allemp;
+				allemp = makemodulecat.getEmployees(selected_module);
+				for (int i = 0; i < allemp.size(); i++) {
+					HashMap<String,String> emps = new HashMap<String,String>();
+					emps.put("empid", allemp.get(i).getId()+"");
+					emps.put("empname", allemp.get(i).getName());
+					data.add(emps);
+				}
+				
+				moduledetailemployee_tabledata.update(data);
+				
+			}
+		}
+	}
+	
+	private void deleteModuleResource() {
+		int rowIndex = moduledetail_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = moduledetail_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (moduledetail_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				MakeModuleCatalogue makemodcat = new MakeModuleCatalogue();
+				makemodcat.deleteResource(Integer.parseInt(Table_click), selected_module);
+				
+				
+				
+				ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+				ArrayList<Resource> allres;
+				allres = makemodulecat.getResources(selected_module);
+				for (int i = 0; i < allres.size(); i++) {
+					HashMap<String,String> ress = new HashMap<String,String>();
+					ress.put("rid", allres.get(i).getId()+"");
+					ress.put("rname", allres.get(i).getName());
+					resdata.add(ress);
+				}
+				
+				moduledetail_tabledata.update(resdata);
+				
+			}
+		}
+	}
+	
+	private void deleteMaintainingEmployee() {
+		int rowIndex = maintainingdetailemployee_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = maintainingdetailemployee_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (maintainingdetailemployee_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				maintainmodempresCat.deleteEmployee(Integer.parseInt(Table_click), selected_maintaining_module);
+				
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<Employee> allemp;
+				allemp = maintainmodempresCat.getEmployees(selected_maintaining_module);
+				for (int i = 0; i < allemp.size(); i++) {
+					HashMap<String,String> emps = new HashMap<String,String>();
+					emps.put("empid", allemp.get(i).getId()+"");
+					emps.put("empname", allemp.get(i).getName());
+					data.add(emps);
+				}
+				
+				maintainingdetailemployee_tabledata.update(data);
+				
+			}
+		}
+	}
+	
+	private void deleteMaintainingResource() {
+		int rowIndex = maintainingdetail_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = maintainingdetail_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource!");
+		} else {
+
+			String Table_click = (maintainingdetail_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				maintainmodempresCat.deleteResource(Integer.parseInt(Table_click), selected_maintaining_module);
+				
+				
+				
+				ArrayList<HashMap<String, String>> resdata = new ArrayList<HashMap<String, String>>();
+				ArrayList<Resource> allres;
+				allres = maintainmodempresCat.getResources(selected_maintaining_module);
+				for (int i = 0; i < allres.size(); i++) {
+					HashMap<String,String> ress = new HashMap<String,String>();
+					ress.put("rid", allres.get(i).getId()+"");
+					ress.put("rname", allres.get(i).getName());
+					resdata.add(ress);
+				}
+				
+				maintainingdetail_tabledata.update(resdata);
+				
+			}
+		}
 	}
 }
 

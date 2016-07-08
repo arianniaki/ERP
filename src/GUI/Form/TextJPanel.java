@@ -11,6 +11,9 @@ import javax.swing.JTextField;
 
 public class TextJPanel extends FieldPanel {
 	private JTextField textField;
+	public JTextField getTextField() {
+		return textField;
+	}
 	public TextJPanel(Field field) {
 		super(field.getName());
 

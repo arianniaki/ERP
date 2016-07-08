@@ -51,20 +51,4 @@ public class SectionCatalogue {
 		}
 		return sec;
 	}
-	
-	public long addSection(String name) {
-		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("sectionname", "\'"+name+"\'");
-
-		long pk=DB.insert(vars, "section");
-		System.out.println("inserted into section table: " + pk);
-		return pk;
-	}
-	
-	public void deleteSection(int id) {
-		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("sid", Integer.toString(id));
-		DB.delete(vars, "section");
-	}
-
 }

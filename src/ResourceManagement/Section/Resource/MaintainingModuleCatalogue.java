@@ -1,6 +1,7 @@
 package ResourceManagement.Section.Resource;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,6 +12,7 @@ import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.Project;
 import ProjectEmployee.ProjectCatalogue;
 import ProjectEmployee.ProjectEmployee;
+import ResourceManagement.Section.Section;
 
 public class MaintainingModuleCatalogue {
 
@@ -20,6 +22,24 @@ public class MaintainingModuleCatalogue {
 		DB = DB.getInstance();
 	}
 	
+	public MaintainingModule getMaintainingModule(int mmid){
+		HashMap<String, String> vars = new HashMap<String, String>();
+		vars.put("maintainid", Integer.toString(mmid));
+		ResultSet res = DB.select("maintainmodule",vars,null);
+		MaintainingModule mm = null;
+		try {
+			if (res.next()) {
+				ModuleCatalogue modCat = new ModuleCatalogue();
+				Module mod = modCat.getModule(res.getInt("modrid"));
+				mm = new MaintainingModule(mod, mmid, res.getString("changetype"), res.getInt("duration"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mm;
+	}
+
 	public ArrayList<MaintainingModule> getMaintainingModules(int modrid){
 	
 		ArrayList<MaintainingModule> mms = new ArrayList<MaintainingModule>();

@@ -85,22 +85,26 @@ public class EmployeeCatalogue {
 
 	}
 
-	public Employee signUp(boolean ismodir, String empname, String post, String username,
+	public Employee signUp(String empname, String post, String username,
 			String password, boolean is_loggedin) {
 
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empname", "\'" + empname + "\'");
 		vars.put("post", "\'" + post + "\'");
-		vars.put("ismodir", Boolean.toString(ismodir));
 		vars.put("username", "\'" + username + "\'");
 		vars.put("password", "\'" + password + "\'");
 		vars.put("is_loggedin", Boolean.toString(is_loggedin));
 		vars.put("is_confirmed", Boolean.toString(false));
-
+		
 		long pk = DB.insert(vars, tablename);
-		Employee employee = new Employee();
-		employee.getFromDB((int) pk);
-		return employee;
+		if(pk==-1)
+			return null;
+		else{
+			Employee employee = new Employee();
+			employee.getFromDB((int) pk);
+			return employee;
+				
+		}
 		
 	}
 

@@ -47,14 +47,4 @@ public class MaintainingModule {
 		mm.put("duration",Integer.toString(this.duration));
 		return mm;
 	}
-	public void edit(String changeType,Integer duration){
-		this.changeType = changeType;
-		this.duration = duration;
-		HashMap<String, String> setVars = new HashMap<String, String>();
-		setVars.put("changetype", "\'"+changeType+"\'");
-		setVars.put("duration", Integer.toString(duration));
-		submitToDB(setVars);
-
-	}
-
 }
