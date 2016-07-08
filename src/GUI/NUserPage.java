@@ -5423,31 +5423,31 @@ public class NUserPage {
 				if (resourceRepCombo.getSelectedItem().toString().equals("Financial")) {
 					// System.out.println(finanResCat.getReport().getResults());
 					resavail_tabledata.update(financat.getReport().getResults(),
-							new String[] { "sid", "count", "finanname" });
+							new String[] { "sid", "sname","count","finanname" });
 				}
 				if (resourceRepCombo.getSelectedItem().toString().equals("Physical")) {
 					// HERE
 					// System.out.println(physResCat.getReport().getResults());
 					resavail_tabledata.update(physcat.getReport().getResults(),
-							new String[] { "sid", "count", "physname" });
+							new String[] { "sid", "sname","count", "physname" });
 
 				}
 				if (resourceRepCombo.getSelectedItem().toString().equals("Information")) {
 					// System.out.println(infoResCat.getReport().getResults());
 					resavail_tabledata.update(infocat.getReport().getResults(),
-							new String[] { "sid", "count", "irname" });
+							new String[] { "sid", "sname","count", "irname" });
 
 				}
 				if (resourceRepCombo.getSelectedItem().toString().equals("Employee")) {
 					System.out.println(empcat.getReport().getResults());
 					resavail_tabledata.update(empcat.getReport().getResults(),
-							new String[] { "sid", "count", "empname" });
+							new String[] { "sid", "sname","count", "empname" });
 
 				}
 				if (resourceRepCombo.getSelectedItem().toString().equals("Module")) {
 					// System.out.println(modResCat.getReport().getResults());
 					resavail_tabledata.update(modcat.getReport().getResults(),
-							new String[] { "sid", "count", "modname" });
+							new String[] { "sid", "sname","count", "modname" });
 
 				}
 

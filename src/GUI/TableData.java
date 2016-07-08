@@ -183,8 +183,8 @@ public class TableData {
 		}
 		if(type=="resavail report")
 		{
-			columns = new String[] {"Section Id", "Count", "Resource"};
-			dbnames = new String[] { "sid", "count", "physname"};
+			columns = new String[] {"Section Id","Section", "Count", "Resource"};
+			dbnames = new String[] { "sid","sname", "count", "physname"};
 
 		}
 
