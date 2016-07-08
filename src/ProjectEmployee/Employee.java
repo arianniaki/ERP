@@ -242,4 +242,14 @@ public class Employee {
 		DB.delete(vars, "Employee");
 	}
 
+	public void editEmployeeInformationName(String text) {
+		// TODO Auto-generated method stub
+		this.name=text;
+		ResourceCatalogue resCat = new ResourceCatalogue();		
+		resCat.getResource(rid).editResource(name, this.sectionId);
+		HashMap<String, String> setVars = new HashMap<String, String>();
+		setVars.put("empname", "\'"+name+"\'");
+		submitToDB(setVars);
+
+	}
 }

@@ -142,73 +142,10 @@ public class NLoginPage {
 		btnSignUp.setBounds(115, 155, 91, 29);
 		btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				ArrayList<Field> signupFields = new ArrayList<Field>();
-				signupFields.add(new Field("text", "username", "", 10, "username"));
-				signupFields.add(new Field("text", "name", "", 10, "name"));
-
-				signupFields.add(new Field("text", "lastname", "", 10, "lastname"));
-				signupFields.add(new Field("text", "password", "", 10, "password"));
-				signupFields.add(new Field("text", "repeat password", "", 10, "repassword"));
-
-				final Form signupForm = new Form(signupFields, "Sign up Form");
-				final PanelBuilder signupPanel = new PanelBuilder(signupForm);
-				signupPanel.makeForm();
-				JFrame SignupPage = new JFrame("Sign up Form");
-				SignupPage.setResizable(false);
-
-				SignupPage.getContentPane().add(signupForm.getJPanel(), BorderLayout.NORTH);
-
-				JButton confirm = new JButton("Confirm");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(confirm);
-				SignupPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				SignupPage.pack();
-				SignupPage.setVisible(true);
-				confirm.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						ArrayList<String> inputs = new ArrayList<String>();
-						for (int i = 0; i < signupForm.getJPanel().getComponentCount(); i++) {
-							FieldPanel fpanel = (FieldPanel) signupForm.getJPanel().getComponent(i);
-							inputs.add(fpanel.getValues().get(0));
-						}
-						for (int i = 0; i < inputs.size(); i++) {
-							System.out.println(inputs.get(i) + "adasa");
-						}
-						EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
-
-						if((inputs.get(0).isEmpty()) || (inputs.get(1).isEmpty()) ||(inputs.get(2).isEmpty()) ||(inputs.get(3).isEmpty()) ||(inputs.get(4).isEmpty())){
-							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
-									"Please fill all of the required data");
-
-						}
-						else{
-						if(!(inputs.get(3).equals(inputs.get(4)))){
-							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
-									"Passwords do not match.");
-						}
-						else
-						{
-						Employee new_emp= empcat.signUp(inputs.get(1)+" "+inputs.get(2), "Default post", inputs.get(0), inputs.get(3), false);
-						if (new_emp == null) {
-							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
-									"Username is already taken!");
-							DataBase.getInstance().connectionClose();
-							DataBase.getInstance().setConnection();
-
-						} 
-							else{
-							System.out.println("Employee added");
-							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
-									"You have been successfully signed up!");
-							}
-						}
-					}
-					}
-				});
+				signUp();
 			}
+
+			
 		});
 		loginFrame.getContentPane().add(btnSignUp);
 		loginFrame.getContentPane().setBackground(color);
@@ -233,5 +170,72 @@ public class NLoginPage {
 
 	public JFrame getloginpageFrame() {
 		return loginFrame;
+	}
+	private void signUp() {
+		ArrayList<Field> signupFields = new ArrayList<Field>();
+		signupFields.add(new Field("text", "username", "", 10, "username"));
+		signupFields.add(new Field("text", "name", "", 10, "name"));
+
+		signupFields.add(new Field("text", "lastname", "", 10, "lastname"));
+		signupFields.add(new Field("text", "password", "", 10, "password"));
+		signupFields.add(new Field("text", "repeat password", "", 10, "repassword"));
+
+		final Form signupForm = new Form(signupFields, "Sign up Form");
+		final PanelBuilder signupPanel = new PanelBuilder(signupForm);
+		signupPanel.makeForm();
+		JFrame SignupPage = new JFrame("Sign up Form");
+		SignupPage.setResizable(false);
+
+		SignupPage.getContentPane().add(signupForm.getJPanel(), BorderLayout.NORTH);
+
+		JButton confirm = new JButton("Confirm");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(confirm);
+		SignupPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		SignupPage.pack();
+		SignupPage.setVisible(true);
+		confirm.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ArrayList<String> inputs = new ArrayList<String>();
+				for (int i = 0; i < signupForm.getJPanel().getComponentCount(); i++) {
+					FieldPanel fpanel = (FieldPanel) signupForm.getJPanel().getComponent(i);
+					inputs.add(fpanel.getValues().get(0));
+				}
+				for (int i = 0; i < inputs.size(); i++) {
+					System.out.println(inputs.get(i) + "adasa");
+				}
+				EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
+
+				if((inputs.get(0).isEmpty()) || (inputs.get(1).isEmpty()) ||(inputs.get(2).isEmpty()) ||(inputs.get(3).isEmpty()) ||(inputs.get(4).isEmpty())){
+					NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+							"Please fill all of the required data");
+
+				}
+				else{
+				if(!(inputs.get(3).equals(inputs.get(4)))){
+					NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+							"Passwords do not match.");
+				}
+				else
+				{
+				Employee new_emp= empcat.signUp(inputs.get(1)+" "+inputs.get(2), "Default post", inputs.get(0), inputs.get(3), false);
+				if (new_emp == null) {
+					NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+							"Username is already taken!");
+					DataBase.getInstance().connectionClose();
+					DataBase.getInstance().setConnection();
+
+				} 
+					else{
+					System.out.println("Employee added");
+					NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+							"You have been successfully signed up!");
+					}
+				}
+			}
+			}
+		});
 	}
 }

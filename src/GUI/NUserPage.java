@@ -261,19 +261,10 @@ public class NUserPage {
 
 		btnEditInformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(passwordField.getText() + " " + passwordField_re.getText() + " "
-						+ editname_textField.getText());
-				if (!(passwordField.getText().equals(passwordField_re.getText()))) {
-					NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
-							"Passwords do not match!");
-
-				} else {
-					if (passwordField.getText() != null && passwordField_re.getText() != null) {
-						NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
-								"You have been successfully edited your information!");
-					}
-				}
+				editEmployeeInformation();
 			}
+
+		
 		});
 		
 		JLabel lblAccessRight = DefaultComponentFactory.getInstance().createLabel("Access Right");
@@ -6125,6 +6116,34 @@ public class NUserPage {
 				
 				maintainingdetail_tabledata.update(resdata);
 				
+			}
+		}
+	}
+	private void editEmployeeInformation() {
+		System.out.println(passwordField.getText() + " " + passwordField_re.getText() + " "
+				+ editname_textField.getText());
+		if (!(passwordField.getText().equals(passwordField_re.getText()))) {
+			NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+					"Passwords do not match!");
+
+		} else {
+			if (!(passwordField.getText().isEmpty() && passwordField_re.getText().isEmpty())) {
+				if(!(editname_textField.getText().isEmpty()))
+				{AuthenticatedEmployee.getInstance().getEmployee().editEmployeeInformation(editname_textField.getText(), passwordField.getText());
+				NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+						"You have been successfully edited your information!");}
+				else{
+					AuthenticatedEmployee.getInstance().getEmployee().editEmployeeInformation(AuthenticatedEmployee.getInstance().getEmployee().getName(), passwordField.getText());
+					NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+							"You have been successfully edited your information!");
+				}
+			
+			}
+			else{
+				AuthenticatedEmployee.getInstance().getEmployee().editEmployeeInformationName(editname_textField.getText());
+				NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+						"You have been successfully edited your information!");
+
 			}
 		}
 	}
