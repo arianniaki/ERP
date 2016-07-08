@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
+import DataBase.DataBase;
 import GUI.Form.Field;
 import GUI.Form.FieldPanel;
 import GUI.Form.Form;
@@ -194,6 +195,9 @@ public class NLoginPage {
 						if (new_emp == null) {
 							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
 									"Username is already taken!");
+							DataBase.getInstance().connectionClose();
+							DataBase.getInstance().setConnection();
+
 						} 
 							else{
 							System.out.println("Employee added");

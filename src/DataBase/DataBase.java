@@ -34,7 +34,7 @@ public class DataBase {
 			scn.close();
 			Class.forName("org.postgresql.Driver");
 			c = DriverManager.getConnection(dbName, user, pass);
-			c.setAutoCommit(false);
+			c.setAutoCommit(false); 
 			System.out.println("insert : Opened database successfully");
 		} catch (FileNotFoundException | ClassNotFoundException | SQLException e) {
 			
@@ -250,4 +250,18 @@ public class DataBase {
 		}
 
 	}
+	
+
+	public void setConnection() {
+		try {
+			c = DriverManager.getConnection(dbName, user, pass);
+			c.setAutoCommit(false); //changed from false to true to stop this error:current transaction is aborted, commands ignored until end of transaction block
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	
 }

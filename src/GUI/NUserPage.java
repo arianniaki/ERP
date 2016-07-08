@@ -32,6 +32,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
+import DataBase.DataBase;
 import GUI.Form.CheckBoxJPanel;
 import GUI.Form.ComboBoxJPanel;
 import GUI.Form.Field;
@@ -5672,8 +5673,14 @@ public class NUserPage {
 						empids = m_emp.group();
 					}
 					System.out.println("empids: " + empids);
-					makemodulecat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_module);
+					long resemp= makemodulecat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_module);
+					if(resemp==-1)
+						{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
 
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",empids+" This Resource already exists");
+						}
 				}
 
 				Pattern res = Pattern.compile("rid=\\d+");
@@ -5684,8 +5691,14 @@ public class NUserPage {
 						respids = m_res.group();
 					}
 					System.out.println("finan rid: " + respids);
-					makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
-
+					long resfinan= makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+					if(resfinan==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					
+					}
 				}
 
 				for (int i = 0; i < physicalvales.size(); i++) {
@@ -5695,8 +5708,15 @@ public class NUserPage {
 						respids = m_res.group();
 					}
 					System.out.println("phys rid: " + respids);
-					makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+					long physres=makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
 
+					if(physres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
 				}
 
 				for (int i = 0; i < informationvales.size(); i++) {
@@ -5706,7 +5726,15 @@ public class NUserPage {
 						respids = m_res.group();
 					}
 					System.out.println("info rid: " + respids);
-					makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+					long infores= makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+					if(infores==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
+					
 
 				}
 				for (int i = 0; i < modulevales.size(); i++) {
@@ -5716,7 +5744,14 @@ public class NUserPage {
 						respids = m_res.group();
 					}
 					System.out.println("module rid: " + respids);
-					makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+					long modres= makemodulecat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_module);
+					if(modres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
+
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
 				}
 				
 				
@@ -5854,8 +5889,14 @@ public class NUserPage {
 					}
 					System.out.println("empids: " + empids);
 					
-					maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_maintaining_module);
+					long empres= maintainmodempresCat.addEmployee(Integer.parseInt(empids.replace("empid=", "")), selected_maintaining_module);
+					if(empres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
 
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",empids+" This Resource already exists");
+					}
 				}
 
 				Pattern res = Pattern.compile("rid=\\d+");
@@ -5866,8 +5907,14 @@ public class NUserPage {
 						respids = m_res.group();
 					}
 					System.out.println("finan rid: " + respids);
-					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					long finanres = maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					if(finanres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
 
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
 				}
 
 				for (int i = 0; i < physicalvales.size(); i++) {
@@ -5877,8 +5924,14 @@ public class NUserPage {
 						respids = m_res.group();
 					}
 					System.out.println("phys rid: " + respids);
-					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					long physres= maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					if(physres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
 
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
 				}
 
 				for (int i = 0; i < informationvales.size(); i++) {
@@ -5888,8 +5941,14 @@ public class NUserPage {
 						respids = m_res.group();
 					}
 					System.out.println("info rid: " + respids);
-					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					long infores= maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					if(infores==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
 
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
 				}
 				
 				
@@ -5900,8 +5959,14 @@ public class NUserPage {
 						respids = m_res.group();
 					}
 					System.out.println("module rid: " + respids);
-					maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					long modres= maintainmodempresCat.addResource(Integer.parseInt(respids.replace("rid=", "")), selected_maintaining_module);
+					if(modres==-1)
+					{
+						DataBase.getInstance().connectionClose();
+						DataBase.getInstance().setConnection();
 
+						NotificationPage notif = new NotificationPage(new JFrame(), "Notification",respids+" This Resource already exists");
+					}
 				}
 				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 				ArrayList<Employee> allemp;
