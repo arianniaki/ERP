@@ -142,7 +142,7 @@ public class NUserPage {
 	private JTextField search_physicalname;
 	private JTextField search_projectname;
 
-	private JTextField search_maintainingname;
+	private JTextField search_maintainingchangetype;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_re;
 	private JTextField search_projectmanager;
@@ -156,7 +156,7 @@ public class NUserPage {
 	private JTextField search_physicalmodel;
 	private JTextField search_subsystemname;
 	private JTextField search_accessrightname;
-	private JTextField search_resourcename;
+	private JTextField search_utilresourcename;
 	private JTextField search_reqresourcename;
 	private JTextField search_regemployeename;
 	
@@ -179,6 +179,8 @@ public class NUserPage {
 	private JTextField search_reqsectionname;
 	private JTextField accessright_textField;
 	private JTextField post_textField;
+	private JTextField search_utilprojectname;
+	private JTextField search_utilsectionname;
 	/**
 	 * Launch the application.
 	 */
@@ -614,43 +616,81 @@ public class NUserPage {
 		JLabel lblResourceName = DefaultComponentFactory.getInstance().createLabel("Resource Name");
 
 		JButton resutil_btnSearch = new JButton("Search");
+		resutil_btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 
-		search_resourcename = new JTextField();
-		search_resourcename.setColumns(10);
+		search_utilresourcename = new JTextField();
+		search_utilresourcename.setColumns(10);
+		
+		JLabel lblProjectName_2 = DefaultComponentFactory.getInstance().createLabel("Project Name");
+		
+		search_utilprojectname = new JTextField();
+		search_utilprojectname.setColumns(10);
+		
+		JLabel lblSectionName_1 = DefaultComponentFactory.getInstance().createLabel("Section Name");
+		
+		search_utilsectionname = new JTextField();
+		search_utilsectionname.setColumns(10);
 
 		GroupLayout gl_resourceutilpanel = new GroupLayout(resourceutilpanel);
-		gl_resourceutilpanel
-				.setHorizontalGroup(
-						gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(
-										gl_resourceutilpanel.createSequentialGroup().addGap(40)
-												.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757,
-														Short.MAX_VALUE)
-												.addGap(40))
-								.addGroup(gl_resourceutilpanel.createSequentialGroup().addComponent(presutil_btnEdit)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(presutil_btnDelete)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(utilbtnBacktoProject)
-										.addPreferredGap(ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
-										.addComponent(btnAddResourceUtilization))
-								.addGroup(gl_resourceutilpanel.createSequentialGroup()
-										.addContainerGap(503, Short.MAX_VALUE).addComponent(resutil_btnSearch)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(search_resourcename, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblResourceName)
-										.addContainerGap()));
-		gl_resourceutilpanel.setVerticalGroup(gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_resourceutilpanel.createSequentialGroup().addGap(12)
-						.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblResourceName).addComponent(resutil_btnSearch).addComponent(
-										search_resourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(40)
-						.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
-						.addGap(40)
-						.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(utilbtnBacktoProject).addComponent(btnAddResourceUtilization)
-								.addComponent(presutil_btnEdit).addComponent(presutil_btnDelete))));
+		gl_resourceutilpanel.setHorizontalGroup(
+			gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addComponent(presutil_btnEdit)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(presutil_btnDelete)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(utilbtnBacktoProject)
+					.addPreferredGap(ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
+					.addComponent(btnAddResourceUtilization))
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addContainerGap(271, Short.MAX_VALUE)
+					.addComponent(resutil_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_utilsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblSectionName_1)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(Alignment.TRAILING, gl_resourceutilpanel.createSequentialGroup()
+							.addComponent(search_utilprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblProjectName_2))
+						.addGroup(Alignment.TRAILING, gl_resourceutilpanel.createSequentialGroup()
+							.addComponent(search_utilresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblResourceName)))
+					.addContainerGap())
+		);
+		gl_resourceutilpanel.setVerticalGroup(
+			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_resourceutilpanel.createSequentialGroup()
+					.addGap(12)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(resutil_btnSearch)
+						.addComponent(search_utilresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSectionName_1)
+						.addComponent(search_utilsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblResourceName))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblProjectName_2)
+						.addComponent(search_utilprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+					.addGap(40)
+					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(utilbtnBacktoProject)
+						.addComponent(btnAddResourceUtilization)
+						.addComponent(presutil_btnEdit)
+						.addComponent(presutil_btnDelete)))
+		);
 
 		resourceutil_tabledata = new TableData(presutilcat);
 		resourceutil_scrollPane.setViewportView(resourceutil_tabledata.getJdataTable());
@@ -1684,9 +1724,13 @@ public class NUserPage {
 
 		
 		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 
-		search_maintainingname = new JTextField();
-		search_maintainingname.setColumns(10);
+		search_maintainingchangetype = new JTextField();
+		search_maintainingchangetype.setColumns(10);
 
 		JButton search_maintainingbtnRefresh = new JButton("Refresh");
 		search_maintainingbtnRefresh.setIcon(new ImageIcon(
@@ -1748,6 +1792,8 @@ public class NUserPage {
 				
 			}
 		});
+		
+		JLabel lblChangeType = DefaultComponentFactory.getInstance().createLabel("Change Type");
 
 		GroupLayout gl_maintaining_panel = new GroupLayout(maintaining_panel);
 		gl_maintaining_panel.setHorizontalGroup(
@@ -1762,7 +1808,7 @@ public class NUserPage {
 					.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnBacktoModule)
-					.addPreferredGap(ComponentPlacement.RELATED, 324, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
 					.addComponent(btnViewMaintainingDetail)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnAddMaintaining, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE))
@@ -1771,8 +1817,10 @@ public class NUserPage {
 					.addPreferredGap(ComponentPlacement.RELATED, 382, Short.MAX_VALUE)
 					.addComponent(btnSearch)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(132))
+					.addComponent(search_maintainingchangetype, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblChangeType)
+					.addContainerGap())
 		);
 		gl_maintaining_panel.setVerticalGroup(
 			gl_maintaining_panel.createParallelGroup(Alignment.LEADING)
@@ -1780,8 +1828,9 @@ public class NUserPage {
 					.addContainerGap()
 					.addGroup(gl_maintaining_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnSearch)
-						.addComponent(search_maintainingname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(search_maintainingbtnRefresh))
+						.addComponent(search_maintainingchangetype, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(search_maintainingbtnRefresh)
+						.addComponent(lblChangeType))
 					.addGap(30)
 					.addComponent(maintaining_scrollPane, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -2330,56 +2379,56 @@ public class NUserPage {
 		search_physicalmodel.setColumns(10);
 
 		GroupLayout gl_physicalPanel = new GroupLayout(physicalPanel);
-		gl_physicalPanel
-				.setHorizontalGroup(
-						gl_physicalPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_physicalPanel.createSequentialGroup().addGap(30)
-										.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 736,
-												Short.MAX_VALUE)
-										.addGap(30))
-								.addGroup(gl_physicalPanel.createSequentialGroup()
-										.addComponent(physical_btnEdit, GroupLayout.PREFERRED_SIZE, 75,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(physical_btnDelete, GroupLayout.PREFERRED_SIZE, 84,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, 494, Short.MAX_VALUE)
-										.addComponent(btnAddPhysicalResource))
-								.addGroup(gl_physicalPanel.createSequentialGroup()
-										.addComponent(search_physicalbtnRefresh)
-										.addPreferredGap(ComponentPlacement.RELATED, 271, Short.MAX_VALUE)
-										.addComponent(physical_btnSearch).addGap(146)
-										.addGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING, false)
-												.addGroup(Alignment.TRAILING, gl_physicalPanel.createSequentialGroup()
-														.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addComponent(lblPhysicalName))
-												.addGroup(Alignment.TRAILING, gl_physicalPanel.createSequentialGroup()
-														.addComponent(search_physicalmodel, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.RELATED,
-																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-														.addComponent(lblModel_1)))
-										.addContainerGap()));
-		gl_physicalPanel.setVerticalGroup(gl_physicalPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_physicalPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(physical_btnSearch).addComponent(lblPhysicalName)
-								.addComponent(search_physicalbtnRefresh))
-						.addGap(3)
-						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblModel_1)
-								.addComponent(search_physicalmodel, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnAddPhysicalResource).addComponent(physical_btnEdit)
-								.addComponent(physical_btnDelete))
-						.addContainerGap()));
+		gl_physicalPanel.setHorizontalGroup(
+			gl_physicalPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addGap(30)
+					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+					.addGap(30))
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addComponent(physical_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(physical_btnDelete, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 494, Short.MAX_VALUE)
+					.addComponent(btnAddPhysicalResource))
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addComponent(search_physicalbtnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 411, Short.MAX_VALUE)
+					.addComponent(physical_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_physicalPanel.createSequentialGroup()
+							.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblPhysicalName))
+						.addGroup(gl_physicalPanel.createSequentialGroup()
+							.addComponent(search_physicalmodel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblModel_1)))
+					.addContainerGap())
+		);
+		gl_physicalPanel.setVerticalGroup(
+			gl_physicalPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_physicalPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(search_physicalname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPhysicalName)
+						.addComponent(search_physicalbtnRefresh)
+						.addComponent(physical_btnSearch))
+					.addGap(3)
+					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblModel_1)
+						.addComponent(search_physicalmodel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(physical_scrollPane, GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_physicalPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnAddPhysicalResource)
+						.addComponent(physical_btnEdit)
+						.addComponent(physical_btnDelete))
+					.addContainerGap())
+		);
 
 		physical_tabledata = new TableData(physcat, "physical");
 		physical_scrollPane.setViewportView(physical_tabledata.getJdataTable());
