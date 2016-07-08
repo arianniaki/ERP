@@ -143,7 +143,6 @@ public class NLoginPage {
 			public void actionPerformed(ActionEvent e) {
 
 				ArrayList<Field> signupFields = new ArrayList<Field>();
-				signupFields.add(new Field("text", "email", "", 10, "email"));
 				signupFields.add(new Field("text", "username", "", 10, "username"));
 				signupFields.add(new Field("text", "name", "", 10, "name"));
 
@@ -179,19 +178,19 @@ public class NLoginPage {
 						}
 						EmployeeCatalogue empcat = EmployeeCatalogue.getInstance();
 
-						if((inputs.get(0).isEmpty()) || (inputs.get(1).isEmpty()) ||(inputs.get(2).isEmpty()) ||(inputs.get(3).isEmpty()) ||(inputs.get(4).isEmpty())||(inputs.get(5).isEmpty())){
+						if((inputs.get(0).isEmpty()) || (inputs.get(1).isEmpty()) ||(inputs.get(2).isEmpty()) ||(inputs.get(3).isEmpty()) ||(inputs.get(4).isEmpty())){
 							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
 									"Please fill all of the required data");
 
 						}
 						else{
-						if(!(inputs.get(4).equals(inputs.get(5)))){
+						if(!(inputs.get(3).equals(inputs.get(4)))){
 							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
 									"Passwords do not match.");
 						}
 						else
 						{
-						Employee new_emp= empcat.signUp(inputs.get(2)+" "+inputs.get(3), "Default post", inputs.get(1), inputs.get(4), false);
+						Employee new_emp= empcat.signUp(inputs.get(1)+" "+inputs.get(2), "Default post", inputs.get(0), inputs.get(3), false);
 						if (new_emp == null) {
 							NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
 									"Username is already taken!");
