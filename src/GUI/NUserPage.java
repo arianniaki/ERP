@@ -340,11 +340,11 @@ public class NUserPage {
 
 		JPanel accessrightPanel = new JPanel();
 		accessrightPanel.setBackground(tab_color);
-		// if
-		// (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super"))
-		// {
+		 if
+		 (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super"))
+		 {
 		tabbedPane.addTab("AccessRight Management", null, accessrightPanel, null);
-		// }
+		 }
 
 		// get employee list
 
@@ -1493,6 +1493,20 @@ public class NUserPage {
 		search_maintainingchangetype.setColumns(10);
 
 		JButton search_maintainingbtnRefresh = new JButton("Refresh");
+		search_maintainingbtnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<MaintainingModule> allmaintainmodule;
+				allmaintainmodule = maintainmodulecat.getMaintainingModules(selected_module);
+				for (int i = 0; i < allmaintainmodule.size(); i++) {
+					data.add((allmaintainmodule.get(i).toHashMap()));
+				}
+				System.out.println("DATA");
+
+				maintaining_tabledata.update(data);
+
+			}
+		});
 		search_maintainingbtnRefresh.setIcon(new ImageIcon(
 				new ImageIcon("images/refresh.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 		
@@ -1563,7 +1577,7 @@ public class NUserPage {
 				.addGroup(gl_maintaining_panel.createSequentialGroup()
 					.addComponent(maintaining_btnEdit, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addComponent(maintaining_btnDelete, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnBacktoModule)
 					.addPreferredGap(ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
@@ -2053,7 +2067,7 @@ public class NUserPage {
 				int colIndex = project_tabledata.getJdataTable().getSelectedColumn();
 				if (rowIndex == -1) {
 					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a module!");
+							"Please Select a project!");
 				} else {
 
 					String Table_click = (project_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
@@ -2197,9 +2211,10 @@ public class NUserPage {
 
 		JPanel reportPanel = new JPanel();
 		reportPanel.setBackground(tab_color);
-		// if
-		// (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super"))
-		// {
+		//begin report 
+		if
+		 (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super"))
+		 {
 		tabbedPane.addTab("Report", null, reportPanel, null);
 		SpringLayout sl_reportPanel = new SpringLayout();
 		reportPanel.setLayout(sl_reportPanel);
@@ -2351,14 +2366,14 @@ public class NUserPage {
 		resavail_tabledata = new TableData(new ArrayList<HashMap<String, String>>(), "resavail report");
 		resavail_scrollpane.setViewportView(resavail_tabledata.getJdataTable());
 		resourceavailPanel.setLayout(gl_resourceavailPanel);
-		// }
-
+		 } 
+		//end report
 		JPanel RegisteredUserspanel = new JPanel();
 		RegisteredUserspanel.setBackground(tab_color);
-		// if(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")
-		// ){
+		 if(AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("super")
+		 ){
 		tabbedPane.addTab("Registered Users", null, RegisteredUserspanel, null);
-		// }
+		 }
 		JScrollPane registered_scrollPane = new JScrollPane();
 
 		JButton btnConfirm = new JButton("Confirm");
@@ -2457,7 +2472,7 @@ public class NUserPage {
 		ImageIcon logout_icon = new ImageIcon(new ImageIcon("images/exit.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 		ImageIcon about_icon = new ImageIcon(new ImageIcon("images/info.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 
-		JMenu file = new JMenu("File");
+		JMenu file = new JMenu("Menu");
 		file.setMnemonic(KeyEvent.VK_F);
 		JMenuItem logout_eMenuItem = new JMenuItem("Logout", logout_icon);
 		JMenuItem about_eMenuItem = new JMenuItem("About", about_icon);
@@ -2492,14 +2507,39 @@ public class NUserPage {
 		userpageFrame.setJMenuBar(menuBar);
 		if (AuthenticatedEmployee.getInstance().getEmployee().getAccessRight().getName().equals("default")) {
 			addreqBtn.setEnabled(false);
+			requirement_btnEdit.setEnabled(false);
+			requirement_btnDelete.setEnabled(false);
+			
 			btnAddInformation.setEnabled(false);
+			information_btnDelete.setEnabled(false);
 			information_btnEdit.setEnabled(false);
+			
 			btnAddFinancial.setEnabled(false);
 			financial_btnEdit.setEnabled(false);
+			financial_btnDelete.setEnabled(false);
+			
 			btnAddPhysicalResource.setEnabled(false);
 			physical_btnEdit.setEnabled(false);
+			physical_btnDelete.setEnabled(false);
+			
+			human_btnAdd.setEnabled(false);
+			human_btnEdit.setEnabled(false);
+			human_btnDelete.setEnabled(false);
+			
 			addprojectBtn.setEnabled(false);
+			btnEditProject.setEnabled(false);
+			btnDeleteProject.setEnabled(false);
+			
 			addsubsystemBtn.setEnabled(false);
+			subsystem_btnEdit.setEnabled(false);
+			subsystem_btnDelete.setEnabled(false);
+			
+			btnAddResourceUtilization.setEnabled(false);
+			presutil_btnEdit.setEnabled(false);
+			presutil_btnDelete.setEnabled(false);
+			
+			
+			
 		}
 
 	}
@@ -3109,7 +3149,7 @@ public class NUserPage {
 		final PanelBuilder requirement_Panel = new PanelBuilder(requirement_Form);
 		requirement_Panel.makeForm();
 
-		JFrame Add_RequirementPage = new JFrame("Add Requirement Module Form");
+		JFrame Add_RequirementPage = new JFrame("Add Requirement Form");
 		Add_RequirementPage.getContentPane().add(requirement_Form.getJPanel(), BorderLayout.NORTH);
 
 		// adding date
@@ -3204,7 +3244,7 @@ public class NUserPage {
 					resourceCombo.removeAllItems();
 					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
 					for (int i = 0; i < employee_resource.size(); i++) {
-						resourceCombo.addItem("empid="+employee_resource.get(i).get("empid")+" "+employee_resource.get(i).get("empname"));
+						resourceCombo.addItem("rid="+employee_resource.get(i).get("rid")+" "+employee_resource.get(i).get("empname"));
 					}
 				}
 				if (resource_type.getSelectedItem().toString().equals("Module")) {
@@ -3235,19 +3275,19 @@ public class NUserPage {
 				// }
 				String empid = "";
 				String rid = "";
-				if (resource_type.getSelectedItem().toString().equals("Employee")) {
-					Pattern p = Pattern.compile("empid=\\d+");
-					Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
-					if (m.find()) {
-						empid = m.group();
-					}
-				} else {
+//				if (resource_type.getSelectedItem().toString().equals("Employee")) {
+//					Pattern p = Pattern.compile("rid=\\d+");
+//					Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
+//					if (m.find()) {
+//						empid = m.group();
+//					}
+//				} else {
 					Pattern p = Pattern.compile("rid=\\d+");
 					Matcher m = p.matcher((CharSequence) resourceCombo.getSelectedItem());
 					if (m.find()) {
 						rid = m.group();
 					}
-				}
+//				}
 
 				String sid = "";
 				Pattern p1 = Pattern.compile("sid=\\d+");
@@ -3314,7 +3354,7 @@ public class NUserPage {
 		final PanelBuilder editrequirement_Panel = new PanelBuilder(editrequirement_Form);
 		editrequirement_Panel.makeForm();
 
-		JFrame Edit_RequirementPage = new JFrame("Edit Requirement Module Form");
+		JFrame Edit_RequirementPage = new JFrame("Edit Requirement Form");
 		Edit_RequirementPage.getContentPane().add(editrequirement_Form.getJPanel(), BorderLayout.NORTH);
 
 		UtilDateModel modelsatisfydate = new UtilDateModel();
@@ -3514,10 +3554,10 @@ public class NUserPage {
 		information_moduleFields.add(new Field("text", "description", "", 20, "desc"));
 
 		information_moduleFields.add(sections);
-		final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
+		final Form information_moduleForm = new Form(information_moduleFields, "Information Form");
 		final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
 		information_modulePanel.makeForm();
-		JFrame Edit_InformationModulePage = new JFrame("Edit Information Module Form");
+		JFrame Edit_InformationModulePage = new JFrame("Edit Information Form");
 		Edit_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 		// adding date
@@ -3644,10 +3684,10 @@ public class NUserPage {
 		information_moduleFields.add(new Field("text", "description", "", 20, "desc"));
 
 		information_moduleFields.add(sections);
-		final Form information_moduleForm = new Form(information_moduleFields, "Information Module Form");
+		final Form information_moduleForm = new Form(information_moduleFields, "Information Form");
 		final PanelBuilder information_modulePanel = new PanelBuilder(information_moduleForm);
 		information_modulePanel.makeForm();
-		JFrame Add_InformationModulePage = new JFrame("Add Information Module Form");
+		JFrame Add_InformationModulePage = new JFrame("Add Information Form");
 		Add_InformationModulePage.getContentPane().add(information_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 		// adding date
@@ -3730,7 +3770,7 @@ public class NUserPage {
 		final Form financial_moduleForm = new Form(financial_moduleFields, "Financial Edit Module Form");
 		final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
 		financial_modulePanel.makeForm();
-		JFrame Add_InformationModulePage = new JFrame("Edit Financial Module Form");
+		JFrame Add_InformationModulePage = new JFrame("Edit Financial Form");
 		Add_InformationModulePage.getContentPane().add(financial_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 		JButton submitaddfinancialBtn = new JButton("Submit");
@@ -3837,10 +3877,10 @@ public class NUserPage {
 		financial_moduleFields.add(new Field("text", "description", "", 20, "desc"));
 		financial_moduleFields.add(sections);
 
-		final Form financial_moduleForm = new Form(financial_moduleFields, "Information Module Form");
+		final Form financial_moduleForm = new Form(financial_moduleFields, "Financial Form");
 		final PanelBuilder financial_modulePanel = new PanelBuilder(financial_moduleForm);
 		financial_modulePanel.makeForm();
-		JFrame Add_FinancialModulePage = new JFrame("Add Financial Module Form");
+		JFrame Add_FinancialModulePage = new JFrame("Add Financial Form");
 		Add_FinancialModulePage.getContentPane().add(financial_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 		JButton submitaddfinancialmoduleBtn = new JButton("Submit");
@@ -4695,7 +4735,7 @@ public class NUserPage {
 		final Form physical_moduleForm = new Form(physical_moduleFields, "Physical Module Form");
 		final PanelBuilder physical_modulePanel = new PanelBuilder(physical_moduleForm);
 		physical_modulePanel.makeForm();
-		JFrame Add_PhysicalModulePage = new JFrame("Add Physical Module Form");
+		JFrame Add_PhysicalModulePage = new JFrame("Add Physical Form");
 		Add_PhysicalModulePage.getContentPane().add(physical_moduleForm.getJPanel(), BorderLayout.NORTH);
 
 		JButton submitaddphysicalmoduleBtn = new JButton("Submit");

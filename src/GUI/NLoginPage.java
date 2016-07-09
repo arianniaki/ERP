@@ -130,7 +130,6 @@ public class NLoginPage {
 				} else {
 					NUserPage userpageWindow = new NUserPage();
 
-					// UserPage userpage = new UserPage(emp);
 					userpageWindow.getUserpageFrame().setVisible(true);
 					loginFrame.dispose();
 				}
