@@ -53,7 +53,7 @@ public class ProjectEmployeeCatalogue {
 			Employee emp = empcat.getEmployee(Integer.parseInt(result.get(i).get("empid")));
 			Project pr = pcat.getProject(Integer.parseInt(result.get(i).get("projid")));
 
-			ProjectEmployee pe = new ProjectEmployee(pr,emp,result.get(i).get("fromdate"),result.get(i).get("todate"));
+			ProjectEmployee pe = new ProjectEmployee(Integer.parseInt(result.get(i).get("projempid")),pr,emp,result.get(i).get("fromdate"),result.get(i).get("todate"));
 			projemp.add(pe);
 		}
 		return projemp;
@@ -73,7 +73,7 @@ public class ProjectEmployeeCatalogue {
 			if(res.next()){
 				Project pr = pcat.getProject(res.getInt("projid"));
 				Employee emp = empcat.getEmployee(res.getInt("empid"));
-				premp = new ProjectEmployee(pr, emp,res.getString("fromdate"),res.getString("todate"));
+				premp = new ProjectEmployee(Integer.parseInt(res.getString("projempid")),pr, emp,res.getString("fromdate"),res.getString("todate"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -79,4 +79,15 @@ public class MaintainingModuleCatalogue {
 
 
 	}
+	
+	public ArrayList<HashMap<String, String>> Search(HashMap<String, String> searchvars){
+		
+		Table table = new Table("maintainmodule");
+		ArrayList<HashMap<String, String>> result = table.search(searchvars);
+		for (int i = 0; i < result.size(); i++) {
+			System.out.println(result.get(i).toString());
+		}
+		return result;		
+	}
+
 }
