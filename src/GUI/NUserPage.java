@@ -125,6 +125,7 @@ public class NUserPage {
 	private TableData resavail_tabledata;
 	private TableData subsystem_tabledata;
 	private TableData resourceutil_tabledata;
+	private TableData employeeutil_tabledata;
 	private TableData moduledetail_tabledata;
 	private  TableData moduledetailemployee_tabledata;
 	private TableData maintainingdetail_tabledata;
@@ -157,7 +158,6 @@ public class NUserPage {
 	private JTextField search_physicalmodel;
 	private JTextField search_subsystemname;
 	private JTextField search_accessrightname;
-	private JTextField search_utilresourcename;
 	private JTextField search_reqresourcename;
 	private JTextField search_regemployeename;
 	
@@ -180,8 +180,6 @@ public class NUserPage {
 	private JTextField search_reqsectionname;
 	private JTextField accessright_textField;
 	private JTextField post_textField;
-	private JTextField search_utilprojectname;
-	private JTextField search_utilsectionname;
 	/**
 	 * Launch the application.
 	 */
@@ -599,38 +597,15 @@ public class NUserPage {
 		});
 		presutil_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
+		
+		employeeutil_tabledata = new TableData(projempcat,selected_project_forsubsystem);
 
-		JLabel lblResourceName = DefaultComponentFactory.getInstance().createLabel("Resource Name");
-
-		JButton resutil_btnSearch = new JButton("Search");
-		resutil_btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				searchResourceUtilization();
-			}
-
-		
-		});
-
-		search_utilresourcename = new JTextField();
-		search_utilresourcename.setColumns(10);
-		
-		JLabel lblProjectName_2 = DefaultComponentFactory.getInstance().createLabel("Project Name");
-		
-		search_utilprojectname = new JTextField();
-		search_utilprojectname.setColumns(10);
-		
-		JLabel lblSectionName_1 = DefaultComponentFactory.getInstance().createLabel("Section Name");
-		
-		search_utilsectionname = new JTextField();
-		search_utilsectionname.setColumns(10);
+		JScrollPane employeeutil_scrollPane = new JScrollPane();
+		employeeutil_scrollPane.setViewportView(employeeutil_tabledata.getJdataTable());
 
 		GroupLayout gl_resourceutilpanel = new GroupLayout(resourceutilpanel);
 		gl_resourceutilpanel.setHorizontalGroup(
 			gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_resourceutilpanel.createSequentialGroup()
-					.addGap(40)
-					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-					.addGap(40))
 				.addGroup(gl_resourceutilpanel.createSequentialGroup()
 					.addComponent(presutil_btnEdit)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -640,41 +615,22 @@ public class NUserPage {
 					.addPreferredGap(ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
 					.addComponent(btnAddResourceUtilization))
 				.addGroup(gl_resourceutilpanel.createSequentialGroup()
-					.addContainerGap(271, Short.MAX_VALUE)
-					.addComponent(resutil_btnSearch)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_utilsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblSectionName_1)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(Alignment.TRAILING, gl_resourceutilpanel.createSequentialGroup()
-							.addComponent(search_utilprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblProjectName_2))
-						.addGroup(Alignment.TRAILING, gl_resourceutilpanel.createSequentialGroup()
-							.addComponent(search_utilresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblResourceName)))
-					.addContainerGap())
+					.addGap(40)
+					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(Alignment.LEADING, gl_resourceutilpanel.createSequentialGroup()
+					.addGap(133)
+					.addComponent(employeeutil_scrollPane, GroupLayout.PREFERRED_SIZE, 550, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(154, Short.MAX_VALUE))
 		);
 		gl_resourceutilpanel.setVerticalGroup(
 			gl_resourceutilpanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_resourceutilpanel.createSequentialGroup()
-					.addGap(12)
-					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(resutil_btnSearch)
-						.addComponent(search_utilresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblSectionName_1)
-						.addComponent(search_utilsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblResourceName))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblProjectName_2)
-						.addComponent(search_utilprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addComponent(resourceutil_scrollPane, GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
-					.addGap(40)
+				.addGroup(Alignment.TRAILING, gl_resourceutilpanel.createSequentialGroup()
+					.addGap(68)
+					.addComponent(resourceutil_scrollPane, GroupLayout.PREFERRED_SIZE, 190, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+					.addComponent(employeeutil_scrollPane, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+					.addGap(73)
 					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(utilbtnBacktoProject)
 						.addComponent(btnAddResourceUtilization)
@@ -682,7 +638,7 @@ public class NUserPage {
 						.addComponent(presutil_btnDelete)))
 		);
 
-		resourceutil_tabledata = new TableData(presutilcat);
+		resourceutil_tabledata = new TableData(presutilcat,selected_project_forsubsystem);
 		resourceutil_scrollPane.setViewportView(resourceutil_tabledata.getJdataTable());
 		resourceutilpanel.setLayout(gl_resourceutilpanel);
 		//
@@ -2790,24 +2746,6 @@ public class NUserPage {
 			}
 		});
 	}
-	}
-	
-	private void searchResourceUtilization() {
-		HashMap<String, String> searchVars = new HashMap<String, String>();
-
-		if (search_utilresourcename.getText() != null && !search_utilresourcename.getText().trim().equals(""))
-			searchVars.put("rname", "\'" + search_utilresourcename.getText() + "\'");
-		if (search_utilprojectname.getText() != null && !search_utilprojectname.getText().trim().equals(""))
-			searchVars.put("pname", "\'" + search_utilprojectname.getText() + "\'");
-		if (search_utilsectionname.getText() != null && !search_utilsectionname.getText().trim().equals(""))
-			searchVars.put("sname", "\'" + search_utilsectionname.getText() + "\'");
-
-
-//		if (presutilcat.Search(searchVars).isEmpty()) {
-//			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
-//		} else {
-//			resourceutil_tabledata.update(presutilcat.Search(searchVars));
-//		}
 	}
 	
 	private void addResourceUtilization() {

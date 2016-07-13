@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableModel;
 import ProjectEmployee.Employee;
 import ProjectEmployee.EmployeeCatalogue;
 import ProjectEmployee.ProjectCatalogue;
+import ProjectEmployee.ProjectEmployee;
+import ProjectEmployee.ProjectEmployeeCatalogue;
 import ProjectEmployee.SubSystem.SubSystemCatalogue;
 import RequirementUtilization.ProjectResourceUtilization;
 import RequirementUtilization.ProjectResourceUtilizationCatalogue;
@@ -123,13 +125,13 @@ public class TableData {
 		this.buildFilledJTable();
 
 	}
-	public TableData(ProjectResourceUtilizationCatalogue presutilcat) {
+	public TableData(ProjectResourceUtilizationCatalogue presutilcat, int projectid) {
 		
 		data= new ArrayList<HashMap<String, String>>();
 		columns = new String[] { "presutilid","Resource Id","Resource", "Section Id", "Section","Project Id","Project","From","To" };
 		dbnames = new String[] { "presutilid","rid","resourceName", "sid", "sectionName","pid","projectName","fromdate","todate" };
 		ArrayList<ProjectResourceUtilization> allpresutil;
-		allpresutil = presutilcat.getProjectResourceUtilizations();
+		allpresutil = presutilcat.getProjectResourceUtilizationbyProject(projectid);
 		for (int i = 0; i < allpresutil.size(); i++) {
 			data.add((allpresutil.get(i).toHashMap()));
 		}
@@ -219,6 +221,20 @@ public class TableData {
 			dbnames = new String[] { "rid", "rname"};
 		}
 		this.buildFilledJTable();
+	}
+
+	public TableData(ProjectEmployeeCatalogue projempcat,int projectid) {
+		// TODO Auto-generated constructor stub
+		data= new ArrayList<HashMap<String, String>>();
+		columns = new String[] { "presutilid","Employee Id","Employee Name", "Section Id", "Section","Project Id","Project","From","To" };
+		dbnames = new String[] { "presutilid","empid","empname", "sid", "sectionName","pid","projectName","fromdate","todate" };
+		ArrayList<ProjectEmployee> allpresutil;
+		allpresutil = projempcat.getProjectEmployeesByProject(projectid);
+//		for (int i = 0; i < allpresutil.size(); i++) {
+//			data.add((allpresutil.get(i).toHashMap()));
+//		}
+		this.buildFilledJTable();
+		
 	}
 
 	public JTable buildFilledJTable() {
