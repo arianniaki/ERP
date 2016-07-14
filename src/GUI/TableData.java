@@ -104,8 +104,8 @@ public class TableData {
 		}
 		if(type=="human")
 		{
-			columns = new String[] { "Id", "Name","Post","Access Right" ,"Section Id"};
-			dbnames = new String[] { "empid", "empname","post" ,"accessrightname","sid"};
+			columns = new String[] { "Id", "Name","Post","Access Right" ,"Section Id","Section"};
+			dbnames = new String[] { "empid", "empname","post" ,"accessrightname","sid","sectionName"};
 		}
 		this.buildFilledJTable();
 	}
@@ -226,13 +226,13 @@ public class TableData {
 	public TableData(ProjectEmployeeCatalogue projempcat,int projectid) {
 		// TODO Auto-generated constructor stub
 		data= new ArrayList<HashMap<String, String>>();
-		columns = new String[] { "presutilid","Employee Id","Employee Name", "Section Id", "Section","Project Id","Project","From","To" };
-		dbnames = new String[] { "presutilid","empid","empname", "sid", "sectionName","pid","projectName","fromdate","todate" };
+		columns = new String[] { "projempid","Employee Id","Employee Name","Project Id","Project","From","To" };
+		dbnames = new String[] { "projempid","empid","empname", "pid","projectname","fromdate","todate" };
 		ArrayList<ProjectEmployee> allpresutil;
 		allpresutil = projempcat.getProjectEmployeesByProject(projectid);
-//		for (int i = 0; i < allpresutil.size(); i++) {
-//			data.add((allpresutil.get(i).toHashMap()));
-//		}
+		for (int i = 0; i < allpresutil.size(); i++) {
+			data.add((allpresutil.get(i).toHashMap()));
+		}
 		this.buildFilledJTable();
 		
 	}

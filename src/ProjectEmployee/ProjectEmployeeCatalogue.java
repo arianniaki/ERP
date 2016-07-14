@@ -59,11 +59,12 @@ public class ProjectEmployeeCatalogue {
 		return projemp;
 	}
 	
-	public ProjectEmployee getProjectEmployee(int pid, int empid){
+	public ProjectEmployee getProjectEmployee(int projempid){
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("projid", Integer.toString(pid));
-		vars.put("empid", Integer.toString(empid));
-		
+//		
+//		vars.put("projid", Integer.toString(pid));
+//		vars.put("empid", Integer.toString(empid));
+		vars.put("projempid", Integer.toString(projempid));
 		ResultSet res = DB.select("projectemployee",vars,null);
 
 		ProjectCatalogue pcat = ProjectCatalogue.getInstance();
@@ -83,11 +84,12 @@ public class ProjectEmployeeCatalogue {
 	}
 	
 	
-	public void deleteProjectEmployee (int pid, int empid){
+	public void deleteProjectEmployee (int projempid){
 	
 		HashMap<String, String> vars = new HashMap<String, String>();
-		vars.put("projid", Integer.toString(pid));
-		vars.put("empid", Integer.toString(empid));
+//		vars.put("projid", Integer.toString(pid));
+//		vars.put("empid", Integer.toString(empid));
+		vars.put("projempid", Integer.toString(projempid));
 		
 		DB.delete(vars, "projectemployee");
 
