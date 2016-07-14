@@ -4454,7 +4454,7 @@ System.out.println("--------===");
 		if (empcat.SearchEmployee(searchVars).isEmpty()) {
 			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
 		} else {
-//			maintaining_tabledata.update(maintainmodulecat.s(searchVars));
+			maintaining_tabledata.update(maintainmodulecat.Search(searchVars));
 		}
 	}
 	
