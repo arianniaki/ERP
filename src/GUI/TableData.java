@@ -105,7 +105,7 @@ public class TableData {
 		if(type=="human")
 		{
 			columns = new String[] { "Id", "Name","Post","Access Right" ,"Section Id","Section"};
-			dbnames = new String[] { "empid", "empname","post" ,"accessrightname","sid","sectionName"};
+			dbnames = new String[] { "empid", "empname","post" ,"accessrightname","sid","sectionname"};
 		}
 		this.buildFilledJTable();
 	}
