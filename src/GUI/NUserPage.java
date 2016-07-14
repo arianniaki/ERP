@@ -587,84 +587,19 @@ public class NUserPage {
 
 		pemputil_btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//HERE
-				int rowIndex = employeeutil_tabledata.getJdataTable().getSelectedRow();
-
-				String Table_click = (employeeutil_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-						.toString()); // return
-				selected_employee_util = Integer.parseInt(Table_click.trim());
-
-				System.out.println(Table_click);
-				System.out.println("---employee util id-- " + selected_employee_util);
-
-
-				JFrame Edit_ResUtilPage = new JFrame("Edit Employee Utilization Form");
-
-				// adding date
-				UtilDateModel modelfor = new UtilDateModel();
-				UtilDateModel modelto = new UtilDateModel();
-
-				Properties p = new Properties();
-				p.put("text.today", "Today");
-				p.put("text.month", "Month");
-				p.put("text.year", "Year");
-				final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
-				JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
-				JLabel from = new JLabel("From");
-				JLabel to = new JLabel("To");
-				final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
-				final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
-
-				JPanel date_panel = new JPanel(new FlowLayout());
-				date_panel.add(from);
-
-				date_panel.add(from_datePanel);
-				date_panel.add(to);
-				date_panel.add(to_datePanel);
-				Edit_ResUtilPage.getContentPane().add(date_panel, BorderLayout.CENTER);
-				// end date
-
-				JButton submiteditresutilBtn = new JButton("Submit");
-				JPanel buttonPanel = new JPanel();
-				buttonPanel.add(submiteditresutilBtn);
-				Edit_ResUtilPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-				Edit_ResUtilPage.pack();
-				Edit_ResUtilPage.setVisible(true);
-
-				submiteditresutilBtn.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-
-						String fromdate = from_datePicker.getJFormattedTextField().getText();
-						String todate = to_datePicker.getJFormattedTextField().getText();
-
-						ProjectEmployee projemputil = projempcat.getProjectEmployee(selected_employee_util);
-						projemputil.edit(fromdate, todate);
-						
-
-						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-						ArrayList<ProjectEmployee> allpemputil;
-						allpemputil = projempcat.getProjectEmployeesByProject(selected_project_forsubsystem);
-						for (int i = 0; i < allpemputil.size(); i++) {
-							data.add((allpemputil.get(i).toHashMap()));
-						}
-						employeeutil_tabledata.update(data);
-
-					}
-				});
+				editEmployeeUtilization();
 				
 			}
+			
 		});
 
-		JButton presutil_btnDelete = new JButton("Delete");
-		presutil_btnDelete.addActionListener(new ActionListener() {
+		JButton pemployeeutil_btnDelete = new JButton("Delete");
+		pemployeeutil_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				deleteResourceUtilization();
+				deleteEmployeeUtilization();
 			}
 		});
-		presutil_btnDelete.setIcon(new ImageIcon(
+		pemployeeutil_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 		
 		employeeutil_tabledata = new TableData(projempcat,selected_project_forsubsystem);
@@ -672,37 +607,13 @@ public class NUserPage {
 		JScrollPane employeeutil_scrollPane = new JScrollPane();
 		employeeutil_scrollPane.setViewportView(employeeutil_tabledata.getJdataTable());
 		
-		JButton pemputil_btnDelete = new JButton("Delete");
-		pemputil_btnDelete.setIcon(new ImageIcon(
+		JButton presutil_btnDelete = new JButton("Delete");
+		presutil_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
 
-		pemputil_btnDelete.addActionListener(new ActionListener() {
+		presutil_btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int rowIndex = resourceutil_tabledata.getJdataTable().getSelectedRow();
-				int colIndex = resourceutil_tabledata.getJdataTable().getSelectedColumn();
-				if (rowIndex == -1) {
-					NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
-							"Please Select a Resource Utilization!");
-				} else {
-
-					String Table_click = (resourceutil_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
-							.toString()); // the
-					System.out.println(Table_click + " this was clicked");
-					DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
-							"Are you sure you want to Delete this item?");
-					if (myDialog.getAnswer()) {
-						presutilcat.deleteProjectResourceUtilization(Integer.parseInt(Table_click));
-
-						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-						ArrayList<ProjectResourceUtilization> allpresutil;
-						allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
-						for (int i = 0; i < allpresutil.size(); i++) {
-							data.add((allpresutil.get(i).toHashMap()));
-						}
-						resourceutil_tabledata.update(data);
-						
-				}
-			}
+				deleteResourceUtilization();
 				
 			}
 		});
@@ -723,7 +634,7 @@ public class NUserPage {
 				.addGroup(gl_resourceutilpanel.createSequentialGroup()
 					.addComponent(pemputil_btnEdit)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(presutil_btnDelete)
+					.addComponent(pemployeeutil_btnDelete)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(utilbtnBacktoProject)
 					.addPreferredGap(ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
@@ -731,7 +642,7 @@ public class NUserPage {
 				.addGroup(gl_resourceutilpanel.createSequentialGroup()
 					.addComponent(presutil_btnEdit)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(pemputil_btnDelete)
+					.addComponent(presutil_btnDelete)
 					.addContainerGap())
 				.addGroup(Alignment.TRAILING, gl_resourceutilpanel.createSequentialGroup()
 					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.TRAILING)
@@ -750,7 +661,7 @@ public class NUserPage {
 					.addComponent(resourceutil_scrollPane, GroupLayout.PREFERRED_SIZE, 198, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_resourceutilpanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(pemputil_btnDelete)
+						.addComponent(presutil_btnDelete)
 						.addComponent(presutil_btnEdit))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(employeeutil_scrollPane, GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
@@ -759,7 +670,7 @@ public class NUserPage {
 						.addComponent(utilbtnBacktoProject)
 						.addComponent(btnAddResourceUtilization)
 						.addComponent(pemputil_btnEdit)
-						.addComponent(presutil_btnDelete)))
+						.addComponent(pemployeeutil_btnDelete)))
 		);
 
 		resourceutil_tabledata = new TableData(presutilcat,selected_project_forsubsystem);
@@ -2626,7 +2537,7 @@ public class NUserPage {
 			
 			btnAddResourceUtilization.setEnabled(false);
 			pemputil_btnEdit.setEnabled(false);
-			presutil_btnDelete.setEnabled(false);
+			pemployeeutil_btnDelete.setEnabled(false);
 			
 			
 			
@@ -2708,10 +2619,10 @@ public class NUserPage {
 		if(search_accessrightname.getText().equals("default"))
 			searchVars.put("accessrightid", "\'" + 1 + "\'");
 
-		if(search_accessrightname.getText().equals("super"))
+		else if(search_accessrightname.getText().equals("super"))
 			searchVars.put("accessrightid", "\'" + 3 + "\'");
 
-		if(search_accessrightname.getText().equals("intermediate"))
+		else if(search_accessrightname.getText().equals("intermediate"))
 			searchVars.put("accessrightid", "\'" + 2 + "\'");
 		else
 			searchVars.put("accessrightid", "\'"+13+"\'");
@@ -3086,6 +2997,74 @@ public class NUserPage {
 			}
 		});
 	}
+	private void editEmployeeUtilization() {
+		int rowIndex = employeeutil_tabledata.getJdataTable().getSelectedRow();
+
+		String Table_click = (employeeutil_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+				.toString()); // return
+		selected_employee_util = Integer.parseInt(Table_click.trim());
+
+		System.out.println(Table_click);
+		System.out.println("---employee util id-- " + selected_employee_util);
+
+
+		JFrame Edit_ResUtilPage = new JFrame("Edit Employee Utilization Form");
+
+		// adding date
+		UtilDateModel modelfor = new UtilDateModel();
+		UtilDateModel modelto = new UtilDateModel();
+
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		final JDatePanelImpl from_datePanel = new JDatePanelImpl(modelfor, p);
+		JDatePanelImpl to_datePanel = new JDatePanelImpl(modelto, p);
+		JLabel from = new JLabel("From");
+		JLabel to = new JLabel("To");
+		final JDatePickerImpl from_datePicker = new JDatePickerImpl(from_datePanel, new DateLabelFormatter());
+		final JDatePickerImpl to_datePicker = new JDatePickerImpl(to_datePanel, new DateLabelFormatter());
+
+		JPanel date_panel = new JPanel(new FlowLayout());
+		date_panel.add(from);
+
+		date_panel.add(from_datePanel);
+		date_panel.add(to);
+		date_panel.add(to_datePanel);
+		Edit_ResUtilPage.getContentPane().add(date_panel, BorderLayout.CENTER);
+		// end date
+
+		JButton submiteditresutilBtn = new JButton("Submit");
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(submiteditresutilBtn);
+		Edit_ResUtilPage.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		Edit_ResUtilPage.pack();
+		Edit_ResUtilPage.setVisible(true);
+
+		submiteditresutilBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+				String fromdate = from_datePicker.getJFormattedTextField().getText();
+				String todate = to_datePicker.getJFormattedTextField().getText();
+
+				ProjectEmployee projemputil = projempcat.getProjectEmployee(selected_employee_util);
+				projemputil.edit(fromdate, todate);
+				
+
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<ProjectEmployee> allpemputil;
+				allpemputil = projempcat.getProjectEmployeesByProject(selected_project_forsubsystem);
+				for (int i = 0; i < allpemputil.size(); i++) {
+					data.add((allpemputil.get(i).toHashMap()));
+				}
+				employeeutil_tabledata.update(data);
+
+			}
+		});
+	}
 	private void editResourceUtilization() {
 		int rowIndex = resourceutil_tabledata.getJdataTable().getSelectedRow();
 
@@ -3156,8 +3135,35 @@ public class NUserPage {
 			}
 		});
 	}
-	
 	private void deleteResourceUtilization() {
+		int rowIndex = resourceutil_tabledata.getJdataTable().getSelectedRow();
+		int colIndex = resourceutil_tabledata.getJdataTable().getSelectedColumn();
+		if (rowIndex == -1) {
+			NotificationPage notif = new NotificationPage(new JFrame(), "Notification",
+					"Please Select a Resource Utilization!");
+		} else {
+
+			String Table_click = (resourceutil_tabledata.getJdataTable().getModel().getValueAt(rowIndex, 0)
+					.toString()); // the
+			System.out.println(Table_click + " this was clicked");
+			DeleteDialog myDialog = new DeleteDialog(new JFrame(), true,
+					"Are you sure you want to Delete this item?");
+			if (myDialog.getAnswer()) {
+				presutilcat.deleteProjectResourceUtilization(Integer.parseInt(Table_click));
+
+				ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+				ArrayList<ProjectResourceUtilization> allpresutil;
+				allpresutil = presutilcat.getProjectResourceUtilizationbyProject(selected_project_forsubsystem);
+				for (int i = 0; i < allpresutil.size(); i++) {
+					data.add((allpresutil.get(i).toHashMap()));
+				}
+				resourceutil_tabledata.update(data);
+				
+		}
+	}
+	}
+	
+	private void deleteEmployeeUtilization() {
 		int rowIndex = employeeutil_tabledata.getJdataTable().getSelectedRow();
 		int colIndex = employeeutil_tabledata.getJdataTable().getSelectedColumn();
 		if (rowIndex == -1) {
