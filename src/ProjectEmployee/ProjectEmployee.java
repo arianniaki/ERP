@@ -29,6 +29,7 @@ public class ProjectEmployee {
 		HashMap<String,String> projEmp = new HashMap<String,String>();
 		projEmp.put("projempid", Integer.toString(this.projempId));
 		projEmp.put("pid", Integer.toString(this.project.getId()));
+		projEmp.put("projectname", this.project.getName());
 		projEmp.put("empid",Integer.toString(this.employee.getId()));
 		projEmp.put("fromdate", this.from);
 		projEmp.put("todate", this.to);

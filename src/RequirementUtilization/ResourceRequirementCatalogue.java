@@ -121,10 +121,17 @@ public class ResourceRequirementCatalogue{
 	
 	public ArrayList<HashMap<String, String>> Search(HashMap<String, String> searchvars){
 		
+		ResourceCatalogue rcat = new ResourceCatalogue();
+		
 		Table table = new Table("resourcerequirement");
 		ArrayList<HashMap<String, String>> result = table.search(searchvars);
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
+			result.get(i).put("resourcename", rcat.getResource(Integer.parseInt(result.get(i).get("rid"))).getName());
+			result.get(i).put("sectionname", SectionCatalogue.getInstance().getSection(Integer.parseInt(result.get(i).get("sid"))).getName());
+			result.get(i).put("projectname", ProjectCatalogue.getInstance().getProject(Integer.parseInt(result.get(i).get("pid"))).getName());
+
+		
 		}
 		return result;		
 	}
