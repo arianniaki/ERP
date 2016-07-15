@@ -152,7 +152,6 @@ public class NUserPage {
 	private JTextField search_maintainingchangetype;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_re;
-	private JTextField search_projectmanager;
 	private JTextField search_projecttech;
 	private JTextField search_projectsize;
 	private JTextField search_financialmodel;
@@ -185,6 +184,8 @@ public class NUserPage {
 	private JTextField search_reqsectionname;
 	private JTextField accessright_textField;
 	private JTextField post_textField;
+	
+	private JComboBox projectmanager_comboBox;
 	/**
 	 * Launch the application.
 	 */
@@ -2123,9 +2124,6 @@ public class NUserPage {
 			}
 		});
 
-		search_projectmanager = new JTextField();
-		search_projectmanager.setColumns(10);
-
 		JLabel lblProjectManager = DefaultComponentFactory.getInstance().createLabel("Project Manager");
 
 		JLabel lblTechnology = DefaultComponentFactory.getInstance().createLabel("Technology");
@@ -2147,73 +2145,84 @@ public class NUserPage {
 				project_tabledata.update(projcat.getProjects());
 			}
 		});
+		
+		projectmanager_comboBox = new JComboBox();
+		ArrayList<HashMap<String, String>> employees = empcat.getConfirmedEmployees();
+		projectmanager_comboBox.addItem("");
+		for (int i = 0; i < employees.size(); i++) {
+			projectmanager_comboBox.addItem("empid="+employees.get(i).get("empid")+" "+employees.get(i).get("empname"));	
+		}
+		
 		GroupLayout gl_projectPanel = new GroupLayout(projectPanel);
-		gl_projectPanel
-				.setHorizontalGroup(gl_projectPanel.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_projectPanel.createSequentialGroup().addGap(40)
-								.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
-								.addGap(40))
-						.addGroup(
-								gl_projectPanel.createSequentialGroup().addContainerGap().addComponent(btnEditProject)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnDeleteProject)
-										.addPreferredGap(ComponentPlacement.RELATED, 450,
-												Short.MAX_VALUE)
-										.addComponent(btnViewResources).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(viewsubsys_Btn).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(addprojectBtn))
-						.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap()
-								.addComponent(project_btnRefresh)
-								.addPreferredGap(ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
-								.addComponent(project_btnSearch).addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_projectPanel.createParallelGroup(Alignment.TRAILING, false)
-										.addGroup(gl_projectPanel.createSequentialGroup()
-												.addComponent(search_projecttech, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(lblTechnology))
-										.addGroup(gl_projectPanel.createSequentialGroup()
-												.addComponent(search_projectsize,
-														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
-														Short.MAX_VALUE)
-												.addComponent(lblSize)))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_projectPanel.createSequentialGroup()
-												.addComponent(search_projectmanager, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
-														Short.MAX_VALUE)
-												.addComponent(lblProjectManager))
-										.addGroup(gl_projectPanel.createSequentialGroup()
-												.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(lblProjectName)))
-								.addContainerGap()));
-		gl_projectPanel.setVerticalGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_projectPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblProjectName).addComponent(project_btnSearch)
-								.addComponent(lblTechnology)
-								.addComponent(search_projecttech, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(project_btnRefresh))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(search_projectmanager, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblProjectManager).addComponent(lblSize).addComponent(search_projectsize,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(40).addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
-						.addGap(40)
-						.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE).addComponent(addprojectBtn)
-								.addComponent(viewsubsys_Btn).addComponent(btnViewResources)
-								.addComponent(btnEditProject).addComponent(btnDeleteProject))));
+		gl_projectPanel.setHorizontalGroup(
+			gl_projectPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addGap(40)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+					.addGap(40))
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnEditProject)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnDeleteProject)
+					.addPreferredGap(ComponentPlacement.RELATED, 450, Short.MAX_VALUE)
+					.addComponent(btnViewResources)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(viewsubsys_Btn)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(addprojectBtn))
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(project_btnRefresh)
+					.addPreferredGap(ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
+					.addComponent(project_btnSearch)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_projectPanel.createSequentialGroup()
+							.addComponent(search_projecttech, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblTechnology))
+						.addGroup(gl_projectPanel.createSequentialGroup()
+							.addComponent(search_projectsize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblSize)))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(projectmanager_comboBox, Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(search_projectname, Alignment.TRAILING))
+					.addGap(24)
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblProjectManager)
+						.addComponent(lblProjectName))
+					.addContainerGap())
+		);
+		gl_projectPanel.setVerticalGroup(
+			gl_projectPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_projectPanel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(search_projectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(project_btnSearch)
+						.addComponent(lblTechnology)
+						.addComponent(search_projecttech, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(project_btnRefresh)
+						.addComponent(lblProjectName))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblProjectManager)
+						.addComponent(lblSize)
+						.addComponent(search_projectsize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(projectmanager_comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(40)
+					.addComponent(project_scrollPane, GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+					.addGap(40)
+					.addGroup(gl_projectPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addprojectBtn)
+						.addComponent(viewsubsys_Btn)
+						.addComponent(btnViewResources)
+						.addComponent(btnEditProject)
+						.addComponent(btnDeleteProject)))
+		);
 		project_tabledata = new TableData(projcat);
 
 		project_tabledata.getJdataTable().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -4996,6 +5005,18 @@ System.out.println("--------===");
 	}
 	private void searchProject() {
 		HashMap<String, String> searchVars = new HashMap<String, String>();
+		if (!(projectmanager_comboBox.getSelectedItem().toString().equals("")))
+		{
+		String empid = "";
+		Pattern emp_p = Pattern.compile("empid=\\d+");
+		Matcher emp_m = emp_p.matcher((CharSequence) projectmanager_comboBox.getSelectedItem());
+		if (emp_m.find()) {
+			empid = emp_m.group();
+		}
+		System.out.println("empid: " + empid);
+		int projectid = Integer.parseInt(empid.replace("empid=", ""));
+		searchVars.put("projectmanager", "\'" + projectid + "\'");
+		}
 
 		if (search_projectname.getText() != null && !search_projectname.getText().trim().equals(""))
 			searchVars.put("projname", "\'" + search_projectname.getText() + "\'");
