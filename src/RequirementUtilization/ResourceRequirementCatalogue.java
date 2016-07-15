@@ -127,10 +127,10 @@ public class ResourceRequirementCatalogue{
 		ArrayList<HashMap<String, String>> result = table.search(searchvars);
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i).toString());
-			result.get(i).put("resourcename", rcat.getResource(Integer.parseInt(result.get(i).get("rid"))).getName());
-			result.get(i).put("sectionname", SectionCatalogue.getInstance().getSection(Integer.parseInt(result.get(i).get("sid"))).getName());
-			result.get(i).put("projectname", ProjectCatalogue.getInstance().getProject(Integer.parseInt(result.get(i).get("pid"))).getName());
-
+			result.get(i).put("resourceName", rcat.getResource(Integer.parseInt(result.get(i).get("rid"))).getName());
+			result.get(i).put("sectionName", SectionCatalogue.getInstance().getSection(Integer.parseInt(result.get(i).get("sid"))).getName());
+			result.get(i).put("projectName", ProjectCatalogue.getInstance().getProject(Integer.parseInt(result.get(i).get("pid"))).getName());
+			result.get(i).put("resReqid", Integer.toString(Integer.parseInt(result.get(i).get("resreqid"))));
 		
 		}
 		return result;		

@@ -68,13 +68,12 @@ public class Employee {
 		vars.put("password", "\'"+password+"\'");
 		System.out.println(vars.toString());
 		ResultSet results = DB.select("Employee", vars, null);
-
 		boolean ret = false;
 		try {
 			if (results.next()) {
 				getFromDB(results.getInt("empId"));
 				AuthenticatedEmployee auth = AuthenticatedEmployee.getInstance();
-				if(auth.setEmployee(this) && this.is_confirmed){
+				if(auth.setEmployee(this) && this.is_confirmed && !this.loggedin){
 					this.loggedin = true;
 					HashMap<String, String> setVars = new HashMap<String, String>();
 					setVars.put("is_loggedin", Boolean.toString(this.loggedin));
@@ -98,7 +97,6 @@ public class Employee {
 			HashMap<String, String> setVars = new HashMap<String, String>();
 			setVars.put("is_loggedin", Boolean.toString(this.loggedin));
 			submitToDB(setVars);
-			auth.logoutEmployee();
 			return true;
 		}
 		return false;
@@ -201,6 +199,7 @@ public class Employee {
 				this.post = rs.getString("post");
 				this.setAccessRight(new AccessRight(rs.getInt("accessrightid")));
 				this.is_confirmed = rs.getBoolean("is_confirmed");
+				this.loggedin = rs.getBoolean("is_loggedin");
 			}
 			rs.close();
 			DB.connectionClose();

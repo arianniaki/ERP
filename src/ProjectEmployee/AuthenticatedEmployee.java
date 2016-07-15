@@ -25,9 +25,9 @@ public class AuthenticatedEmployee {
 	public boolean logoutEmployee(){
 		if(authenticatedEmployee.employee == null)
 			return false;
+		authenticatedEmployee.employee.logout();
 		authenticatedEmployee.employee = null;
-		return true;
-		
+		return true;	
 	}
 
 	

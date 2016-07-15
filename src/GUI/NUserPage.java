@@ -20,6 +20,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.lang.Character.Subset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -226,7 +228,16 @@ public class NUserPage {
 	private void initialize() {
 		userpageFrame = new JFrame("User Page");
 		userpageFrame.setBounds(100, 100, 870, 600);
-		userpageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		userpageFrame.addWindowListener(new WindowAdapter() {
+			  @Override
+		        public void windowClosing(WindowEvent event) {
+			    	System.out.println("logged out");
+					userpageFrame.dispose();
+					AuthenticatedEmployee.getInstance().logoutEmployee();
+					NLoginPage loginWindow = new NLoginPage();
+					loginWindow.getloginpageFrame().setVisible(true);
+		        }
+		});
 		userpageFrame.getContentPane().setLayout(null);
 		userpageFrame.getContentPane().setBackground(userpage_color);
 		userpageFrame.setResizable(false);
@@ -3030,11 +3041,11 @@ public class NUserPage {
 		HashMap<String, String> searchVars = new HashMap<String, String>();
 
 		if (search_reqprojectname.getText() != null && !search_reqprojectname.getText().trim().equals(""))
-			searchVars.put("pname", "\'" + search_reqprojectname.getText() + "\'");
+			searchVars.put("pid", "\'" + search_reqprojectname.getText() + "\'");
 		if (search_reqresourcename.getText() != null && !search_reqresourcename.getText().trim().equals(""))
-			searchVars.put("rname", "\'" + search_reqresourcename.getText() + "\'");
+			searchVars.put("rid", "\'" + search_reqresourcename.getText() + "\'");
 		if (search_reqsectionname.getText() != null && !search_reqsectionname.getText().trim().equals(""))
-			searchVars.put("sname", "\'" + search_reqsectionname.getText() + "\'");
+			searchVars.put("sid", "\'" + search_reqsectionname.getText() + "\'");
 
 		if (resreqcat.Search(searchVars).isEmpty()) {
 			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
