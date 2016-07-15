@@ -4815,8 +4815,18 @@ System.out.println("--------===");
 				}
 				System.out.println("sid: " + section);
 
-				empcat.addEmployee(inputs.get(0), inputs.get(3), Integer.parseInt(section.replace("sid=", "")),
+
+				
+				Employee new_emp= empcat.addEmployee(inputs.get(0), inputs.get(3), Integer.parseInt(section.replace("sid=", "")),
 						inputs.get(1), inputs.get(2), false, true);
+				if (new_emp == null) {
+					NotificationPage confirmation = new NotificationPage(new JFrame(), "Notification",
+							"Username is already taken!");
+					DataBase.getInstance().connectionClose();
+					DataBase.getInstance().setConnection();
+
+				} 
+
 				human_tabledata.update(empcat.getConfirmedEmployees());
 
 			}
