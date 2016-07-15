@@ -113,8 +113,8 @@ public class EmployeeCatalogue {
 			String password, boolean is_loggedin, boolean is_confirmed) {
 
 		ResourceCatalogue resCat = new ResourceCatalogue();
-		int rid = (int) resCat.addResource(empname,sectionId);
-
+		resCat.addResource(empname, sectionId);
+		
 		HashMap<String, String> vars = new HashMap<String, String>();
 		vars.put("empname", "\'" + empname + "\'");
 		vars.put("sid", Integer.toString(sectionId));
@@ -123,7 +123,6 @@ public class EmployeeCatalogue {
 		vars.put("password", "\'" + password + "\'");
 		vars.put("is_loggedin", Boolean.toString(is_loggedin));
 		vars.put("is_confirmed", Boolean.toString(is_confirmed));
-		vars.put("rid", Integer.toString(rid));
 
 		long pk = DB.insert(vars, tablename);
 		if(pk==-1)
