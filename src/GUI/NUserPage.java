@@ -162,7 +162,6 @@ public class NUserPage {
 	private JTextField search_physicalmodel;
 	private JTextField search_subsystemname;
 	private JTextField search_accessrightname;
-	private JTextField search_reqresourcename;
 	private JTextField search_regemployeename;
 	
 	private EmployeeCatalogue empcat;
@@ -180,12 +179,13 @@ public class NUserPage {
 	private MakeModuleCatalogue makemodulecat;
 	private ProjectResourceUtilizationCatalogue presutilcat;
 	private MaintainModEmpResCatalogue maintainmodempresCat;
-	private JTextField search_reqprojectname;
-	private JTextField search_reqsectionname;
 	private JTextField accessright_textField;
 	private JTextField post_textField;
 	
 	private JComboBox projectmanager_comboBox;
+	private JComboBox search_reqresourcenamecombo;
+	private JComboBox search_reqprojectnamecombo;
+	private JComboBox search_reqsectionnamecombo;
 	/**
 	 * Launch the application.
 	 */
@@ -729,9 +729,6 @@ public class NUserPage {
 
 		JLabel lblResourceName_1 = DefaultComponentFactory.getInstance().createLabel("Resource Name");
 
-		search_reqresourcename = new JTextField();
-		search_reqresourcename.setColumns(10);
-
 		JButton requirement_btnDelete = new JButton("Delete");
 		requirement_btnDelete.setIcon(new ImageIcon(
 				new ImageIcon("images/delete.png").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT)));
@@ -744,13 +741,7 @@ public class NUserPage {
 		
 		JLabel lblProjectName_1 = DefaultComponentFactory.getInstance().createLabel("Project Name");
 		
-		search_reqprojectname = new JTextField();
-		search_reqprojectname.setColumns(10);
-		
 		JLabel lblSectionName = DefaultComponentFactory.getInstance().createLabel("Section Name");
-		
-		search_reqsectionname = new JTextField();
-		search_reqsectionname.setColumns(10);
 		
 		JButton resreq_btnRefresh = new JButton("Refresh");
 		resreq_btnRefresh.setIcon(new ImageIcon(
@@ -767,6 +758,36 @@ public class NUserPage {
 				resrequirement_tabledata.update(data);
 			}
 		});
+		
+		search_reqresourcenamecombo = new JComboBox();
+		ArrayList<HashMap<String, String>> resources_combo = empcat.getConfirmedEmployees();
+		resources_combo.addAll(rcat.readAllResources());
+		search_reqresourcenamecombo.addItem("");
+		
+		for (int i = 0; i < resources_combo.size(); i++) {
+			if(resources_combo.get(i).containsKey("empid"))
+			search_reqresourcenamecombo.addItem("rid="+resources_combo.get(i).get("rid")+" "+resources_combo.get(i).get("empname"));
+			else
+				search_reqresourcenamecombo.addItem("rid="+resources_combo.get(i).get("rid")+" "+resources_combo.get(i).get("rname"));
+		}
+		
+		search_reqprojectnamecombo = new JComboBox();
+		ArrayList<HashMap<String, String>> project_combo = projcat.getProjects();
+		search_reqprojectnamecombo.addItem("");
+		
+		for (int i = 0; i < project_combo.size(); i++) {
+			search_reqprojectnamecombo.addItem("pid="+project_combo.get(i).get("projid")+" "+project_combo.get(i).get("projname"));
+		}
+		
+		search_reqsectionnamecombo = new JComboBox();
+		ArrayList<HashMap<String, String>> section_combo = seccat.getSections();
+		search_reqsectionnamecombo.addItem("");
+		
+		for (int i = 0; i < section_combo.size(); i++) {
+			search_reqsectionnamecombo.addItem("sid="+section_combo.get(i).get("sid")+" "+section_combo.get(i).get("sectionname"));
+		}
+		
+		
 		GroupLayout gl_requirementPanel = new GroupLayout(requirementPanel);
 		gl_requirementPanel.setHorizontalGroup(
 			gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
@@ -785,22 +806,20 @@ public class NUserPage {
 				.addGroup(gl_requirementPanel.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(resreq_btnRefresh)
-					.addPreferredGap(ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 228, Short.MAX_VALUE)
 					.addComponent(searchreqBtn)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(search_reqsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(search_reqsectionnamecombo, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+					.addGap(2)
 					.addComponent(lblSectionName)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.TRAILING, false)
-						.addGroup(gl_requirementPanel.createSequentialGroup()
-							.addComponent(search_reqprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblProjectName_1))
-						.addGroup(gl_requirementPanel.createSequentialGroup()
-							.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblResourceName_1)))
+					.addGap(27)
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(search_reqprojectnamecombo, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(search_reqresourcenamecombo, 0, 123, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblProjectName_1)
+						.addComponent(lblResourceName_1))
 					.addContainerGap())
 		);
 		gl_requirementPanel.setVerticalGroup(
@@ -808,18 +827,18 @@ public class NUserPage {
 				.addGroup(gl_requirementPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(searchreqBtn)
 						.addComponent(lblResourceName_1)
-						.addComponent(search_reqresourcename, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(resreq_btnRefresh)
+						.addComponent(search_reqresourcenamecombo, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblSectionName)
-						.addComponent(search_reqsectionname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(resreq_btnRefresh))
-					.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(searchreqBtn)
+						.addComponent(search_reqsectionnamecombo, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+					.addGap(31)
 					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblProjectName_1)
-						.addComponent(search_reqprojectname, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(search_reqprojectnamecombo, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
+					.addComponent(requirement_scrollPane, GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
 					.addGap(40)
 					.addGroup(gl_requirementPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(addreqBtn)
@@ -3211,19 +3230,50 @@ public class NUserPage {
 	}
 	}
 	private void searchRequirement() {
+		
 		HashMap<String, String> searchVars = new HashMap<String, String>();
-System.out.println("..............");
-		System.out.println(search_reqprojectname.getText()+" "+search_reqresourcename.getText()+" "+search_reqsectionname.getText());
-		if (search_reqprojectname.getText() != null && !search_reqprojectname.getText().trim().equals(""))
-			searchVars.put("projectName", "\'" + search_reqprojectname.getText() + "\'");
-		if (search_reqresourcename.getText() != null && !search_reqresourcename.getText().trim().equals(""))
-			searchVars.put("resourceName", "\'" + search_reqresourcename.getText() + "\'");
-		if (search_reqsectionname.getText() != null && !search_reqsectionname.getText().trim().equals(""))
-			searchVars.put("sectionName", "\'" + search_reqsectionname.getText() + "\'");
-System.out.println("--------===");
-		System.out.println(searchVars.get("projectName"));
-		System.out.println(searchVars.get("resourceName"));
-		System.out.println(searchVars.get("sectionName"));
+
+		if (!(search_reqresourcenamecombo.getSelectedItem().toString().equals("")))
+		{
+		String rid = "";
+		Pattern rid_p = Pattern.compile("rid=\\d+");
+		Matcher rid_m = rid_p.matcher((CharSequence) search_reqresourcenamecombo.getSelectedItem());
+		if (rid_m.find()) {
+			rid = rid_m.group();
+		}
+		System.out.println("rid: " + rid);
+		int resourceid = Integer.parseInt(rid.replace("rid=", ""));
+		searchVars.put("rid", "\'" + resourceid + "\'");
+		}
+		
+		if (!(search_reqprojectnamecombo.getSelectedItem().toString().equals("")))
+		{
+		String pid = "";
+		Pattern pid_p = Pattern.compile("pid=\\d+");
+		Matcher pid_m = pid_p.matcher((CharSequence) search_reqprojectnamecombo.getSelectedItem());
+		if (pid_m.find()) {
+			pid = pid_m.group();
+		}
+		System.out.println("pid: " + pid);
+		int projectid = Integer.parseInt(pid.replace("pid=", ""));
+		searchVars.put("pid", "\'" + projectid + "\'");
+		}
+		
+		if (!(search_reqsectionnamecombo.getSelectedItem().toString().equals("")))
+		{
+		String sid = "";
+		Pattern sid_p = Pattern.compile("sid=\\d+");
+		Matcher sid_m = sid_p.matcher((CharSequence) search_reqsectionnamecombo.getSelectedItem());
+		if (sid_m.find()) {
+			sid = sid_m.group();
+		}
+		System.out.println("sid: " + sid);
+		int sectionid = Integer.parseInt(sid.replace("sid=", ""));
+		searchVars.put("sid", "\'" + sectionid + "\'");
+		}
+		
+
+		
 		if (resreqcat.Search(searchVars).isEmpty()) {
 			NotificationPage notif = new NotificationPage(new JFrame(), "Notification", "No Results Found");
 		} else {
