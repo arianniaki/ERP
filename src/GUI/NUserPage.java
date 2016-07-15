@@ -2911,7 +2911,7 @@ public class NUserPage {
 				}
 				if (resource_type.getSelectedItem().toString().equals("Employee")) {
 					resourceCombo.removeAllItems();
-					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
+					ArrayList<HashMap<String, String>> employee_resource = empcat.getConfirmedEmployees();
 					for (int i = 0; i < employee_resource.size(); i++) {
 						resourceCombo.addItem("empid="+employee_resource.get(i).get("empid")+" "+employee_resource.get(i).get("empname"));
 					}
@@ -3359,7 +3359,7 @@ System.out.println("--------===");
 				}
 				if (resource_type.getSelectedItem().toString().equals("Employee")) {
 					resourceCombo.removeAllItems();
-					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
+					ArrayList<HashMap<String, String>> employee_resource = empcat.getConfirmedEmployees();
 					for (int i = 0; i < employee_resource.size(); i++) {
 						resourceCombo.addItem("rid="+employee_resource.get(i).get("rid")+" "+employee_resource.get(i).get("empname"));
 					}
@@ -4064,7 +4064,7 @@ System.out.println("--------===");
 		final ArrayList<String> information = new ArrayList<String>();
 		final ArrayList<String> module = new ArrayList<String>();
 
-		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		ArrayList<HashMap<String, String>> employe_readall = empcat.getConfirmedEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
 			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
 		}
@@ -4482,7 +4482,7 @@ System.out.println("--------===");
 		final ArrayList<String> information = new ArrayList<String>();
 		final ArrayList<String> module = new ArrayList<String>();
 
-		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		ArrayList<HashMap<String, String>> employe_readall = empcat.getConfirmedEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
 			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
 		}
@@ -4694,7 +4694,7 @@ System.out.println("--------===");
 				} else {
 
 					System.out.println("all : ");
-					empcat.readAllEmployees();
+					empcat.getConfirmedEmployees();
 					ArrayList<String> inputs = new ArrayList<String>();
 					for (int i = 0; i < human_moduleForm.getJPanel().getComponentCount(); i++) {
 						FieldPanel fpanel = (FieldPanel) human_moduleForm.getJPanel().getComponent(i);
@@ -4796,7 +4796,7 @@ System.out.println("--------===");
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println("all : ");
-				empcat.readAllEmployees();
+				empcat.getConfirmedEmployees();
 				ArrayList<String> inputs = new ArrayList<String>();
 				for (int i = 0; i < human_moduleForm.getJPanel().getComponentCount(); i++) {
 					FieldPanel fpanel = (FieldPanel) human_moduleForm.getJPanel().getComponent(i);
@@ -4817,7 +4817,7 @@ System.out.println("--------===");
 
 				empcat.addEmployee(inputs.get(0), inputs.get(3), Integer.parseInt(section.replace("sid=", "")),
 						inputs.get(1), inputs.get(2), false, true);
-				human_tabledata.update(empcat.readAllEmployees());
+				human_tabledata.update(empcat.getConfirmedEmployees());
 
 			}
 		});
@@ -5010,7 +5010,7 @@ System.out.println("--------===");
 		final ArrayList<String> module = new ArrayList<String>();
 
 
-		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		ArrayList<HashMap<String, String>> employe_readall = empcat.getConfirmedEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
 			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+ " -username="+employe_readall.get(i).get("username"));
 		}
@@ -5266,7 +5266,7 @@ System.out.println("--------===");
 	private void editProject() {
 		// EDITPROJECT
 		ArrayList<Field> projectFields = new ArrayList<Field>();
-		ArrayList<HashMap<String, String>> employees_fromcatalouge = empcat.readAllEmployees();
+		ArrayList<HashMap<String, String>> employees_fromcatalouge = empcat.getConfirmedEmployees();
 		ArrayList<String> employees = new ArrayList<String>();
 
 		projectFields.add(new Field("text", "project name", "", 20, "name"));
@@ -5631,7 +5631,7 @@ System.out.println("--------===");
 
 		final JComboBox resourceCombo = comboBoxpane_res.getComboBox();
 					resourceCombo.removeAllItems();
-					ArrayList<HashMap<String, String>> employee_resource = empcat.readAllEmployees();
+					ArrayList<HashMap<String, String>> employee_resource = empcat.getConfirmedEmployees();
 					for (int i = 0; i < employee_resource.size(); i++) {
 						resourceCombo.addItem("empid="+employee_resource.get(i).get("empid")+" "+employee_resource.get(i).get("empname"));
 					}
@@ -5723,7 +5723,7 @@ System.out.println("--------===");
 		final ArrayList<String> information = new ArrayList<String>();
 		final ArrayList<String> module = new ArrayList<String>();
 
-		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		ArrayList<HashMap<String, String>> employe_readall = empcat.getConfirmedEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
 			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
 		}
@@ -5937,7 +5937,7 @@ System.out.println("--------===");
 		final ArrayList<String> information = new ArrayList<String>();
 		final ArrayList<String> module = new ArrayList<String>();
 
-		ArrayList<HashMap<String, String>> employe_readall = empcat.readAllEmployees();
+		ArrayList<HashMap<String, String>> employe_readall = empcat.getConfirmedEmployees();
 		for (int i = 0; i < employe_readall.size(); i++) {
 			employees.add("empid="+employe_readall.get(i).get("empid")+" "+employe_readall.get(i).get("empname")+" -username:"+employe_readall.get(i).get("username"));
 		}
