@@ -162,7 +162,7 @@ public class Employee {
 	public void setDefaultAccessRight(){
 		setAccessRight(new AccessRight(1));
 		HashMap<String, String> setVars = new HashMap<String, String>();
-		setVars.put("accessRightid", 1+"");
+		setVars.put("accessrightid", 1+"");
 		submitToDB(setVars);
 	}
 
